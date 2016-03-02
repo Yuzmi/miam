@@ -1,0 +1,101 @@
+{% extends 'MiamBundle::base.html.twig' %}
+
+{% block stylesheets %}
+	{{ parent() }}
+	{% stylesheets "@MiamBundle/Resources/public/scss/home.scss" filter='scss' output='css/home.css' %}
+		<link href="{{ asset_url }}" type="text/css" rel="stylesheet">
+	{% endstylesheets %}
+{% endblock %}
+
+{% macro rows(tree, unreadCounts) %}
+	{% import _self as macros %}
+
+	{% if tree.category is defined %}
+		<div class="row" data-type="category" data-category="{{ tree.category.id }}">
+			<span class="name">
+				<span class="toggle">
+					<i class="fa fa-caret-right closed"></i>
+					<i class="fa fa-caret-down open"></i>
+				</span>
+				{{ tree.category.name }}
+			</span>
+			<span class="unreadCount"></span>
+		</div>
+	{% endif %}
+
+	{% if tree.category is defined %}
+		<div class="rowChildren" data-parent="{{ tree.category.id }}">
+	{% endif %}
+
+	{% for c in tree.categories %}
+		{{ macros.rows(c, unreadCounts) }}
+	{% endfor %}
+
+	{% for s in tree.subscriptions %}
+		<div class="row" data-type="feed" data-feed="{{ s.feed.id }}">
+			<span class="name">{{ s.name ?: "[NO TITLE]" }}</span>
+			<span class="unreadCount">{{ unreadCounts[s.feed.id] is defined ? unreadCounts[s.feed.id] : 0 }}</span>
+		</div>
+	{% endfor %}
+
+	{% if tree.category is defined %}
+		</div>
+	{% endif %}
+{% endmacro %}
+
+{% import _self as macros %}
+
+{% block body %}
+	<div class="body_home">
+		<aside class="sidebar">
+			<div class="row selected" data-type="all">
+				<i class="fa fa-globe"></i>
+				All articles
+			</div>
+
+			{% if reader %}
+				<div class="row" data-type="unread">
+					<i class="fa fa-book"></i>
+					Unread
+				</div>
+
+				<div class="row" data-type="starred">
+					<i class="fa fa-star"></i>
+					Starred
+				</div>
+			{% endif %}
+
+			{{ macros.rows(tree, unreadCounts) }}
+		</aside>
+
+		<div class="sidebar_toggle">
+			<span class="hide"><i class="fa fa-angle-left"></i></span>
+			<span class="show"><i class="fa fa-angle-right"></i></span>
+		</div>
+
+		{% include 'MiamBundle:Default:header.html.twig' %}
+
+		<section>
+			<main class="items">
+				{% include 'MiamBundle:Default:items.html.twig' %}
+			</main>
+		</section>
+	</div>
+{% endblock %}
+
+{% block javascripts %}
+	{{ parent() }}
+
+	{% javascripts "@MiamBundle/Resources/public/js/sidebar.js" %}
+		<script src="{{ asset_url }}"></script>
+	{% endjavascripts %}
+
+	<script type="text/javascript">
+		$(document).ready(function() {
+			app.items.subscriber = {{ subscriber.id }};
+			{% if reader %}app.items.reader = {{ reader.id }};{% endif %}
+
+			app.sidebar.init();
+		});
+	</script>
+{% endblock %}

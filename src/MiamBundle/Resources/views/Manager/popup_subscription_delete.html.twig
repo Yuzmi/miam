@@ -1,0 +1,16 @@
+<div class="popupContainer visible">
+	<div class="popup">
+		<div class="header">Unsubscribe feed</div>
+
+		<form method="POST" action="{{ path('manager_subscription_delete', {'id': subscription.id}) }}">
+			Unsubscribe "{{ subscription.name }}" ?
+
+			<input type="hidden" name="csrf_token" value="{{ csrf_token('manager_subscription_delete') }}">
+
+			<br><br>
+
+			<button type="submit">Yes</button>
+			<button class="closePopup">No</button>
+		</form>
+	</div>
+</div>

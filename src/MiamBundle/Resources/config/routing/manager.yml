@@ -1,0 +1,58 @@
+manager:
+    path: /
+    defaults: { _controller: MiamBundle:Manager:index }
+
+ajax_manager_popup_category_new:
+    path: /ajax/popup/category/new
+    defaults: { _controller: MiamBundle:Manager:ajaxPopupNewCategory }
+
+manager_category_create:
+    path: /category/create
+    defaults: { _controller: MiamBundle:Manager:createCategory }
+
+ajax_manager_popup_category_edit:
+    path: /ajax/popup/category/{id}/edit
+    defaults: { _controller: MiamBundle:Manager:ajaxPopupEditCategory }
+
+manager_category_update:
+    path: /category/{id}/update
+    defaults: { _controller: MiamBundle:Manager:updateCategory }
+    requirements: { id: \d+ }
+
+ajax_manager_popup_category_delete:
+    path: /ajax/popup/category/{id}/delete
+    defaults: { _controller: MiamBundle:Manager:ajaxPopupDeleteCategory }
+    requirements: { id: \d+ }
+
+manager_category_delete:
+    path: /category/{id}/delete
+    defaults: { _controller: MiamBundle:Manager:deleteCategory }
+    requirements: { id: \d+ }
+
+ajax_manager_popup_subscription_new:
+    path: /ajax/popup/subscription/new
+    defaults: { _controller: MiamBundle:Manager:ajaxPopupNewSubscription }
+
+manager_subscription_create:
+    path: /subscription/create
+    defaults: { _controller: MiamBundle:Manager:createSubscription }
+
+ajax_manager_popup_subscription_edit:
+    path: /ajax/popup/subscription/{id}/edit
+    defaults: { _controller: MiamBundle:Manager:ajaxPopupEditSubscription }
+    requirements: { id: \d+ }
+
+manager_subscription_update:
+    path: /subscription/{id}/update
+    defaults: { _controller: MiamBundle:Manager:updateSubscription }
+    requirements: { id: \d+ }
+
+ajax_manager_popup_subscription_delete:
+    path: /ajax/popup/subscription/{id}/delete
+    defaults: { _controller: MiamBundle:Manager:ajaxPopupDeleteSubscription }
+    requirements: { id: \d+ }
+
+manager_subscription_delete:
+    path: /subscription/{id}/delete
+    defaults: { _controller: MiamBundle:Manager:deleteSubscription }
+    requirements: { id: \d+ }

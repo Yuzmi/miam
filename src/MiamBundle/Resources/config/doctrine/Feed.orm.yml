@@ -1,0 +1,75 @@
+MiamBundle\Entity\Feed:
+    type: entity
+    table: feed
+    repositoryClass: MiamBundle\Repository\FeedRepository
+    id:
+        id:
+            type: integer
+            id: true
+            generator:
+                strategy: AUTO
+    fields:
+        name:
+            type: string
+            nullable: true
+        customName:
+            type: string
+            column: name_custom
+            nullable: true
+        url:
+            type: string
+            options:
+                collation: utf8_bin
+        website:
+            type: string
+            nullable: true
+        globalRate:
+            type: float
+            column: rate_global
+        monthRate:
+            type: float
+            column: rate_month
+        weekRate:
+            type: float
+            column: rate_week
+        dataLength:
+            type: integer
+            column: data_length
+        nbItems:
+            type: integer
+            column: nb_items_on_parsing
+        nbErrors:
+            type: integer
+            column: nb_error_parsing
+        dateCreated:
+            type: datetime
+            column: date_created
+        dateParsed:
+            type: datetime
+            column: date_parsed
+            nullable: true
+        dateSuccess:
+            type: datetime
+            column: date_success
+            nullable: true
+        dateNewItem:
+            type: datetime
+            column: date_new_item
+            nullable: true
+    oneToMany:
+        items:
+            targetEntity: Item
+            mappedBy: feed
+            cascade: ["remove"]
+        marks:
+            targetEntity: FeedMark
+            mappedBy: feed
+            cascade: ["remove"]
+        subscriptions:
+            targetEntity: Subscription
+            mappedBy: feed
+            cascade: ["remove"]
+    uniqueConstraints:
+        url_idx:
+            columns: [ url ]
+    lifecycleCallbacks: {  }

@@ -1,0 +1,19 @@
+catalog:
+    path: /
+    defaults: { _controller: MiamBundle:Catalog:index }
+
+catalog_feeds:
+    path: /feeds
+    defaults: { _controller: MiamBundle:Catalog:showFeeds }
+
+catalog_items:
+    path: /items
+    defaults: { _controller: MiamBundle:Catalog:showItems }
+
+ajax_catalog_feed_subscribe:
+    path: /ajax/feed/{id}/subscribe
+    defaults: { _controller: MiamBundle:Catalog:ajaxSubscribeToFeed }
+
+ajax_catalog_feed_unsubscribe:
+    path: /ajax/feed/{id}/unsubscribe
+    defaults: { _controller: MiamBundle:Catalog:ajaxUnsubscribeFromFeed }

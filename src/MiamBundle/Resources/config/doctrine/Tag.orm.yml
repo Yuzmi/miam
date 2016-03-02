@@ -1,0 +1,21 @@
+MiamBundle\Entity\Tag:
+    type: entity
+    table: tag
+    repositoryClass: MiamBundle\Repository\TagRepository
+    id:
+        id:
+            type: integer
+            id: true
+            generator:
+                strategy: AUTO
+    fields:
+        name:
+            type: string
+        dateCreated:
+            type: datetime
+            column: date_created
+    manyToMany:
+        items:
+            targetEntity: Item
+            mappedBy: tags
+    lifecycleCallbacks: {  }

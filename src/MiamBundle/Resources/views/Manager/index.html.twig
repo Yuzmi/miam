@@ -1,0 +1,49 @@
+{% extends 'MiamBundle::base.html.twig' %}
+
+{% block stylesheets %}
+	{{ parent() }}
+	{% stylesheets "@MiamBundle/Resources/public/scss/manager.scss" filter='scss' output='css/manager.css' %}
+		<link href="{{ asset_url }}" type="text/css" rel="stylesheet">
+	{% endstylesheets %}
+{% endblock %}
+
+{% block body %}
+	{% include 'MiamBundle:Default:header.html.twig' %}
+	
+	<div class="body_manager">
+		<h1>Manager</h1>
+
+		<section class="tab catsubs">
+			<div class="header">
+				Categories & Subscriptions
+			</div>
+			<div class="content">
+				<div class="buttons">
+					<button class="createCategory">
+						Create a category
+					</button>
+
+					<button class="createSubscription">
+						Subscribe to a feed
+					</button>
+				</div>
+
+				<div class="tree">
+					{% include 'MiamBundle:Manager:tree.html.twig' %}
+				</div>
+			</div>
+		</section>
+	</div>
+{% endblock %}
+
+{% block javascripts %}
+	{{ parent() }}
+
+	{% javascripts "@MiamBundle/Resources/public/js/manager.js" %}
+		<script src="{{ asset_url }}"></script>
+	{% endjavascripts %}
+
+	<script type="text/javascript">
+		app.manager.init();
+	</script>
+{% endblock %}

@@ -1,0 +1,39 @@
+MiamBundle\Entity\Enclosure:
+    type: entity
+    table: enclosure
+    repositoryClass: MiamBundle\Repository\EnclosureRepository
+    id:
+        id:
+            type: integer
+            id: true
+            generator:
+                strategy: AUTO
+    fields:
+        url:
+            type: string
+        type:
+            type: string
+            nullable: true
+        length:
+            type: integer
+            nullable: true
+        title:
+            type: string
+            nullable: true
+        description:
+            type: text
+            nullable: true
+        dateCreated:
+            type: datetime
+            column: date_created
+    manyToOne:
+        item:
+            targetEntity: Item
+            inversedBy: enclosures
+            joinColumn:
+                name: item_id
+                referencedColumnName: id
+    uniqueConstraints:
+        item_url_idx:
+            columns: [ item_id, url ]
+    lifecycleCallbacks: {  }

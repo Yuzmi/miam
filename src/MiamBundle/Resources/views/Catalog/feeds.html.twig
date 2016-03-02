@@ -1,0 +1,41 @@
+{% extends 'MiamBundle:Catalog:base.html.twig' %}
+
+{% block content %}
+	<div class="feeds">
+		{% for feed in feeds %}
+			<div class="feed feed{{ feed.id }} {% if feed.id in subscribedFeedIds %}subscribed{% endif %}" data-feed="{{ feed.id }}" title="{{ feed.name }} - {{ feed.url }}">
+				<span class="name">{{ feed.name ? feed.name|shorten(32) : feed.url|shorten(32) }}</span>
+			</div>
+		{% endfor %}
+	</div>
+{% endblock %}
+
+{% block javascripts %}
+	{{ parent() }}
+
+	<script type="text/javascript">
+		$(".feed").on('click', function() {
+			var feedId = $(this).data('feed');
+			
+			if($(this).hasClass('subscribed')) {
+				$.ajax({
+					type: "POST",
+					url: Routing.generate('ajax_catalog_feed_unsubscribe', {id: feedId}, true),
+					dataType: "json",
+					success: function(result) {
+						$(".feed"+feedId).removeClass("subscribed");
+					}
+				});
+			} else {
+				$.ajax({
+					type: "POST",
+					url: Routing.generate('ajax_catalog_feed_subscribe', {id: feedId}, true),
+					dataType: "json",
+					success: function(result) {
+						$(".feed"+feedId).addClass("subscribed");
+					}
+				});
+			}
+		});
+	</script>
+{% endblock %}

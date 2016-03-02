@@ -1,0 +1,35 @@
+.body_catalog {
+	text-align:center;
+
+	.feeds {
+		.feed {
+			background-color:white;
+			border:solid 1px #ccf;
+			cursor:pointer;
+			display:inline-block;
+			margin:10px;
+			padding:10px;
+			position:relative;
+			width:260px;
+
+			.name {
+				display:block;
+				font-weight:700;
+			}
+
+			.subscriptionIcon {
+				background-color:orange;
+				display:none;
+				height:20px;
+				left:-5px;
+				position:absolute;
+				top:-5px;
+				width:20px;
+			}
+		}
+
+		.feed.subscribed {
+			background-color:#cfc;
+		}
+	}
+}

@@ -1,0 +1,245 @@
+@import "vars.scss";
+
+html {
+	font-size:10px;
+}
+
+body {
+	background-color:$color-body-background;
+	color:$color-default;
+	font-family:Arial, Helvetica, sans-serif;
+	font-size:1.4rem;
+	margin:0;
+	padding:0;
+}
+
+a {
+	color:$color-link;
+}
+
+select {
+	font-size:1.3rem;
+}
+
+noscript {
+	background-color:#fcc;
+	border-bottom:solid 1px red;
+	color:red;
+	display:block;
+	font-weight:700;
+	padding:1rem;
+	text-align:center;
+}
+
+header {
+	background-color:$color-header-background;
+	border-bottom:solid 1px $color-border;
+	padding:1rem;
+
+	.user {
+		float:right;
+	}
+}
+
+input, select, button {
+	border:solid 1px $color-border;
+	color:$color-default;
+	padding:0.4rem 0.8rem;
+}
+
+button {
+	cursor:pointer;
+
+	&:hover {
+		background-color:$color-border;
+		color:white;
+	}
+}
+
+.flashMessages {
+	bottom:25px;
+	position:fixed;
+	width:100%;
+
+	.flashMessageContainer {
+		display:block;
+		margin-top:20px;
+		text-align:center;
+
+		.flashMessage {
+			background-color:lightgrey;
+			border:solid 1px darkgrey;
+			display:inline-block;
+			font-size:1.6rem;
+			padding:8px 12px;
+		}
+	}
+
+	.flashMessageContainer:first-of-type {
+		margin-top:0px;
+	}
+}
+
+.popupContainer {
+	align-items:center;
+	background-color:rgba(0, 0, 0, 0.25);
+	bottom:0px;
+	display:none;
+	justify-content:center;
+	left:0px;
+	position:fixed;
+	right:0px;
+	top:0px;
+	z-index:10;
+
+	.popup {
+		background-color:$color-popup-background;
+		border:solid 2px $color-border;
+		display:inline-block;
+		max-height:90%;
+		max-width:90%;
+		padding:2rem;
+		text-align:center;
+
+		.header {
+			background-color:$color-border;
+			color:white;
+			font-size:2rem;
+			font-weight:700;
+			margin:-2rem -2rem 2rem;
+			padding:1rem 2rem;
+		}
+
+		label {
+			display:inline-block;
+		}
+
+		input, select {
+			display:inline-block;
+			margin-top:0.6rem;
+		}
+	}
+
+	&.visible {
+		display:flex;
+	}
+}
+
+.items {
+	padding:1rem;
+
+	.item {
+		$item-header-height: 2rem;
+		$item-header-pad-x: $item-header-height / 5 * 2;
+		$item-header-pad-y: $item-header-height / 5;
+
+		background-color:$color-item-background;
+		border:solid 1px $color-border;
+		font-size:$item-header-height / 2 * 1.3;
+		margin-top:$item-header-height / 2;
+		position:relative;
+		text-align:left;
+
+		&:first-of-type {
+			margin-top:0;
+		}
+
+		.header {
+			color:$color-default;
+			cursor:pointer;
+			display:block;
+			font-weight:700;
+			height:$item-header-height;
+			line-height:$item-header-height;
+			overflow:hidden;
+			padding:$item-header-pad-y $item-header-pad-x;
+			position:relative;
+			text-decoration:none;
+
+			.hide {
+				border-right:solid 1px $color-border;
+				cursor:pointer;
+				display:none;
+				height:$item-header-height + $item-header-pad-y * 2;
+				line-height:$item-header-height + $item-header-pad-y * 2;
+				margin:(-$item-header-pad-y) ($item-header-pad-x / 2) (-$item-header-pad-y) (-$item-header-pad-x);
+				text-align:center;
+				width:$item-header-height + $item-header-pad-x;
+			}
+
+			.datetime {
+				margin-right:$item-header-height / 10;
+			}
+
+			.title {
+				color:$color-item-title;
+			}
+
+			.summary {
+				color:$color-item-summary;
+				font-size:0.8em;
+			}
+
+			.feed {
+				float:right;
+				margin-left:$item-header-height / 5;
+			}
+		}
+
+		&.subscribed .header {
+			background-color:#cfc;
+		}
+
+		&.read .header {
+			background-color:$color-item-header-unread;
+			font-weight:normal;
+		}
+
+		&.expanded .header {
+			.hide {
+				display:inline-block;
+			}
+		}
+
+		.content {
+			border-top:solid 1px $color-border;
+			display:none;
+			line-height:$item-header-height * 0.9;
+			max-height:500px;
+			overflow-x:hidden;
+			overflow-y:auto;
+			padding:$item-header-pad-y $item-header-pad-x;
+			position:relative;
+		}
+
+		&.expanded .content {
+			display:block;
+		}
+
+		.details {
+			border-top:solid 1px $color-border;
+			display:none;
+			overflow:hidden;
+			padding:0.4rem 0.8rem;
+
+			& > * {
+				margin-top:0.4rem;
+			}
+
+			& > *:first-child {
+				margin-top:0;
+			}
+
+			select.enclosures {
+				background-color:$color-item-background;
+				border:solid 1px $color-border;
+				color:$color-default;
+				max-width:100%;
+			}
+		}
+
+		&.expanded .details {
+			display:block;
+		}
+	}
+}

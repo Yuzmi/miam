@@ -1,0 +1,35 @@
+index:
+    path: /
+    defaults: { _controller: MiamBundle:Default:index }
+
+miam_admin:
+    resource: "@MiamBundle/Resources/config/routing/admin.yml"
+    prefix: /admin
+
+miam_catalog:
+    resource: "@MiamBundle/Resources/config/routing/catalog.yml"
+    prefix: /catalog
+
+miam_manager:
+    resource: "@MiamBundle/Resources/config/routing/manager.yml"
+    prefix: /manager
+
+miam_security:
+    resource: "@MiamBundle/Resources/config/routing/security.yml"
+
+user:
+    path: /user/{userId}
+    defaults: { _controller: MiamBundle:User:show }
+    requirements: { userId: \d+ }
+
+ajax_items_get:
+    path: /ajax/items/get
+    defaults: { _controller: MiamBundle:Default:ajaxGetItems }
+
+ajax_items_read:
+    path: /ajax/items/read
+    defaults: { _controller: MiamBundle:Default:ajaxReadItems }
+
+ajax_unread_get:
+    path: /ajax/unread/get
+    defaults: { _controller: MiamBundle:Default:ajaxGetUnread }

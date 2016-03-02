@@ -1,0 +1,19 @@
+admin:
+    path: /
+    defaults: { _controller: MiamBundle:Admin:index }
+
+admin_feed_create:
+    path: /feed/create
+    defaults: { _controller: MiamBundle:Admin:createFeed }
+
+admin_feed_parse:
+    path: /feed/{id}/parse
+    defaults: { _controller: MiamBundle:Admin:parseFeed }
+
+admin_parse_all:
+    path: /parse/all
+    defaults: { _controller: MiamBundle:Admin:parseAll }
+
+admin_feed_delete:
+    path: /feed/{id}/delete
+    defaults: { _controller: MiamBundle:Admin:deleteFeed }

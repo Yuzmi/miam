@@ -1,0 +1,25 @@
+{% extends 'MiamBundle::base.html.twig' %}
+
+{% block stylesheets %}
+	{{ parent() }}
+	{% stylesheets "@MiamBundle/Resources/public/scss/catalog.scss" filter='scss' output='css/catalog.css' %}
+		<link href="{{ asset_url }}" type="text/css" rel="stylesheet">
+	{% endstylesheets %}
+{% endblock %}
+
+{% block body %}
+	{% include 'MiamBundle:Default:header.html.twig' %}
+
+	<div class="body_catalog">
+		<h1>Catalog
+			<br>
+			<small>
+				<a href="{{ path('catalog_feeds') }}">Feeds</a>
+				-
+				<a href="{{ path('catalog_items') }}">Items</a>
+			</small>
+		</h1>
+
+		{% block content %}{% endblock %}
+	</div>
+{% endblock %}

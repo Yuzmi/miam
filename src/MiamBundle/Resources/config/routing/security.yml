@@ -1,0 +1,17 @@
+register:
+    path: /register
+    defaults: { _controller: MiamBundle:Security:register }
+
+register_check:
+    path: /register/check
+    defaults: { _controller: MiamBundle:Security:registerCheck }
+
+login:
+    path: /login
+    defaults: { _controller: MiamBundle:Security:login }
+
+login_check:
+    path: /login/check
+
+logout:
+    path: /logout

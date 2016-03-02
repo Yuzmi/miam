@@ -1,0 +1,48 @@
+# To get started with security, check out the documentation:
+# http://symfony.com/doc/current/book/security.html
+security:
+    encoders:
+        MiamBundle\Entity\User: sha512
+
+    # http://symfony.com/doc/current/book/security.html#where-do-users-come-from-user-providers
+    providers:
+        miam_user:
+            entity:
+                class: MiamBundle\Entity\User
+                property: username
+
+    firewalls:
+        # disables authentication for assets and the profiler, adapt it according to your needs
+        dev:
+            pattern: ^/(_(profiler|wdt)|css|images|js)/
+            security: false
+
+        main:
+            pattern: ^/
+            form_login:
+                login_path: login
+                check_path: login_check
+                default_target_path: index
+                provider: miam_user
+                csrf_token_generator: security.csrf.token_manager
+                use_referer: true
+            logout:
+                path: /logout
+                target: index
+            remember_me:
+                secret: '%secret%'
+                always_remember_me: true
+            anonymous: ~
+
+            # http_basic: ~
+            # http://symfony.com/doc/current/book/security.html#a-configuring-how-your-users-will-authenticate
+
+            # form_login: ~
+            # http://symfony.com/doc/current/cookbook/security/form_login_setup.html
+
+    access_control:
+        - { path: /ajax/, roles: [IS_AUTHENTICATED_ANONYMOUSLY, ROLE_USER] }
+        - { path: ^/login$, role: IS_AUTHENTICATED_ANONYMOUSLY }
+        - { path: ^/register$, role: IS_AUTHENTICATED_ANONYMOUSLY }
+        - { path: ^/admin(/|$), role: ROLE_USER }
+        - { path: ^/manager(/|$), role: ROLE_USER }

@@ -1,0 +1,56 @@
+{% macro category(category, categories) %}
+	{% import _self as macros %}
+
+	<div class="row category" data-category="{{ category.id }}">
+		<span class="actions">
+			<span class="edit">
+				<i class="fa fa-edit"></i>
+			</span>
+			<span class="delete">
+				<i class="fa fa-remove"></i>
+			</span>
+		</span>
+
+		<span class="toggle">
+			<i class="fa fa-caret-right"></i>
+		</span>
+
+		{{ category.name }}
+
+		<span class="feedCount">
+			(<span class="count">0</span> feeds)
+		</span>
+	</div>
+	<div class="rowChildren" data-category="{{ category.id }}">
+		{% for c in categories if c.parent == category %}
+			{{ macros.category(c, categories) }}
+		{% endfor %}
+		{% for s in category.subscriptions %}
+			{{ macros.subscription(s) }}
+		{% endfor %}
+	</div>
+{% endmacro %}
+
+{% macro subscription(s) %}
+	<div class="row subscription" data-subscription="{{ s.id }}">
+		<span class="actions">
+			<span class="edit">
+				<i class="fa fa-edit"></i>
+			</span>
+			<span class="delete">
+				<i class="fa fa-remove"></i>
+			</span>
+		</span>
+
+		<span title="{{ s.feed.url }}">{{ s.name ?: s.feed.url }}</span>
+	</div>
+{% endmacro %}
+
+{% import _self as macros %}
+
+{% for c in categories if c.parent is null %}
+	{{ macros.category(c, categories) }}
+{% endfor %}
+{% for s in subscriptions if s.categories|length == 0 %}
+	{{ macros.subscription(s) }}
+{% endfor %}

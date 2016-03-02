@@ -1,0 +1,39 @@
+{% extends 'MiamBundle::base.html.twig' %}
+
+{% block body %}
+	{% include 'MiamBundle:Default:header.html.twig' %}
+
+	<p>
+	{{ form_start(createFeedForm) }}
+	{{ form_widget(createFeedForm.url) }}
+	{{ form_widget(createFeedForm.submit) }}
+	{{ form_end(createFeedForm) }}
+	</p>
+
+	<table>
+		<tr>
+			<th>Name</th>
+			<th>URL</th>
+			<th>Parsing</th>
+			<th>Rate</th>
+		</tr>
+		{% for feed in feeds %}
+			<tr>
+				<td title="{{ feed.name }}">
+					{{ feed.name|shorten(40) }}
+				</td>
+				<td title="{{ feed.url }}">
+					{{ feed.url|shorten(60) }}
+				</td>
+				<td>
+					<a href="{{ path('admin_feed_parse', {'id': feed.id}) }}">
+						Parse
+					</a>
+				</td>
+				<td>
+					{{ feed.weekRate|round(2) }} / {{ feed.monthRate|round(2) }} / {{ feed.globalRate|round(2) }}
+				</td>
+			</tr>
+		{% endfor %}
+	</table>
+{% endblock %}

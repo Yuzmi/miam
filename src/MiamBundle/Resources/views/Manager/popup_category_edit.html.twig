@@ -1,0 +1,40 @@
+<div class="popupContainer editCategory visible">
+	<div class="popup">
+		<div class="header">Edit category "{{ category.name }}"</div>
+
+		<form method="POST" action="{{ path('manager_category_update', {'id': category.id}) }}">
+			<label for="name">Name:</label>
+			<input type="text" id="name" name="name" value="{{ category.name }}" required>
+
+			<br><br>
+
+			<label for="parent">Parent:</label>
+			<select id="parent" name="parent">
+				<option></option>
+				{% for c in categories %}
+					<option value="{{ c.id }}" {{ category.parent and category.parent.id == c.id ? "selected" }}>
+						{{ c.path }}
+					</option>
+				{% endfor %}
+			</select>
+
+			<br><br>
+
+			<label>Subscriptions:</label>
+			<div class="subscriptions">
+				{% for s in subscriptions %}
+					<div class="subscription" {{ s.categories|length == 0 ? 'style="color:red;"' }}>
+						<input type="checkbox" name="subscriptions[]" value="{{ s.id }}" {{ s in category.subscriptions ? "checked" }}>
+						{{ s.name ?: s.feed.url }}
+					</div>
+				{% endfor %}
+			</div>
+
+			<input type="hidden" name="csrf_token" value="{{ csrf_token('manager_category_update') }}">
+
+			<br><br>
+
+			<button type="submit">Update</button>
+		</form>
+	</div>
+</div>

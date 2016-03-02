@@ -1,0 +1,90 @@
+.body_manager {
+	text-align:center;
+
+	.tab {
+		background-color:white;
+		border:solid 2px #ccf;
+		margin:30px 40px 0;
+
+		&:first-of-type {
+			margin-top:0;
+		}
+
+		.header {
+			background-color:#ccf;
+			cursor:pointer;
+			font-weight:700;
+			padding:10px;
+		}
+
+		.content {
+			border-top:solid 1px #ccf;
+			display:none;
+			padding:10px;
+		}
+
+		&.catsubs {
+			.content {
+				padding:0;
+
+				.buttons {
+					padding:1rem;
+				}
+
+				.tree {
+					text-align:left;
+
+					.row {
+						background-color:#f9f9ff;
+						border-bottom:solid 1px #ccf;
+						height:3rem;
+						line-height:3rem;
+						overflow:hidden;
+						padding:0 1rem;
+
+						.actions {
+							float:right;
+
+							i {
+								cursor:pointer;
+								padding:0 0.4rem;
+							}
+						}
+					}
+
+					& > div:first-of-type {
+						border-top:solid 1px #ccf;
+					}
+
+					.category {
+						.toggle {
+							cursor:pointer;
+							display:inline-block;
+							width:1rem;
+						}
+					}
+
+					.rowChildren {
+						display:none;
+					}
+				}
+			}
+		}
+	}
+}
+
+.popupContainer {
+	&.editCategory {
+		.subscriptions {
+			border:solid 1px black;
+			max-height:40rem;
+			max-width:100%;
+			overflow:auto;
+			text-align:left;
+
+			.subscription {
+				padding:0.1rem;
+			}
+		}
+	}
+}

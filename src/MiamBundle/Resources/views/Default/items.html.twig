@@ -1,0 +1,73 @@
+{% if items is defined %}
+	{% for item in items %}
+		{% set itemData = dataItems[item.id] is defined ? dataItems[item.id] : null %}
+		<div class="item {{ itemData and itemData.isRead ? 'read' }}" data-item="{{ item.id }}" data-feed="{{ item.feed.id }}">
+			<a class="header" href="{{ item.link }}" target="_blank">
+				<span class="feed">
+					{% if itemData and itemData.feedName %}
+						{{ itemData.feedName }}
+					{% elseif item.feed.name %}
+						{{ item.feed.name }}
+					{% else %}
+						{{ item.feed.url }}
+					{% endif %}
+				</span>
+
+				<span class="hide">
+					<i class="fa fa-minus"></i>
+				</span>
+
+				<span class="datetime">
+					{% if item.datePublished|date('d/m/Y') == "now"|date('d/m/Y') %}
+						{{ item.datePublished|date('H:i') }}
+					{% elseif item.datePublished|date('Y') == "now"|date('Y') %}
+						{{ item.datePublished|date('m/d H:i') }}
+					{% else %}
+						{{ item.datePublished|date('y/m/d H:i') }}
+					{% endif %}
+				</span>
+
+				<span class="title">
+					{{ item.title }}
+				</span>
+
+				{% set summary = item.textContent|shorten(200) %}
+
+				{% if summary %}
+					<span class="summary">- {{ summary }}</span>
+				{% endif %}
+			</a>
+
+			<div class="content">
+				{{ item.htmlContent ? item.htmlContent|raw : "[No content]" }}
+			</div>
+
+			{% if itemData and (itemData.tags|length > 0 or itemData.enclosures|length > 0) %}
+				<div class="details">
+					{% if itemData.tags|length > 0 %}
+						<div class="tags">
+							Tags:
+							{% for tag in itemData.tags %}
+								{% if loop.index > 1 %}
+									-
+								{% endif %}
+								{{ tag.name }}
+							{% endfor %}
+						</div>
+					{% endif %}
+
+					{% if itemData.enclosures|length > 0 %}
+						<select class="enclosures">
+							<option selected="selected">Enclosure(s)</option>
+							{% for enclosure in itemData.enclosures %}
+								<option class="enclosure" data-url="{{ enclosure.url }}">
+									{{ enclosure.title ?: enclosure.url }}
+								</option>
+							{% endfor %}
+						</select>
+					{% endif %}
+				</div>
+			{% endif %}
+		</div>
+	{% endfor %}
+{% endif %}

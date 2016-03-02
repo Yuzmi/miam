@@ -1,0 +1,21 @@
+services:
+    category_manager:
+        class: MiamBundle\Services\CategoryManager
+        arguments: ["@doctrine.orm.default_entity_manager", "@service_container"]
+    data_parsing:
+        class: MiamBundle\Services\DataParsing
+        arguments: ["@doctrine.orm.default_entity_manager", "@service_container"]
+    feed_manager:
+        class: MiamBundle\Services\FeedManager
+        arguments: ["@doctrine.orm.default_entity_manager", "@service_container"]
+    item_manager:
+        class: MiamBundle\Services\ItemManager
+        arguments: ["@doctrine.orm.default_entity_manager", "@security.token_storage"]
+    mark_manager:
+        class: MiamBundle\Services\MarkManager
+        arguments: ["@doctrine.orm.default_entity_manager"]
+    text_extension:
+        class: MiamBundle\Twig\TextExtension
+        public: false
+        tags:
+            - { name: twig.extension }

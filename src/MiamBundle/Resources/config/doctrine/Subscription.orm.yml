@@ -1,0 +1,38 @@
+MiamBundle\Entity\Subscription:
+    type: entity
+    table: subscription
+    repositoryClass: MiamBundle\Repository\SubscriptionRepository
+    id:
+        id:
+            type: integer
+            id: true
+            generator:
+                strategy: AUTO
+    fields:
+        name:
+            type: string
+            nullable: true
+        dateCreated:
+            type: datetime
+            column: date_created
+    manyToMany:
+        categories:
+            targetEntity: Category
+            mappedBy: subscriptions
+    manyToOne:
+        feed:
+            targetEntity: Feed
+            inversedBy: subscriptions
+            joinColumn:
+                name: feed_id
+                referencedColumnName: id
+        user:
+            targetEntity: User
+            inversedBy: subscriptions
+            joinColumn:
+                name: user_id
+                referencedColumnName: id
+    uniqueConstraints:
+        feed_user_idx:
+            columns: [ feed_id, user_id ]
+    lifecycleCallbacks: {  }

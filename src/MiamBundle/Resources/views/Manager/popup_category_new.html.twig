@@ -1,0 +1,26 @@
+<div class="popupContainer visible">
+	<div class="popup">
+		<div class="header">New category</div>
+
+		<form method="POST" action="{{ path('manager_category_create') }}">
+			<label for="name">Name:</label>
+			<input type="text" id="name" name="name" required>
+
+			<br>
+
+			<label for="parent">Parent:</label>
+			<select id="parent" name="parent">
+				<option></option>
+				{% for c in categories %}
+					<option value="{{ c.id }}">{{ c.path }}</option>
+				{% endfor %}
+			</select>
+
+			<input type="hidden" name="csrf_token" value="{{ csrf_token('manager_category_create') }}">
+
+			<br><br>
+
+			<button type="submit">Create</button>
+		</form>
+	</div>
+</div>

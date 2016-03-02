@@ -1,0 +1,56 @@
+MiamBundle\Entity\Category:
+    type: entity
+    table: category
+    repositoryClass: MiamBundle\Repository\CategoryRepository
+    id:
+        id:
+            type: integer
+            id: true
+            generator:
+                strategy: AUTO
+    fields:
+        name:
+            type: string
+        dateCreated:
+            type: datetime
+            column: date_created
+        leftPosition:
+            type: integer
+            column: left_position
+            nullable: true
+        rightPosition:
+            type: integer
+            column: right_position
+            nullable: true
+    manyToMany:
+        subscriptions:
+            targetEntity: Subscription
+            inversedBy: categories
+            joinTable:
+                name: categories_subscriptions
+                joinColumns:
+                    category_id:
+                        referencedColumnName: id
+                inverseJoinColumns:
+                    subscription_id:
+                        referencedColumnName: id
+    manyToOne:
+        parent:
+            targetEntity: Category
+            inversedBy: subcategories
+            joinColumn:
+                name: parent_id
+                referencedColumnName: id
+                nullable: true
+        user:
+            targetEntity: User
+            inversedBy: categories
+            joinColumn:
+                name: user_id
+                referencedColumnName: id
+    oneToMany:
+        subcategories:
+            targetEntity: Category
+            mappedBy: parent
+            cascade: ["remove"]
+    lifecycleCallbacks: {  }

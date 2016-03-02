@@ -1,0 +1,30 @@
+MiamBundle\Entity\FeedMark:
+    type: entity
+    table: feed_mark
+    repositoryClass: MiamBundle\Repository\FeedMarkRepository
+    id:
+        id:
+            type: integer
+            id: true
+            generator:
+                strategy: AUTO
+    fields:
+        dateRead:
+            type: datetime
+            nullable: true
+    manyToOne:
+        feed:
+            targetEntity: Feed
+            inversedBy: marks
+            joinColumn:
+                name: feed_id
+                referencedColumnName: id
+        user:
+            targetEntity: User
+            joinColumn:
+                name: user_id
+                referencedColumnName: id
+    uniqueConstraints:
+        feed_user_idx:
+            columns: [ feed_id, user_id ]
+    lifecycleCallbacks: {  }

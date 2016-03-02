@@ -1,0 +1,34 @@
+MiamBundle\Entity\ItemMark:
+    type: entity
+    table: item_mark
+    repositoryClass: MiamBundle\Repository\ItemMarkRepository
+    id:
+        id:
+            type: integer
+            id: true
+            generator:
+                strategy: AUTO
+    fields:
+        isRead:
+            type: boolean
+        isStarred:
+            type: boolean
+        dateRead:
+            type: datetime
+            nullable: true
+    manyToOne:
+        item:
+            targetEntity: Item
+            inversedBy: marks
+            joinColumn:
+                name: item_id
+                referencedColumnName: id
+        user:
+            targetEntity: User
+            joinColumn:
+                name: user_id
+                referencedColumnName: id
+    uniqueConstraints:
+        item_user_idx:
+            columns: [ item_id, user_id ]
+    lifecycleCallbacks: {  }
