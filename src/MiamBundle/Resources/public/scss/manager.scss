@@ -3,7 +3,7 @@
 
 	.tab {
 		background-color:white;
-		border:solid 2px #ccf;
+		border:solid 2px black;
 		margin:30px 40px 0;
 
 		&:first-of-type {
@@ -11,14 +11,15 @@
 		}
 
 		.header {
-			background-color:#ccf;
+			background-color:black;
+			color:white;
 			cursor:pointer;
 			font-weight:700;
 			padding:10px;
 		}
 
 		.content {
-			border-top:solid 1px #ccf;
+			border-top:solid 1px black;
 			display:none;
 			padding:10px;
 		}
@@ -35,8 +36,8 @@
 					text-align:left;
 
 					.row {
-						background-color:#f9f9ff;
-						border-bottom:solid 1px #ccf;
+						background-color:white;
+						border-bottom:solid 1px black;
 						height:3rem;
 						line-height:3rem;
 						overflow:hidden;
@@ -53,7 +54,7 @@
 					}
 
 					& > div:first-of-type {
-						border-top:solid 1px #ccf;
+						border-top:solid 1px black;
 					}
 
 					.category {

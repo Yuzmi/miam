@@ -5,7 +5,7 @@ $width-sidebar:250px;
 .body_home {
 	.sidebar {
 		background-color:white;
-		border-right:solid 1px $color-border;
+		border-right:solid 1px black;
 		bottom:0px;
 		overflow-x:hidden;
 		overflow-y:auto;
@@ -14,7 +14,7 @@ $width-sidebar:250px;
 		width:$width-sidebar - 1px;
 
 		.row {
-			border-bottom:solid 1px $color-border;
+			border-bottom:solid 1px black;
 			cursor:pointer;
 			height:3.6rem;
 			line-height:3.6rem;
@@ -23,11 +23,13 @@ $width-sidebar:250px;
 			position:relative;
 
 			&:hover {
-				background-color:$color-border;
+				background-color:black;
+				color:white;
 			}
 
 			&.selected {
-				background-color:$color-border;
+				background-color:black;
+				color:white;
 				font-weight:700;
 			}
 
@@ -59,7 +61,7 @@ $width-sidebar:250px;
 			}
 
 			.unreadCount {
-				background-color:$color-main3;
+				background-color:black;
 				color:white;
 				display:none;
 				font-size:0.8em;
@@ -82,7 +84,7 @@ $width-sidebar:250px;
 		}
 
 		&_toggle {
-			border-right:solid 1px $color-border;
+			border-right:solid 1px black;
 			cursor:pointer;
 			font-weight:700;
 			height:1.6rem;
@@ -96,7 +98,7 @@ $width-sidebar:250px;
 			z-index:3;
 
 			&:hover {
-				background-color:$color-border;
+				background-color:black;
 				color:white;
 			}
 
@@ -112,13 +114,13 @@ $width-sidebar:250px;
 
 	.sidebarRowMenu {
 		background-color:white;
-		border:solid 1px $color-main3;
-		color:$color-main3;
+		border:solid 1px black;
+		color:black;
 		font-weight:700;
 		position:fixed;
 
 		.option {
-			border-top:solid 1px $color-main3;
+			border-top:solid 1px black;
 			cursor:pointer;
 			padding:0.5rem 1rem;
 
@@ -127,7 +129,7 @@ $width-sidebar:250px;
 			}
 
 			&:hover {
-				background-color:$color-main3;
+				background-color:black;
 				color:white;
 			}
 		}

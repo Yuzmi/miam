@@ -4,7 +4,7 @@
 	.feeds {
 		.feed {
 			background-color:white;
-			border:solid 1px #ccf;
+			border:solid 1px black;
 			cursor:pointer;
 			display:inline-block;
 			margin:10px;
@@ -29,7 +29,8 @@
 		}
 
 		.feed.subscribed {
-			background-color:#cfc;
+			background-color:black;
+			color:white;
 		}
 	}
 }
