@@ -7,6 +7,8 @@ app.manager = {
 		var params = app.getUrlParams();
 		if(params.tab) {
 			$(".tab."+params.tab+" .content").show();
+		} else {
+			$(".tab.catsubs .content").show();
 		}
 
 		this.catsubs.init();
@@ -36,6 +38,32 @@ app.manager = {
 				$.ajax({
 					type: "POST",
 					url: Routing.generate("ajax_manager_popup_subscription_new"),
+					dataType: "json"
+				}).done(function(result) {
+					if(result.success) {
+						$("body").append(result.html);
+						app.popup.init();
+					}
+				});
+			});
+
+			$(".catsubs .exportOPML").click(function() {
+				$.ajax({
+					type: "POST",
+					url: Routing.generate("ajax_manager_popup_opml_export"),
+					dataType: "json"
+				}).done(function(result) {
+					if(result.success) {
+						$("body").append(result.html);
+						app.popup.init();
+					}
+				});
+			});
+
+			$(".catsubs .importOPML").click(function() {
+				$.ajax({
+					type: "POST",
+					url: Routing.generate("ajax_manager_popup_opml_import"),
 					dataType: "json"
 				}).done(function(result) {
 					if(result.success) {
@@ -98,12 +126,32 @@ app.manager = {
 			});
 
 			this.indent();
+			this.countFeedsPerCategory();
 		},
 
 		indent: function() {
 			$(".catsubs .row").each(function() {
 				var indentation = ($(this).parents(".rowChildren").length + 1) * 1.5;
 				$(this).css('padding-left', indentation+"rem");
+			});
+		},
+
+		countFeedsPerCategory: function() {
+			$(".catsubs .category").each(function() {
+				var category = $(this).data('category');
+
+				var count = 0;
+				var subIds = [];
+
+				$(".catsubs .rowChildren[data-category="+category+"] .subscription").each(function() {
+					var subId = $(this).data("subscription");
+					if($.inArray(subId, subIds) == -1) {
+						count = count + 1;
+						subIds.push(subId);
+					}
+				});
+				
+				$(".catsubs .category[data-category="+category+"] .feedCount .count").text(count);
 			});
 		}
 	}

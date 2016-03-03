@@ -1,0 +1,13 @@
+<div class="popupContainer {% block popupContainerClass %}{% endblock %}">
+	<div class="popup {% block popupClass %}{% endblock %}">
+		{% if block('popupTitle') %}
+			<div class="popupTitle">
+				{% block popupTitle %}{% endblock %}
+			</div>
+		{% endif %}
+
+		<div class="popupContent">
+			{% block popupContent %}{% endblock %}
+		</div>
+	</div>
+</div>

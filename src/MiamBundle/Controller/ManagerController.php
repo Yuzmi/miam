@@ -6,10 +6,12 @@ use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 
 use MiamBundle\Entity\Category;
 use MiamBundle\Entity\Feed;
 use MiamBundle\Entity\Subscription;
+use MiamBundle\Entity\User;
 
 class ManagerController extends MainController
 {
@@ -125,7 +127,7 @@ class ManagerController extends MainController
             }
 
             $subscriptionIds = $request->get("subscriptions");
-            $subscriptions = null;
+            $subscriptions = array();
             if(is_array($subscriptionIds) && !empty($subscriptionIds)) {
                 $subscriptions = $this->getRepo("Subscription")->createQueryBuilder("s")
                     ->where("s.user = :user")->setParameter("user", $this->getUser())
@@ -235,9 +237,97 @@ class ManagerController extends MainController
 
     public function createSubscriptionAction(Request $request) {
         if($this->isTokenValid('manager_subscription_create', $request->get('csrf_token'))) {
-            $subscription = $this->get('feed_manager')->subscribeUserToUrl($this->getUser(), $request->get('url'));
+            $subscription = $this->get('feed_manager')->getSubscriptionForUserAndUrl($this->getUser(), $request->get('url'));
             if($subscription) {
                 $this->addFm("Feed subscribed", "success");
+            } else {
+                $this->addFm("Error", "error");
+            }
+        } else {
+            $this->addFm("Invalid token", "error");
+        }
+
+        return $this->redirectToRoute("manager", array("tab" => "catsubs"));
+    }
+
+    public function ajaxPopupEditSubscriptionAction(Request $request, $id) {
+        $response = array(
+            "success" => false
+        );
+
+        if($request->isXmlHttpRequest() && $this->isLogged()) {
+            $subscription = $this->getRepo("Subscription")->findOneForUserWithMore($id, $this->getUser());
+            if($subscription) {
+                $categories = $this->getRepo("Category")->findForUser($this->getUser(), "leftPosition");
+
+                $html = $this->renderView("MiamBundle:Manager:popup_subscription_edit.html.twig", array(
+                    "subscription" => $subscription,
+                    "categories" => $categories
+                ));
+
+                $response["success"] = true;
+                $response["html"] = $html;
+            }
+        }
+
+        return new JsonResponse($response);
+    }
+
+    public function updateSubscriptionAction(Request $request, $id) {
+        if($this->isTokenValid('manager_subscription_update', $request->get('csrf_token'))) {
+            $subscription = $this->getRepo("Subscription")->findOneBy(array(
+                'id' => $id,
+                'user' => $this->getUser()
+            ));
+            if($subscription) {
+                $em = $this->getEm();
+
+                $name = trim($request->get("name"));
+                if(!empty($name)) {
+                    $subscription->setName($name);
+                }
+
+                $url = $request->get("url");
+                $feed = $this->get("feed_manager")->getFeedForUrl($url);
+                if($feed && $feed->getId() != $subscription->getFeed()->getId()) {
+                    $feedSubscription = $this->getRepo("Subscription")->findOneBy(array(
+                        'feed' => $feed,
+                        'user' => $this->getUser()
+                    ));
+                    if(!$feedSubscription) {
+                        $subscription->setFeed($feed);
+                    } else {
+                        $this->addFm("Subscription already exists for the given URL", "error");
+                    }
+                }
+
+                $categoryIds = $request->get("categories");
+                $categories = array();
+                if(is_array($categoryIds) && !empty($categoryIds)) {
+                    $categories = $this->getRepo("Category")->createQueryBuilder('c')
+                        ->where("c.user = :user")->setParameter("user", $this->getUser())
+                        ->andWhere("c.id IN (:ids)")->setParameter("ids", $categoryIds)
+                        ->getQuery()->getResult();
+                }
+
+                foreach($subscription->getCategories() as $c) {
+                    if(!in_array($c->getId(), $categoryIds)) {
+                        $c->removeSubscription($subscription);
+                        $em->persist($c);
+                    }
+                }
+
+                foreach($categories as $c) {
+                    if(!$subscription->getCategories()->contains($c)) {
+                        $c->addSubscription($subscription);
+                        $em->persist($c);
+                    }
+                }
+
+                $em->persist($subscription);
+                $em->flush();
+
+                $this->addFm("Subscription updated", "success");
             } else {
                 $this->addFm("Error", "error");
             }
@@ -289,5 +379,141 @@ class ManagerController extends MainController
         }
 
         return $this->redirectToRoute("manager", array("tab" => "catsubs"));
+    }
+
+    public function ajaxPopupExportOPMLAction(Request $request) {
+        $response = array(
+            "success" => false
+        );
+
+        if($request->isXmlHttpRequest() && $this->isLogged()) {
+            $html = $this->renderView("MiamBundle:Manager:popup_opml_export.html.twig");
+
+            $response["success"] = true;
+            $response["html"] = $html;
+        }
+
+        return new JsonResponse($response);
+    }
+
+    public function exportOPMlAction(Request $request) {
+        $what = $request->get("what");
+
+        $categories = $this->getRepo("Category")->findForUserWithMore($this->getUser());
+        $subscriptions = $this->getRepo("Subscription")->findForUserWithMore($this->getUser());
+        $settings = array();
+
+        $opml = $this->renderView("MiamBundle:Manager:export.opml.twig", array(
+            'what' => $what,
+            'categories' => $categories,
+            'subscriptions' => $subscriptions,
+            'settings' => $settings,
+            'user' => $this->getUser(),
+            'dateCreated' => date_format(new \DateTime("now"), DATE_ATOM)
+        ));
+
+        $response = new Response($opml);
+        $response->headers->set('Content-Type', "application/xml+opml");
+        $response->headers->set('Content-Disposition', "attachment;filename=export.opml");
+
+        return $response;
+    }
+
+    public function ajaxPopupImportOPMLAction(Request $request) {
+        $response = array(
+            "success" => false
+        );
+
+        if($request->isXmlHttpRequest() && $this->isLogged()) {
+            $html = $this->renderView("MiamBundle:Manager:popup_opml_import.html.twig");
+
+            $response["success"] = true;
+            $response["html"] = $html;
+        }
+
+        return new JsonResponse($response);
+    }
+
+    public function importOPMLAction(Request $request) {
+        if($this->isTokenValid('manager_opml_import', $request->get('csrf_token'))) {
+            $opml = false;
+            if(isset($_FILES["opml"]["tmp_name"])) {
+                try {
+                    $opml = simplexml_load_file($_FILES["opml"]["tmp_name"]);
+                } catch(\Exception $e) {
+                    $opml = false;
+                }
+            }
+            
+            if($opml !== false) {
+                foreach($opml->body->children() as $child) {
+                    $this->importOPMLOutlineForUser($child, $this->getUser());
+                }
+
+                $this->addFm("OPML imported", "success");
+            } else {
+                $this->addFm("Error", "error");
+            }
+        } else {
+            $this->addFm("Invalid token", "error");
+        }
+
+        return $this->redirectToRoute("manager", array("tab" => "catsubs"));
+    }
+
+    private function importOPMLOutlineForUser($outline, User $user, Category $parentCategory = null) {
+        $em = $this->getEm();
+
+        $type = isset($outline['type']) ? trim($outline['type']) : null;
+        if(isset($outline["xmlUrl"])) {
+            $subscription = $this->get("feed_manager")->getSubscriptionForUserAndUrl($user, $outline["xmlUrl"]);
+            if($subscription) {
+                $text = null;
+                if(isset($outline['text']) || isset($outline['title'])) {
+                    $text = isset($outline['text']) ? trim($outline['text']) : trim($outline['title']);
+                    if(!empty($text)) {
+                        $subscription->setName($text);
+                        $em->persist($subscription);
+                    }
+                }
+
+                if($parentCategory) {
+                    $parentCategory->addSubscription($subscription);
+                    $em->persist($parentCategory);
+                }
+
+                $em->flush();
+            }
+        } elseif($type == "setting") {
+            // TODO
+        } else {
+            $category = null;
+            if(isset($outline['text']) || isset($outline['title'])) {
+                $name = isset($outline['text']) ? trim($outline['text']) : trim($outline['title']);
+                if(!empty($name)) {
+                    $category = $this->getRepo("Category")->findOneBy(array(
+                        'name' => $name,
+                        'parent' => $parentCategory,
+                        'user' => $user
+                    ));
+                    if(!$category) {
+                        $category = new Category();
+                        $category->setUser($user);
+                        $category->setName($name);
+
+                        if($parentCategory) {
+                            $category->setParent($parentCategory);
+                        }
+
+                        $em->persist($category);
+                        $em->flush();
+                    }
+                }
+            }
+
+            foreach($outline->children() as $child) {
+                $this->importOPMLOutlineForUser($child, $user, $category);
+            }
+        }
     }
 }

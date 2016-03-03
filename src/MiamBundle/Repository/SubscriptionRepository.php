@@ -55,6 +55,18 @@ class SubscriptionRepository extends \Doctrine\ORM\EntityRepository
 			->leftJoin('s.categories', 'c')->addSelect('c')
 			->where('s.user = :user')->setParameter('user', $user)
 			->orderBy('s.name', 'ASC')
+			->addOrderBy('c.name', 'ASC')
 			->getQuery()->getResult();
+	}
+
+	public function findOneForUserWithMore($id, User $user) {
+		return $this->createQueryBuilder('s')
+			->innerJoin('s.feed', 'f')->addSelect('f')
+			->leftJoin('s.categories', 'c')->addSelect('c')
+			->where('s.user = :user')->setParameter('user', $user)
+			->andWhere('s.id = :id')->setParameter('id', $id)
+			->orderBy('s.name', 'ASC')
+			->addorderBy('c.name', 'ASC')
+			->getQuery()->getOneOrNullResult();
 	}
 }

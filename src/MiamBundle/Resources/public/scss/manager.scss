@@ -77,14 +77,27 @@
 	&.editCategory {
 		.subscriptions {
 			border:solid 1px black;
+			margin:auto;
+			margin-top:1rem;
 			max-height:40rem;
 			max-width:100%;
 			overflow:auto;
+			padding:0.5rem 1rem;
 			text-align:left;
+		}
+	}
 
-			.subscription {
-				padding:0.1rem;
-			}
+	&.editSubscription {
+		.categories {
+			border:solid 1px black;
+			display:inline-block;
+			margin:auto;
+			margin-top:1rem;
+			max-height:40rem;
+			max-width:100%;
+			overflow:auto;
+			padding:0.5rem 1rem;
+			text-align:left;
 		}
 	}
 }

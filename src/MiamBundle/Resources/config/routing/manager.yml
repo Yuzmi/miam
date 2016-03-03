@@ -56,3 +56,19 @@ manager_subscription_delete:
     path: /subscription/{id}/delete
     defaults: { _controller: MiamBundle:Manager:deleteSubscription }
     requirements: { id: \d+ }
+
+ajax_manager_popup_opml_export:
+    path: /ajax/popup/opml/export
+    defaults: { _controller: MiamBundle:Manager:ajaxPopupExportOPML }
+
+manager_opml_export:
+    path: /opml/export
+    defaults: { _controller: MiamBundle:Manager:exportOPML }
+
+ajax_manager_popup_opml_import:
+    path: /ajax/popup/opml/import
+    defaults: { _controller: MiamBundle:Manager:ajaxPopupImportOPML }
+
+manager_opml_import:
+    path: /opml/import
+    defaults: { _controller: MiamBundle:Manager:importOPML }

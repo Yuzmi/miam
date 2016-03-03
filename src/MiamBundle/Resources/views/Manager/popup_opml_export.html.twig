@@ -1,0 +1,20 @@
+{% extends "MiamBundle:Default:popup.html.twig" %}
+
+{% block popupTitle %}Export OPML{% endblock %}
+
+{% block popupContent %}
+	<form method="POST" action="{{ path('manager_opml_export') }}">
+		<label for="what">What do you want to export ?</label>
+		<br>
+		<select name="what">
+			<option value="all">Everything</option>
+			<option value="catsubs">Categories & Subscriptions</option>
+			<option value="subscriptions">Subscriptions</option>
+			<option value="settings">Settings</option>
+		</select>
+
+		<br><br>
+
+		<button type="submit">Export</button>
+	</form>
+{% endblock %}

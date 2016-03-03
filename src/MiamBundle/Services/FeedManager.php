@@ -19,6 +19,29 @@ class FeedManager {
 		return trim($url);
 	}
 
+	public function getSubscriptionForUserAndUrl(User $user, $url) {
+		$subscription = null;
+
+		$feed = $this->getFeedForUrl($url);
+		if($feed) {
+			$subscription = $this->getSubscriptionForUserAndFeed($user, $feed);
+		}
+
+		return $subscription;
+	}
+
+	public function getSubscriptionForUserAndFeed(User $user, Feed $feed) {
+		$subscription = $this->em->getRepository('MiamBundle:Subscription')->findOneBy(array(
+			'user' => $user,
+			'feed' => $feed
+		));
+		if(!$subscription) {
+			$subscription = $this->subscribeUserToFeed($user, $feed);
+		}
+
+		return $subscription;
+	}
+
 	public function getFeedForUrl($url) {
 		$feed = null;
 
@@ -34,6 +57,18 @@ class FeedManager {
 		return $feed;
 	}
 
+	public function subscribeUserToFeed(User $user, Feed $feed) {
+		$subscription = new Subscription();
+		$subscription->setUser($user);
+		$subscription->setFeed($feed);
+		$subscription->setName($feed->getName());
+
+		$this->em->persist($subscription);
+		$this->em->flush();
+
+		return $subscription;
+	}
+
 	public function createFeedForUrl($url) {
 		$feed = new Feed();
 		$feed->setUrl($url);
@@ -44,35 +79,6 @@ class FeedManager {
 		$this->container->get('data_parsing')->parseFeed($feed);
 
 		return $feed;
-	}
-
-	public function subscribeUserToFeed(User $user, Feed $feed) {
-		$subscription = $this->em->getRepository('MiamBundle:Subscription')->findOneBy(array(
-			'user' => $user,
-			'feed' => $feed
-		));
-		if(!$subscription) {
-			$subscription = new Subscription();
-			$subscription->setUser($user);
-			$subscription->setFeed($feed);
-			$subscription->setName($feed->getName());
-
-			$this->em->persist($subscription);
-			$this->em->flush();
-		}
-
-		return $subscription;
-	}
-
-	public function subscribeUserToUrl(User $user, $url) {
-		$subscription = null;
-
-		$feed = $this->getFeedForUrl($url);
-		if($feed) {
-			$subscription = $this->subscribeUserToFeed($user, $feed);
-		}
-
-		return $subscription;
 	}
 
 	public function unsubscribeUserFromFeed(User $user, Feed $feed) {

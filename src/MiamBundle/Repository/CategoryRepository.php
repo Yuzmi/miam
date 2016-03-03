@@ -25,6 +25,7 @@ class CategoryRepository extends \Doctrine\ORM\EntityRepository
 			->leftJoin('c.subscriptions', 's')->addSelect('s')
 			->where('c.user = :user')->setParameter('user', $user)
 			->orderBy('c.name', 'ASC')
+			->addOrderBy('s.name', 'ASC')
 			->getQuery()->getResult();
 	}
 
@@ -35,9 +36,11 @@ class CategoryRepository extends \Doctrine\ORM\EntityRepository
 			->where('c.user = :user')->setParameter('user', $user)
 			->andWhere('c.id = :id')->setParameter('id', $id)
 			->orderBy('c.name', 'ASC')
+			->addOrderBy('s.name', 'ASC')
 			->getQuery()->getOneOrNullResult();
 	}
 
+	/*
 	public function findPathesForUser(User $user) {
 		$categories = $this->findForUser($user);
 
@@ -65,4 +68,5 @@ class CategoryRepository extends \Doctrine\ORM\EntityRepository
 
 		return $pathes;
 	}
+	*/
 }

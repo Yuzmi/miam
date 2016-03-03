@@ -21,74 +21,21 @@
 		{% block body %}{% endblock %}
 		
 		<div class="flashMessages">
-			{% for fm in app.session.flashbag.get('success') %}
-				<div class="flashMessageContainer">
-					<div class="flashMessage success">{{ fm }}</div>
-				</div>
-			{% endfor %}
+			{% set fmTypes = ["success", "notice", "warning", "error"] %}
 
-			{% for fm in app.session.flashbag.get('notice') %}
-				<div class="flashMessageContainer">
-					<div class="flashMessage notice">{{ fm }}</div>
-				</div>
-			{% endfor %}
-			
-			{% for fm in app.session.flashbag.get('error') %}
-				<div class="flashMessageContainer">
-					<div class="flashMessage error">{{ fm }}</div>
-				</div>
+			{% for type in fmTypes %}
+				{% for fm in app.session.flashbag.get(type) %}
+					<div class="flashMessageContainer">
+						<div class="flashMessage success">{{ fm }}</div>
+					</div>
+				{% endfor %}
 			{% endfor %}
 		</div>
 
 		{% if not app.user %}
-			<div class="popupContainer login">
-				<div class="popup login">
-					<div class="header">Login</div>
+			{% include "MiamBundle:Security:popup_login.html.twig" %}
 
-					<form method="POST" action="{{ path('login_check') }}">
-					    <label for="username">Username:</label>
-					    <input type="text" id="username" name="_username" placeholder="Username">
-
-					    <br>
-
-					    <label for="password">Password:</label>
-					    <input type="password" id="password" name="_password" placeholder="Password">
-
-					    <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
-
-					    <br>
-
-					    <button type="submit">Login</button>
-					</form>
-				</div>
-			</div>
-
-			<div class="popupContainer register">
-				<div class="popup">
-					<div class="header">Register</div>
-
-					<form method="POST" action="{{ path('register_check') }}">
-						<label for="username">Choose a username:</label>
-						<input type="text" id="username" name="username" placeholder="Username">
-
-						<br>
-
-						<label for="password">Choose a password:</label>
-						<input type="text" id="password" name="password" placeholder="Password">
-
-						<br>
-
-						<label for="password_again">Retype the password:</label>
-						<input type="text" id="password_again" name="password_again" placeholder="Password (again)">
-
-						<input type="hidden" name="csrf_token" value="{{ csrf_token('register') }}">
-
-						<br>
-
-						<button type="submit">Register</button>
-					</form>
-				</div>
-			</div>
+			{% include "MiamBundle:Security:popup_register.html.twig" %}
 		{% endif %}
 
 		{% block javascripts %}

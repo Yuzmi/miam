@@ -1,0 +1,63 @@
+{% import _self as macros %}
+<?xml version="1.0" encoding="UTF-8"?>
+<opml version="2.0">
+	<head>
+		<title>Export OPML</title>
+		<dateCreated>{{ dateCreated }}</dateCreated>
+		<ownerName>{{ user.username }}</ownerName>
+	</head>
+	<body>
+		{% if what == "settings" %}
+			{% for s in settings %}
+				{{ macros.setting(s) }}
+			{% endfor %}
+		{% elseif what == "subscriptions" %}
+			{% for s in subscriptions %}
+				{{ macros.subscription(s) }}
+			{% endfor %}
+		{% elseif what == "catsubs" %}
+			{% for c in categories if c.parent is null %}
+				{{ macros.category(c, categories) }}
+			{% endfor %}
+
+			{% for s in subscriptions if s.categories|length == 0 %}
+				{{ macros.subscription(s) }}
+			{% endfor %}
+		{% else %}
+			{% for c in categories if c.parent is null %}
+				{{ macros.category(c, categories) }}
+			{% endfor %}
+
+			{% for s in subscriptions if s.categories|length == 0 %}
+				{{ macros.subscription(s) }}
+			{% endfor %}
+
+			{% for s in settings %}
+				{{ macros.setting(s) }}
+			{% endfor %}
+		{% endif %}
+	</body>
+</opml>
+
+{% macro category(category, categories) %}
+	{% import _self as macros %}
+
+	<outline type="category" text="{{ category.name }}" title="{{ category.name }}">
+		{% for c in categories if c.parent == category %}
+			{{ macros.category(c) }}
+		{% endfor %}
+		{% for s in category.subscriptions %}
+			{{ macros.subscription(s) }}
+		{% endfor %}
+	</outline>
+{% endmacro %}
+
+{% macro subscription(s) %}
+	<outline type="rss" text="{{ s.name }}" title="{{ s.name }}" xmlUrl="{{ s.feed.url }}" />
+{% endmacro %}
+
+{% macro setting(s) %}
+	{# TODO #}
+{% endmacro %}
+
+{# http://dev.opml.org/spec2.html #}

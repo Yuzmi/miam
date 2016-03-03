@@ -47,7 +47,7 @@ class CatalogController extends MainController
 		if($this->isLogged()) {
 			$feed = $this->getRepo('Feed')->find($id);
 			if($feed) {
-				$subscription = $this->get('feed_manager')->subscribeUserToFeed($this->getUser(), $feed);
+				$subscription = $this->get('feed_manager')->getSubscriptionForUserAndFeed($this->getUser(), $feed);
 				if($subscription) {
 					$success = true;
 				}

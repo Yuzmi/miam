@@ -1,0 +1,23 @@
+{% extends "MiamBundle:Default:popup.html.twig" %}
+
+{% block popupContainerClass %}login hidden{% endblock %}
+
+{% block popupTitle %}Login{% endblock %}
+
+{% block popupContent %}
+	<form method="POST" action="{{ path('login_check') }}">
+	    <label for="username">Username:</label>
+	    <input type="text" id="username" name="_username" placeholder="Username">
+
+	    <br>
+
+	    <label for="password">Password:</label>
+	    <input type="password" id="password" name="_password" placeholder="Password">
+
+	    <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
+
+	    <br><br>
+
+	    <button type="submit">Login</button>
+	</form>
+{% endblock %}

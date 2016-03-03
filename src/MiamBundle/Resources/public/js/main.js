@@ -5,12 +5,12 @@ var app = {
 
 		$(".showLogin").click(function(e) {
 			e.preventDefault();
-			$(".popupContainer.login").addClass("visible");
+			$(".popupContainer.login").removeClass("hidden");
 		});
 
 		$(".showRegister").click(function(e) {
 			e.preventDefault();
-			$(".popupContainer.register").addClass("visible");
+			$(".popupContainer.register").removeClass("hidden");
 		});
 	},
 
@@ -43,7 +43,7 @@ var app = {
 		closeAll: function() {
 			$(".popupContainer").each(function() {
 				if($(this).hasClass("login") || $(this).hasClass("register")) {
-					$(this).removeClass("visible");
+					$(this).addClass("hidden");
 				} else {
 					$(this).remove();
 				}

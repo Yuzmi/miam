@@ -1,0 +1,36 @@
+{% extends "MiamBundle:Default:popup.html.twig" %}
+
+{% block popupContainerClass %}editSubscription{% endblock %}
+
+{% block popupTitle %}Edit "{{ subscription.name }}"{% endblock %}
+
+{% block popupContent %}
+	<form method="POST" action="{{ path('manager_subscription_update', {'id': subscription.id}) }}">
+		<label for="name">Name:</label>
+		<input type="text" name="name" value="{{ subscription.name }}">
+
+		<br><br>
+
+		<label for="url">URL:</label>
+		<input type="url" id="url" name="url" value="{{ subscription.feed.url }}" required>
+
+		<br><br>
+
+		<label>Categories:</label>
+		<br>
+		<div class="categories">
+			{% for c in categories %}
+				<div class="category">
+					<input type="checkbox" name="categories[]" value="{{ c.id }}" {{ c in subscription.categories ? "checked" }}>
+					{{ c.path }}
+				</div>
+			{% endfor %}
+		</div>
+
+		<input type="hidden" name="csrf_token" value="{{ csrf_token('manager_subscription_update') }}">
+
+		<br><br>
+
+		<button type="submit">Update</button>
+	</form>
+{% endblock %}

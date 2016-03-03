@@ -1,16 +1,16 @@
-<div class="popupContainer visible">
-	<div class="popup">
-		<div class="header">New subscription</div>
+{% extends "MiamBundle:Default:popup.html.twig" %}
 
-		<form method="POST" action="{{ path('manager_subscription_create') }}">
-			<label for="url">URL:</label>
-			<input type="text" id="url" name="url" required>
+{% block popupTitle %}New subscription{% endblock %}
 
-			<input type="hidden" name="csrf_token" value="{{ csrf_token('manager_subscription_create') }}">
+{% block popupContent %}
+	<form method="POST" action="{{ path('manager_subscription_create') }}">
+		<label for="url">URL:</label>
+		<input type="text" id="url" name="url" required>
 
-			<br><br>
+		<input type="hidden" name="csrf_token" value="{{ csrf_token('manager_subscription_create') }}">
 
-			<button type="submit">Create</button>
-		</form>
-	</div>
-</div>
+		<br><br>
+
+		<button type="submit">Create</button>
+	</form>
+{% endblock %}
