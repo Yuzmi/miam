@@ -143,4 +143,22 @@ class FeedManager {
 
     	$this->em->flush();
     }
+
+    public function updateSubscriptions() {
+    	$subscriptions = $this->em->getRepository('MiamBundle:Subscription')
+    		->createQueryBuilder("s")
+    		->innerJoin("s.feed", "f")->addSelect("f")
+    		->getQuery()->getResult();
+
+    	foreach($subscriptions as $s) {
+    		$name = $s->getName();
+    		$feedName = $s->getFeed()->getName();
+    		if(empty($name) && !empty($feedName)) {
+    			$s->setName($feedName);
+    			$this->em->persist($s);
+    		}
+    	}
+
+    	$this->em->flush();
+    }
 }

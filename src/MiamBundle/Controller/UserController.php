@@ -21,35 +21,35 @@ class UserController extends MainController
             return $this->redirectToRoute("index");
         }
 
-        $reader = null;
+        $marker = null;
         if($this->isLogged()) {
-            $reader = $this->getUser();
+            $marker = $this->getUser();
         }
 
         $items = $this->get('item_manager')->getItems(array(
-            'reader' => $reader,
+            'marker' => $marker,
             'subscriber' => $subscriber
         ));
 
         $dataItems = $this->get('item_manager')->getDataForItems($items, array(
-            'reader' => $reader,
+            'marker' => $marker,
             'subscriber' => $subscriber
         ));
 
         $tree = $this->getTreeForUser($subscriber);
 
         $unreadCounts = null;
-        if($reader) {
-            $unreadCounts = $this->get('mark_manager')->getUnreadCounts($subscriber, $reader);
+        if($marker) {
+            $unreadCounts = $this->get('mark_manager')->getUnreadCounts($subscriber, $marker);
         }
 
     	return $this->render('MiamBundle:User:show.html.twig', array(
             'items' => $items,
             'dataItems' => $dataItems,
+            'marker' => $marker,
             'tree' => $tree,
             'unreadCounts' => $unreadCounts,
-            'subscriber' => $subscriber,
-            'reader' => $reader
+            'subscriber' => $subscriber
         ));
 	}
 

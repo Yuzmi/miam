@@ -14,7 +14,6 @@
 		<tr>
 			<th>Name</th>
 			<th>URL</th>
-			<th>Parsing</th>
 			<th>Rate</th>
 		</tr>
 		{% for feed in feeds %}
@@ -26,12 +25,17 @@
 					{{ feed.url|shorten(60) }}
 				</td>
 				<td>
+					{{ feed.weekRate|round(2) }} / {{ feed.monthRate|round(2) }} / {{ feed.globalRate|round(2) }}
+				</td>
+				<td>
 					<a href="{{ path('admin_feed_parse', {'id': feed.id}) }}">
 						Parse
 					</a>
 				</td>
 				<td>
-					{{ feed.weekRate|round(2) }} / {{ feed.monthRate|round(2) }} / {{ feed.globalRate|round(2) }}
+					<a href="{{ path('admin_feed_delete', {'id': feed.id}) }}">
+						X
+					</a>
 				</td>
 			</tr>
 		{% endfor %}

@@ -53,7 +53,7 @@
 				All articles
 			</div>
 
-			{% if reader %}
+			{% if marker %}
 				<div class="row" data-type="unread">
 					<i class="fa fa-book"></i>
 					Unread
@@ -93,7 +93,7 @@
 	<script type="text/javascript">
 		$(document).ready(function() {
 			app.items.subscriber = {{ subscriber.id }};
-			{% if reader %}app.items.reader = {{ reader.id }};{% endif %}
+			{% if marker %}app.items.markable = true;{% endif %}
 
 			app.sidebar.init();
 		});

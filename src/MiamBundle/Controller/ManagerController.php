@@ -237,9 +237,32 @@ class ManagerController extends MainController
 
     public function createSubscriptionAction(Request $request) {
         if($this->isTokenValid('manager_subscription_create', $request->get('csrf_token'))) {
-            $subscription = $this->get('feed_manager')->getSubscriptionForUserAndUrl($this->getUser(), $request->get('url'));
-            if($subscription) {
-                $this->addFm("Feed subscribed", "success");
+            $feed = $this->getFeedForUrl($request->get('url'));
+            if($feed) {
+                $subscription = $this->em->getRepository('MiamBundle:Subscription')->findOneBy(array(
+                    'user' => $user,
+                    'feed' => $feed
+                ));
+                if(!$subscription) {
+                    $subscription = new Subscription();
+                    $subscription->setUser($this->getUser());
+                    $subscription->setFeed($feed);
+
+                    $name = trim($request->get("name"));
+                    if(!empty($name)) {
+                        $subscription->setName($name);
+                    } else {
+                        $subscription->setName($feed->getName());
+                    }
+
+                    $em = $this->getEm();
+                    $em->persist($subscription);
+                    $em->flush();
+
+                    $this->addFm("Feed subscribed", "success");
+                } else {
+                    $this->addFm("Feed already subscribed", "error");
+                }
             } else {
                 $this->addFm("Error", "error");
             }
@@ -435,6 +458,8 @@ class ManagerController extends MainController
     }
 
     public function importOPMLAction(Request $request) {
+        set_time_limit(120);
+
         if($this->isTokenValid('manager_opml_import', $request->get('csrf_token'))) {
             $opml = false;
             if(isset($_FILES["opml"]["tmp_name"])) {
@@ -477,7 +502,7 @@ class ManagerController extends MainController
                     }
                 }
 
-                if($parentCategory) {
+                if($parentCategory && !$parentCategory->getSubscriptions()->contains($subscription)) {
                     $parentCategory->addSubscription($subscription);
                     $em->persist($parentCategory);
                 }

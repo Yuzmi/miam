@@ -4,6 +4,11 @@
 
 {% block popupContent %}
 	<form method="POST" action="{{ path('manager_subscription_create') }}">
+		<label for="name">Name:</label>
+		<input type="text" id="name" name="name">
+
+		<br><br>
+
 		<label for="url">URL:</label>
 		<input type="text" id="url" name="url" required>
 

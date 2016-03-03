@@ -1,7 +1,7 @@
 app.items = {
 	category: null,
 	feed: null,
-	reader: null,
+	markable: false,
 	subscriber: null,
 	type: null,
 
@@ -21,6 +21,24 @@ app.items = {
 			e.stopPropagation();
 		});
 
+		$(".item .star").on("click", function(e) {
+			e.preventDefault();
+			if(app.items.markable) {
+				var item = $(this).closest(".item");
+				
+				if(item.hasClass("starred")) {
+					app.items.unstar(item, function() {
+						item.removeClass("starred");
+					});
+				} else {
+					app.items.star(item, function() {
+						item.addClass("starred");
+					});
+				}
+			}
+			e.stopPropagation();
+		});
+
 		$(".item .enclosure").on("click", function(e) {
 			window.open($(this).data("url"));
 		});
@@ -30,7 +48,7 @@ app.items = {
 		$(".item").removeClass("expanded");
 		item.addClass("expanded");
 
-		if(app.items.reader && !item.hasClass("read")) {
+		if(app.items.markable && !item.hasClass("read")) {
 			app.items.read({
 				type: "item",
 				item: item.data("item")
@@ -45,12 +63,39 @@ app.items = {
 
 	read: function(data, callback) {
 		data.subscriber = app.items.subscriber;
-		data.reader = app.items.reader;
 
 		$.ajax({
 			type: "POST",
 			url: Routing.generate('ajax_items_read'),
 			data: data,
+			dataType: "json"
+		}).done(function(result) {
+			if(result.success) {
+				if(callback) {
+					callback();
+				}
+			}
+		});
+	},
+
+	star: function(item, callback) {
+		$.ajax({
+			type: "POST",
+			url: Routing.generate('ajax_item_star', {'id': item.data("item")}),
+			dataType: "json"
+		}).done(function(result) {
+			if(result.success) {
+				if(callback) {
+					callback();
+				}
+			}
+		});
+	},
+
+	unstar: function(item, callback) {
+		$.ajax({
+			type: "POST",
+			url: Routing.generate('ajax_item_unstar', {'id': item.data("item")}),
 			dataType: "json"
 		}).done(function(result) {
 			if(result.success) {
@@ -78,7 +123,7 @@ app.items = {
 		app.items.get({
 			category: app.items.category,
 			feed: app.items.feed,
-			reader: app.items.reader,
+			markable: app.items.markable,
 			subscriber: app.items.subscriber,
 			type: app.items.type
 		}, function(items) {

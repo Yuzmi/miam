@@ -20,7 +20,7 @@ class ItemManager {
 	public function getItems($options = array()) {
 		$category = isset($options['category']) ? $options['category'] : null;
 		$feed = isset($options['feed']) ? $options['feed'] : null;
-		$reader = isset($options['reader']) ? $options['reader'] : null;
+		$marker = isset($options['marker']) ? $options['marker'] : null;
 		$subscriber = isset($options['subscriber']) ? $options['subscriber'] : null;
 		$subscription = isset($options['subscription']) ? $options['subscription'] : null;
 		$type = isset($options['type']) ? $options['type'] : 'all';
@@ -49,10 +49,10 @@ class ItemManager {
 			}
 		}
 
-		if($reader) {
-			$qb->leftJoin('i.marks', 'im', 'with', 'im.user = :reader');
-			$qb->leftJoin('f.marks', 'fm', 'with', 'fm.user = :reader');
-			$qb->setParameter('reader', $reader);
+		if($marker) {
+			$qb->leftJoin('i.marks', 'im', 'with', 'im.user = :marker');
+			$qb->leftJoin('f.marks', 'fm', 'with', 'fm.user = :marker');
+			$qb->setParameter('marker', $marker);
 
 			if($type == 'unread') {
 				$qb->andWhere('im.isRead IS NULL OR im.isRead = FALSE');
@@ -89,6 +89,7 @@ class ItemManager {
 				'enclosures' => array(),
 				'feedName' => '',
 				'isRead' => false,
+				'isStarred' => false,
 				'tags' => array()
 			);
 		}
@@ -105,11 +106,11 @@ class ItemManager {
 			$qb->setParameter('subscriber', $subscriber);
 		}
 
-		$reader = isset($options['reader']) ? $options['reader'] : null;
-		if($reader) {
-			$qb->leftJoin('i.marks', 'im', 'with', 'im.user = :reader')->addSelect('im');
-			$qb->leftJoin('f.marks', 'fm', 'with', 'fm.user = :reader')->addSelect('fm');
-			$qb->setParameter('reader', $reader);
+		$marker = isset($options['marker']) ? $options['marker'] : null;
+		if($marker) {
+			$qb->leftJoin('i.marks', 'im', 'with', 'im.user = :marker')->addSelect('im');
+			$qb->leftJoin('f.marks', 'fm', 'with', 'fm.user = :marker')->addSelect('fm');
+			$qb->setParameter('marker', $marker);
 		}
 
 		$items = $qb->getQuery()->getResult();
@@ -124,16 +125,22 @@ class ItemManager {
 				}
 			}
 
-			if($reader) {
+			if($marker) {
 				foreach($i->getMarks() as $m) {
 					if($m->getIsRead()) {
 						$data[$i->getId()]['isRead'] = true;
 					}
+
+					if($m->getIsStarred()) {
+						$data[$i->getId()]['isStarred'] = true;
+					}
 				}
 
-				foreach($i->getFeed()->getMarks() as $m) {
-					if($m->getDateRead() && $m->getDateRead() >= $i->getDateCreated()) {
-						$data[$i->getId()]['isRead'] = true;
+				if(!$data[$i->getId()]['isRead']) {
+					foreach($i->getFeed()->getMarks() as $m) {
+						if($m->getDateRead() && $m->getDateRead() >= $i->getDateCreated()) {
+							$data[$i->getId()]['isRead'] = true;
+						}
 					}
 				}
 			}

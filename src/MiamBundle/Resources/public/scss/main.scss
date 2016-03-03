@@ -131,22 +131,17 @@ button {
 }
 
 .items {
-	padding:1rem;
-
 	.item {
-		$item-header-height: 2rem;
-		$item-header-pad-x: $item-header-height / 5 * 2;
-		$item-header-pad-y: $item-header-height / 5;
+		$item-header-height: 2.4rem;
 
 		background-color:white;
-		border:solid 1px black;
-		font-size:$item-header-height / 2 * 1.3;
-		margin-top:$item-header-height / 2;
+		border-bottom:solid 1px black;
+		font-size:1.3rem;
 		position:relative;
 		text-align:left;
 
 		&:first-of-type {
-			margin-top:0;
+			border-top:solid 1px black;
 		}
 
 		.header {
@@ -157,19 +152,37 @@ button {
 			height:$item-header-height;
 			line-height:$item-header-height;
 			overflow:hidden;
-			padding:$item-header-pad-y $item-header-pad-x;
+			padding:0.4rem 0.8rem;
 			position:relative;
 			text-decoration:none;
 
 			.hide {
-				border-right:solid 1px black;
+				border:solid 1px black;
 				cursor:pointer;
 				display:none;
-				height:$item-header-height + $item-header-pad-y * 2;
-				line-height:$item-header-height + $item-header-pad-y * 2;
-				margin:(-$item-header-pad-y) ($item-header-pad-x / 2) (-$item-header-pad-y) (-$item-header-pad-x);
+				height:1.2rem;
+				line-height:1.2rem;
+				margin-right:$item-header-height / 10;
 				text-align:center;
-				width:$item-header-height + $item-header-pad-x;
+				width:1.2rem;
+			}
+
+			.star {
+				margin-right:$item-header-height / 10;
+
+				.full {
+					display:none;
+				}
+
+				&:hover {
+					.empty {
+						display:none;
+					}
+
+					.full {
+						display:inline-block;
+					}
+				}
 			}
 
 			.datetime {
@@ -178,6 +191,10 @@ button {
 
 			.title {
 				color:black;
+			}
+
+			&:hover .title {
+				text-decoration:underline;
 			}
 
 			.summary {
@@ -192,8 +209,19 @@ button {
 		}
 
 		&.read .header {
-			background-color:rgba(0, 0, 0, 0.05);
-			font-weight:normal;
+			background-color:rgba(0, 0, 0, 0.1);
+		}
+
+		&.starred .header {
+			.star {
+				.empty {
+					display:none;
+				}
+
+				.full {
+					display:inline-block;
+				}
+			}
 		}
 
 		&.expanded .header {
@@ -209,7 +237,7 @@ button {
 			max-height:500px;
 			overflow-x:hidden;
 			overflow-y:auto;
-			padding:$item-header-pad-y $item-header-pad-x;
+			padding:0.4rem 0.8rem;
 			position:relative;
 		}
 

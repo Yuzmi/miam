@@ -36,25 +36,6 @@ class MarkManager {
 	    }
 	}
 
-	public function starItemForUser(Item $item, User $user) {
-		$mark = $this->em->getRepository('MiamBundle:ItemMark')->findOneBy(array(
-            'item' => $item,
-            'user' => $user
-        ));
-        if(!$mark) {
-            $mark = new ItemMark();
-            $mark->setItem($item);
-            $mark->setUser($user);
-        }
-
-        if(!$mark->getIsStarred()) {
-	        $mark->setIsStarred(true);
-
-	        $this->em->persist($mark);
-        	$this->em->flush();
-	    }
-	}
-
 	public function readFeedForUser(Feed $feed, User $user) {
 		$mark = $this->em->getRepository('MiamBundle:FeedMark')->findOneBy(array(
             'feed' => $feed,
@@ -118,6 +99,38 @@ class MarkManager {
 
 			$this->em->flush();
 		}
+	}
+
+	public function starItemForUser(Item $item, User $user) {
+		$mark = $this->em->getRepository('MiamBundle:ItemMark')->findOneBy(array(
+            'item' => $item,
+            'user' => $user
+        ));
+        if(!$mark) {
+            $mark = new ItemMark();
+            $mark->setItem($item);
+            $mark->setUser($user);
+        }
+
+        if(!$mark->getIsStarred()) {
+	        $mark->setIsStarred(true);
+
+	        $this->em->persist($mark);
+        	$this->em->flush();
+	    }
+	}
+
+	public function unstarItemForUser(Item $item, User $user) {
+		$mark = $this->em->getRepository('MiamBundle:ItemMark')->findOneBy(array(
+            'item' => $item,
+            'user' => $user
+        ));
+        if($mark) {
+            $mark->setIsStarred(false);
+
+	        $this->em->persist($mark);
+        	$this->em->flush();
+        }
 	}
 
 	public function getUnreadCounts(User $subscriber, User $reader) {
