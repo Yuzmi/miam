@@ -65,7 +65,7 @@
 
 					{% if itemData.enclosures|length > 0 %}
 						<select class="enclosures">
-							<option selected="selected">Enclosure(s)</option>
+							<option selected disabled hidden>Enclosure(s)</option>
 							{% for enclosure in itemData.enclosures %}
 								<option class="enclosure" data-url="{{ enclosure.url }}">
 									{{ enclosure.title ?: enclosure.url }}
