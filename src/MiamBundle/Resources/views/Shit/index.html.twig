@@ -2,7 +2,7 @@
 
 {% block stylesheets %}
 	{{ parent() }}
-	{% stylesheets "@MiamBundle/Resources/public/scss/home.scss" filter='scss' output='css/home.css' %}
+	{% stylesheets "@MiamBundle/Resources/public/scss/shit.scss" filter='scss' output='css/home.css' %}
 		<link href="{{ asset_url }}" type="text/css" rel="stylesheet">
 	{% endstylesheets %}
 {% endblock %}
@@ -46,14 +46,14 @@
 {% import _self as macros %}
 
 {% block body %}
-	<div class="body_home">
+	<div class="body_shit">
 		<aside class="sidebar">
 			<div class="row selected" data-type="all">
 				<i class="fa fa-globe"></i>
 				All articles
 			</div>
 
-			{% if marker %}
+			{% if app.user and app.user.id == subscriber.id %}
 				<div class="row" data-type="unread">
 					<i class="fa fa-book"></i>
 					Unread
@@ -86,16 +86,19 @@
 {% block javascripts %}
 	{{ parent() }}
 
-	{% javascripts "@MiamBundle/Resources/public/js/sidebar.js" %}
+	{% javascripts 
+		"@MiamBundle/Resources/public/js/items.js" 
+		"@MiamBundle/Resources/public/js/shit.js" 
+	%}
 		<script src="{{ asset_url }}"></script>
 	{% endjavascripts %}
 
 	<script type="text/javascript">
 		$(document).ready(function() {
-			app.items.subscriber = {{ subscriber.id }};
-			{% if marker %}app.items.markable = true;{% endif %}
+			app.shit.items.subscriber = {{ subscriber.id }};
 
-			app.sidebar.init();
+			app.items.init();
+			app.shit.init();
 		});
 	</script>
 {% endblock %}

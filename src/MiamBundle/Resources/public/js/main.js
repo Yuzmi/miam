@@ -1,6 +1,5 @@
 var app = {
 	init: function() {
-		app.items.init();
 		app.popup.init();
 
 		$(".showLogin").click(function(e) {

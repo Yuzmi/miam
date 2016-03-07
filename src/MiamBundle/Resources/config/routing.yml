@@ -17,27 +17,6 @@ miam_manager:
 miam_security:
     resource: "@MiamBundle/Resources/config/routing/security.yml"
 
-user:
-    path: /user/{userId}
-    defaults: { _controller: MiamBundle:User:show }
-    requirements: { userId: \d+ }
-
-ajax_items_get:
-    path: /ajax/items/get
-    defaults: { _controller: MiamBundle:Default:ajaxGetItems }
-
-ajax_items_read:
-    path: /ajax/items/read
-    defaults: { _controller: MiamBundle:Default:ajaxReadItems }
-
-ajax_item_star:
-    path: /ajax/item/{id}/star
-    defaults: { _controller: MiamBundle:Default:ajaxStarItem }
-
-ajax_item_unstar:
-    path: /ajax/item/{id}/unstar
-    defaults: { _controller: MiamBundle:Default:ajaxUnstarItem }
-
-ajax_unread_get:
-    path: /ajax/unread/get
-    defaults: { _controller: MiamBundle:Default:ajaxGetUnread }
+miam_shit:
+    resource: "@MiamBundle/Resources/config/routing/shit.yml"
+    prefix: /shit

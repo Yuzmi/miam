@@ -27,9 +27,11 @@ class SubscriptionRepository extends \Doctrine\ORM\EntityRepository
 				->innerJoin('s.categories', 'c')
 				->where('c.leftPosition >= :leftPosition')
 				->andWhere('c.rightPosition <= :rightPosition')
+				->andWhere('c.user = :user')
 				->setParameters(array(
 					'leftPosition' => $category->getLeftPosition(),
-					'rightPosition' => $category->getRightPosition()
+					'rightPosition' => $category->getRightPosition(),
+					'user' => $category->getUser()
 				))
 				->getQuery()->getResult();
 		} else {

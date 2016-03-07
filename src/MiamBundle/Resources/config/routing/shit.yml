@@ -1,0 +1,40 @@
+shit_user:
+    path: /user/{userId}
+    defaults: { _controller: MiamBundle:Shit:index }
+    requirements: { userId: \d+ }
+
+ajax_shit_get_items:
+    path: /ajax/items/get
+    defaults: { _controller: MiamBundle:Shit:ajaxGetItems }
+
+ajax_shit_read_user_items:
+    path: /ajax/items/user/{id}/read
+    defaults: { _controller: MiamBundle:Shit:ajaxReadUserItems }
+
+ajax_shit_read_category_items:
+    path: /ajax/items/category/{id}/read
+    defaults: { _controller: MiamBundle:Shit:ajaxReadCategoryItems }
+
+ajax_shit_read_feed_items:
+    path: /ajax/items/feed/{id}/read
+    defaults: { _controller: MiamBundle:Shit:ajaxReadFeedItems }
+
+ajax_shit_read_item:
+    path: /ajax/item/{id}/read
+    defaults: { _controller: MiamBundle:Shit:ajaxReadItem }
+
+ajax_shit_star_item:
+    path: /ajax/item/{id}/star
+    defaults: { _controller: MiamBundle:Shit:ajaxStarItem }
+
+ajax_shit_unstar_item:
+    path: /ajax/item/{id}/unstar
+    defaults: { _controller: MiamBundle:Shit:ajaxUnstarItem }
+
+ajax_shit_get_tree:
+    path: /ajax/tree/get
+    defaults: { _controller: MiamBundle:Shit:ajaxGetTree }
+
+ajax_shit_get_unread_counts:
+    path: /ajax/unread/get
+    defaults: { _controller: MiamBundle:Shit:ajaxGetUnreadCounts }

@@ -237,10 +237,10 @@ class ManagerController extends MainController
 
     public function createSubscriptionAction(Request $request) {
         if($this->isTokenValid('manager_subscription_create', $request->get('csrf_token'))) {
-            $feed = $this->getFeedForUrl($request->get('url'));
+            $feed = $this->get('feed_manager')->getFeedForUrl($request->get('url'));
             if($feed) {
-                $subscription = $this->em->getRepository('MiamBundle:Subscription')->findOneBy(array(
-                    'user' => $user,
+                $subscription = $this->getRepo('Subscription')->findOneBy(array(
+                    'user' => $this->getUser(),
                     'feed' => $feed
                 ));
                 if(!$subscription) {
@@ -474,6 +474,8 @@ class ManagerController extends MainController
                 foreach($opml->body->children() as $child) {
                     $this->importOPMLOutlineForUser($child, $this->getUser());
                 }
+
+                $this->get('category_manager')->updateForUser($this->getUser());
 
                 $this->addFm("OPML imported", "success");
             } else {
