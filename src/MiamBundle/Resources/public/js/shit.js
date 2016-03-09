@@ -97,6 +97,10 @@ app.shit = {
 				$(document).click(function() {
 					$(".sidebarRowMenu").remove();
 				});
+
+				setInterval(function() {
+					app.shit.sidebar.refreshUnreadCounts();
+				}, 300000);
 			}
 
 			this.countUnread();
@@ -222,6 +226,7 @@ app.shit = {
 			}, function(items) {
 				$(".items").html(items);
 				app.items.init();
+				app.shit.items.init();
 			});
 		},
 
