@@ -12,17 +12,27 @@
 
 	<table>
 		<tr>
+			<th></th>
 			<th>Name</th>
 			<th>URL</th>
 			<th>Rate</th>
 		</tr>
 		{% for feed in feeds %}
-			<tr {% if feed.nbErrors > 10 %}style="color:red;"{% endif %}>
+			<tr>
+				<td>
+					{% if feed.nbErrors > 10 %}
+						<i class="fa fa-warning"></i>
+					{% endif %}
+				</td>
 				<td title="{{ feed.name }}">
-					{{ feed.name|shorten(40) }}
+					{% if feed.website %}
+						<a href="{{ feed.website }}">{{ feed.name|shorten(40) }}</a>
+					{% else %}
+						{{ feed.name|shorten(40) }}
+					{% endif %}
 				</td>
 				<td title="{{ feed.url }}">
-					{{ feed.url|shorten(60) }}
+					<a href="{{ feed.url }}">{{ feed.url|shorten(60) }}</a>
 				</td>
 				<td>
 					{{ feed.weekRate|round(2) }} / {{ feed.monthRate|round(2) }} / {{ feed.globalRate|round(2) }}

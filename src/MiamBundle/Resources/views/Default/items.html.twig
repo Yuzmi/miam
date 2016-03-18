@@ -1,6 +1,7 @@
 {% set markable = markable is defined and markable ? true : false %}
+{% set loadMore = loadMore is defined and loadMore ? true : false %}
 
-{% if items is defined %}
+{% if items is defined and items|length > 0 %}
 	{% for item in items %}
 		{% set itemData = dataItems[item.id] is defined ? dataItems[item.id] : null %}
 		<div class="item {{ itemData and itemData.isRead ? 'read' }} {{ itemData and itemData.isStarred ? 'starred' }}" data-item="{{ item.id }}" data-feed="{{ item.feed.id }}">
@@ -77,4 +78,11 @@
 			{% endif %}
 		</div>
 	{% endfor %}
+
+	{% if loadMore %}
+		<div class="loadMore">
+			Load more...
+			<i class="fa fa-spinner fa-spin"></i>
+		</div>
+	{% endif %}
 {% endif %}

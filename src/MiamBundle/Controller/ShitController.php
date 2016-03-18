@@ -150,11 +150,20 @@ class ShitController extends MainController
                     'user' => $subscriber
                 ));
             }
+            
+            $createdAfter = \DateTime::createFromFormat("Y-m-d H:i:s", $request->get("createdAfter"));
+
+            $page = intval($request->get('page'));
+            if($page <= 0) {
+                $page = 1;
+            }
 
             $items = $this->get('item_manager')->getItems(array(
+                'createdAfter' => $createdAfter,
                 'category' => $category,
                 'feed' => $feed,
                 'marker' => $marker,
+                'page' => $page,
                 'subscriber' => $subscriber,
                 'type' => $request->get('type')
             ));
@@ -167,13 +176,16 @@ class ShitController extends MainController
             $htmlItems = $this->renderView('MiamBundle:Default:items.html.twig', array(
                 'items' => $items,
                 'dataItems' => $dataItems,
-                'markable' => $marker ? true : false
+                'markable' => $marker ? true : false,
+                'loadMore' => $request->get("loadMore")
             ));
         }
 
         return new JsonResponse(array(
             'success' => $success,
-            'items' => $htmlItems
+            'items' => $htmlItems,
+            'page' => $page,
+            'dateRefresh' => date_format(new \DateTime("now"), "Y-m-d H:i:s")
         ));
     }
 

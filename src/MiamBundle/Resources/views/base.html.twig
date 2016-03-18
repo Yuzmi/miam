@@ -52,7 +52,7 @@
 
 			<script>
 				app.preInit = function() {
-					app.dateLoaded = '{{ "now"|date() }}';
+					app.dateLoaded = '{{ "now"|date("Y-m-d H:i:s") }}';
 
 					{% if app.user %}
 						app.user = { 'id': {{ app.user.id }} };

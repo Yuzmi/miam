@@ -189,7 +189,7 @@ app.shit = {
 				}
 			}
 
-			$(".item .star").on("click", function(e) {
+			$(".item .star").click(function(e) {
 				e.preventDefault();
 
 				var item = $(this).closest(".item");
@@ -202,6 +202,10 @@ app.shit = {
 
 				e.stopPropagation();
 			});
+
+			$(".items .loadMore").click(function() {
+				app.shit.items.loadMore();
+			});
 		},
 
 		get: function(data, callback) {
@@ -211,9 +215,7 @@ app.shit = {
 				data: data,
 				dataType: "json"
 			}).done(function(result) {
-				if(result.success) {
-					callback(result.items);
-				}
+				callback(result);
 			});
 		},
 
@@ -221,12 +223,59 @@ app.shit = {
 			this.get({
 				category: app.shit.items.category,
 				feed: app.shit.items.feed,
+				loadMore: true,
 				subscriber: app.shit.items.subscriber,
 				type: app.shit.items.type
-			}, function(items) {
-				$(".items").html(items);
-				app.items.init();
-				app.shit.items.init();
+			}, function(result) {
+				if(result.success) {
+					$(".items").html(result.items);
+
+					app.items.init();
+					app.shit.items.init();
+
+					app.items.dateRefresh = result.dateRefresh;
+					app.items.page = 1;
+				}
+			});
+		},
+
+		loadNew: function() {
+			this.get({
+				createdAfter: app.items.dateRefresh,
+				category: app.shit.items.category,
+				feed: app.shit.items.feed,
+				subscriber: app.shit.items.subscriber,
+				type: app.shit.items.type
+			}, function(result) {
+				if(result.success) {
+					$(".items").prepend(result.items);
+
+					app.items.init();
+					app.shit.items.init();
+
+					app.items.dateRefresh = result.dateRefresh;
+				}
+			});
+		},
+
+		loadMore: function() {
+			$(".items .loadMore").addClass("loading");
+			this.get({
+				category: app.shit.items.category,
+				feed: app.shit.items.feed,
+				loadMore: true,
+				page: app.items.page + 1,
+				subscriber: app.shit.items.subscriber,
+				type: app.shit.items.type
+			}, function(result) {
+				if(result.success && result.page == app.items.page + 1) {
+					$(".items .loadMore").replaceWith(result.items);
+
+					app.items.init();
+					app.shit.items.init();
+
+					app.items.page += 1;
+				}
 			});
 		},
 

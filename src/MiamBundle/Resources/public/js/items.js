@@ -1,5 +1,12 @@
 app.items = {
+	dateRefresh: null,
+	page: 1,
+
 	init: function() {
+		if(app.items.dateRefresh == null) {
+			app.items.dateRefresh = app.dateLoaded;
+		}
+
 		$(".item .header").on("click", function(e) {
 			var item = $(this).closest(".item");
 

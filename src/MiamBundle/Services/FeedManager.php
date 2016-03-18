@@ -15,6 +15,7 @@ class FeedManager {
 		$this->container = $container;
 	}
 
+	// @todo : domain name in lower case
 	public function formatUrl($url) {
 		return trim($url);
 	}

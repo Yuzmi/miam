@@ -18,9 +18,11 @@ class ItemManager {
 	}
 
 	public function getItems($options = array()) {
+		$createdAfter = isset($options['createdAfter']) ? $options['createdAfter'] : null;
 		$category = isset($options['category']) ? $options['category'] : null;
 		$feed = isset($options['feed']) ? $options['feed'] : null;
 		$marker = isset($options['marker']) ? $options['marker'] : null;
+		$page = isset($options['page']) ? $options['page'] : 1;
 		$subscriber = isset($options['subscriber']) ? $options['subscriber'] : null;
 		$subscription = isset($options['subscription']) ? $options['subscription'] : null;
 		$type = isset($options['type']) ? $options['type'] : 'all';
@@ -62,6 +64,11 @@ class ItemManager {
 			}
 		}
 
+		if($createdAfter) {
+			$qb->andWhere('i.dateCreated > :createdAfter');
+			$qb->setParameter('createdAfter', $createdAfter);
+		}
+
 		$nb = isset($options['nb']) ? intval($options['nb']) : 0;
 		if($nb > $this->nbMaxItems) {
 			$nb = $this->nbMaxItems;
@@ -69,6 +76,9 @@ class ItemManager {
 			$nb = $this->nbItems;
 		}
 		$qb->setMaxResults($nb);
+
+		$offset = $nb * ($page - 1);
+		$qb->setFirstResult($offset);
 
 		$qb->orderBy('i.datePublished', 'DESC');
 

@@ -131,9 +131,9 @@ button {
 }
 
 .items {
-	.item {
-		$item-header-height: 2.4rem;
+	$item-header-height: 2.4rem;
 
+	.item {
 		background-color:white;
 		border-bottom:solid 1px black;
 		font-size:1.3rem;
@@ -275,6 +275,28 @@ button {
 
 		&.expanded .details {
 			display:block;
+		}
+	}
+
+	.loadMore {
+		background-color:white;
+		cursor:pointer;
+		display:block;
+		font-size:1.3rem;
+		font-weight:700;
+		height:$item-header-height;
+		line-height:$item-header-height;
+		overflow:hidden;
+		padding:0.4rem 0.8rem 0.8rem;
+		position:relative;
+		text-align:center;
+
+		i {
+			visibility:hidden;
+		}
+
+		&.loading i {
+			visibility:visible;
 		}
 	}
 }
