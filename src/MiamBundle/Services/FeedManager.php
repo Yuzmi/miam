@@ -129,7 +129,7 @@ class FeedManager {
     		$interval = date_diff($feed->getDateCreated(), new \DateTime("now"), true);
     		$daysSinceCreation = $interval->format("%a");
 
-    		$dailyRate = round(($nbItems - $feed->getNbItemsOnParsing()) / ($daysSinceCreation ?: 1), 5);
+    		$dailyRate = round(($nbItems - $feed->getNbItems()) / ($daysSinceCreation ?: 1), 5);
     		$feed->setGlobalRate($dailyRate);
 
     		$monthDailyRate = round($nbMonthItems / 30, 5);

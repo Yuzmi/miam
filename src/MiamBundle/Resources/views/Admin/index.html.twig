@@ -17,7 +17,7 @@
 			<th>Rate</th>
 		</tr>
 		{% for feed in feeds %}
-			<tr>
+			<tr {% if feed.nbErrors > 10 %}style="color:red;"{% endif %}>
 				<td title="{{ feed.name }}">
 					{{ feed.name|shorten(40) }}
 				</td>

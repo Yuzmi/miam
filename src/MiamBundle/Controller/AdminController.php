@@ -40,7 +40,7 @@ class AdminController extends MainController
     	$form->handleRequest($request);
 
     	if($form->isValid()) {
-            $this->get('feed_manager')->createFeedForUrl($form->get('url')->getData());
+            $this->get('feed_manager')->getFeedForUrl($form->get('url')->getData());
     	}
 
     	return $this->redirectToRoute('admin');
