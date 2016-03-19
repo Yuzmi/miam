@@ -62,7 +62,7 @@ app.shit = {
 						.addClass("sidebarRowMenu")
 						.css({
 							left: e.clientX, 
-							top: e.clientY
+							top: e.clientY + 10
 						})
 						.attr('data-type', type)
 					;
@@ -91,11 +91,15 @@ app.shit = {
 								app.shit.items.readAll();
 							}
 						}
+
+						$(".sidebarRowMenu").remove();
 					});
 				});
 				
-				$(document).click(function() {
-					$(".sidebarRowMenu").remove();
+				$(document).click(function(e) {
+					if(e.which == 1) {
+						$(".sidebarRowMenu").remove();
+					}
 				});
 
 				setInterval(function() {
