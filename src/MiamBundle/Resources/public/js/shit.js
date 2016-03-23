@@ -97,7 +97,7 @@ app.shit = {
 				});
 				
 				$(document).click(function(e) {
-					if(e.which == 1) {
+					if(e.which != 3) {
 						$(".sidebarRowMenu").remove();
 					}
 				});
