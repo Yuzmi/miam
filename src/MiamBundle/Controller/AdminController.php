@@ -6,7 +6,7 @@ use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\JsonResponse;
 
 use MiamBundle\Entity\Feed;
 
@@ -46,21 +46,71 @@ class AdminController extends MainController
     	return $this->redirectToRoute('admin');
     }
 
-    public function parseFeedAction($id) {
-        $feed = $this->getRepo('Feed')->find($id);
+    public function ajaxAddFeedToCatalogAction($id) {
+        $success = false;
+
+        $feed = $this->getRepo("Feed")->find($id);
         if($feed) {
-            $this->get('data_parsing')->parseFeed($feed);
+            $feed->setIsCatalog(true);
+
+            $em = $this->getEm();
+            $em->persist($feed);
+            $em->flush();
+
+            $success = true;
         }
-        
-        return $this->redirectToRoute('admin');
+
+        return new JsonResponse(array(
+            'success' => $success
+        ));
     }
 
-    public function deleteFeedAction($id) {
-        $feed = $this->getrepo("Feed")->find($id);
+    public function ajaxRemoveFeedFromCatalogAction($id) {
+        $success = false;
+
+        $feed = $this->getRepo("Feed")->find($id);
         if($feed) {
-            $this->get('feed_manager')->deleteFeed($feed);
+            $feed->setIsCatalog(false);
+
+            $em = $this->getEm();
+            $em->persist($feed);
+            $em->flush();
+
+            $success = true;
         }
 
-        return $this->redirectToRoute('admin');
+        return new JsonResponse(array(
+            'success' => $success
+        ));
+    }
+
+    public function ajaxParseFeedAction($id) {
+        $success = false;
+
+        $feed = $this->getRepo("Feed")->find($id);
+        if($feed) {
+            $this->get('data_parsing')->parseFeed($feed);
+
+            $success = true;
+        }
+
+        return new JsonResponse(array(
+            'success' => $success
+        ));
+    }
+
+    public function ajaxDeleteFeedAction($id) {
+        $success = false;
+
+        $feed = $this->getRepo("Feed")->find($id);
+        if($feed) {
+            $this->get('feed_manager')->deleteFeed($feed);
+
+            $success = true;
+        }
+
+        return new JsonResponse(array(
+            'success' => $success
+        ));
     }
 }

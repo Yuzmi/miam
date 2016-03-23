@@ -23,6 +23,9 @@ MiamBundle\Entity\Feed:
         website:
             type: string
             nullable: true
+        isCatalog:
+            type: boolean
+            column: is_catalog
         globalRate:
             type: float
             column: rate_global

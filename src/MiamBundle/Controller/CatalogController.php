@@ -29,6 +29,7 @@ class CatalogController extends MainController
 
 	public function showItemsAction() {
 		$items = $this->get('item_manager')->getItems(array(
+			'catalog' => true,
 			'nb' => 50,
 			'reader' => $this->getUser()
 		));

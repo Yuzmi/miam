@@ -217,4 +217,38 @@ class Category
     {
         return $this->rightPosition;
     }
+
+    /**
+     * Add subscription
+     *
+     * @param \MiamBundle\Entity\Subscription $subscription
+     *
+     * @return Category
+     */
+    public function addSubscription(\MiamBundle\Entity\Subscription $subscription)
+    {
+        $this->subscriptions[] = $subscription;
+
+        return $this;
+    }
+
+    /**
+     * Remove subscription
+     *
+     * @param \MiamBundle\Entity\Subscription $subscription
+     */
+    public function removeSubscription(\MiamBundle\Entity\Subscription $subscription)
+    {
+        $this->subscriptions->removeElement($subscription);
+    }
+
+    /**
+     * Get subscriptions
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getSubscriptions()
+    {
+        return $this->subscriptions;
+    }
 }

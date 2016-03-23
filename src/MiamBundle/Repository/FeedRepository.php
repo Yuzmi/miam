@@ -6,6 +6,7 @@ class FeedRepository extends \Doctrine\ORM\EntityRepository
 {
 	public function findCatalog() {
 		return $this->createQueryBuilder('f')
+			->where('f.isCatalog = TRUE')
 			->orderBy('f.name', 'ASC')
 			->getQuery()->getResult();
 	}

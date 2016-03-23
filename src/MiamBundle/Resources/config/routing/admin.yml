@@ -6,14 +6,26 @@ admin_feed_create:
     path: /feed/create
     defaults: { _controller: MiamBundle:Admin:createFeed }
 
-admin_feed_parse:
-    path: /feed/{id}/parse
-    defaults: { _controller: MiamBundle:Admin:parseFeed }
+ajax_admin_catalog_feed_add:
+    path: /ajax/feed/{id}/add
+    defaults: { _controller: MiamBundle:Admin:ajaxAddFeedToCatalog }
+    requirements: { id: \d+ }
+
+ajax_admin_catalog_feed_remove:
+    path: /ajax/feed/{id}/remove
+    defaults: { _controller: MiamBundle:Admin:ajaxRemoveFeedFromCatalog }
+    requirements: { id: \d+ }
+
+ajax_admin_feed_parse:
+    path: /ajax/feed/{id}/parse
+    defaults: { _controller: MiamBundle:Admin:ajaxParseFeed }
+    requirements: { id: \d+ }
+
+ajax_admin_feed_delete:
+    path: /ajax/feed/{id}/delete
+    defaults: { _controller: MiamBundle:Admin:ajaxDeleteFeed }
+    requirements: { id: \d+ }
 
 admin_parse_all:
     path: /parse/all
     defaults: { _controller: MiamBundle:Admin:parseAll }
-
-admin_feed_delete:
-    path: /feed/{id}/delete
-    defaults: { _controller: MiamBundle:Admin:deleteFeed }

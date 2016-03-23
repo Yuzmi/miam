@@ -15,6 +15,7 @@ class Feed
     private $dataLength;
     private $nbItems;
     private $nbErrors;
+    private $isCatalog;
     private $dateCreated;
     private $dateParsed;
     private $dateSuccess;
@@ -30,6 +31,7 @@ class Feed
         $this->dataLength = 0;
         $this->nbItems = 0;
         $this->nbErrors = 0;
+        $this->isCatalog = false;
         $this->dateCreated = new \DateTime("now");
         $this->items = new \Doctrine\Common\Collections\ArrayCollection();
         $this->subscriptions = new \Doctrine\Common\Collections\ArrayCollection();

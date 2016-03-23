@@ -16,9 +16,10 @@
 			<th>Name</th>
 			<th>URL</th>
 			<th>Rate</th>
+			<th>Catalog</th>
 		</tr>
 		{% for feed in feeds %}
-			<tr>
+			<tr class="feed {{ feed.isCatalog ? "catalog" }}" data-feed="{{ feed.id }}">
 				<td>
 					{% if feed.nbErrors > 10 %}
 						<i class="fa fa-warning"></i>
@@ -38,16 +39,106 @@
 					{{ feed.weekRate|round(2) }} / {{ feed.monthRate|round(2) }} / {{ feed.globalRate|round(2) }}
 				</td>
 				<td>
-					<a href="{{ path('admin_feed_parse', {'id': feed.id}) }}">
-						Parse
-					</a>
+					<button class="addToCatalog">Add</button>
+					<button class="removeFromCatalog">Remove</button>
 				</td>
 				<td>
-					<a href="{{ path('admin_feed_delete', {'id': feed.id}) }}">
-						X
-					</a>
+					<button class="parse">
+						Parse
+					</button>
+				</td>
+				<td>
+					<button class="delete">X</button>
 				</td>
 			</tr>
 		{% endfor %}
 	</table>
+{% endblock %}
+
+{% block stylesheets %}
+	{{ parent() }}
+
+	<style>
+		.feed .removeFromCatalog {
+			display:none;
+		}
+
+		.feed.catalog .addToCatalog {
+			display:none;
+		}
+
+		.feed.catalog .removeFromCatalog {
+			display:inline-block;
+		}
+	</style>
+{% endblock %}
+
+{% block javascripts %}
+	{{ parent() }}
+
+	<script type="text/javascript">
+		$(".feed .addToCatalog").click(function() {
+			var feedId = $(this).closest(".feed").data('feed');
+
+			$.ajax({
+				type: "POST",
+				url: Routing.generate('ajax_admin_catalog_feed_add', {id: feedId}, true),
+				dataType: "json",
+				success: function(result) {
+					if(result.success) {
+						$(".feed[data-feed="+feedId+"]").addClass("catalog");
+					}
+				}
+			});
+		});
+
+		$(".feed .removeFromCatalog").click(function() {
+			var feedId = $(this).closest(".feed").data('feed');
+
+			$.ajax({
+				type: "POST",
+				url: Routing.generate('ajax_admin_catalog_feed_remove', {id: feedId}, true),
+				dataType: "json",
+				success: function(result) {
+					if(result.success) {
+						$(".feed[data-feed="+feedId+"]").removeClass("catalog");
+					}
+				}
+			});
+		});
+
+		$(".feed .parse").click(function() {
+			var feedId = $(this).closest(".feed").data('feed');
+
+			if(!$(this).closest(".feed").hasClass("parsing")) {
+				$(this).closest(".feed").addClass("parsing");
+				$(this).text("...");
+
+				$.ajax({
+					type: "POST",
+					url: Routing.generate('ajax_admin_feed_parse', {id: feedId}, true),
+					dataType: "json",
+					complete: function() {
+						$(".feed[data-feed="+feedId+"]").removeClass("parsing");
+						$(".feed[data-feed="+feedId+"] .parse").text("Parse");
+					}
+				});
+			}
+		});
+
+		$(".feed .delete").click(function() {
+			var feedId = $(this).closest(".feed").data('feed');
+
+			$.ajax({
+				type: "POST",
+				url: Routing.generate('ajax_admin_feed_delete', {id: feedId}, true),
+				dataType: "json",
+				success: function(result) {
+					if(result.success) {
+						$(".feed[data-feed="+feedId+"]").remove();
+					}
+				}
+			});
+		});
+	</script>
 {% endblock %}

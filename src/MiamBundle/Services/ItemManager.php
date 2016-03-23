@@ -18,8 +18,9 @@ class ItemManager {
 	}
 
 	public function getItems($options = array()) {
-		$createdAfter = isset($options['createdAfter']) ? $options['createdAfter'] : null;
+		$catalog = isset($options['catalog']) ? $options['catalog'] : null;
 		$category = isset($options['category']) ? $options['category'] : null;
+		$createdAfter = isset($options['createdAfter']) ? $options['createdAfter'] : null;
 		$feed = isset($options['feed']) ? $options['feed'] : null;
 		$marker = isset($options['marker']) ? $options['marker'] : null;
 		$page = isset($options['page']) ? $options['page'] : 1;
@@ -62,6 +63,12 @@ class ItemManager {
 			} elseif($type == 'starred') {
 				$qb->andWhere('im.isStarred = TRUE');
 			}
+		}
+
+		if($catalog === true) {
+			$qb->andWhere('f.isCatalog = TRUE');
+		} elseif($catalog === false) {
+			$qb->andWhere('f.isCatalog = FALSE');
 		}
 
 		if($createdAfter) {

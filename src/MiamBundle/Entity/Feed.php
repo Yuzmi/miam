@@ -15,12 +15,14 @@ class Feed
     private $dataLength;
     private $nbItems;
     private $nbErrors;
+    private $isCatalog;
     private $dateCreated;
     private $dateParsed;
     private $dateSuccess;
     private $dateNewItem;
     private $items;
     private $subscriptions;
+    private $marks;
 
     public function __construct()
     {
@@ -30,9 +32,11 @@ class Feed
         $this->dataLength = 0;
         $this->nbItems = 0;
         $this->nbErrors = 0;
+        $this->isCatalog = false;
         $this->dateCreated = new \DateTime("now");
         $this->items = new \Doctrine\Common\Collections\ArrayCollection();
         $this->subscriptions = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->marks = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
     public function __toString() {
@@ -456,11 +460,6 @@ class Feed
     {
         return $this->nbErrors;
     }
-    /**
-     * @var \Doctrine\Common\Collections\Collection
-     */
-    private $marks;
-
 
     /**
      * Add mark
@@ -494,5 +493,29 @@ class Feed
     public function getMarks()
     {
         return $this->marks;
+    }
+
+    /**
+     * Set isCatalog
+     *
+     * @param boolean $isCatalog
+     *
+     * @return Feed
+     */
+    public function setIsCatalog($isCatalog)
+    {
+        $this->isCatalog = $isCatalog;
+
+        return $this;
+    }
+
+    /**
+     * Get isCatalog
+     *
+     * @return boolean
+     */
+    public function getIsCatalog()
+    {
+        return $this->isCatalog;
     }
 }
