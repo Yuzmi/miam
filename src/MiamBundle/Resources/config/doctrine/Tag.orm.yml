@@ -11,6 +11,8 @@ MiamBundle\Entity\Tag:
     fields:
         name:
             type: string
+            options:
+                collation: utf8_bin
         dateCreated:
             type: datetime
             column: date_created
@@ -18,4 +20,7 @@ MiamBundle\Entity\Tag:
         items:
             targetEntity: Item
             mappedBy: tags
+    uniqueConstraints:
+        name_idx:
+            columns: [ name ]
     lifecycleCallbacks: {  }

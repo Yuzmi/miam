@@ -210,6 +210,8 @@ class DataParsing {
 					
 					// Pièce(s) jointe(s)
 					$enclosures = $i->get_enclosures();
+					$enclosure_urls = array();
+
 					foreach($enclosures as $e) {
 						$enclosure_url = trim($e->get_link());
 						if(filter_var($enclosure_url, FILTER_VALIDATE_URL) !== false) {
@@ -221,7 +223,7 @@ class DataParsing {
 								));
 							}
 
-							if(!$enclosure) {
+							if(!$enclosure && !in_array($enclosure_url, $enclosure_urls)) {
 								$enclosure = new Enclosure();
 								$enclosure->setItem($item);
 								$enclosure->setUrl($enclosure_url);
@@ -231,6 +233,8 @@ class DataParsing {
 								$enclosure->setDescription(trim($e->get_description()));
 
 								$this->em->persist($enclosure);
+
+								$enclosure_urls[] = $enclosure_url;
 							}
 						}
 					}
@@ -400,34 +404,3 @@ class DataParsing {
         return $text;
     }
 }
-
-/*
-public function mustBeRetrieved() {
-    $now = new \DateTime("now");
-
-    if(!$this->getDateAttempt()) {
-        return true;
-    }
-
-    $interval = $now->diff($this->getDateAttempt(), true);
-    $hoursSinceLastAttempt = $interval->format("%a") * 24 + $interval->format("%h");
-    $minutesSinceLastAttempt = $hoursSinceLastAttempt * 60 + $interval->format("%i");
-
-    if(!$this->getDateRetrieved()) {
-        $daysSinceCreation = $now->diff($this->getDateCreated(), true)->format("%a");
-        if($daysSinceCreation > 7 && $hoursSinceAttempt < 6) {
-            return false;
-        }
-    }
-
-    if($this->getDateRetrieved()) {
-        $daysBetweenAttemptAndRetrieval = $this->getDateAttempt()->diff($this->getDateRetrieved(), true)->format("%a");
-        
-        if($daysBetweenAttemptAndRetrieval > 7 && $hoursSinceLastAttempt < 6) {
-            return false;
-        }
-    }
-
-    return true;
-}
-*/

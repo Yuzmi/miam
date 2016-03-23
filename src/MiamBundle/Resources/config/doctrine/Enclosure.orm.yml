@@ -11,6 +11,8 @@ MiamBundle\Entity\Enclosure:
     fields:
         url:
             type: string
+            options:
+                collation: utf8_bin
         type:
             type: string
             nullable: true
