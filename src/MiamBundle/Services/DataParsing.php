@@ -71,7 +71,7 @@ class DataParsing {
 			foreach($items as $i) {
 				$tags = $i->get_categories() ?: array();
 				foreach($tags as $t) {
-					$tag_name = strtolower(trim($t->get_label()));
+					$tag_name = trim($t->get_label());
 					if($tag_name) {
 						if(array_key_exists($tag_name, $cache_tags)) {
 							$tag = $cache_tags[$tag_name];
@@ -90,7 +90,7 @@ class DataParsing {
 				}
 			}
 			$this->em->flush();
-
+			
 			$identifiers = array();
 			foreach($items as $i) {
 				$identifier = $i->get_id();
@@ -197,6 +197,8 @@ class DataParsing {
 						$item->setAuthor($authors);
 					}
 
+					$new_tags = array();
+
 					// Tags
 					$tags = $i->get_categories() ?: array();
 					foreach($tags as $t) {
@@ -205,8 +207,10 @@ class DataParsing {
 							if(array_key_exists($tag_name, $cache_tags)) {
 								$tag = $cache_tags[$tag_name];
 
-								if($is_new_item || !$item->getTags()->contains($tag)) {
+								if(($is_new_item || !$item->getTags()->contains($tag)) && !in_array($tag_name, $new_tags)) {
 									$item->addTag($tag);
+
+									$new_tags[] = $tag_name;
 								}
 							}
 						}
@@ -395,10 +399,12 @@ class DataParsing {
     	// Récupération de l'URL de l'icône
     	$favicon = $this->getUrlForFeedIcon($feed);
     	if($favicon) {
-    		$content = file_get_contents($favicon);
-    		if($content !== false) {
-    			file_put_contents($tmpPath, $content);
-    		}
+    		try {
+	    		$content = file_get_contents($favicon);
+	    		if($content !== false) {
+	    			file_put_contents($tmpPath, $content);
+	    		}
+	    	} catch(\Exception $e) {}
     	}
 
     	$iconSize = 16;
@@ -535,20 +541,22 @@ class DataParsing {
     		$doc->strictErrorChecking = false;
 
     		// Récupération du chemin de l'icône
-    		$html = file_get_contents($rootUrl);
-    		if($html && $doc->loadHTML($html) !== false) {
-	    		$xml = simplexml_import_dom($doc);
-	    		if($xml instanceof \SimpleXmlElement) {
-	    			$rels = array("shortcut icon", "SHORTCUT ICON", "icon", "ICON");
-	    			foreach($rels as $rel) {
-	    				$arr = $xml->xpath('//link[@rel="'.$rel.'"]');
-	    				if(isset($arr[0]['href'])) {
-				    		$favicon = $arr[0]['href'];
-				    		break;
-				    	}
-	    			}
-		    	}
-		    }
+    		try {
+	    		$html = file_get_contents($rootUrl);
+	    		if($html && $doc->loadHTML($html) !== false) {
+		    		$xml = simplexml_import_dom($doc);
+		    		if($xml instanceof \SimpleXmlElement) {
+		    			$rels = array("shortcut icon", "SHORTCUT ICON", "icon", "ICON");
+		    			foreach($rels as $rel) {
+		    				$arr = $xml->xpath('//link[@rel="'.$rel.'"]');
+		    				if(isset($arr[0]['href'])) {
+					    		$favicon = $arr[0]['href'];
+					    		break;
+					    	}
+		    			}
+			    	}
+			    }
+			} catch(\Exception $e) {}
 
 		    // Sinon on tente celui par défaut
 		    if(!$favicon) {
@@ -559,9 +567,9 @@ class DataParsing {
 		    if(!filter_var($favicon, FILTER_VALIDATE_URL) !== false) {
 		    	$parsedFav = parse_url($favicon);
 
-		    	if(!$parsedFav["host"]) {
+		    	if(!isset($parsedFav["host"])) {
 			    	$favicon = $rootUrl;
-			    } elseif(!$parsedFav["scheme"]) {
+			    } elseif(!isset($parsedFav["scheme"])) {
 			    	$favicon = $parsedFav["host"];
 
 			    	if(isset($parsedFav["port"])) {
