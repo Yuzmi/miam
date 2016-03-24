@@ -497,7 +497,7 @@ class ManagerController extends MainController
 
             $feed = $this->get("feed_manager")->getFeedForUrl($outline["xmlUrl"], true);
             if($feed) {
-                $subscription = $this->em->getRepository('MiamBundle:Subscription')->findOneBy(array(
+                $subscription = $this->getRepo('Subscription')->findOneBy(array(
                     'user' => $user,
                     'feed' => $feed
                 ));
