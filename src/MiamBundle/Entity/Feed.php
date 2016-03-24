@@ -16,6 +16,7 @@ class Feed
     private $nbItems;
     private $nbErrors;
     private $isCatalog;
+    private $hasIcon;
     private $dateCreated;
     private $dateParsed;
     private $dateSuccess;
@@ -33,6 +34,7 @@ class Feed
         $this->nbItems = 0;
         $this->nbErrors = 0;
         $this->isCatalog = false;
+        $this->hasIcon = false;
         $this->dateCreated = new \DateTime("now");
         $this->items = new \Doctrine\Common\Collections\ArrayCollection();
         $this->subscriptions = new \Doctrine\Common\Collections\ArrayCollection();
@@ -41,6 +43,10 @@ class Feed
 
     public function __toString() {
         return $this->name ?: $this->url;
+    }
+
+    public function getIcon() {
+        return $this->hasIcon ? 'images/feeds/'.$this->id.'/icon.png' : '';
     }
 
     /**
@@ -517,5 +523,29 @@ class Feed
     public function getIsCatalog()
     {
         return $this->isCatalog;
+    }
+
+    /**
+     * Set hasIcon
+     *
+     * @param boolean $hasIcon
+     *
+     * @return Feed
+     */
+    public function setHasIcon($hasIcon)
+    {
+        $this->hasIcon = $hasIcon;
+
+        return $this;
+    }
+
+    /**
+     * Get hasIcon
+     *
+     * @return boolean
+     */
+    public function getHasIcon()
+    {
+        return $this->hasIcon;
     }
 }

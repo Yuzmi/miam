@@ -11,7 +11,7 @@ function getFeeds() {
 
 		for(var i = 0; i < feeds.length; i++) {
 			//getFeed(feeds[i]);
-			setTimeout(getFeed, i*500, feeds[i]);
+			setTimeout(getFeed, i*250, feeds[i]);
 		}
 	});
 }
@@ -23,7 +23,7 @@ function getFeed(feed) {
 	}, function(error, response, body) {
 		if(!error && response.statusCode == 200) {
 			console.log(feed.id+" - Récupéré - "+body.length);
-			fs.writeFile(__dirname+"/files/"+feed.id+".rss", body, function(error, response) {
+			fs.writeFile(__dirname+"/rss/"+feed.id+".rss", body, function(error, response) {
 				if(error) {
 					console.log(feed.id+" - Erreur lors de l'écriture");
 				}

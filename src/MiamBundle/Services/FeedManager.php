@@ -15,9 +15,30 @@ class FeedManager {
 		$this->container = $container;
 	}
 
-	// @todo : domain name in lower case
 	public function formatUrl($url) {
-		return trim($url);
+		$parsed = parse_url($url);
+
+		$url = strtolower($parsed["scheme"])."://";
+
+		if(isset($parsed["user"]) && isset($parsed["pass"])) {
+			$url .= $parsed["user"].":".$parsed["pass"]."@";
+		}
+
+		$url .= strtolower($parsed["host"]);
+
+		if(isset($parsed["path"])) {
+			$url .= $parsed["path"];
+		}
+
+		if(isset($parsed["query"])) {
+			$url .= "?".$parsed["query"];
+		}
+
+		if(isset($parsed["fragment"])) {
+			$url .= "#".$parsed["fragment"];
+		}
+
+		return $url;
 	}
 
 	public function getSubscriptionForUserAndUrl(User $user, $url) {

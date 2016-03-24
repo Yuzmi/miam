@@ -15,7 +15,7 @@ class DataParsing {
 		$this->em = $em;
 		$this->container = $container;
 		$this->rootDir = $this->container->get('kernel')->getRootDir().'/..';
-		$this->fileDir = $this->rootDir.'/files';
+		$this->rssDir = $this->rootDir.'/rss';
 	}
 
 	public function parseFeed(Feed $feed, $options = array()) {
@@ -32,6 +32,10 @@ class DataParsing {
 			$pie->set_autodiscovery_level(SIMPLEPIE_LOCATOR_NONE);
 		}
 
+		$firstParsing = false;
+		if(!$feed->getDateParsed()) {
+			$firstParsing = true;
+		}
 		$feed->setDateParsed($now);
 
 		$countNewItems = 0;
@@ -267,6 +271,10 @@ class DataParsing {
 				echo 'x';
 			}
 		}
+
+		if($firstParsing) {
+			$this->updateFeedIcon($feed);
+		}
 	}
 
 	public function parseAll($options = array()) {
@@ -321,7 +329,7 @@ class DataParsing {
 	}
 
 	public function parseFile($filename, $options = array()) {
-		$path = $this->fileDir.'/'.$filename;
+		$path = $this->rssDir.'/'.$filename;
 		if(preg_match('#^([0-9]+)\.rss$#', $filename, $match) && file_exists($path)) {
 			$feed = $this->em->getRepository('MiamBundle:Feed')->find($match[1]);
 			if($feed) {
@@ -334,7 +342,7 @@ class DataParsing {
 	}
 
 	public function parseFiles($options = array()) {
-		$handle = opendir($this->fileDir);
+		$handle = opendir($this->rssDir);
 		if($handle) {
 			$nb = 0;
 			while(($entry = readdir($handle)) !== false) {
@@ -365,42 +373,222 @@ class DataParsing {
 		return $generate !== false ? true : false;
 	}
 
-	private function decodeEntities($text, $nb = 1) {
-        for($i=0;$i<$nb;$i++) {
-            $text = html_entity_decode($text, ENT_COMPAT | ENT_HTML401, 'UTF-8');
-            
-            // Décodage d'entités illégales mais utilisées malgré tout
-            $charmap = array(
-                '&#128;' => '€', '&#129;' => '', '&#130;' => '‚', '&#131;' => 'ƒ', 
-                '&#132;' => '„', '&#133;' => '…', '&#134;' => '†', '&#135;' => '‡', 
-                '&#136;' => 'ˆ', '&#137;' => '‰', '&#138;' => 'Š', '&#139;' => '‹', 
-                '&#140;' => 'Œ', '&#141;' => '', '&#142;' => 'Ž', '&#143;' => '', 
-                '&#144;' => '', '&#145;' => '‘', '&#146;' => '’', '&#147;' => '“', 
-                '&#148;' => '”', '&#149;' => '•', '&#150;' => '–', '&#151;' => '—', 
-                '&#152;' => '˜', '&#153;' => '™', '&#154;' => 'š', '&#155;' => '›', 
-                '&#156;' => 'œ', '&#157;' => '', '&#158;' => 'ž', '&#159;' => 'Ÿ',
+    public function updateFeedIcons() {
+    	$feeds = $this->em->getRepository('MiamBundle:Feed')->findAll();
+    	foreach($feeds as $feed) {
+    		if(!$feed->getHasIcon()) {
+	    		$icon = $this->updateFeedIcon($feed);
+	    	}
+    	}
+    }
 
-                '&#x80;' => '€', '&#x81;' => '', '&#x82;' => '‚', '&#x83;' => 'ƒ', 
-                '&#x84;' => '„', '&#x85;' => '…', '&#x86;' => '†', '&#x87;' => '‡', 
-                '&#x88;' => 'ˆ', '&#x89;' => '‰', '&#x8a;' => 'Š', '&#x8b;' => '‹', 
-                '&#x8c;' => 'Œ', '&#x8d;' => '', '&#x8e;' => 'Ž', '&#x8f;' => '', 
-                '&#x90;' => '', '&#x91;' => '‘', '&#x92;' => '’', '&#x93;' => '“', 
-                '&#x94;' => '”', '&#x95;' => '•', '&#x96;' => '–', '&#x97;' => '—', 
-                '&#x98;' => '˜', '&#x99;' => '™', '&#x9a;' => 'š', '&#x9b;' => '›', 
-                '&#x9c;' => 'œ', '&#x9d;' => '', '&#x9e;' => 'ž', '&#x9f;' => 'Ÿ'
-            );
-            foreach($charmap AS $a => $b) $text = str_replace($a, $b, $text);
-        }
+    public function updateFeedIcon(Feed $feed) {
+    	$success = false;
 
-        // Caractères non-décodés parfois restants
-        $charmap = array(
-            '&#034;' => '"', '&#34;' => '"', 
-            '&#039;' => '\'', '&#39;' => '\'', '&#8217;' => '\'', 
-            '&#65279;' => ' ', '&nbsp;' => ' ',
-            '&amp;' => '&', '&quot;' => '"', '&apos;' => '\''
-        );
-        foreach($charmap AS $a => $b) $text = str_replace($a, $b, $text);
-            
-        return $text;
+    	// Dossier des images du flux
+    	$feedDir = $this->rootDir.'/web/images/feeds/'.$feed->getId();
+    	if(!is_dir($feedDir)) {
+    		mkdir($feedDir, 0777, true);
+    	}
+
+    	$tmpPath = $feedDir.'/icon.tmp';
+    	$iconPath = $feedDir.'/icon.png';
+
+    	// Récupération de l'URL de l'icône
+    	$favicon = $this->getUrlForFeedIcon($feed);
+    	if($favicon) {
+    		$content = file_get_contents($favicon);
+    		if($content !== false) {
+    			file_put_contents($tmpPath, $content);
+    		}
+    	}
+
+    	$iconSize = 16;
+
+    	// Conversion et stockage
+    	if(is_file($tmpPath)) {
+    		$iconData = getimagesize($tmpPath);
+    		
+    		$iconSrcWidth = $iconData[0];
+    		$iconSrcHeight = $iconData[1];
+    		$iconSrcType = $iconData[2];
+    		
+    		if($iconSrcType == IMAGETYPE_GIF) {
+    			$iconDst = imagecreatetruecolor($iconSize, $iconSize);
+				
+				$blackBg = imagecolorallocate($iconDst, 0, 0, 0);
+    			imagecolortransparent($iconDst, $blackBg);
+
+				$iconSrc = imagecreatefromgif($tmpPath);
+				imagecopyresampled($iconDst, $iconSrc, 0, 0, 0, 0, $iconSize, $iconSize, $iconSrcWidth, $iconSrcHeight);
+				
+				imagepng($iconDst, $iconPath);
+            	imagedestroy($iconDst);
+
+            	$success = true;
+    		} elseif($iconSrcType == IMAGETYPE_JPEG) {
+    			$iconDst = imagecreatetruecolor($iconSize, $iconSize);
+
+				$iconSrc = imagecreatefromjpeg($tmpPath);
+				imagecopyresampled($iconDst, $iconSrc, 0, 0, 0, 0, $iconSize, $iconSize, $iconSrcWidth, $iconSrcHeight);
+				
+				imagepng($iconDst, $iconPath);
+            	imagedestroy($iconDst);
+
+            	$success = true;
+    		} elseif($iconSrcType == IMAGETYPE_PNG) {
+    			$iconDst = imagecreatetruecolor($iconSize, $iconSize);
+
+    			$blackBg = imagecolorallocate($iconDst, 0, 0, 0);
+    			imagecolortransparent($iconDst, $blackBg);
+            	imagealphablending($iconDst, false);
+            	imagesavealpha($iconDst, true);
+
+            	$iconSrc = imagecreatefrompng($tmpPath);
+            	imagecopyresampled($iconDst, $iconSrc, 0, 0, 0, 0, $iconSize, $iconSize, $iconSrcWidth, $iconSrcHeight);
+
+            	imagepng($iconDst, $iconPath);
+            	imagedestroy($iconDst);
+
+            	$success = true;
+    		} elseif($iconSrcType == IMAGETYPE_BMP) {
+    			$icon = new \Imagick($tmpPath);
+				$icon->thumbnailImage($iconSize, $iconSize);
+				$icon->setImageFormat('png');
+				$icon->writeImage($iconPath);
+				$icon->clear();
+				$icon->destroy();
+
+    			$success = true;
+    		} elseif($iconSrcType == IMAGETYPE_ICO) {
+    			// Must edit the extension here or it fails
+				$icoPath = $feedDir.'/icon.ico';
+				rename($tmpPath, $icoPath);
+
+				$icon = new \Imagick($icoPath);
+				$icon->thumbnailImage($iconSize, $iconSize);
+				$icon->setImageFormat('png');
+				$icon->writeImage($iconPath);
+				$icon->clear();
+				$icon->destroy();
+
+    			@unlink($icoPath);
+
+    			$success = true;
+    		} else {
+    			try {
+    				$icon = new \Imagick($tmpPath);
+					$icon->thumbnailImage($iconSize, $iconSize);
+					$icon->setImageFormat('png');
+					$icon->writeImage($iconPath);
+					$icon->clear();
+					$icon->destroy();
+
+	    			$success = true;
+    			} catch(\Exception $e) {
+    				$success = false;
+    			}
+    		}
+
+    		@unlink($tmpPath);
+    	}
+
+    	// Mise à jour du flux
+    	if($success && !$feed->getHasIcon()) {
+    		$feed->setHasIcon(true);
+
+    		$this->em->persist($feed);
+    		$this->em->flush();
+    	}
+    }
+
+    // May need improvements
+    private function getUrlForFeedIcon(Feed $feed) {
+    	$favicon = null;
+    	
+    	$url = $feed->getWebsite();
+    	if(empty($url)) {
+    		$item = $this->em->getRepository('MiamBundle:Item')->findLastOneForFeed($feed);
+    		if($item) {
+    			$url = $item->getLink();
+    		}
+    	}
+
+    	$rootUrl = null;
+    	if(filter_var($url, FILTER_VALIDATE_URL) !== false) {
+    		$parsed = parse_url($url);
+
+    		$rootUrl = $parsed["scheme"]."://";
+
+    		if(isset($parsed["user"]) && isset($parsed["pass"])) {
+    			$rootUrl .= $parsed["user"].":".$parsed["pass"]."@";
+    		}
+
+    		$rootUrl .= $parsed["host"];
+
+    		if(isset($parsed["port"])) {
+    			$rootUrl .= ":".$parsed["port"];
+    		}
+    	}
+
+    	if($rootUrl) {
+    		// https://stackoverflow.com/questions/5701593
+    		$doc = new \DOMDocument();
+    		$doc->strictErrorChecking = false;
+
+    		// Récupération du chemin de l'icône
+    		$html = file_get_contents($rootUrl);
+    		if($html && $doc->loadHTML($html) !== false) {
+	    		$xml = simplexml_import_dom($doc);
+	    		if($xml instanceof \SimpleXmlElement) {
+	    			$rels = array("shortcut icon", "SHORTCUT ICON", "icon", "ICON");
+	    			foreach($rels as $rel) {
+	    				$arr = $xml->xpath('//link[@rel="'.$rel.'"]');
+	    				if(isset($arr[0]['href'])) {
+				    		$favicon = $arr[0]['href'];
+				    		break;
+				    	}
+	    			}
+		    	}
+		    }
+
+		    // Sinon on tente celui par défaut
+		    if(!$favicon) {
+		    	$favicon = "/favicon.ico";
+		    }
+		    
+		    // Correction en cas d'erreurs
+		    if(!filter_var($favicon, FILTER_VALIDATE_URL) !== false) {
+		    	$parsedFav = parse_url($favicon);
+
+		    	if(!$parsedFav["host"]) {
+			    	$favicon = $rootUrl;
+			    } elseif(!$parsedFav["scheme"]) {
+			    	$favicon = $parsedFav["host"];
+
+			    	if(isset($parsedFav["port"])) {
+		    			$favicon .= ":".$parsedFav["port"];
+		    		}
+
+		    		if(isset($parsedFav["user"]) && isset($parsedFav["pass"])) {
+		    			$favicon = $parsedFav["user"].":".$parsedFav["pass"]."@".$favicon;
+		    		}
+
+		    		$favicon = "http://".$favicon;
+			    }
+
+		    	$path = $parsedFav['path'] ?: "/favicon.ico";
+		    	if(substr($path, 0, 1) != "/") {
+		    		$path = "/".$path;
+		    	}
+		    	$favicon .= $path;
+
+		    	if(isset($parsedFav["query"])) {
+		    		$favicon .= "?".$parsedFav["query"];
+		    	}
+		    }
+    	}
+    	
+    	return $favicon;
     }
 }

@@ -26,6 +26,9 @@ MiamBundle\Entity\Feed:
         isCatalog:
             type: boolean
             column: is_catalog
+        hasIcon:
+            type: boolean
+            column: has_icon
         globalRate:
             type: float
             column: rate_global
