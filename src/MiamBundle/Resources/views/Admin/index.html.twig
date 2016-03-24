@@ -13,6 +13,7 @@
 	<table>
 		<tr>
 			<th></th>
+			<th></th>
 			<th>Name</th>
 			<th>URL</th>
 			<th>Rate</th>
@@ -23,6 +24,11 @@
 				<td>
 					{% if feed.nbErrors > 10 %}
 						<i class="fa fa-warning"></i>
+					{% endif %}
+				</td>
+				<td>
+					{% if feed.hasIcon %}
+						<img src="{{ asset(feed.icon) }}" alt="">
 					{% endif %}
 				</td>
 				<td title="{{ feed.name }}">

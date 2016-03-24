@@ -376,9 +376,7 @@ class DataParsing {
     public function updateFeedIcons() {
     	$feeds = $this->em->getRepository('MiamBundle:Feed')->findAll();
     	foreach($feeds as $feed) {
-    		if(!$feed->getHasIcon()) {
-	    		$icon = $this->updateFeedIcon($feed);
-	    	}
+	    	$icon = $this->updateFeedIcon($feed);
     	}
     }
 

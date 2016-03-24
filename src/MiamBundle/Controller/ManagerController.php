@@ -493,16 +493,30 @@ class ManagerController extends MainController
 
         $type = isset($outline['type']) ? trim($outline['type']) : null;
         if(isset($outline["xmlUrl"])) {
-            $subscription = $this->get("feed_manager")->getSubscriptionForUserAndUrl($user, $outline["xmlUrl"]);
-            if($subscription) {
+            $subscription = null;
+
+            $feed = $this->get("feed_manager")->getFeedForUrl($outline["xmlUrl"], true);
+            if($feed) {
+                $subscription = $this->em->getRepository('MiamBundle:Subscription')->findOneBy(array(
+                    'user' => $user,
+                    'feed' => $feed
+                ));
+                if(!$subscription) {
+                    $subscription = new Subscription();
+                    $subscription->setUser($user);
+                    $subscription->setFeed($feed);
+                    $subscription->setName($feed->getName());
+                }
+
                 $text = null;
                 if(isset($outline['text']) || isset($outline['title'])) {
                     $text = isset($outline['text']) ? trim($outline['text']) : trim($outline['title']);
                     if(!empty($text)) {
                         $subscription->setName($text);
-                        $em->persist($subscription);
                     }
                 }
+
+                $em->persist($subscription);
 
                 if($parentCategory && !$parentCategory->getSubscriptions()->contains($subscription)) {
                     $parentCategory->addSubscription($subscription);

@@ -6,6 +6,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
 use MiamBundle\Entity\Feed;
+use MiamBundle\Entity\Subscription;
 
 class CatalogController extends MainController
 {
@@ -48,10 +49,22 @@ class CatalogController extends MainController
 		if($this->isLogged()) {
 			$feed = $this->getRepo('Feed')->find($id);
 			if($feed) {
-				$subscription = $this->get('feed_manager')->getSubscriptionForUserAndFeed($this->getUser(), $feed);
-				if($subscription) {
-					$success = true;
+				$subscription = $this->getRepo('Subscription')->findOneBy(array(
+					'user' => $this->getUser(),
+					'feed' => $feed
+				));
+				if(!$subscription) {
+					$subscription = new Subscription();
+					$subscription->setUser($this->getUser());
+					$subscription->setFeed($feed);
+					$subscription->setName($feed->getName());
+
+					$em = $this->getEm();
+					$em->persist($subscription);
+					$em->flush();
 				}
+				
+				$success = true;
 			}
 		}
 

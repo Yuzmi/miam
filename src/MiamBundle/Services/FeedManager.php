@@ -41,30 +41,7 @@ class FeedManager {
 		return $url;
 	}
 
-	public function getSubscriptionForUserAndUrl(User $user, $url) {
-		$subscription = null;
-
-		$feed = $this->getFeedForUrl($url);
-		if($feed) {
-			$subscription = $this->getSubscriptionForUserAndFeed($user, $feed);
-		}
-
-		return $subscription;
-	}
-
-	public function getSubscriptionForUserAndFeed(User $user, Feed $feed) {
-		$subscription = $this->em->getRepository('MiamBundle:Subscription')->findOneBy(array(
-			'user' => $user,
-			'feed' => $feed
-		));
-		if(!$subscription) {
-			$subscription = $this->subscribeUserToFeed($user, $feed);
-		}
-
-		return $subscription;
-	}
-
-	public function getFeedForUrl($url) {
+	public function getFeedForUrl($url, $fast = false) {
 		$feed = null;
 
 		if(filter_var($url, FILTER_VALIDATE_URL) !== false) {
@@ -72,33 +49,17 @@ class FeedManager {
 
 			$feed = $this->em->getRepository("MiamBundle:Feed")->findOneByUrl($url);
 			if(!$feed) {
-				$feed = $this->createFeedForUrl($url);
+				$feed = new Feed();
+				$feed->setUrl($url);
+
+				$this->em->persist($feed);
+				$this->em->flush();
+
+				if(!$fast) {
+					$this->container->get('data_parsing')->parseFeed($feed);
+				}
 			}
 		}
-
-		return $feed;
-	}
-
-	public function subscribeUserToFeed(User $user, Feed $feed) {
-		$subscription = new Subscription();
-		$subscription->setUser($user);
-		$subscription->setFeed($feed);
-		$subscription->setName($feed->getName());
-
-		$this->em->persist($subscription);
-		$this->em->flush();
-
-		return $subscription;
-	}
-
-	public function createFeedForUrl($url) {
-		$feed = new Feed();
-		$feed->setUrl($url);
-
-		$this->em->persist($feed);
-		$this->em->flush();
-
-		$this->container->get('data_parsing')->parseFeed($feed);
 
 		return $feed;
 	}
@@ -164,12 +125,11 @@ class FeedManager {
     	}
 
     	$this->em->flush();
-    }
 
-    public function updateSubscriptions() {
     	$subscriptions = $this->em->getRepository('MiamBundle:Subscription')
     		->createQueryBuilder("s")
     		->innerJoin("s.feed", "f")->addSelect("f")
+    		->where("s.name IS NULL")
     		->getQuery()->getResult();
 
     	foreach($subscriptions as $s) {
