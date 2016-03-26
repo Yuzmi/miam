@@ -7,8 +7,8 @@ use MiamBundle\Entity\Feed;
 use MiamBundle\Entity\Item;
 use MiamBundle\Entity\Tag;
 
-class DataParsing {
-	private $em;
+class DataParsing extends MainService {
+	protected $em;
 	private $container;
 
 	public function __construct($em, $container) {
@@ -76,7 +76,7 @@ class DataParsing {
 						if(array_key_exists($tag_name, $cache_tags)) {
 							$tag = $cache_tags[$tag_name];
 						} else {
-							$tag = $this->em->getRepository('MiamBundle:Tag')->findOneByName($tag_name);
+							$tag = $this->getRepo('Tag')->findOneByName($tag_name);
 							if(!$tag) {
 								$tag = new Tag();
 								$tag->setName($tag_name);
@@ -105,7 +105,7 @@ class DataParsing {
 				$is_new_item = false;
 				
 				// On vérifie l'existence de l'article
-				$item = $this->em->getRepository('MiamBundle:Item')->findOneBy(array(
+				$item = $this->getRepo('Item')->findOneBy(array(
 					'feed' => $feed,
 					'identifier' => $identifier
 				));
@@ -225,7 +225,7 @@ class DataParsing {
 						if(filter_var($enclosure_url, FILTER_VALIDATE_URL) !== false) {
 							$enclosure = null;
 							if(!$is_new_item) {
-								$enclosure = $this->em->getRepository('MiamBundle:Enclosure')->findOneBy(array(
+								$enclosure = $this->getRepo('Enclosure')->findOneBy(array(
 									'item' => $item,
 									'url' => $enclosure_url
 								));
@@ -282,11 +282,11 @@ class DataParsing {
 	}
 
 	public function parseAll($options = array()) {
-		$feeds = $this->em->getRepository('MiamBundle:Feed')->findAll();
+		$feeds = $this->getRepo('Feed')->findAll();
 
 		$nb = 0;
 		foreach($feeds as $feed) {
-			$feed = $this->em->getRepository('MiamBundle:Feed')->find($feed->getId());
+			$feed = $this->getRepo('Feed')->find($feed->getId());
 
 			if($feed) {
 				$this->parseFeed($feed, $options);
@@ -301,11 +301,11 @@ class DataParsing {
 	}
 
 	public function parseSelected($options = array()) {
-		$feeds = $this->em->getRepository('MiamBundle:Feed')->findAll();
+		$feeds = $this->getRepo('Feed')->findAll();
 
 		$nb = 0;
 		foreach($feeds as $feed) {
-			$feed = $this->em->getRepository('MiamBundle:Feed')->find($feed->getId());
+			$feed = $this->getRepo('Feed')->find($feed->getId());
 
 			if($feed) {
 				$now = new \DateTime("now");
@@ -335,7 +335,7 @@ class DataParsing {
 	public function parseFile($filename, $options = array()) {
 		$path = $this->rssDir.'/'.$filename;
 		if(preg_match('#^([0-9]+)\.rss$#', $filename, $match) && file_exists($path)) {
-			$feed = $this->em->getRepository('MiamBundle:Feed')->find($match[1]);
+			$feed = $this->getRepo('Feed')->find($match[1]);
 			if($feed) {
 				$data = file_get_contents($path);
 				$this->parseFeed($feed, array_merge($options, array('data' => $data)));
@@ -364,7 +364,7 @@ class DataParsing {
 	public function generateJson() {
 		$array = array();
 
-		$feeds = $this->em->getRepository('MiamBundle:Feed')->findAll();
+		$feeds = $this->getRepo('Feed')->findAll();
 		foreach($feeds as $feed) {
 			$array[] = array(
 				'id' => $feed->getId(),
@@ -378,7 +378,7 @@ class DataParsing {
 	}
 
     public function updateFeedIcons() {
-    	$feeds = $this->em->getRepository('MiamBundle:Feed')->findAll();
+    	$feeds = $this->getRepo('Feed')->findAll();
     	foreach($feeds as $feed) {
 	    	$icon = $this->updateFeedIcon($feed);
     	}
@@ -512,7 +512,7 @@ class DataParsing {
     	
     	$url = $feed->getWebsite();
     	if(empty($url)) {
-    		$item = $this->em->getRepository('MiamBundle:Item')->findLastOneForFeed($feed);
+    		$item = $this->getRepo('Item')->findLastOneForFeed($feed);
     		if($item) {
     			$url = $item->getLink();
     		}

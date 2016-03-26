@@ -6,8 +6,8 @@ use MiamBundle\Entity\Feed;
 use MiamBundle\Entity\Subscription;
 use MiamBundle\Entity\User;
 
-class FeedManager {
-	private $em;
+class FeedManager extends MainService {
+	protected $em;
 	private $container;
 
 	public function __construct($em, $container) {
@@ -47,7 +47,7 @@ class FeedManager {
 		if(filter_var($url, FILTER_VALIDATE_URL) !== false) {
 			$url = $this->formatUrl($url);
 
-			$feed = $this->em->getRepository("MiamBundle:Feed")->findOneByUrl($url);
+			$feed = $this->getRepo("Feed")->findOneByUrl($url);
 			if(!$feed) {
 				$feed = new Feed();
 				$feed->setUrl($url);
@@ -65,7 +65,7 @@ class FeedManager {
 	}
 
 	public function unsubscribeUserFromFeed(User $user, Feed $feed) {
-		$subscription = $this->em->getRepository('MiamBundle:Subscription')->findOneBy(array(
+		$subscription = $this->getRepo('Subscription')->findOneBy(array(
 			'user' => $user,
 			'feed' => $feed
 		));
@@ -90,7 +90,7 @@ class FeedManager {
     	$oneMonthAgo = new \DateTime("now - 30 days");
     	$oneWeekAgo = new \DateTime("now - 7 days");
 
-    	$feeds = $this->em->getrepository('MiamBundle:Feed')->findAll();
+    	$feeds = $this->getRepo('Feed')->findAll();
     	foreach($feeds as $feed) {
     		$nbItems = 0;
     		$nbMonthItems = 0;
@@ -126,7 +126,7 @@ class FeedManager {
 
     	$this->em->flush();
 
-    	$subscriptions = $this->em->getRepository('MiamBundle:Subscription')
+    	$subscriptions = $this->getRepo('Subscription')
     		->createQueryBuilder("s")
     		->innerJoin("s.feed", "f")->addSelect("f")
     		->where("s.name IS NULL")

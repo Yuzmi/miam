@@ -9,15 +9,15 @@ use MiamBundle\Entity\Item;
 use MiamBundle\Entity\ItemMark;
 use MiamBundle\Entity\User;
 
-class MarkManager {
-	private $em;
+class MarkManager extends MainService {
+	protected $em;
 
 	public function __construct($em) {
 		$this->em = $em;
 	}
 
 	public function readItemForUser(Item $item, User $user) {
-		$mark = $this->em->getRepository('MiamBundle:ItemMark')->findOneBy(array(
+		$mark = $this->getRepo('ItemMark')->findOneBy(array(
             'item' => $item,
             'user' => $user
         ));
@@ -37,7 +37,7 @@ class MarkManager {
 	}
 
 	public function readFeedForUser(Feed $feed, User $user) {
-		$mark = $this->em->getRepository('MiamBundle:FeedMark')->findOneBy(array(
+		$mark = $this->getRepo('FeedMark')->findOneBy(array(
             'feed' => $feed,
             'user' => $user
         ));
@@ -53,13 +53,13 @@ class MarkManager {
 	}
 
 	public function readCategoryForUser(Category $category, User $user) {
-		$subscriptions = $this->em->getRepository('MiamBundle:Subscription')->findForCategory($category, true);
+		$subscriptions = $this->getRepo('Subscription')->findForCategory($category, true);
 
 		if(count($subscriptions) > 0) {
 			foreach($subscriptions as $s) {
 				$feed = $s->getFeed();
 
-				$mark = $this->em->getRepository('MiamBundle:FeedMark')->findOneBy(array(
+				$mark = $this->getRepo('FeedMark')->findOneBy(array(
 					'feed' => $feed,
 					'user' => $user
 				));
@@ -78,12 +78,12 @@ class MarkManager {
 	}
 
 	public function readUserForUser(User $subscriber, User $reader) {
-		$subscriptions = $this->em->getRepository('MiamBundle:Subscription')->findByUser($subscriber);
+		$subscriptions = $this->getRepo('Subscription')->findByUser($subscriber);
 		if(count($subscriptions) > 0) {
 			foreach($subscriptions as $s) {
 				$feed = $s->getFeed();
 
-				$mark = $this->em->getRepository('MiamBundle:FeedMark')->findOneBy(array(
+				$mark = $this->getRepo('FeedMark')->findOneBy(array(
 					'feed' => $feed,
 					'user' => $reader
 				));
@@ -102,7 +102,7 @@ class MarkManager {
 	}
 
 	public function starItemForUser(Item $item, User $user) {
-		$mark = $this->em->getRepository('MiamBundle:ItemMark')->findOneBy(array(
+		$mark = $this->getRepo('ItemMark')->findOneBy(array(
             'item' => $item,
             'user' => $user
         ));
@@ -121,7 +121,7 @@ class MarkManager {
 	}
 
 	public function unstarItemForUser(Item $item, User $user) {
-		$mark = $this->em->getRepository('MiamBundle:ItemMark')->findOneBy(array(
+		$mark = $this->getRepo('ItemMark')->findOneBy(array(
             'item' => $item,
             'user' => $user
         ));
@@ -136,7 +136,7 @@ class MarkManager {
 	public function getUnreadCounts(User $subscriber, User $reader) {
 		$unreadCounts = array();
 
-        $result = $this->em->getRepository('MiamBundle:Item')->createQueryBuilder('i')
+        $result = $this->getRepo('Item')->createQueryBuilder('i')
             ->select('f.id AS feed_id, COUNT(i.id) AS unread_count')
             ->innerJoin('i.feed', 'f')
             ->innerJoin('f.subscriptions', 's')

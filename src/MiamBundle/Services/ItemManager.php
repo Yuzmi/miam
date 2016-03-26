@@ -2,8 +2,8 @@
 
 namespace MiamBundle\Services;
 
-class ItemManager {
-	private $em;
+class ItemManager extends MainService {
+	protected $em;
 	private $tokenStorage;
 
 	public function __construct($em, $tokenStorage) {
@@ -28,7 +28,7 @@ class ItemManager {
 		$subscription = isset($options['subscription']) ? $options['subscription'] : null;
 		$type = isset($options['type']) ? $options['type'] : 'all';
 
-		$qb = $this->em->getRepository('MiamBundle:Item')->createQueryBuilder('i')
+		$qb = $this->getRepo('Item')->createQueryBuilder('i')
 			->innerJoin('i.feed', 'f')->addSelect('f');
 
 		if($type == 'feed' && $feed) {
@@ -111,7 +111,7 @@ class ItemManager {
 			);
 		}
 
-		$qb = $this->em->getRepository('MiamBundle:Item')->createQueryBuilder('i')
+		$qb = $this->getRepo('Item')->createQueryBuilder('i')
 			->leftJoin('i.tags', 't')->addSelect('t')
 			->leftJoin('i.enclosures', 'e')->addSelect('e')
 			->where('i.id IN (:ids)')->setParameter('ids', $itemIds);

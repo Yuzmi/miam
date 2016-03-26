@@ -5,8 +5,8 @@ namespace MiamBundle\Services;
 use MiamBundle\Entity\Category;
 use MiamBundle\Entity\User;
 
-class CategoryManager {
-	private $em;
+class CategoryManager extends MainService {
+	protected $em;
 	private $container;
 
 	public function __construct($em, $container) {
@@ -23,14 +23,14 @@ class CategoryManager {
 	}
 
 	public function updatePositions() {
-		$users = $this->em->getRepository("MiamBundle:User")->findAll();
+		$users = $this->getRepo("User")->findAll();
 		foreach($users as $u) {
 			$this->updatePositionsForUser($u);
 		}
 	}
 
 	public function updatePositionsForUser(User $user) {
-		$categories = $this->em->getRepository("MiamBundle:Category")
+		$categories = $this->getRepo("Category")
 			->createQueryBuilder("c")
 			->where("c.user = :user AND c.parent IS NULL")
 			->setParameter("user", $user)

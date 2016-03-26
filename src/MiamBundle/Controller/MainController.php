@@ -11,8 +11,8 @@ class MainController extends Controller
 		return $this->getDoctrine()->getManager();
 	}
 
-    public function getRepo($repository) {
-    	return $this->getEm()->getRepository('MiamBundle:'.$repository);
+    public function getRepo($entity) {
+    	return $this->getEm()->getRepository('MiamBundle:'.$entity);
     }
 
     public function isLogged() {
