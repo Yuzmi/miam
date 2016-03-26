@@ -42,6 +42,7 @@ sudo apt-get install npm
 
 INSTALL
 =====
+
 Git & Composer (https://getcomposer.org/download/)
 ```shell
 cd /var/www
@@ -69,6 +70,18 @@ Cache
 ```shell
 php app/console cache:clear
 php app/console cache:warmup
+```
+
+CRON
+=====
+Normal cron
+```shell
+*/30 * * * * php /var/www/miam/bin/console miam:parse:selected
+```
+
+With NodeJS, faster but experimental
+```shell
+*/30 * * * * php /var/www/miam/bin/console miam:generate:json && nodejs /var/www/miam/get_feeds.js && php /var/www/miam/bin/console miam:parse:files
 ```
 
 TODO
