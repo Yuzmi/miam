@@ -74,9 +74,9 @@ php app/console cache:warmup
 
 CRON
 =====
-Normal cron
+Default
 ```shell
-*/30 * * * * php /var/www/miam/bin/console miam:parse:selected
+*/30 * * * * php /var/www/miam/bin/console miam:parse:all
 ```
 
 With NodeJS, faster but experimental
