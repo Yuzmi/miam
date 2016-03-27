@@ -26,6 +26,10 @@ class User implements UserInterface, \Serializable
         $this->subscriptions = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
+    public function __toString() {
+        return $this->id." - ".$this->username;
+    }
+
     public function getId() {
         return $this->id;
     }

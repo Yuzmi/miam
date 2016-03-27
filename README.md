@@ -87,7 +87,10 @@ With NodeJS, faster but experimental
 TODO
 =====
 - Categories/Lists/Groups in catalog
-- change headers
-- unread for all articles
+- unread count for all articles
 - try postgresql and sqlite
 - login/register page
+- choose order of categories and feeds
+- settings
+- improve context menu
+- keyboard navigation
