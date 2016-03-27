@@ -49,8 +49,8 @@ app.shit = {
 				$(".body_shit").toggleClass("hide_sidebar");
 			});
 
-			// Menu contextuel d'un flux ou d'une catégorie
 			if(app.user && app.shit.items.subscriber && app.user.id == app.shit.items.subscriber) {
+				// Context menu for feeds and categories
 				$(".sidebar .row").contextmenu(function(e) {
 					e.preventDefault();
 
@@ -96,16 +96,23 @@ app.shit = {
 					});
 				});
 				
+				// Hide the menu
 				$(document).click(function(e) {
 					if(e.which != 3) {
 						$(".sidebarRowMenu").remove();
 					}
 				});
 
+				// Refresh unread counts every 5 minutes
 				setInterval(function() {
 					app.shit.sidebar.refreshUnreadCounts();
 				}, 300000);
 			}
+
+			// Get last items every 5 minutes
+			setInterval(function() {
+				app.shit.items.loadNew();
+			}, 300000);
 
 			this.countUnread();
 			this.toggleUnreadCounts();
@@ -237,6 +244,7 @@ app.shit = {
 					app.items.init();
 					app.shit.items.init();
 
+					app.items.countNewAdded = 0;
 					app.items.dateRefresh = result.dateRefresh;
 					app.items.page = 1;
 				}
@@ -257,6 +265,7 @@ app.shit = {
 					app.items.init();
 					app.shit.items.init();
 
+					app.items.countNewAdded += result.count;
 					app.items.dateRefresh = result.dateRefresh;
 				}
 			});
@@ -268,6 +277,7 @@ app.shit = {
 				category: app.shit.items.category,
 				feed: app.shit.items.feed,
 				loadMore: true,
+				offset: app.items.countNewAdded,
 				page: app.items.page + 1,
 				subscriber: app.shit.items.subscriber,
 				type: app.shit.items.type
@@ -303,6 +313,7 @@ app.shit = {
 				dataType: "json"
 			}).done(function(result) {
 				if(result.success) {
+					$(".item[data-feed="+feedId+"]").addClass("read");
 					app.shit.sidebar.refreshUnreadCounts();
 				}
 			});
@@ -315,6 +326,9 @@ app.shit = {
 				dataType: "json"
 			}).done(function(result) {
 				if(result.success) {
+					$(".sidebar .rowChildren[data-parent="+categoryId+"] .row[data-type='feed']").each(function() {
+						$(".item[data-feed="+$(this).data("feed")+"]").addClass("read");
+					});
 					app.shit.sidebar.refreshUnreadCounts();
 				}
 			});
@@ -329,6 +343,7 @@ app.shit = {
 					dataType: "json"
 				}).done(function(result) {
 					if(result.success) {
+						$(".item").addClass("read");
 						app.shit.sidebar.refreshUnreadCounts();
 					}
 				});

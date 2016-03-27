@@ -158,11 +158,17 @@ class ShitController extends MainController
                 $page = 1;
             }
 
+            $offset = intval($request->get('offset'));
+            if($offset < 0) {
+                $offset = 0;
+            }
+
             $items = $this->get('item_manager')->getItems(array(
                 'createdAfter' => $createdAfter,
                 'category' => $category,
                 'feed' => $feed,
                 'marker' => $marker,
+                'offset' => $offset,
                 'page' => $page,
                 'subscriber' => $subscriber,
                 'type' => $request->get('type')
@@ -185,6 +191,7 @@ class ShitController extends MainController
             'success' => $success,
             'items' => $htmlItems,
             'page' => $page,
+            'count' => count($items),
             'dateRefresh' => date_format(new \DateTime("now"), "Y-m-d H:i:s")
         ));
     }

@@ -5,12 +5,14 @@ namespace MiamBundle\Services;
 class ItemManager extends MainService {
 	protected $em;
 	private $tokenStorage;
+	private $nbItems;
+	private $nbMaxItems;
 
 	public function __construct($em, $tokenStorage) {
 		$this->em = $em;
 		$this->tokenStorage = $tokenStorage;
 		$this->nbItems = 40;
-		$this->nbMaxItems = 200;
+		$this->nbMaxItems = 100;
 	}
 
 	public function getUser() {
@@ -23,6 +25,8 @@ class ItemManager extends MainService {
 		$createdAfter = isset($options['createdAfter']) ? $options['createdAfter'] : null;
 		$feed = isset($options['feed']) ? $options['feed'] : null;
 		$marker = isset($options['marker']) ? $options['marker'] : null;
+		$nb = isset($options['nb']) ? intval($options['nb']) : $this->nbItems;
+		$offset = isset($options['offset']) ? intval($options['offset']) : 0;
 		$page = isset($options['page']) ? $options['page'] : 1;
 		$subscriber = isset($options['subscriber']) ? $options['subscriber'] : null;
 		$subscription = isset($options['subscription']) ? $options['subscription'] : null;
@@ -76,7 +80,6 @@ class ItemManager extends MainService {
 			$qb->setParameter('createdAfter', $createdAfter);
 		}
 
-		$nb = isset($options['nb']) ? intval($options['nb']) : 0;
 		if($nb > $this->nbMaxItems) {
 			$nb = $this->nbMaxItems;
 		} elseif($nb <= 0) {
@@ -84,9 +87,9 @@ class ItemManager extends MainService {
 		}
 		$qb->setMaxResults($nb);
 
-		$offset = $nb * ($page - 1);
+		$offset += $nb * ($page - 1);
 		$qb->setFirstResult($offset);
-
+		
 		$qb->orderBy('i.datePublished', 'DESC');
 
 		return $qb->getQuery()->getResult();

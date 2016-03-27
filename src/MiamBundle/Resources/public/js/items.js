@@ -1,4 +1,5 @@
 app.items = {
+	countNewAdded: 0,
 	dateRefresh: null,
 	page: 1,
 
