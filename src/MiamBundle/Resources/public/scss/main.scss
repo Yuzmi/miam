@@ -248,6 +248,7 @@ button {
 			.summary {
 				color:black;
 				font-size:0.8em;
+				font-weight:normal;
 			}
 
 			.feed {
@@ -262,7 +263,7 @@ button {
 		}
 
 		&.read .header {
-			background-color:rgba(0, 0, 0, 0.2);
+			background-color:rgba(0, 0, 0, 0.1);
 		}
 
 		&.starred .header {

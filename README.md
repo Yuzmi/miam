@@ -47,6 +47,7 @@ Git & Composer (https://getcomposer.org/download/)
 ```shell
 cd /var/www
 git clone https://github.com/Yuzmi/miam.git
+cd /var/www/miam
 composer selfupdate
 composer install
 ```
@@ -89,8 +90,9 @@ TODO
 - Categories/Lists/Groups in catalog
 - unread count for all articles
 - try postgresql and sqlite
-- login/register page
+- login/register page ?
 - choose order of categories and feeds
 - settings
 - improve context menu
 - keyboard navigation
+- tests unitaires ?
