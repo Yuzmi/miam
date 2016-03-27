@@ -197,13 +197,14 @@ class DataParsing extends MainService {
 						$item->setAuthor($authors);
 					}
 
+					$all_tags = array();
 					$new_tags = array();
 
-					// Tags
+					// New tags
 					$tags = $i->get_categories() ?: array();
 					foreach($tags as $t) {
 						$tag_name = trim($t->get_label());
-						if($tag_name) {
+						if(!empty($tag_name)) {
 							if(array_key_exists($tag_name, $cache_tags)) {
 								$tag = $cache_tags[$tag_name];
 
@@ -213,6 +214,15 @@ class DataParsing extends MainService {
 									$new_tags[] = $tag_name;
 								}
 							}
+
+							$all_tags[] = $tag_name;
+						}
+					}
+
+					// Remove obsolete tags
+					foreach($item->getTags() as $t) {
+						if(!in_array($t->getName(), $all_tags)) {
+							$item->removeTag($t);
 						}
 					}
 					
