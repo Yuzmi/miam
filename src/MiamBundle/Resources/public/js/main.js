@@ -33,7 +33,7 @@ var app = {
 				}
 			});
 
-			$(".popupContainer .closePopup").click(function(e) {
+			$(".popupContainer .popupClose").click(function(e) {
 				e.preventDefault();
 				app.popup.closeAll();
 			});
