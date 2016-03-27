@@ -30,10 +30,37 @@ noscript {
 header {
 	background-color:white;
 	border-bottom:solid 1px black;
-	padding:1rem;
 
-	.user {
+	a {
+		display:inline-block;
+		line-height:2rem;
+		padding:1rem 1.4rem;
+		text-decoration:none;
+
+		i {
+			margin-right:0.2rem;
+		}
+
+		&:hover {
+			background-color:rgba(0, 0, 0, 0.1);
+		}
+	}
+
+	& > a {
+		border-right:solid 1px black;
+	}
+
+	.rightSide {
 		float:right;
+
+		.user {
+			display:inline-block;
+			padding:1rem 1.4rem;
+		}
+
+		& > a {
+			border-left:solid 1px black;
+		}
 	}
 }
 

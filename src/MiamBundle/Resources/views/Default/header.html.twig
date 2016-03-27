@@ -1,24 +1,39 @@
-<header>
-	{% if app.user %}
-		<a href="{{ path('index') }}">Home</a> -
-	{% endif %}
-	<a href="{{ path('catalog') }}">Catalog</a>
-	{% if app.user %}
-		- <a href="{{ path('manager') }}">Manager</a>
-		{% if is_granted('ROLE_ADMIN') %}
-			- <a href="{{ path('admin') }}">Admin</a>
-		{% endif %}
-	{% endif %}
-	<span class="user">
+{% spaceless %}
+	<header>
 		{% if app.user %}
-			Logged as {{ app.user.username }} -
-			<a href="{{ path('logout') }}">
-				<i class="fa fa-sign-out"></i>
+			<a href="{{ path('index') }}">
+				<i class="fa fa-list"></i> Feeds
 			</a>
-		{% else %}
-			<a class="showLogin" href="{{ path('login') }}">Log in</a>
-			-
-			<a class="showRegister" href="{{ path('register') }}">Register</a>
 		{% endif %}
-	</span>
-</header>
+		<a href="{{ path('catalog') }}">
+			<i class="fa fa-list-alt"></i> Catalog
+		</a>
+		{% if app.user %}
+			<a href="{{ path('manager') }}">
+				<i class="fa fa-cog"></i> Manager
+			</a>
+			{% if is_granted('ROLE_ADMIN') %}
+				<a href="{{ path('admin') }}">
+					Admin
+				</a>
+			{% endif %}
+		{% endif %}
+		<span class="rightSide">
+			{% if app.user %}
+				<span class="user">
+					{{ app.user.username }}
+				</span>
+				<a href="{{ path('logout') }}">
+					<i class="fa fa-sign-out"></i>
+				</a>
+			{% else %}
+				<a class="showLogin" href="{{ path('login') }}">
+					<i class="fa fa-sign-in"></i> Login
+				</a>
+				<a class="showRegister" href="{{ path('register') }}">
+					<i class="fa fa-user-plus"></i> Register
+				</a>
+			{% endif %}
+		</span>
+	</header>
+{% endspaceless %}

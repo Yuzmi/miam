@@ -4,11 +4,7 @@ $width-sidebar:250px;
 
 .body_shit {
 	header {
-		font-size:1.2rem;
-		height:1.4rem;
 		left:0px;
-		line-height:1.4rem;
-		padding:0.8rem;
 		padding-left:3.2rem;
 		position:fixed;
 		right:0px;
@@ -23,7 +19,7 @@ $width-sidebar:250px;
 		overflow-x:hidden;
 		overflow-y:auto;
 		position:fixed;
-		top:3rem;
+		top:4rem;
 		width:$width-sidebar - 1px;
 
 		.row {
@@ -107,13 +103,13 @@ $width-sidebar:250px;
 			border-right:solid 1px black;
 			cursor:pointer;
 			font-weight:700;
-			height:1.4rem;
-			line-height:1.4rem;
-			padding:0.8rem 0.8rem;
+			height:2rem;
+			line-height:2rem;
+			padding:1rem 1rem;
 			position:fixed;
 			text-align:center;
 			top:0px;
-			width:0.5rem;
+			width:1rem;
 			z-index:3;
 
 			&:hover {
@@ -160,7 +156,7 @@ $width-sidebar:250px;
 		overflow:auto;
 		position:fixed;
 		right:0px;
-		top:3rem;
+		top:4rem;
 	}
 
 	&.hide_sidebar {
