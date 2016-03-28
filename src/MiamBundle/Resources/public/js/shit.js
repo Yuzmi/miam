@@ -54,11 +54,12 @@ app.shit = {
 				$(".sidebar .row").contextmenu(function(e) {
 					e.preventDefault();
 
-					$(".sidebarRowMenu").remove();
+					$(".contextMenu").remove();
 
 					var type = $(this).data('type');
 					
 					var menu = $("<div>")
+						.addClass("contextMenu")
 						.addClass("sidebarRowMenu")
 						.css({
 							left: e.clientX, 
@@ -99,7 +100,7 @@ app.shit = {
 								}
 							}
 
-							$(".sidebarRowMenu").remove();
+							$(".contextMenu").remove();
 						});
 					}
 				});
@@ -107,9 +108,10 @@ app.shit = {
 				$(".item").contextmenu(function(e) {
 					e.preventDefault();
 
-					$(".itemMenu").remove();
+					$(".contextMenu").remove();
 
 					var menu = $("<div>")
+						.addClass("contextMenu")
 						.addClass("itemMenu")
 						.css({
 							left: e.clientX,
@@ -138,15 +140,14 @@ app.shit = {
 							app.shit.items.unreadItem(item.data("item"));
 						}
 
-						$(".itemMenu").remove();
+						$(".contextMenu").remove();
 					});
 				});
 				
 				// Hide the menu
 				$(document).click(function(e) {
 					if(e.which != 3) {
-						$(".sidebarRowMenu").remove();
-						$(".itemMenu").remove();
+						$(".contextMenu").remove();
 					}
 				});
 
