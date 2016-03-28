@@ -73,27 +73,35 @@ app.shit = {
 						menu.attr('data-category', $(this).data('category'));
 					}
 
-					var menuOption = $("<div>").addClass("option").text("Mark as read").attr('data-action', 'read');
-					menu.append(menuOption);
+					var countOptions = 0;
 
-					$(".body_shit").append(menu);
+					if(type == "feed" || type == "category" || type == "all" || type == "unread") {
+						var menuOption = $("<div>").addClass("option").text("Mark as read").attr('data-action', 'read');
+						menu.append(menuOption);
 
-					$(".sidebarRowMenu .option").click(function(e) {
-						var action = $(this).data("action");
-						var type = $(this).closest(".sidebarRowMenu").data("type");
+						countOptions++;
+					}
 
-						if(action == 'read') {
-							if(type == "feed") {
-								app.shit.items.readFeed($(this).closest(".sidebarRowMenu").data("feed"));
-							} else if(type == "category") {
-								app.shit.items.readCategory($(this).closest(".sidebarRowMenu").data("category"));
-							} else if(type == "all") {
-								app.shit.items.readAll();
+					if(countOptions > 0) {
+						$(".body_shit").append(menu);
+						
+						$(".sidebarRowMenu .option").click(function(e) {
+							var action = $(this).data("action");
+							var type = $(this).closest(".sidebarRowMenu").data("type");
+
+							if(action == 'read') {
+								if(type == "feed") {
+									app.shit.items.readFeed($(this).closest(".sidebarRowMenu").data("feed"));
+								} else if(type == "category") {
+									app.shit.items.readCategory($(this).closest(".sidebarRowMenu").data("category"));
+								} else if(type == "all" || type == "unread") {
+									app.shit.items.readAll();
+								}
 							}
-						}
 
-						$(".sidebarRowMenu").remove();
-					});
+							$(".sidebarRowMenu").remove();
+						});
+					}
 				});
 				
 				// Hide the menu
@@ -133,6 +141,24 @@ app.shit = {
 
 				$(".sidebar .row[data-category="+category+"] .unreadCount").text(unreadCount);
 			});
+
+			// Calculate total unread counts
+			var totalCount = 0;
+			var feeds = [];
+			
+			$(".sidebar .row[data-type='feed'] .unreadCount").each(function() {
+				var feed = $(this).closest(".row[data-type='feed']").data("feed");
+				if($.inArray(feed, feeds) == -1) {
+					var count = parseInt($(this).text());
+					if(!isNaN(count)) {
+						totalCount += count;
+					}
+
+					feeds.push(feed);
+				}
+			});
+
+			$(".sidebar .row[data-type='unread'] .unreadCount").text(totalCount);
 		},
 
 		toggleUnreadCounts: function() {

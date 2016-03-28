@@ -88,11 +88,11 @@ With NodeJS, faster but experimental
 TODO
 =====
 - Categories/Lists/Groups in catalog
-- unread count for all articles
 - try postgresql and sqlite
 - login/register page ?
 - choose order of categories and feeds
 - settings
 - improve context menu
 - keyboard navigation
-- tests unitaires ?
+- unit tests
+- count starred items
