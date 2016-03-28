@@ -89,7 +89,7 @@ class ItemManager extends MainService {
 
 		$offset += $nb * ($page - 1);
 		$qb->setFirstResult($offset);
-		
+
 		$qb->orderBy('i.datePublished', 'DESC');
 
 		return $qb->getQuery()->getResult();
@@ -146,9 +146,12 @@ class ItemManager extends MainService {
 			}
 
 			if($marker) {
+				$lastDateRead = null;
+
 				foreach($i->getMarks() as $m) {
-					if($m->getIsRead()) {
-						$data[$i->getId()]['isRead'] = true;
+					if($m->getDateRead() && (is_null($lastDateRead) || $lastDateRead < $m->getDateRead())) {
+						$data[$i->getId()]['isRead'] = $m->getIsRead();
+						$lastDateRead = $m->getDateRead();
 					}
 
 					if($m->getIsStarred()) {
@@ -156,11 +159,10 @@ class ItemManager extends MainService {
 					}
 				}
 
-				if(!$data[$i->getId()]['isRead']) {
-					foreach($i->getFeed()->getMarks() as $m) {
-						if($m->getDateRead() && $m->getDateRead() >= $i->getDateCreated()) {
-							$data[$i->getId()]['isRead'] = true;
-						}
+				foreach($i->getFeed()->getMarks() as $m) {
+					if($m->getDateRead() && $i->getDateCreated() < $m->getDateRead() && (is_null($lastDateRead) || $lastDateRead < $m->getDateRead())) {
+						$data[$i->getId()]['isRead'] = $m->getIsRead();
+						$lastDateRead = $m->getDateRead();
 					}
 				}
 			}

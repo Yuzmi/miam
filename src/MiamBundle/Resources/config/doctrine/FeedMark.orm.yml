@@ -9,6 +9,9 @@ MiamBundle\Entity\FeedMark:
             generator:
                 strategy: AUTO
     fields:
+        isRead:
+            type: boolean
+            nullable: true
         dateRead:
             type: datetime
             nullable: true

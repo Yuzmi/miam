@@ -211,7 +211,27 @@ class ShitController extends MainController
         }
 
         return new JsonResponse(array(
-            'success' => $success
+            'success' => $success,
+            'item' => isset($item) ? $item->getId() : null,
+            'feed' => isset($item) ? $item->getFeed()->getId() : null
+        ));
+    }
+
+    public function ajaxUnreadItemAction(Request $request, $id) {
+        $success = false;
+
+        if($request->isXmlHttpRequest() && $this->isLogged()) {
+            $item = $this->getRepo("Item")->find($id);
+            if($item) {
+                $this->get("mark_manager")->unreadItemForUser($item, $this->getUser());
+                $success = true;
+            }
+        }
+
+        return new JsonResponse(array(
+            'success' => $success,
+            'item' => isset($item) ? $item->getId() : null,
+            'feed' => isset($item) ? $item->getFeed()->getId() : null
         ));
     }
 

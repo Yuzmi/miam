@@ -23,6 +23,10 @@ ajax_shit_read_item:
     path: /ajax/item/{id}/read
     defaults: { _controller: MiamBundle:Shit:ajaxReadItem }
 
+ajax_shit_unread_item:
+    path: /ajax/item/{id}/unread
+    defaults: { _controller: MiamBundle:Shit:ajaxUnreadItem }
+
 ajax_shit_star_item:
     path: /ajax/item/{id}/star
     defaults: { _controller: MiamBundle:Shit:ajaxStarItem }

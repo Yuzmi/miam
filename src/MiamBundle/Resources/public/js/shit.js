@@ -103,11 +103,50 @@ app.shit = {
 						});
 					}
 				});
+
+				$(".item").contextmenu(function(e) {
+					e.preventDefault();
+
+					$(".itemMenu").remove();
+
+					var menu = $("<div>")
+						.addClass("itemMenu")
+						.css({
+							left: e.clientX,
+							top: e.clientY + 10
+						})
+						.data("item", $(this).data("item"))
+					;
+
+					if($(this).hasClass("read")) {
+						var menuOption = $("<div>").addClass("option").text("Mark as unread").attr("data-action", 'unread');
+					} else {
+						var menuOption = $("<div>").addClass("option").text("Mark as read").attr("data-action", 'read');
+					}
+					menu.append(menuOption);
+
+					$(".body_shit").append(menu);
+
+					$(".itemMenu .option").click(function(e) {
+						var action = $(this).data("action");
+
+						var item = $(".item[data-item="+$(this).closest(".itemMenu").data("item")+"]");
+
+						if(action == 'read') {
+							app.shit.items.readItem(item.data("item"));
+						} else if(action == 'unread') {
+							app.shit.items.unreadItem(item.data("item"));
+						}
+
+						$(".itemMenu").remove();
+					});
+				});
 				
 				// Hide the menu
 				$(document).click(function(e) {
 					if(e.which != 3) {
 						$(".sidebarRowMenu").remove();
+						$(".itemMenu").remove();
 					}
 				});
 
@@ -213,6 +252,18 @@ app.shit = {
 			this.toggleUnreadCounts();
 		},
 
+		incrementUnreadCountForFeed: function(feed) {
+			$(".sidebar .row[data-feed="+feed+"] .unreadCount").each(function() {
+				var count = parseInt($(this).text());
+				if(!isNaN(count)) {
+					$(this).text(count + 1);
+				}
+			});
+
+			this.countUnread();
+			this.toggleUnreadCounts();
+		},
+
 		decrementStarredCount: function() {
 			var count = parseInt($(".sidebar .row[data-type='starred'] .count").text());
 			$(".sidebar .row[data-type='starred'] .count").text(count - 1);
@@ -244,7 +295,7 @@ app.shit = {
 		init: function() {
 			app.items.onExpand = function(item) {
 				if(!item.hasClass("read")) {
-					app.shit.items.readItem(item);
+					app.shit.items.readItem(item.data("item"));
 				}
 			}
 
@@ -254,9 +305,9 @@ app.shit = {
 				var item = $(this).closest(".item");
 				
 				if(item.hasClass("starred")) {
-					app.shit.items.unstarItem(item);
+					app.shit.items.unstarItem(item.data("item"));
 				} else {
-					app.shit.items.starItem(item);
+					app.shit.items.starItem(item.data("item"));
 				}
 
 				e.stopPropagation();
@@ -341,15 +392,28 @@ app.shit = {
 			});
 		},
 
-		readItem: function(item) {
+		readItem: function(itemId) {
 			$.ajax({
 				type: "POST",
-				url: Routing.generate('ajax_shit_read_item', {id: item.data("item")}),
+				url: Routing.generate('ajax_shit_read_item', {id: itemId}),
 				dataType: "json"
 			}).done(function(result) {
 				if(result.success) {
-					item.addClass("read");
-					app.shit.sidebar.decrementUnreadCountForFeed(item.data('feed'));
+					$(".item[data-item="+itemId+"]").addClass("read");
+					app.shit.sidebar.decrementUnreadCountForFeed(result.feed);
+				}
+			});
+		},
+
+		unreadItem: function(itemId) {
+			$.ajax({
+				type: "POST",
+				url: Routing.generate('ajax_shit_unread_item', {id: itemId}),
+				dataType: "json"
+			}).done(function(result) {
+				if(result.success) {
+					$(".item[data-item="+itemId+"]").removeClass("read");
+					app.shit.sidebar.incrementUnreadCountForFeed(result.feed);
 				}
 			});
 		},
@@ -398,27 +462,27 @@ app.shit = {
 			}
 		},
 
-		starItem: function(item) {
+		starItem: function(itemId) {
 			$.ajax({
 				type: "POST",
-				url: Routing.generate('ajax_shit_star_item', {'id': item.data("item")}),
+				url: Routing.generate('ajax_shit_star_item', {'id': itemId}),
 				dataType: "json"
 			}).done(function(result) {
 				if(result.success) {
-					item.addClass("starred");
+					$(".item[data-item="+itemId+"]").addClass("starred");
 					app.shit.sidebar.incrementStarredCount();
 				}
 			});
 		},
 
-		unstarItem: function(item) {
+		unstarItem: function(itemId) {
 			$.ajax({
 				type: "POST",
-				url: Routing.generate('ajax_shit_unstar_item', {'id': item.data("item")}),
+				url: Routing.generate('ajax_shit_unstar_item', {'id': itemId}),
 				dataType: "json"
 			}).done(function(result) {
 				if(result.success) {
-					item.removeClass("starred");
+					$(".item[data-item="+itemId+"]").removeClass("starred");
 					app.shit.sidebar.decrementStarredCount();
 				}
 			});

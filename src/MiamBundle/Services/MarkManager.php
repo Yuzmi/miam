@@ -27,13 +27,29 @@ class MarkManager extends MainService {
             $mark->setUser($user);
         }
 
-        if(!$mark->getIsRead()) {
-	        $mark->setIsRead(true);
-	        $mark->setDateRead(new \DateTime("now"));
+        $mark->setIsRead(true);
+        $mark->setDateRead(new \DateTime("now"));
 
-	        $this->em->persist($mark);
-        	$this->em->flush();
-	    }
+        $this->em->persist($mark);
+    	$this->em->flush();
+	}
+
+	public function unreadItemForUser(Item $item, User $user) {
+		$mark = $this->getRepo('ItemMark')->findOneBy(array(
+            'item' => $item,
+            'user' => $user
+        ));
+        if(!$mark) {
+            $mark = new ItemMark();
+            $mark->setItem($item);
+            $mark->setUser($user);
+        }
+
+        $mark->setIsRead(false);
+        $mark->setDateRead(new \DateTime("now"));
+
+        $this->em->persist($mark);
+    	$this->em->flush();
 	}
 
 	public function readFeedForUser(Feed $feed, User $user) {
@@ -47,6 +63,24 @@ class MarkManager extends MainService {
             $mark->setUser($user);
         }
 
+        $mark->setIsRead(true);
+        $mark->setDateRead(new \DateTime("now"));
+        $this->em->persist($mark);
+        $this->em->flush();
+	}
+
+	public function unreadFeedForUser(Feed $feed, User $user) {
+		$mark = $this->getRepo('FeedMark')->findOneBy(array(
+            'feed' => $feed,
+            'user' => $user
+        ));
+        if(!$mark) {
+            $mark = new FeedMark();
+            $mark->setFeed($feed);
+            $mark->setUser($user);
+        }
+
+        $mark->setIsRead(false);
         $mark->setDateRead(new \DateTime("now"));
         $this->em->persist($mark);
         $this->em->flush();
@@ -69,6 +103,33 @@ class MarkManager extends MainService {
 					$mark->setUser($user);
 				}
 
+				$mark->setIsRead(true);
+				$mark->setDateRead(new \DateTime("now"));
+				$this->em->persist($mark);
+			}
+
+			$this->em->flush();
+		}
+	}
+
+	public function unreadCategoryForUser(Category $category, User $user) {
+		$subscriptions = $this->getRepo('Subscription')->findForCategory($category, true);
+
+		if(count($subscriptions) > 0) {
+			foreach($subscriptions as $s) {
+				$feed = $s->getFeed();
+
+				$mark = $this->getRepo('FeedMark')->findOneBy(array(
+					'feed' => $feed,
+					'user' => $user
+				));
+				if(!$mark) {
+					$mark = new FeedMark();
+					$mark->setFeed($feed);
+					$mark->setUser($user);
+				}
+
+				$mark->setIsRead(false);
 				$mark->setDateRead(new \DateTime("now"));
 				$this->em->persist($mark);
 			}
@@ -93,6 +154,32 @@ class MarkManager extends MainService {
 					$mark->setUser($reader);
 				}
 
+				$mark->setIsRead(true);
+				$mark->setDateRead(new \DateTime("now"));
+				$this->em->persist($mark);
+			}
+
+			$this->em->flush();
+		}
+	}
+
+	public function unreadUserForUser(User $subscriber, User $reader) {
+		$subscriptions = $this->getRepo('Subscription')->findByUser($subscriber);
+		if(count($subscriptions) > 0) {
+			foreach($subscriptions as $s) {
+				$feed = $s->getFeed();
+
+				$mark = $this->getRepo('FeedMark')->findOneBy(array(
+					'feed' => $feed,
+					'user' => $reader
+				));
+				if(!$mark) {
+					$mark = new FeedMark();
+					$mark->setFeed($feed);
+					$mark->setUser($reader);
+				}
+
+				$mark->setIsRead(false);
 				$mark->setDateRead(new \DateTime("now"));
 				$this->em->persist($mark);
 			}

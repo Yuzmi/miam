@@ -5,9 +5,14 @@ namespace MiamBundle\Entity;
 class FeedMark
 {
     private $id;
-    private $dateRead;
     private $feed;
     private $user;
+    private $isRead;
+    private $dateRead;
+
+    public function __construct() {
+        $this->isRead = null;
+    }
 
     /**
      * Get id
@@ -89,5 +94,29 @@ class FeedMark
     public function getUser()
     {
         return $this->user;
+    }
+
+    /**
+     * Set isRead
+     *
+     * @param boolean $isRead
+     *
+     * @return FeedMark
+     */
+    public function setIsRead($isRead)
+    {
+        $this->isRead = $isRead;
+
+        return $this;
+    }
+
+    /**
+     * Get isRead
+     *
+     * @return boolean
+     */
+    public function getIsRead()
+    {
+        return $this->isRead;
     }
 }

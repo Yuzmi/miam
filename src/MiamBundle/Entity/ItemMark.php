@@ -12,7 +12,7 @@ class ItemMark
     private $user;
 
     public function __construct() {
-        $this->isRead = false;
+        $this->isRead = null;
         $this->isStarred = false;
     }
     

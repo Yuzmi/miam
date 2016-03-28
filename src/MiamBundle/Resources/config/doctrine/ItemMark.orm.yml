@@ -11,6 +11,7 @@ MiamBundle\Entity\ItemMark:
     fields:
         isRead:
             type: boolean
+            nullable: true
         isStarred:
             type: boolean
         dateRead:

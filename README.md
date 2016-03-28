@@ -92,7 +92,7 @@ TODO
 - login/register page ?
 - choose order of categories and feeds
 - settings
-- improve context menu
+- improve context menu ?
 - keyboard navigation
 - unit tests
-- cancel read option
+- manage if data in favicon href
