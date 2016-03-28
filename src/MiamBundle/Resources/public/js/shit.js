@@ -2,9 +2,18 @@ app.shit = {
 	init: function() {
 		this.sidebar.init();
 		this.items.init();
+
+		// Hide context menus
+		$(document).click(function(e) {
+			if(e.which != 3) {
+				$(".contextMenu").remove();
+			}
+		});
 	},
 
 	sidebar: {
+		intervalRefreshUnreadCounts: null,
+
 		init: function() {
 			// Indentation des catégories
 			$(".sidebar .row").each(function() {
@@ -105,62 +114,12 @@ app.shit = {
 					}
 				});
 
-				$(".item").contextmenu(function(e) {
-					e.preventDefault();
-
-					$(".contextMenu").remove();
-
-					var menu = $("<div>")
-						.addClass("contextMenu")
-						.addClass("itemMenu")
-						.css({
-							left: e.clientX,
-							top: e.clientY + 10
-						})
-						.data("item", $(this).data("item"))
-					;
-
-					if($(this).hasClass("read")) {
-						var menuOption = $("<div>").addClass("option").text("Mark as unread").attr("data-action", 'unread');
-					} else {
-						var menuOption = $("<div>").addClass("option").text("Mark as read").attr("data-action", 'read');
-					}
-					menu.append(menuOption);
-
-					$(".body_shit").append(menu);
-
-					$(".itemMenu .option").click(function(e) {
-						var action = $(this).data("action");
-
-						var item = $(".item[data-item="+$(this).closest(".itemMenu").data("item")+"]");
-
-						if(action == 'read') {
-							app.shit.items.readItem(item.data("item"));
-						} else if(action == 'unread') {
-							app.shit.items.unreadItem(item.data("item"));
-						}
-
-						$(".contextMenu").remove();
-					});
-				});
-				
-				// Hide the menu
-				$(document).click(function(e) {
-					if(e.which != 3) {
-						$(".contextMenu").remove();
-					}
-				});
-
 				// Refresh unread counts every 5 minutes
-				setInterval(function() {
+				clearInterval(app.shit.sidebar.intervalRefreshUnreadCounts);
+				app.shit.sidebar.intervalRefreshUnreadCounts = setInterval(function() {
 					app.shit.sidebar.refreshUnreadCounts();
 				}, 300000);
 			}
-
-			// Get last items every 5 minutes
-			setInterval(function() {
-				app.shit.items.loadNew();
-			}, 300000);
 
 			this.countUnread();
 			this.toggleUnreadCounts();
@@ -293,6 +252,8 @@ app.shit = {
 		subscriber: null,
 		type: null,
 
+		intervalLoadNew: null,
+
 		init: function() {
 			app.items.onExpand = function(item) {
 				if(!item.hasClass("read")) {
@@ -317,6 +278,53 @@ app.shit = {
 			$(".items .loadMore").click(function() {
 				app.shit.items.loadMore();
 			});
+
+			if(app.user && app.shit.items.subscriber && app.user.id == app.shit.items.subscriber) {
+				$(".item").contextmenu(function(e) {
+					e.preventDefault();
+
+					$(".contextMenu").remove();
+
+					var menu = $("<div>")
+						.addClass("contextMenu")
+						.addClass("itemMenu")
+						.css({
+							left: e.clientX,
+							top: e.clientY + 10
+						})
+						.data("item", $(this).data("item"))
+					;
+
+					if($(this).hasClass("read")) {
+						var menuOption = $("<div>").addClass("option").text("Mark as unread").attr("data-action", 'unread');
+					} else {
+						var menuOption = $("<div>").addClass("option").text("Mark as read").attr("data-action", 'read');
+					}
+					menu.append(menuOption);
+
+					$(".body_shit").append(menu);
+
+					$(".itemMenu .option").click(function(e) {
+						var action = $(this).data("action");
+
+						var item = $(".item[data-item="+$(this).closest(".itemMenu").data("item")+"]");
+
+						if(action == 'read') {
+							app.shit.items.readItem(item.data("item"));
+						} else if(action == 'unread') {
+							app.shit.items.unreadItem(item.data("item"));
+						}
+
+						$(".contextMenu").remove();
+					});
+				});
+			}
+
+			// Get last items every 5 minutes
+			clearInterval(app.shit.items.intervalLoadNew);
+			app.shit.items.intervalLoadNew = setInterval(function() {
+				app.shit.items.loadNew();
+			}, 300000);
 		},
 
 		get: function(data, callback) {
