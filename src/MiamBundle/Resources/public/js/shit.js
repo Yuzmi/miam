@@ -84,7 +84,7 @@ app.shit = {
 
 					if(countOptions > 0) {
 						$(".body_shit").append(menu);
-						
+
 						$(".sidebarRowMenu .option").click(function(e) {
 							var action = $(this).data("action");
 							var type = $(this).closest(".sidebarRowMenu").data("type");
@@ -124,6 +124,7 @@ app.shit = {
 
 			this.countUnread();
 			this.toggleUnreadCounts();
+			this.toggleStarredCount();
 		},
 
 		countUnread: function() {
@@ -210,6 +211,27 @@ app.shit = {
 
 			this.countUnread();
 			this.toggleUnreadCounts();
+		},
+
+		decrementStarredCount: function() {
+			var count = parseInt($(".sidebar .row[data-type='starred'] .count").text());
+			$(".sidebar .row[data-type='starred'] .count").text(count - 1);
+			this.toggleStarredCount();
+		},
+
+		incrementStarredCount: function() {
+			var count = parseInt($(".sidebar .row[data-type='starred'] .count").text());
+			$(".sidebar .row[data-type='starred'] .count").text(count + 1);
+			this.toggleStarredCount();
+		},
+
+		toggleStarredCount: function() {
+			var count = parseInt($(".sidebar .row[data-type='starred'] .count").text());
+			if(!isNaN(count) && count > 0) {
+				$(".sidebar .row[data-type='starred'] .count").show();
+			} else {
+				$(".sidebar .row[data-type='starred'] .count").hide();
+			}
 		}
 	},
 
@@ -384,6 +406,7 @@ app.shit = {
 			}).done(function(result) {
 				if(result.success) {
 					item.addClass("starred");
+					app.shit.sidebar.incrementStarredCount();
 				}
 			});
 		},
@@ -396,6 +419,7 @@ app.shit = {
 			}).done(function(result) {
 				if(result.success) {
 					item.removeClass("starred");
+					app.shit.sidebar.decrementStarredCount();
 				}
 			});
 		}

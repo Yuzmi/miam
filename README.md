@@ -95,4 +95,4 @@ TODO
 - improve context menu
 - keyboard navigation
 - unit tests
-- count starred items
+- cancel read option

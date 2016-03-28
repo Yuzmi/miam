@@ -62,12 +62,13 @@
 				<div class="row" data-type="unread">
 					<i class="fa fa-book"></i>
 					Unread
-					<span class="unreadCount"></span>
+					<span class="unreadCount">0</span>
 				</div>
 
 				<div class="row" data-type="starred">
 					<i class="fa fa-star"></i>
 					Starred
+					<span class="count">{{ starredCount is defined ? starredCount : 0 }}</span>
 				</div>
 			{% endif %}
 

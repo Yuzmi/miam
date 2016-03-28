@@ -23,10 +23,12 @@ class ShitController extends MainController
 
         $marker = null;
         $unreadCounts = null;
+        $starredCount = 0;
 
         if($this->isLogged() && $subscriber->getId() == $this->getUser()->getId()) {
             $marker = $this->getUser();
             $unreadCounts = $this->get('mark_manager')->getUnreadCounts($subscriber, $marker);
+            $starredCount = $this->getRepo("ItemMark")->countStarredForUser($this->getUser());
         }
 
         $items = $this->get('item_manager')->getItems(array(
@@ -44,6 +46,7 @@ class ShitController extends MainController
             'dataItems' => $dataItems,
             'tree' => $tree,
             'unreadCounts' => $unreadCounts,
+            'starredCount' => $starredCount,
             'subscriber' => $subscriber,
             'markable' => $marker ? true : false
         ));
