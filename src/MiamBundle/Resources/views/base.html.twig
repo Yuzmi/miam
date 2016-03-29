@@ -1,3 +1,4 @@
+{% set route = app.request.attributes.get('_route') %}
 <!DOCTYPE html>
 <html>
 	<head>
@@ -26,13 +27,13 @@
 			{% for type in fmTypes %}
 				{% for fm in app.session.flashbag.get(type) %}
 					<div class="flashMessageContainer">
-						<div class="flashMessage success">{{ fm }}</div>
+						<div class="flashMessage {{ type }}">{{ fm }}</div>
 					</div>
 				{% endfor %}
 			{% endfor %}
 		</div>
 
-		{% if not app.user %}
+		{% if not app.user and route != "login" %}
 			{% include "MiamBundle:Security:popup_login.html.twig" %}
 
 			{% include "MiamBundle:Security:popup_register.html.twig" %}

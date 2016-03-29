@@ -23,10 +23,6 @@ class SecurityController extends MainController
         ));
 	}
 
-    public function registerAction() {
-        return $this->render('MiamBundle:Security:register.html.twig');
-    }
-
     public function registerCheckAction(Request $request) {
         $username = trim($request->get('username'));
         $password = $request->get('password');

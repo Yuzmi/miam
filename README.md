@@ -89,11 +89,10 @@ TODO
 =====
 - catalog management in admin
 - try postgresql and sqlite
-- login/register page ?
 - choose order of categories and feeds
 - settings
 - improve context menu ?
 - keyboard navigation
 - unit tests
 - manage if data in favicon href
-- change the bundle name... shit controller's name too...
+- change the bundle name... shit controller's name too... (difficulty: hardcore)
