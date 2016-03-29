@@ -116,7 +116,7 @@ app.shit = {
 
 				// Refresh unread counts every 5 minutes
 				clearInterval(app.shit.sidebar.intervalRefreshUnreadCounts);
-				app.shit.sidebar.intervalRefreshUnreadCounts = setInterval(function() {
+				this.intervalRefreshUnreadCounts = setInterval(function() {
 					app.shit.sidebar.refreshUnreadCounts();
 				}, 300000);
 			}
@@ -322,7 +322,7 @@ app.shit = {
 
 			// Get last items every 5 minutes
 			clearInterval(app.shit.items.intervalLoadNew);
-			app.shit.items.intervalLoadNew = setInterval(function() {
+			this.intervalLoadNew = setInterval(function() {
 				app.shit.items.loadNew();
 			}, 300000);
 		},

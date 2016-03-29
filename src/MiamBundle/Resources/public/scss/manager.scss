@@ -67,11 +67,31 @@
 							cursor:pointer;
 							display:inline-block;
 							width:1rem;
+
+							.open {
+								display:none;
+							}
+						}
+
+						&.expanded {
+							.toggle {
+								.open {
+									display:inline-block;
+								}
+
+								.closed {
+									display:none;
+								}
+							}
 						}
 					}
 
 					.rowChildren {
 						display:none;
+
+						&.expanded {
+							display:block;
+						}
 					}
 				}
 			}

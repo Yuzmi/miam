@@ -1,5 +1,5 @@
 A Symfony project created on December 12, 2015, 9:25 pm.
-Well, that's what it says...
+Well, that's what it says... Work In Progress
 
 SERVER
 =====
@@ -87,7 +87,7 @@ With NodeJS, faster but experimental
 
 TODO
 =====
-- Categories/Lists/Groups in catalog
+- catalog management in admin
 - try postgresql and sqlite
 - login/register page ?
 - choose order of categories and feeds
@@ -96,3 +96,4 @@ TODO
 - keyboard navigation
 - unit tests
 - manage if data in favicon href
+- change the bundle name... shit controller's name too...

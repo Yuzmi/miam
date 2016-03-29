@@ -17,8 +17,16 @@ app.manager = {
 	catsubs: {
 		init: function() {
 			$(".catsubs .category .toggle").click(function(e) {
-				var category = $(this).closest('.category').data('category');
-				$(".tab.catsubs .rowChildren[data-category="+category+"]").toggle();
+				var category = $(this).closest('.category');
+				var categoryId = category.data("category");
+
+				if(category.hasClass("expanded")) {
+					$(".tab.catsubs .row[data-category="+categoryId+"]").removeClass("expanded");
+					$(".tab.catsubs .rowChildren[data-category="+categoryId+"]").removeClass("expanded");
+				} else {
+					$(".tab.catsubs .row[data-category="+categoryId+"]").addClass("expanded");
+					$(".tab.catsubs .rowChildren[data-category="+categoryId+"]").addClass("expanded");
+				}
 			});
 
 			$(".catsubs .createCategory").click(function() {
