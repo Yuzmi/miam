@@ -99,3 +99,4 @@ TODO
 - unit tests
 - manage if data in favicon href
 - change the bundle name... shit controller's name too... (difficulty: hardcore)
+- remove doctrine fixtures bundle ?

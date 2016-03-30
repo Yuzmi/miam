@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "c287dc6cf1fa2b9e2e497e5a43a5f151",
-    "content-hash": "59c1876aec8309797d49eb5bf944e608",
+    "hash": "3f1ca25a18a5fea4fe46fa5ac3b6db94",
+    "content-hash": "619c7609634a71387fbbbb916b4bc248",
     "packages": [
         {
             "name": "doctrine/annotations",
@@ -581,7 +581,7 @@
         },
         {
             "name": "doctrine/doctrine-fixtures-bundle",
-            "version": "dev-master",
+            "version": "2.3.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/doctrine/DoctrineFixturesBundle.git",
@@ -889,16 +889,16 @@
         },
         {
             "name": "friendsofsymfony/jsrouting-bundle",
-            "version": "dev-master",
+            "version": "2.0.0-alpha1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/FriendsOfSymfony/FOSJsRoutingBundle.git",
-                "reference": "25d0117093a845dee96d1dc439656cbf3714ea09"
+                "reference": "8f5c55632aada470173264594160865c66f307b3"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/FriendsOfSymfony/FOSJsRoutingBundle/zipball/25d0117093a845dee96d1dc439656cbf3714ea09",
-                "reference": "25d0117093a845dee96d1dc439656cbf3714ea09",
+                "url": "https://api.github.com/repos/FriendsOfSymfony/FOSJsRoutingBundle/zipball/8f5c55632aada470173264594160865c66f307b3",
+                "reference": "8f5c55632aada470173264594160865c66f307b3",
                 "shasum": ""
             },
             "require": {
@@ -944,7 +944,7 @@
                 "javascript",
                 "routing"
             ],
-            "time": "2016-02-06 17:33:24"
+            "time": "2016-02-04 20:16:23"
         },
         {
             "name": "incenteev/composer-parameter-handler",
@@ -2367,8 +2367,7 @@
     "aliases": [],
     "minimum-stability": "stable",
     "stability-flags": {
-        "friendsofsymfony/jsrouting-bundle": 20,
-        "doctrine/doctrine-fixtures-bundle": 20,
+        "friendsofsymfony/jsrouting-bundle": 15,
         "simplepie/simplepie": 20
     },
     "prefer-stable": false,
