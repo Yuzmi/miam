@@ -15,6 +15,8 @@
             "Tests\\": "tests/"
         }
     },
+    "minimum-stability": "dev",
+    "prefer-stable": true,
     "require": {
         "php": ">=5.5.9",
         "symfony/symfony": "3.0.*",
@@ -26,7 +28,7 @@
         "sensio/distribution-bundle": "^5.0",
         "sensio/framework-extra-bundle": "^3.0.2",
         "incenteev/composer-parameter-handler": "^2.0",
-        "friendsofsymfony/jsrouting-bundle": "2.0.0-alpha1",
+        "friendsofsymfony/jsrouting-bundle": "2.*",
         "doctrine/doctrine-fixtures-bundle": "2.*",
         "simplepie/simplepie": "dev-master",
         "symfony/assetic-bundle": "^2.7"
