@@ -3,12 +3,15 @@ Well, that's what it says... Work In Progress
 
 SERVER
 =====
-Packages
+Apache + PHP
 ```shell
-sudo apt-get install apache2
-sudo apt-get install mysql-server
-sudo apt-get install php5 libapache2-mod-php5 php5-mysql php5-gd php5-imagick
+sudo apt-get install apache2 php5 libapache2-mod-php5 php5-gd php5-imagick
 sudo service apache2 restart
+```
+
+MySQL
+```shell
+sudo apt-get install mysql-server php5-mysql
 ```
 
 Mod rewrite if disabled
@@ -23,8 +26,8 @@ DocumentRoot /var/www/miam/web
 
 <Directory "/var/www/miam/web">
 	AllowOverride All
-	Order Allow,Deny
-	Allow from All
+	#Order Allow,Deny
+	#Allow from All
 </Directory>
 ```
 
@@ -47,16 +50,16 @@ Git & Composer (https://getcomposer.org/download/)
 ```shell
 cd /var/www
 git clone https://github.com/Yuzmi/miam.git
-cd /var/www/miam
+cd miam
 composer selfupdate
 composer install
 ```
 
 Acl
 ```shell
-HTTPDUSER=`ps aux | grep -E '[a]pache|[h]ttpd|[_]www|[w]ww-data|[n]ginx' | grep -v root | head -1 | cut -d\  -f1`
-sudo setfacl -R -m u:"$HTTPDUSER":rwX -m u:`whoami`:rwX var/cache var/logs rss web/images/feeds
-sudo setfacl -dR -m u:"$HTTPDUSER":rwX -m u:`whoami`:rwX var/cache var/logs rss web/images/feeds
+sudo apt-get install acl
+sudo setfacl -R -m u:www-data:rwX -m u:`whoami`:rwX var/cache var/logs rss web/images
+sudo setfacl -dR -m u:www-data:rwX -m u:`whoami`:rwX var/cache var/logs rss web/images
 ```
 
 Doctrine & assets
@@ -89,9 +92,9 @@ TODO
 =====
 - catalog management in admin
 - try postgresql and sqlite
-- choose order of categories and feeds
+- order of categories and feeds
 - settings
-- improve context menu ?
+- add options in context menu
 - keyboard navigation
 - unit tests
 - manage if data in favicon href

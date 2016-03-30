@@ -93,13 +93,14 @@ class DataParsing extends MainService {
 			
 			$identifiers = array();
 			foreach($items as $i) {
-				$identifier = $i->get_id();
+				$item_identifier = $i->get_id();
+				$item_hash = $i->get_id(true); // md5(serialize($this->data))
 				
 				// On ignore les doublons (Quoi ?! T'es pas content ?!)
-				if(in_array($identifier, $identifiers)) {
+				if(in_array($item_identifier, $identifiers)) {
 					continue;
 				} else {
-					$identifiers[] = $identifier;
+					$identifiers[] = $item_identifier;
 				}
 
 				$is_new_item = false;
@@ -107,30 +108,16 @@ class DataParsing extends MainService {
 				// On vérifie l'existence de l'article
 				$item = $this->getRepo('Item')->findOneBy(array(
 					'feed' => $feed,
-					'identifier' => $identifier
+					'identifier' => $item_identifier
 				));
 				
 				// Création de l'article si c'est un nouveau
 				if(!$item) {
 					$item = new Item();
 					$item->setFeed($feed);
-					$item->setIdentifier($identifier);
+					$item->setIdentifier($item_identifier);
 
-					$date_published = null;
-					try {
-                        // Equivalent de la méthode Item::get_date() de SimplePie / Correction d'un problème
-                        if($foo = $i->get_item_tags(SIMPLEPIE_NAMESPACE_RSS_20, 'pubDate')) $date_published = date(DATE_ATOM, strtotime($foo[0]['data']));
-                        elseif($foo = $i->get_item_tags(SIMPLEPIE_NAMESPACE_ATOM_10, 'published')) $date_published = date(DATE_ATOM, strtotime($foo[0]['data']));
-                        elseif($foo = $i->get_item_tags(SIMPLEPIE_NAMESPACE_ATOM_03, 'issued')) $date_published = date(DATE_ATOM, strtotime($foo[0]['data']));
-                        elseif($foo = $i->get_item_tags(SIMPLEPIE_NAMESPACE_ATOM_03, 'created')) $date_published = date(DATE_ATOM, strtotime($foo[0]['data']));
-                        elseif($foo = $i->get_item_tags(SIMPLEPIE_NAMESPACE_DC_11, 'date')) $date_published = date(DATE_ATOM, strtotime($foo[0]['data']));
-                        elseif($foo = $i->get_item_tags(SIMPLEPIE_NAMESPACE_DC_10, 'date')) $date_published = date(DATE_ATOM, strtotime($foo[0]['data']));
-                        elseif($foo = $i->get_item_tags(SIMPLEPIE_NAMESPACE_ATOM_10, 'updated')) $date_published = date(DATE_ATOM, strtotime($foo[0]['data']));
-                        elseif($foo = $i->get_item_tags(SIMPLEPIE_NAMESPACE_ATOM_03, 'modified')) $date_published = date(DATE_ATOM, strtotime($foo[0]['data']));
-                    } catch(\Exception $e) {
-                        $date_published = $i->get_date(DATE_ATOM);
-                    }
-
+					$date_published = $i->get_date(DATE_ATOM);
                     if($date_published) {
                     	$date_published = new \DateTime($date_published);
                     }
@@ -143,9 +130,6 @@ class DataParsing extends MainService {
                     $countNewItems++;
                     $is_new_item = true;
 				}
-
-                // Hash
-                $item_hash = (string) $i; // md5(serialize($this->data))
 
                 if($is_new_item || $item->getHash() != $item_hash) {
 	                $item->setHash($item_hash);

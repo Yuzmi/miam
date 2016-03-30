@@ -13,29 +13,35 @@
 {% block javascripts %}
 	{{ parent() }}
 
-	<script type="text/javascript">
-		$(".feed").on('click', function() {
-			var feedId = $(this).data('feed');
-			
-			if($(this).hasClass('subscribed')) {
-				$.ajax({
-					type: "POST",
-					url: Routing.generate('ajax_catalog_feed_unsubscribe', {id: feedId}, true),
-					dataType: "json",
-					success: function(result) {
-						$(".feed"+feedId).removeClass("subscribed");
-					}
-				});
-			} else {
-				$.ajax({
-					type: "POST",
-					url: Routing.generate('ajax_catalog_feed_subscribe', {id: feedId}, true),
-					dataType: "json",
-					success: function(result) {
-						$(".feed"+feedId).addClass("subscribed");
-					}
-				});
-			}
-		});
-	</script>
+	{% if app.user %}
+		<script type="text/javascript">
+			$(".feed").on('click', function() {
+				var feedId = $(this).data('feed');
+				
+				if($(this).hasClass('subscribed')) {
+					$.ajax({
+						type: "POST",
+						url: Routing.generate('ajax_catalog_feed_unsubscribe', {id: feedId}, true),
+						dataType: "json",
+						success: function(result) {
+							if(result.success) {
+								$(".feed"+feedId).removeClass("subscribed");
+							}
+						}
+					});
+				} else {
+					$.ajax({
+						type: "POST",
+						url: Routing.generate('ajax_catalog_feed_subscribe', {id: feedId}, true),
+						dataType: "json",
+						success: function(result) {
+							if(result.success) {
+								$(".feed"+feedId).addClass("subscribed");
+							}
+						}
+					});
+				}
+			});
+		</script>
+	{% endif %}
 {% endblock %}
