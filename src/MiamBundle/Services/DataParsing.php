@@ -140,12 +140,11 @@ class DataParsing extends MainService {
 
 					// Contenu de base
 					$content = (string) $i->get_content();
-
+					
 					// Contenu HTML
 					try {
-						$doc = new \DOMDocument();
-						$doc->loadHTML($content);
-						$htmlContent = $doc->saveHTML();
+						$tidy = new \Tidy();
+						$htmlContent = $tidy->repairString($content, array(), "utf8");
 					} catch(\Exception $e) {
 						$htmlContent = "";
 					}

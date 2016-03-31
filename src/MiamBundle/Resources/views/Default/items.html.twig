@@ -54,7 +54,7 @@
 				{% if item.htmlContent %}
 					{{ item.htmlContent|raw }}
 				{% elseif item.textContent %}
-					{{ item.textContent }}
+					{{ item.textContent|nl2br }}
 				{% else %}
 					[No content]
 				{% endif %}
