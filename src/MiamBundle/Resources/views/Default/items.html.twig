@@ -51,7 +51,13 @@
 			</a>
 
 			<div class="content">
-				{{ item.htmlContent ? item.htmlContent|raw : "[No content]" }}
+				{% if item.htmlContent %}
+					{{ item.htmlContent|raw }}
+				{% elseif item.textContent %}
+					{{ item.textContent }}
+				{% else %}
+					[No content]
+				{% endif %}
 			</div>
 
 			{% if itemData and (itemData.tags|length > 0 or itemData.enclosures|length > 0) %}

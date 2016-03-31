@@ -5,7 +5,7 @@ SERVER
 =====
 Apache + PHP
 ```shell
-sudo apt-get install apache2 php5 libapache2-mod-php5 php5-gd php5-imagick
+sudo apt-get install apache2 php5 libapache2-mod-php5 php5-curl php5-gd php5-imagick
 sudo service apache2 restart
 ```
 
@@ -100,3 +100,4 @@ TODO
 - manage if data in favicon href
 - change the bundle name... shit controller's name too... (difficulty: hardcore)
 - remove doctrine fixtures bundle ?
+- improve textContent

@@ -280,10 +280,12 @@ app.shit = {
 			});
 
 			if(app.user && app.shit.items.subscriber && app.user.id == app.shit.items.subscriber) {
-				$(".item").contextmenu(function(e) {
+				$(".item .header").contextmenu(function(e) {
 					e.preventDefault();
 
 					$(".contextMenu").remove();
+
+					var item = $(this).closest(".item");
 
 					var menu = $("<div>")
 						.addClass("contextMenu")
@@ -292,10 +294,10 @@ app.shit = {
 							left: e.clientX,
 							top: e.clientY + 10
 						})
-						.data("item", $(this).data("item"))
+						.data("item", item.data("item"))
 					;
 
-					if($(this).hasClass("read")) {
+					if(item.hasClass("read")) {
 						var menuOption = $("<div>").addClass("option").text("Mark as unread").attr("data-action", 'unread');
 					} else {
 						var menuOption = $("<div>").addClass("option").text("Mark as read").attr("data-action", 'read');

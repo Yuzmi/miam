@@ -138,12 +138,21 @@ class DataParsing extends MainService {
 					$item_title = html_entity_decode(trim($i->get_title()), ENT_COMPAT | ENT_HTML5, 'utf-8');
 					$item->setTitle($item_title);
 
+					// Contenu de base
+					$content = (string) $i->get_content();
+
 					// Contenu HTML
-					$htmlContent = (string) $i->get_content();
+					try {
+						$doc = new \DOMDocument();
+						$doc->loadHTML($content);
+						$htmlContent = $doc->saveHTML();
+					} catch(\Exception $e) {
+						$htmlContent = "";
+					}
 					$item->setHtmlContent($htmlContent);
 
 					// Contenu texte
-					$textContent = html_entity_decode(trim(strip_tags($htmlContent)), ENT_COMPAT | ENT_HTML5, 'utf-8'); // A améliorer
+					$textContent = html_entity_decode(trim(strip_tags($content)), ENT_COMPAT | ENT_HTML5, 'utf-8'); // A améliorer
 					$item->setTextContent($textContent);
 
 					// Lien
