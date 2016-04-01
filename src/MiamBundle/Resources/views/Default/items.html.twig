@@ -52,7 +52,7 @@
 
 			<div class="content">
 				{% if item.htmlContent %}
-					{{ item.htmlContent|raw }}
+					{{ item.htmlContent|safeHtml }}
 				{% elseif item.textContent %}
 					{{ item.textContent|nl2br }}
 				{% else %}

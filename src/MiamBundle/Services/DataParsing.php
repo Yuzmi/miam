@@ -142,13 +142,7 @@ class DataParsing extends MainService {
 					$content = (string) $i->get_content();
 					
 					// Contenu HTML
-					try {
-						$tidy = new \Tidy();
-						$htmlContent = $tidy->repairString($content, array(), "utf8");
-					} catch(\Exception $e) {
-						$htmlContent = "";
-					}
-					$item->setHtmlContent($htmlContent);
+					$item->setHtmlContent($content);
 
 					// Contenu texte
 					$textContent = html_entity_decode(trim(strip_tags($content)), ENT_COMPAT | ENT_HTML5, 'utf-8'); // A améliorer
