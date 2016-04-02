@@ -53,8 +53,7 @@ class TextExtension extends \Twig_Extension
     }
 
     public function lipsum($length = 0) {
-        $string = "
-        	Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse molestie bibendum nulla, at dignissim mauris suscipit ut. 
+        $string = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse molestie bibendum nulla, at dignissim mauris suscipit ut. 
         	Pellentesque convallis purus in arcu rutrum feugiat. Fusce viverra efficitur enim eget gravida. 
         	Etiam sed nisi id tellus egestas fringilla in in erat. Cras quis erat eget augue blandit sagittis quis varius risus. 
         	Maecenas faucibus ullamcorper risus. Quisque eu convallis purus. 
