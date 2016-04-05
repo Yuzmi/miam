@@ -4,7 +4,7 @@ app.shit = {
 		this.items.init();
 
 		// Hide context menus
-		$(document).click(function(e) {
+		$(document).on("click", function(e) {
 			if(e.which != 3) {
 				$(".contextMenu").remove();
 			}
@@ -21,7 +21,8 @@ app.shit = {
 			});
 
 			// Sélection d'un flux ou d'une catégorie
-			$(".sidebar .row").click(function(e) {
+			$(".sidebar .row").off("click");
+			$(".sidebar .row").on("click", function(e) {
 				app.shit.items.type = $(this).data('type');
 
 				switch(app.shit.items.type) {
@@ -38,7 +39,8 @@ app.shit = {
 			});
 
 			// Subcategories toggle
-			$(".sidebar .row .toggle").click(function(e) {
+			$(".sidebar .row .toggle").off("click");
+			$(".sidebar .row .toggle").on("click", function(e) {
 				var row = $(this).closest(".row");
 				var rowChildren = $(".sidebar .rowChildren[data-parent="+$(this).closest(".row").data("category")+"]");
 
@@ -54,7 +56,8 @@ app.shit = {
 			});
 
 			// Sidebar toggle
-			$(".sidebar_toggle").click(function() {
+			$(".sidebar_toggle").off("click");
+			$(".sidebar_toggle").on("click", function() {
 				$(".body_shit").toggleClass("hide_sidebar");
 			});
 
@@ -261,7 +264,8 @@ app.shit = {
 				}
 			}
 
-			$(".item .star").click(function(e) {
+			$(".item .star").off("click");
+			$(".item .star").on("click", function(e) {
 				e.preventDefault();
 
 				var item = $(this).closest(".item");
@@ -275,7 +279,8 @@ app.shit = {
 				e.stopPropagation();
 			});
 
-			$(".items .loadMore").click(function() {
+			$(".items .loadMore").off("click");
+			$(".items .loadMore").on("click", function() {
 				app.shit.items.loadMore();
 			});
 
@@ -306,7 +311,7 @@ app.shit = {
 
 					$(".body_shit").append(menu);
 
-					$(".itemMenu .option").click(function(e) {
+					$(".itemMenu .option").on("click", function(e) {
 						var action = $(this).data("action");
 
 						var item = $(".item[data-item="+$(this).closest(".itemMenu").data("item")+"]");

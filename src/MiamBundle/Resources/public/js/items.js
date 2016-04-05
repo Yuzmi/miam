@@ -8,6 +8,7 @@ app.items = {
 			app.items.dateRefresh = app.dateLoaded;
 		}
 
+		$(".item .header").off("click");
 		$(".item .header").on("click", function(e) {
 			var item = $(this).closest(".item");
 
@@ -17,12 +18,14 @@ app.items = {
 			}
 		});
 
+		$(".item .hide").off("click");
 		$(".item .hide").on("click", function(e) {
 			e.preventDefault();
 			$(this).closest(".item").removeClass("expanded");
 			e.stopPropagation();
 		});
 
+		$(".item .enclosure").off("click");
 		$(".item .enclosure").on("click", function(e) {
 			window.open($(this).data("url"));
 		});
