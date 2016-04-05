@@ -24,6 +24,9 @@ class Item
         $this->dateCreated = new \DateTime("now");
         $this->datePublished = new \DateTime("now");
         $this->dateUpdated = new \DateTime("now");
+        $this->tags = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->enclosures = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->marks = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
     /**
