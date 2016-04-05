@@ -11,7 +11,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 class UpdateCategoriesCommand extends ContainerAwareCommand {
 	protected function configure() {
         $this
-            ->setName('miam:categories:update')
+            ->setName('miam:update:categories')
             ->setDescription('Met à jour les catégories')
         ;
     }

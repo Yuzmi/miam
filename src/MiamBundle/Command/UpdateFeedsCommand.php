@@ -11,7 +11,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 class UpdateFeedsCommand extends ContainerAwareCommand {
 	protected function configure() {
         $this
-            ->setName('miam:feeds:update')
+            ->setName('miam:update:feeds')
             ->setDescription('Met à jour les informations des flux')
         ;
     }

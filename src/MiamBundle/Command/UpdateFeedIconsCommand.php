@@ -11,7 +11,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 class UpdateFeedIconsCommand extends ContainerAwareCommand {
 	protected function configure() {
         $this
-            ->setName('miam:feeds:updateIcons')
+            ->setName('miam:update:feeds:icons')
             ->setDescription('Met à jour les icônes des flux')
         ;
     }
