@@ -64,13 +64,11 @@ header {
 	}
 }
 
-input, select, button {
+input, select, textarea, button {
+	background-color:white;
+	border:solid 1px black;
 	color:black;
 	padding:0.4rem 0.8rem;
-}
-
-input[type="text"], input[type="password"], input[type="checkbox"], input[type="button"], select, button {
-	border:solid 1px black;
 }
 
 select {

@@ -3,68 +3,72 @@
 {% block body %}
 	{% include 'MiamBundle:Default:header.html.twig' %}
 
-	<p>
-	{{ form_start(createFeedForm) }}
-	{{ form_widget(createFeedForm.url) }}
-	{{ form_widget(createFeedForm.submit) }}
-	{{ form_end(createFeedForm) }}
-	</p>
+	<div class="body_admin">
+		{{ form_start(createFeedForm) }}
+		{{ form_widget(createFeedForm.url) }}
+		{{ form_widget(createFeedForm.submit) }}
+		{{ form_end(createFeedForm) }}
 
-	<table>
-		<tr>
-			<th></th>
-			<th></th>
-			<th>Name</th>
-			<th>URL</th>
-			<th>Rate</th>
-			<th>Catalog</th>
-		</tr>
-		{% for feed in feeds %}
-			<tr class="feed {{ feed.isCatalog ? "catalog" }}" data-feed="{{ feed.id }}">
-				<td>
-					{% if feed.nbErrors > 10 %}
-						<i class="fa fa-warning"></i>
-					{% endif %}
-				</td>
-				<td>
-					{% if feed.hasIcon %}
-						<img src="{{ asset(feed.icon) }}" alt="">
-					{% endif %}
-				</td>
-				<td title="{{ feed.name }}">
-					{% if feed.website %}
-						<a href="{{ feed.website }}">{{ feed.name|shorten(40) }}</a>
-					{% else %}
-						{{ feed.name|shorten(40) }}
-					{% endif %}
-				</td>
-				<td title="{{ feed.url }}">
-					<a href="{{ feed.url }}">{{ feed.url|shorten(60) }}</a>
-				</td>
-				<td>
-					{{ feed.weekRate|round(2) }} / {{ feed.monthRate|round(2) }} / {{ feed.globalRate|round(2) }}
-				</td>
-				<td>
-					<button class="addToCatalog">Add</button>
-					<button class="removeFromCatalog">Remove</button>
-				</td>
-				<td>
-					<button class="parse">
-						Parse
-					</button>
-				</td>
-				<td>
-					<button class="delete">X</button>
-				</td>
+		<table>
+			<tr>
+				<th></th>
+				<th></th>
+				<th>Name</th>
+				<th>URL</th>
+				<th>Rate</th>
+				<th>Catalog</th>
 			</tr>
-		{% endfor %}
-	</table>
+			{% for feed in feeds %}
+				<tr class="feed {{ feed.isCatalog ? "catalog" }}" data-feed="{{ feed.id }}">
+					<td>
+						{% if feed.nbErrors > 10 %}
+							<i class="fa fa-warning"></i>
+						{% endif %}
+					</td>
+					<td>
+						{% if feed.hasIcon %}
+							<img src="{{ asset(feed.icon) }}" alt="">
+						{% endif %}
+					</td>
+					<td title="{{ feed.name }}">
+						{% if feed.website %}
+							<a href="{{ feed.website }}">{{ feed.name|shorten(40) }}</a>
+						{% else %}
+							{{ feed.name|shorten(40) }}
+						{% endif %}
+					</td>
+					<td title="{{ feed.url }}">
+						<a href="{{ feed.url }}">{{ feed.url|shorten(60) }}</a>
+					</td>
+					<td>
+						{{ feed.weekRate|round(2) }} / {{ feed.monthRate|round(2) }} / {{ feed.globalRate|round(2) }}
+					</td>
+					<td>
+						<button class="addToCatalog">Add</button>
+						<button class="removeFromCatalog">Remove</button>
+					</td>
+					<td>
+						<button class="parse">
+							Parse
+						</button>
+					</td>
+					<td>
+						<button class="delete">X</button>
+					</td>
+				</tr>
+			{% endfor %}
+		</table>
+	</div>
 {% endblock %}
 
 {% block stylesheets %}
 	{{ parent() }}
 
 	<style>
+		.body_admin {
+			padding:10px 15px;
+		}
+
 		.feed .removeFromCatalog {
 			display:none;
 		}
