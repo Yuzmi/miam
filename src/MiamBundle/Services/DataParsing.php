@@ -407,77 +407,57 @@ class DataParsing extends MainService {
 
     	// Conversion et stockage
     	if(is_file($tmpPath)) {
-    		$iconData = getimagesize($tmpPath);
+    		try {
+    			$iconData = @getimagesize($tmpPath);
+    		} catch(\Exception $e) {
+    			$iconData = false;
+    		}
     		
-    		$iconSrcWidth = $iconData[0];
-    		$iconSrcHeight = $iconData[1];
-    		$iconSrcType = $iconData[2];
-    		
-    		if($iconSrcType == IMAGETYPE_GIF) {
-    			$iconDst = imagecreatetruecolor($iconSize, $iconSize);
-				
-				$blackBg = imagecolorallocate($iconDst, 0, 0, 0);
-    			imagecolortransparent($iconDst, $blackBg);
+    		if($iconData) {
+	    		$iconSrcWidth = $iconData[0];
+	    		$iconSrcHeight = $iconData[1];
+	    		$iconSrcType = $iconData[2];
+	    		
+	    		if($iconSrcType == IMAGETYPE_GIF) {
+	    			$iconDst = imagecreatetruecolor($iconSize, $iconSize);
+					
+					$blackBg = imagecolorallocate($iconDst, 0, 0, 0);
+	    			imagecolortransparent($iconDst, $blackBg);
 
-				$iconSrc = imagecreatefromgif($tmpPath);
-				imagecopyresampled($iconDst, $iconSrc, 0, 0, 0, 0, $iconSize, $iconSize, $iconSrcWidth, $iconSrcHeight);
-				
-				imagepng($iconDst, $iconPath);
-            	imagedestroy($iconDst);
+					$iconSrc = imagecreatefromgif($tmpPath);
+					imagecopyresampled($iconDst, $iconSrc, 0, 0, 0, 0, $iconSize, $iconSize, $iconSrcWidth, $iconSrcHeight);
+					
+					imagepng($iconDst, $iconPath);
+	            	imagedestroy($iconDst);
 
-            	$success = true;
-    		} elseif($iconSrcType == IMAGETYPE_JPEG) {
-    			$iconDst = imagecreatetruecolor($iconSize, $iconSize);
+	            	$success = true;
+	    		} elseif($iconSrcType == IMAGETYPE_JPEG) {
+	    			$iconDst = imagecreatetruecolor($iconSize, $iconSize);
 
-				$iconSrc = imagecreatefromjpeg($tmpPath);
-				imagecopyresampled($iconDst, $iconSrc, 0, 0, 0, 0, $iconSize, $iconSize, $iconSrcWidth, $iconSrcHeight);
-				
-				imagepng($iconDst, $iconPath);
-            	imagedestroy($iconDst);
+					$iconSrc = imagecreatefromjpeg($tmpPath);
+					imagecopyresampled($iconDst, $iconSrc, 0, 0, 0, 0, $iconSize, $iconSize, $iconSrcWidth, $iconSrcHeight);
+					
+					imagepng($iconDst, $iconPath);
+	            	imagedestroy($iconDst);
 
-            	$success = true;
-    		} elseif($iconSrcType == IMAGETYPE_PNG) {
-    			$iconDst = imagecreatetruecolor($iconSize, $iconSize);
+	            	$success = true;
+	    		} elseif($iconSrcType == IMAGETYPE_PNG) {
+	    			$iconDst = imagecreatetruecolor($iconSize, $iconSize);
 
-    			$blackBg = imagecolorallocate($iconDst, 0, 0, 0);
-    			imagecolortransparent($iconDst, $blackBg);
-            	imagealphablending($iconDst, false);
-            	imagesavealpha($iconDst, true);
+	    			$blackBg = imagecolorallocate($iconDst, 0, 0, 0);
+	    			imagecolortransparent($iconDst, $blackBg);
+	            	imagealphablending($iconDst, false);
+	            	imagesavealpha($iconDst, true);
 
-            	$iconSrc = imagecreatefrompng($tmpPath);
-            	imagecopyresampled($iconDst, $iconSrc, 0, 0, 0, 0, $iconSize, $iconSize, $iconSrcWidth, $iconSrcHeight);
+	            	$iconSrc = imagecreatefrompng($tmpPath);
+	            	imagecopyresampled($iconDst, $iconSrc, 0, 0, 0, 0, $iconSize, $iconSize, $iconSrcWidth, $iconSrcHeight);
 
-            	imagepng($iconDst, $iconPath);
-            	imagedestroy($iconDst);
+	            	imagepng($iconDst, $iconPath);
+	            	imagedestroy($iconDst);
 
-            	$success = true;
-    		} elseif($iconSrcType == IMAGETYPE_BMP) {
-    			$icon = new \Imagick($tmpPath);
-				$icon->thumbnailImage($iconSize, $iconSize);
-				$icon->setImageFormat('png');
-				$icon->writeImage($iconPath);
-				$icon->clear();
-				$icon->destroy();
-
-    			$success = true;
-    		} elseif($iconSrcType == IMAGETYPE_ICO) {
-    			// Must edit the extension here or it fails
-				$icoPath = $feedDir.'/icon.ico';
-				rename($tmpPath, $icoPath);
-
-				$icon = new \Imagick($icoPath);
-				$icon->thumbnailImage($iconSize, $iconSize);
-				$icon->setImageFormat('png');
-				$icon->writeImage($iconPath);
-				$icon->clear();
-				$icon->destroy();
-
-    			@unlink($icoPath);
-
-    			$success = true;
-    		} else {
-    			try {
-    				$icon = new \Imagick($tmpPath);
+	            	$success = true;
+	    		} elseif($iconSrcType == IMAGETYPE_BMP) {
+	    			$icon = new \Imagick($tmpPath);
 					$icon->thumbnailImage($iconSize, $iconSize);
 					$icon->setImageFormat('png');
 					$icon->writeImage($iconPath);
@@ -485,10 +465,36 @@ class DataParsing extends MainService {
 					$icon->destroy();
 
 	    			$success = true;
-    			} catch(\Exception $e) {
-    				$success = false;
-    			}
-    		}
+	    		} elseif($iconSrcType == IMAGETYPE_ICO) {
+	    			// Must edit the extension here or it fails
+					$icoPath = $feedDir.'/icon.ico';
+					rename($tmpPath, $icoPath);
+
+					$icon = new \Imagick($icoPath);
+					$icon->thumbnailImage($iconSize, $iconSize);
+					$icon->setImageFormat('png');
+					$icon->writeImage($iconPath);
+					$icon->clear();
+					$icon->destroy();
+
+	    			@unlink($icoPath);
+
+	    			$success = true;
+	    		} else {
+	    			try {
+	    				$icon = new \Imagick($tmpPath);
+						$icon->thumbnailImage($iconSize, $iconSize);
+						$icon->setImageFormat('png');
+						$icon->writeImage($iconPath);
+						$icon->clear();
+						$icon->destroy();
+
+		    			$success = true;
+	    			} catch(\Exception $e) {
+	    				$success = false;
+	    			}
+	    		}
+	    	}
 
     		@unlink($tmpPath);
     	}
