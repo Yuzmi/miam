@@ -106,7 +106,7 @@ class TextExtension extends \Twig_Extension
         return preg_replace_callback('#<img([^>]*)>#isU', function($matches) {
             $img = $matches[0];
 
-            //$img = preg_replace('#class=".*"#isU', '', $img);
+            $img = preg_replace('#class=[\s]*".*"#isU', '', $img);
             $img = preg_replace('#src=#isU', 'class="clickToShow"  data-src=', $img);
             $img = preg_replace('#srcset=#isU', 'data-srcset=', $img);
 
