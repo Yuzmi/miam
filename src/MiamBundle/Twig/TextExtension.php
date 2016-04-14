@@ -8,6 +8,8 @@ class TextExtension extends \Twig_Extension
 		return array(
 			new \Twig_SimpleFilter('shorten', array($this, 'shorten')),
             new \Twig_SimpleFilter('safeHtml', array($this, 'safeHtml'), array('is_safe' => array('html'))),
+            new \Twig_SimpleFilter('removePictures', array($this, 'removePictures'), array('is_safe' => array('html'))),
+            new \Twig_SimpleFilter('clickForPictures', array($this, 'clickForPictures'), array('is_safe' => array('html'))),
 		);
 	}
 
@@ -86,6 +88,7 @@ class TextExtension extends \Twig_Extension
             "output-html" => true
         ), "utf8");
         
+        // Seriously, Tidy, why do you add html and body tags...
         if(preg_match('#<body>(.*)</body>#is', $html, $matches)) {
             $html = $matches[1];
         } else {
@@ -93,5 +96,21 @@ class TextExtension extends \Twig_Extension
         }
 
         return $html;
+    }
+
+    public function removePictures($html) {
+        return preg_replace('#<img[^>]*>#isU', '', $html);
+    }
+
+    public function clickForPictures($html) {
+        return preg_replace_callback('#<img([^>]*)>#isU', function($matches) {
+            $img = $matches[0];
+
+            //$img = preg_replace('#class=".*"#isU', '', $img);
+            $img = preg_replace('#src=#isU', 'class="clickToShow"  data-src=', $img);
+            $img = preg_replace('#srcset=#isU', 'data-srcset=', $img);
+
+            return $img;
+        }, $html);
     }
 }

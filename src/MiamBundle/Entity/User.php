@@ -13,7 +13,7 @@ class User implements UserInterface, \Serializable
     private $dateCreated;
     private $dateLogin;
     private $isAdmin;
-    private $isPublic;
+    private $settings;
     private $subscriptions;
     private $categories;
 
@@ -22,7 +22,7 @@ class User implements UserInterface, \Serializable
         $this->salt = uniqid(mt_rand(), true);
         $this->dateCreated = new \DateTime("now");
         $this->isAdmin = false;
-        $this->isPublic = false;
+        $this->settings = serialize(array());
         $this->subscriptions = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
@@ -256,27 +256,39 @@ class User implements UserInterface, \Serializable
         return $this->categories;
     }
 
-    /**
-     * Set isPublic
-     *
-     * @param boolean $isPublic
-     *
-     * @return User
-     */
-    public function setIsPublic($isPublic)
-    {
-        $this->isPublic = $isPublic;
+    public function getSettings() {
+        try {
+            $settings = unserialize($this->settings);
+        } catch(\Exception $e) {
+            $settings = array();
+        }
 
-        return $this;
+        return is_array($settings) ? $settings : array();
     }
 
-    /**
-     * Get isPublic
-     *
-     * @return boolean
-     */
-    public function getIsPublic()
-    {
-        return $this->isPublic;
+    public function setSettings(array $settings) {
+        $this->settings = serialize($settings);
+    }
+
+    public function getSetting($key) {
+        $settings = $this->getSettings();
+
+        if(array_key_exists($key, $settings)) {
+            return $settings[$key];
+        } elseif($key == 'DISPLAY_PICTURES') {
+            return "yes";
+        } elseif($key == 'IS_PUBLIC') {
+            return false;
+        }
+
+        return null;
+    }
+
+    public function setSetting($key, $value) {
+        $settings = $this->getSettings();
+
+        $settings[$key] = $value;
+
+        $this->setSettings($settings);
     }
 }

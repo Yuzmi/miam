@@ -93,7 +93,6 @@ TODO
 - catalog management in admin
 - try postgresql and sqlite
 - order of categories and feeds
-- settings
 - add options in context menu
 - keyboard navigation
 - unit tests

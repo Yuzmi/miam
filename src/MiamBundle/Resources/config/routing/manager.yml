@@ -2,6 +2,8 @@ manager:
     path: /
     defaults: { _controller: MiamBundle:Manager:index }
 
+
+
 ajax_manager_popup_category_new:
     path: /ajax/popup/category/new
     defaults: { _controller: MiamBundle:Manager:ajaxPopupNewCategory }
@@ -28,6 +30,8 @@ manager_category_delete:
     path: /category/{id}/delete
     defaults: { _controller: MiamBundle:Manager:deleteCategory }
     requirements: { id: \d+ }
+
+
 
 ajax_manager_popup_subscription_new:
     path: /ajax/popup/subscription/new
@@ -57,6 +61,8 @@ manager_subscription_delete:
     defaults: { _controller: MiamBundle:Manager:deleteSubscription }
     requirements: { id: \d+ }
 
+
+
 ajax_manager_popup_opml_export:
     path: /ajax/popup/opml/export
     defaults: { _controller: MiamBundle:Manager:ajaxPopupExportOPML }
@@ -72,3 +78,9 @@ ajax_manager_popup_opml_import:
 manager_opml_import:
     path: /opml/import
     defaults: { _controller: MiamBundle:Manager:importOPML }
+
+
+
+manager_settings_update:
+    path: /settings/update
+    defaults: { _controller: MiamBundle:Manager:updateSettings }

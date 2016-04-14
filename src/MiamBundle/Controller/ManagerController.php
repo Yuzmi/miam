@@ -557,4 +557,26 @@ class ManagerController extends MainController
             }
         }
     }
+
+    public function updateSettingsAction(Request $request) {
+        if($this->isTokenValid('manager_settings_update', $request->get('csrf_token'))) {
+            $user = $this->getUser();
+            
+            $display_pictures = $request->get("DISPLAY_PICTURES");
+            $user->setSetting('DISPLAY_PICTURES', $display_pictures);
+
+            $is_public = $request->get("IS_PUBLIC") ? true : false;
+            $user->setSetting('IS_PUBLIC', $is_public);
+
+            $em = $this->getEm();
+            $em->persist($user);
+            $em->flush();
+
+            $this->addFm("Settings updated", "success");
+        } else {
+            $this->addFm("Invalid token", "error");
+        }
+
+        return $this->redirectToRoute("manager", array("tab" => "settings"));
+    }
 }

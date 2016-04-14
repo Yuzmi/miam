@@ -52,7 +52,13 @@
 
 			<div class="content">
 				{% if item.htmlContent %}
-					{{ item.htmlContent|safeHtml }}
+					{% if app.user.setting('DISPLAY_PICTURES') == 'no' %}
+						{{ item.htmlContent|safeHtml|removePictures }}
+					{% elseif app.user.setting('DISPLAY_PICTURES') == 'onclick' %}
+						{{ item.htmlContent|safeHtml|clickForPictures }}
+					{% else %}
+						{{ item.htmlContent|safeHtml }}
+					{% endif %}
 				{% elseif item.textContent %}
 					{{ item.textContent|nl2br }}
 				{% else %}

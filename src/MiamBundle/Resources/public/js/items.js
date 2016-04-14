@@ -29,6 +29,15 @@ app.items = {
 		$(".item .enclosure").on("click", function(e) {
 			window.open($(this).data("url"));
 		});
+
+		$(".item .content img.clickToShow").on("click", function(e) {
+			if($(this).hasClass("clickToShow")) {
+				e.preventDefault();
+				$(this).prop('src', $(this).data("src"));
+				$(this).prop('srcset', $(this).data("srcset"));
+				$(this).removeClass("clickToShow");
+			}
+		});
 	},
 
 	expand: function(item) {
