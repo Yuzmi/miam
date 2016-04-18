@@ -20,3 +20,8 @@ miam_security:
 miam_shit:
     resource: "@MiamBundle/Resources/config/routing/shit.yml"
     prefix: /shit
+
+user:
+    path: /user/{userId}
+    defaults: { _controller: MiamBundle:Shit:index }
+    requirements: { userId: \d+ }

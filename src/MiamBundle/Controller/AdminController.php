@@ -15,7 +15,7 @@ class AdminController extends MainController
 	public function indexAction() {
         $feeds = $this->getRepo('Feed')
             ->createQueryBuilder('f')
-            ->orderBy('f.name', 'ASC')
+            ->orderBy('f.dateCreated', 'DESC')
             ->getQuery()->getResult();
 
         $createFeedForm = $this->createCreateFeedForm();

@@ -43,11 +43,6 @@ class ItemManager extends MainService {
 			$qb->innerJoin('f.subscriptions', 's', 'with', 's.user = :subscriber');
 			$qb->setParameter('subscriber', $subscriber);
 
-			if($type == 'subscription' && $subscription) {
-				$qb->andWhere('s.id = :subscriptionId');
-				$qb->setParameter('subscriptionId', $subscription->getId());
-			}
-
 			if($type == 'category' && $category) {
 				$qb->innerJoin('s.categories', 'c', 'with', 'c.user = :subscriber');
 				$qb->andWhere('c.leftPosition >= :catLeft AND c.rightPosition <= :catRight');
