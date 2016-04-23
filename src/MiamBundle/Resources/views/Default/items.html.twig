@@ -7,13 +7,15 @@
 		<div class="item {{ itemData and itemData.isRead ? 'read' }} {{ itemData and itemData.isStarred ? 'starred' }}" data-item="{{ item.id }}" data-feed="{{ item.feed.id }}">
 			<a class="header" href="{{ item.link }}" target="_blank">
 				<span class="feed">
-					{% if itemData and itemData.feedName %}
-						{{ itemData.feedName }}
-					{% elseif item.feed.name %}
-						{{ item.feed.name }}
-					{% else %}
-						{{ item.feed.url }}
-					{% endif %}
+					<span class="name">
+						{% if itemData and itemData.feedName %}
+							{{ itemData.feedName }}
+						{% elseif item.feed.name %}
+							{{ item.feed.name }}
+						{% else %}
+							{{ item.feed.url }}
+						{% endif %}
+					</span>
 
 					{% if item.feed.hasIcon %}
 						<img class="icon" src="{{ asset(item.feed.icon) }}" alt="">
