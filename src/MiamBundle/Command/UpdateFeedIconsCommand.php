@@ -17,9 +17,9 @@ class UpdateFeedIconsCommand extends ContainerAwareCommand {
     }
 
     protected function execute(InputInterface $input, OutputInterface $output) {
-        $output->write('Update feed icons... ');
-
         error_reporting(0);
+
+        $output->write('Update feed icons... ');
 
         $this->getContainer()->get('data_parsing')->updateFeedIcons();
 

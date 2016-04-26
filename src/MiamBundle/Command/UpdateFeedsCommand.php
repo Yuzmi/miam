@@ -17,9 +17,9 @@ class UpdateFeedsCommand extends ContainerAwareCommand {
     }
 
     protected function execute(InputInterface $input, OutputInterface $output) {
-        $output->write('Update... ');
-
         error_reporting(0);
+
+        $output->write('Update... ');
 
         $this->getContainer()->get('feed_manager')->updateFeeds();
 

@@ -17,9 +17,9 @@ class GenerateJsonCommand extends ContainerAwareCommand {
     }
 
     protected function execute(InputInterface $input, OutputInterface $output) {
-        $output->write('Generation... ');
-
         error_reporting(0);
+
+        $output->write('Generation... ');
 
         $this->getContainer()->get('data_parsing')->generateJson();
 

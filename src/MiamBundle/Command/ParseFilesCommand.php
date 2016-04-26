@@ -17,9 +17,9 @@ class ParseFilesCommand extends ContainerAwareCommand {
     }
 
     protected function execute(InputInterface $input, OutputInterface $output) {
-        $output->writeln('Parsing...');
-
         error_reporting(0);
+
+        $output->writeln('Parsing...');
 
         $time_begin = time();
         $this->getContainer()->get('data_parsing')->parseFiles(array('verbose' => true));

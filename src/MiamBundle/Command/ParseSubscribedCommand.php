@@ -8,11 +8,11 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 
-class ParseAllCommand extends ContainerAwareCommand {
+class ParseSubscribedCommand extends ContainerAwareCommand {
 	protected function configure() {
         $this
-            ->setName('miam:parse:all')
-            ->setDescription('Récupère tous les flux')
+            ->setName('miam:parse:subscribed')
+            ->setDescription('Récupère les flux abonnés')
         ;
     }
 
@@ -25,7 +25,18 @@ class ParseAllCommand extends ContainerAwareCommand {
 
         $em = $this->getContainer()->get('doctrine')->getEntityManager();
         
-        $feeds = $em->getRepository('MiamBundle:Feed')->findAll();
+        $feeds = $em->getRepository('MiamBundle:Feed')
+            ->createQueryBuilder('f')
+            ->innerJoin('f.subscriptions', 's')
+            ->getQuery()->getResult();
+
+        /*$feeds = $em->getRepository('MiamBundle:Feed')
+            ->createQueryBuilder('f')
+            ->select('f, COUNT(s.id) AS countSubs')
+            ->leftJoin('f.subscriptions', 's')
+            ->groupBy('f')
+            ->having('countSubs > 0')
+            ->getQuery()->getResult();*/
 
         $nb = 0;
         foreach($feeds as $feed) {

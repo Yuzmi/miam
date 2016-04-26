@@ -26,7 +26,7 @@ class DataParsing extends MainService {
 			$pie->set_raw_data($options['data']);
 		} else {
 			$pie->set_feed_url($feed->getUrl());
-			//$pie->force_feed(true);
+			$pie->force_feed(true);
 			$pie->enable_cache(false);
 			$pie->set_timeout(10);
 			$pie->set_autodiscovery_level(SIMPLEPIE_LOCATOR_NONE);
@@ -274,57 +274,6 @@ class DataParsing extends MainService {
 
 		if($firstParsing) {
 			$this->updateFeedIcon($feed);
-		}
-	}
-
-	public function parseAll($options = array()) {
-		$feeds = $this->getRepo('Feed')->findAll();
-
-		$nb = 0;
-		foreach($feeds as $feed) {
-			$feed = $this->getRepo('Feed')->find($feed->getId());
-
-			if($feed) {
-				$this->parseFeed($feed, $options);
-
-				$nb++;
-			}
-
-			if($nb%20 == 0) {
-				$this->em->clear();
-			}
-		}
-	}
-
-	public function parseSelected($options = array()) {
-		$feeds = $this->getRepo('Feed')->findAll();
-
-		$nb = 0;
-		foreach($feeds as $feed) {
-			$feed = $this->getRepo('Feed')->find($feed->getId());
-
-			if($feed) {
-				$now = new \DateTime("now");
-				$oneHourAgo = new \DateTime("now - 1 hour");
-				$oneDayAgo = new \DateTime("now - 1 day");
-				$oneWeekAgo = new \DateTime("now - 1 week");
-				$oneMonthAgo = new \DateTime("now - 1 month");
-
-				$date = $feed->getDateNewItem() ?: $feed->getDateCreated();
-				if(
-					$date > $oneWeekAgo
-					|| ($date > $oneMonthAgo && $feed->getDateParsed() < $oneHourAgo)
-					|| ($date < $oneMonthAgo && $feed->getDateParsed() < $oneDayAgo)
-				) {
-					$this->parseFeed($feed, $options);
-
-					$nb++;
-				}
-			}
-
-			if($nb%20 == 0) {
-				$this->em->clear();
-			}
 		}
 	}
 
