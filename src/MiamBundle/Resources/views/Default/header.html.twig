@@ -1,12 +1,13 @@
 {% spaceless %}
 	<header>
+		{% block preLink %}{% endblock %}
 		{% if app.user %}
 			<a href="{{ path('index') }}">
 				<i class="fa fa-list"></i> Feeds
 			</a>
 		{% endif %}
 		<a href="{{ path('catalog') }}">
-			<i class="fa fa-list-alt"></i> Catalog
+			<i class="fa fa-book"></i> Catalog
 		</a>
 		{% if app.user %}
 			<a href="{{ path('manager') }}">
@@ -14,7 +15,7 @@
 			</a>
 			{% if is_granted('ROLE_ADMIN') %}
 				<a href="{{ path('admin') }}">
-					Admin
+					<i class="fa fa-lock"></i>	Admin
 				</a>
 			{% endif %}
 		{% endif %}

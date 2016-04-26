@@ -75,12 +75,13 @@
 			{{ macros.rows(tree, unreadCounts) }}
 		</aside>
 
-		<div class="sidebar_toggle">
-			<span class="hide"><i class="fa fa-angle-left"></i></span>
-			<span class="show"><i class="fa fa-angle-right"></i></span>
-		</div>
-
-		{% include 'MiamBundle:Default:header.html.twig' %}
+		{% embed 'MiamBundle:Default:header.html.twig' %}
+			{% block preLink %}
+				<a href="#" class="sidebar_toggle">
+					<i class="fa fa-bars"></i>
+				</a>
+			{% endblock %}
+		{% endembed %}
 
 		<section>
 			<main class="items">
