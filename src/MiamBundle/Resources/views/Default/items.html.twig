@@ -72,27 +72,27 @@
 				<div class="details">
 					{% if itemData.tags|length > 0 %}
 						<div class="tags">
-							Tags:
+							Tag{{ itemData.tags|length > 1 ? "s" }}:
 							{% for tag in itemData.tags %}
-								{% if loop.index > 1 %}
-									-
-								{% endif %}
-								{{ tag.name }}
+								{{ tag.name }}{{ loop.index < itemData.tags|length ? "," }}
 							{% endfor %}
 						</div>
 					{% endif %}
 
 					{% if itemData.enclosures|length > 0 %}
-						<select class="enclosures">
-							<option selected disabled hidden>Enclosure(s)</option>
+						<div class="enclosures">
+							Enclosure{{ itemData.enclosures|length > 1 ? "s" }}:
 							{% for enclosure in itemData.enclosures %}
-								<option class="enclosure" data-url="{{ enclosure.url }}">
+								<a href="{{ enclosure.url }}" target="_blank">
 									{{ enclosure.title ?: enclosure.url }}
-								</option>
+								</a>
+								{{ loop.index < itemData.enclosures|length ? "," }}
 							{% endfor %}
-						</select>
+						</div>
 					{% endif %}
 				</div>
+
+				<span class="details_toggle">+</span>
 			{% endif %}
 		</div>
 	{% endfor %}

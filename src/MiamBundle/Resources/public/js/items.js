@@ -25,9 +25,8 @@ app.items = {
 			e.stopPropagation();
 		});
 
-		$(".item .enclosure").off("click");
-		$(".item .enclosure").on("click", function(e) {
-			window.open($(this).data("url"));
+		$(".item .details_toggle").on("click", function(e) {
+			$(this).closest(".item").addClass("expandedDetails");
 		});
 
 		$(".item .content img.clickToShow").on("click", function(e) {
