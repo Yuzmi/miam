@@ -37,8 +37,9 @@ header {
 		padding:1rem 1.4rem;
 		text-decoration:none;
 
-		i {
-			margin-right:0.2rem;
+		.label {
+			display:inline-block;
+			margin-left:0.5rem;
 		}
 
 		&:hover {
@@ -53,13 +54,14 @@ header {
 	.rightSide {
 		float:right;
 
-		.user {
-			display:inline-block;
-			padding:1rem 1.4rem;
-		}
-
 		& > a {
 			border-left:solid 1px black;
+		}
+	}
+
+	@media (max-width:600px) {
+		a .label {
+			display:none;
 		}
 	}
 }

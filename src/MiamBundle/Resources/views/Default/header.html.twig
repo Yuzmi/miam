@@ -2,37 +2,41 @@
 	<header>
 		{% block preLink %}{% endblock %}
 		{% if app.user %}
-			<a href="{{ path('index') }}">
-				<i class="fa fa-list"></i> Feeds
+			<a href="{{ path('index') }}" title="Feeds">
+				<i class="fa fa-list"></i>
+				<span class="label">Feeds</span>
 			</a>
 		{% endif %}
-		<a href="{{ path('catalog') }}">
-			<i class="fa fa-book"></i> Catalog
+		<a href="{{ path('catalog') }}" title="Catalog">
+			<i class="fa fa-book"></i>
+			<span class="label">Catalog</span>
 		</a>
 		{% if app.user %}
-			<a href="{{ path('manager') }}">
-				<i class="fa fa-cog"></i> Manager
+			<a href="{{ path('manager') }}" title="Manager">
+				<i class="fa fa-cog"></i>
+				<span class="label">Manager</span>
 			</a>
 			{% if is_granted('ROLE_ADMIN') %}
-				<a href="{{ path('admin') }}">
-					<i class="fa fa-lock"></i>	Admin
+				<a href="{{ path('admin') }}" title="Admin">
+					<i class="fa fa-lock"></i>
+					<span class="label">Admin</span>
 				</a>
 			{% endif %}
 		{% endif %}
 		<span class="rightSide">
 			{% if app.user %}
-				<span class="user">
-					{{ app.user.username }}
-				</span>
-				<a href="{{ path('logout') }}">
+				<a href="{{ path('logout') }}" title="Logout">
 					<i class="fa fa-sign-out"></i>
+					<span class="label">Logout</span>
 				</a>
 			{% elseif route != "login" %}
-				<a class="showLogin" href="{{ path('login') }}">
-					<i class="fa fa-sign-in"></i> Login
+				<a class="showLogin" href="{{ path('login') }}" title="Login">
+					<i class="fa fa-sign-in"></i>
+					<span class="label">Login</span>
 				</a>
-				<a class="showRegister" href="{{ path('login') }}">
-					<i class="fa fa-user-plus"></i> Register
+				<a class="showRegister" href="{{ path('login') }}" title="Register">
+					<i class="fa fa-user-plus"></i>
+					<span class="label">Register</span>
 				</a>
 			{% endif %}
 		</span>
