@@ -152,19 +152,12 @@ $width-sidebar:250px;
 	}
 
 	/*@media (max-width:991px) {
-		header {
-			padding:0;
-		}
-
 		.sidebar {
-			&_toggle {
-				display:none;
-			}
+			display:none !important;
 		}
 
 		section {
-			left:0px;
-			top:10rem;
+			left: 0px !important
 		}
 	}*/
 }

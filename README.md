@@ -90,12 +90,9 @@ With NodeJS, faster but experimental
 
 TODO
 =====
-- catalog management in admin
+- catalog refund
 - try postgresql and sqlite
 - order of categories and feeds
-- add options in context menu
-- keyboard navigation
-- unit tests
 - manage if data in favicon href
-- change the bundle name... shit controller's name too... (difficulty: hardcore)
+- change the bundle name... shit controller's name too...
 - improve textContent
