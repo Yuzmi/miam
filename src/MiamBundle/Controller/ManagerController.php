@@ -59,7 +59,7 @@ class ManagerController extends MainController
                         'user' => $this->getUser()
                     ));
                     if($parent) {
-                        $category->setParent($category);
+                        $category->setParent($parent);
                     }
                 }
 
@@ -121,9 +121,6 @@ class ManagerController extends MainController
                     'id' => $parentId,
                     'user' => $this->getUser()
                 ));
-                if($parent) {
-                    $category->setParent($category);
-                }
             }
 
             $subscriptionIds = $request->get("subscriptions");
