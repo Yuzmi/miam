@@ -121,6 +121,7 @@ class ManagerController extends MainController
                     'id' => $parentId,
                     'user' => $this->getUser()
                 ));
+                
                 if($parent && $parent->getId() == $category->getId()) {
                     $parent = null;
                 }
