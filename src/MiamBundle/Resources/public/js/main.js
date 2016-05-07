@@ -33,7 +33,12 @@ var app = {
 				}
 			});
 
-			$(".popupContainer .popupClose").click(function(e) {
+			$(".popupContainer .popupClose").on("click", function(e) {
+				e.preventDefault();
+				app.popup.closeAll();
+			});
+
+			$(".popupContainer .closePopup").on("click", function(e) {
 				e.preventDefault();
 				app.popup.closeAll();
 			});
