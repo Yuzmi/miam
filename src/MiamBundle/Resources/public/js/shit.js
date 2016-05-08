@@ -178,7 +178,7 @@ app.shit = {
 					$(".sidebar .row .unreadCount").each(function() {
 						$(this).text(0);
 
-						var feedId = $(this).closest(".row[data-type='feed']").data("id");console.log(feedId);
+						var feedId = $(this).closest(".row[data-type='feed']").data("id");
 						if(feedId && result.unreadCounts) {
 							for(var i=0; i<result.unreadCounts.length; i++) {
 								if(result.unreadCounts[i].feedId == feedId) {
