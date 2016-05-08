@@ -24,7 +24,7 @@ class Category
         $path = $this->name;
 
         if($this->parent) {
-            $path = $this->parent->getPath().'/'.$path;
+            $path = $this->parent->getPath().' / '.$path;
         }
 
         return $path;

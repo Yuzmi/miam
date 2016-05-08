@@ -11,7 +11,7 @@
 	{% import _self as macros %}
 
 	{% if tree.category is defined %}
-		<div class="row" data-type="category" data-category="{{ tree.category.id }}">
+		<div class="row" data-type="category" data-id="{{ tree.category.id }}">
 			<span class="name">
 				<span class="toggle">
 					<i class="fa fa-caret-right closed"></i>
@@ -32,7 +32,7 @@
 	{% endfor %}
 
 	{% for s in tree.subscriptions %}
-		<div class="row" data-type="feed" data-feed="{{ s.feed.id }}">
+		<div class="row" data-type="feed" data-id="{{ s.feed.id }}">
 			<span class="name">
 				{% if s.feed.hasIcon %}
 					<img class="icon" src="{{ asset(s.feed.icon) }}" alt="">
@@ -48,10 +48,38 @@
 	{% endif %}
 {% endmacro %}
 
+{% macro options(tree, unreadCounts) %}
+	{% import _self as macros %}
+
+	{% if tree.category is defined %}
+		<option data-type="category" data-id="{{ tree.category.id }}">
+			{{ tree.category.path }}
+		</option>
+	{% endif %}
+
+	{% for c in tree.categories %}
+		{{ macros.options(c, unreadCounts) }}
+	{% endfor %}
+
+	{% for s in tree.subscriptions %}
+		<option data-type="feed" data-id="{{ s.feed.id }}" data-parent="{{ tree.category is defined ? tree.category.id }}">
+			{{ tree.category is defined ? s.path(tree.category) : s.name }}
+		</option>
+	{% endfor %}
+{% endmacro %}
+
 {% import _self as macros %}
 
 {% block body %}
-	<div class="body_shit hide_sidebar">
+	<div class="body_shit">
+		{% embed 'MiamBundle:Default:header.html.twig' %}
+			{% block preLink %}
+				<a href="#" class="sidebar_toggle">
+					<i class="fa fa-bars"></i>
+				</a>
+			{% endblock %}
+		{% endembed %}
+
 		<aside class="sidebar">
 			<div class="row selected" data-type="all">
 				<i class="fa fa-globe"></i>
@@ -75,19 +103,31 @@
 			{{ macros.rows(tree, unreadCounts) }}
 		</aside>
 
-		{% embed 'MiamBundle:Default:header.html.twig' %}
-			{% block preLink %}
-				<a href="#" class="sidebar_toggle">
-					<i class="fa fa-bars"></i>
-				</a>
-			{% endblock %}
-		{% endembed %}
+		<aside class="topbar">
+			<select class="catsubs">
+				<option data-type="all">
+					<i class="fa fa-globe"></i> All Articles
+				</option>
 
-		<section>
-			<main class="items">
-				{% include 'MiamBundle:Default:items.html.twig' with {'loadMore': true} %}
-			</main>
-		</section>
+				{% if app.user and app.user.id == subscriber.id %}
+					<option data-type="unread">
+						<i class="fa fa-book"></i>
+						Unread
+					</option>
+
+					<option data-type="starred">
+						<i class="fa fa-star"></i>
+						Starred
+					</option>
+				{% endif %}
+
+				{{ macros.options(tree, unreadCounts) }}
+			</select>
+		</aside>
+
+		<main class="items">
+			{% include 'MiamBundle:Default:items.html.twig' with {'loadMore': true} %}
+		</main>
 	</div>
 {% endblock %}
 

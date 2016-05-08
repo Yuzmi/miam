@@ -1,6 +1,7 @@
 app.shit = {
 	init: function() {
 		this.sidebar.init();
+		this.topbar.init();
 		this.items.init();
 
 		// Hide context menus
@@ -23,26 +24,17 @@ app.shit = {
 			// Sélection d'un flux ou d'une catégorie
 			$(".sidebar .row").off("click");
 			$(".sidebar .row").on("click", function(e) {
-				app.shit.items.type = $(this).data('type');
-
-				switch(app.shit.items.type) {
-					case 'feed':
-						app.shit.items.feed = $(this).data('feed'); break;
-					case 'category':
-					    app.shit.items.category = $(this).data('category'); break;
-				}
-
-				app.shit.items.refresh();
-
-				$(".sidebar .row").removeClass("selected");
-				$(this).addClass("selected");
+				app.shit.selectNode(
+					$(this).data('type'),
+					$(this).data('id')
+				);
 			});
 
 			// Subcategories toggle
 			$(".sidebar .row .toggle").off("click");
 			$(".sidebar .row .toggle").on("click", function(e) {
 				var row = $(this).closest(".row");
-				var rowChildren = $(".sidebar .rowChildren[data-parent="+$(this).closest(".row").data("category")+"]");
+				var rowChildren = $(".sidebar .rowChildren[data-parent="+$(this).closest(".row").data("id")+"]");
 
 				if(row.hasClass("expanded")) {
 					row.removeClass("expanded");
@@ -81,9 +73,9 @@ app.shit = {
 					;
 
 					if(type == 'feed') {
-						menu.attr('data-feed', $(this).data('feed'));
+						menu.attr('data-id', $(this).data('id'));
 					} else if(type == 'category') {
-						menu.attr('data-category', $(this).data('category'));
+						menu.attr('data-id', $(this).data('id'));
 					}
 
 					var countOptions = 0;
@@ -104,9 +96,9 @@ app.shit = {
 
 							if(action == 'read') {
 								if(type == "feed") {
-									app.shit.items.readFeed($(this).closest(".sidebarRowMenu").data("feed"));
+									app.shit.items.readFeed($(this).closest(".sidebarRowMenu").data("id"));
 								} else if(type == "category") {
-									app.shit.items.readCategory($(this).closest(".sidebarRowMenu").data("category"));
+									app.shit.items.readCategory($(this).closest(".sidebarRowMenu").data("id"));
 								} else if(type == "all" || type == "unread") {
 									app.shit.items.readAll();
 								}
@@ -132,17 +124,17 @@ app.shit = {
 		countUnread: function() {
 			// Calculate unread counts for categories
 			$(".sidebar .row[data-type='category']").each(function() {
-				var category = $(this).data("category");
+				var id = $(this).data("id");
 				var unreadCount = 0;
 
-				$(".sidebar .rowChildren[data-parent="+category+"] .row[data-type='feed'] .unreadCount").each(function() {
+				$(".sidebar .rowChildren[data-parent="+id+"] .row[data-type='feed'] .unreadCount").each(function() {
 					var count = parseInt($(this).text());
 					if(!isNaN(count)) {
 						unreadCount += count;
 					}
 				});
 
-				$(".sidebar .row[data-category="+category+"] .unreadCount").text(unreadCount);
+				$(".sidebar .row[data-type='category'][data-id="+id+"] .unreadCount").text(unreadCount);
 			});
 
 			// Calculate total unread counts
@@ -150,7 +142,7 @@ app.shit = {
 			var feeds = [];
 			
 			$(".sidebar .row[data-type='feed'] .unreadCount").each(function() {
-				var feed = $(this).closest(".row[data-type='feed']").data("feed");
+				var feed = $(this).closest(".row[data-type='feed']").data("id");
 				if($.inArray(feed, feeds) == -1) {
 					var count = parseInt($(this).text());
 					if(!isNaN(count)) {
@@ -186,7 +178,7 @@ app.shit = {
 					$(".sidebar .row .unreadCount").each(function() {
 						$(this).text(0);
 
-						var feedId = $(this).closest(".row").data("feed");
+						var feedId = $(this).closest(".row[data-type='feed']").data("id");console.log(feedId);
 						if(feedId && result.unreadCounts) {
 							for(var i=0; i<result.unreadCounts.length; i++) {
 								if(result.unreadCounts[i].feedId == feedId) {
@@ -203,8 +195,8 @@ app.shit = {
 			});
 		},
 
-		decrementUnreadCountForFeed: function(feed) {
-			$(".sidebar .row[data-feed="+feed+"] .unreadCount").each(function() {
+		decrementUnreadCountForFeed: function(feedId) {
+			$(".sidebar .row[data-type='feed'][data-id="+feedId+"] .unreadCount").each(function() {
 				var count = parseInt($(this).text());
 				if(!isNaN(count)) {
 					$(this).text(count - 1);
@@ -215,8 +207,8 @@ app.shit = {
 			this.toggleUnreadCounts();
 		},
 
-		incrementUnreadCountForFeed: function(feed) {
-			$(".sidebar .row[data-feed="+feed+"] .unreadCount").each(function() {
+		incrementUnreadCountForFeed: function(feedId) {
+			$(".sidebar .row[data-type='feed'][data-id="+feedId+"] .unreadCount").each(function() {
 				var count = parseInt($(this).text());
 				if(!isNaN(count)) {
 					$(this).text(count + 1);
@@ -247,6 +239,45 @@ app.shit = {
 				$(".sidebar .row[data-type='starred'] .count").hide();
 			}
 		}
+	},
+
+	topbar: {
+		init: function() {
+			$(".topbar .catsubs option:first").prop('selected', true);
+
+			$(".topbar .catsubs").off("change");
+			$(".topbar .catsubs").on("change", function(e) {
+				var option = $("option:selected", this);
+				if(option) {
+					app.shit.selectNode(
+						$(option).data('type'),
+						$(option).data('id')
+					);
+				}
+			});
+		}
+	},
+
+	selectNode: function(type, id) {
+		app.shit.items.type = type;
+
+		$(".sidebar .row").removeClass("selected");
+		$(".topbar .catsubs option").prop('selected', false);
+
+		if(type == 'feed') {
+			app.shit.items.feed = id;
+			$(".sidebar .row[data-type='feed'][data-id="+id+"]").addClass("selected");
+			$(".topbar .catsubs option[data-type='feed'][data-id="+id+"]").prop('selected', true);
+		} else if(type == 'category') {
+			app.shit.items.category = id;
+			$(".sidebar .row[data-type='category'][data-id="+id+"]").addClass("selected");
+			$(".topbar .catsubs option[data-type='category'][data-id="+id+"]").prop('selected', true);
+		} else {
+			$(".sidebar .row[data-type="+type+"]").addClass("selected");
+			$(".topbar .catsubs option[data-type="+type+"]").prop('selected', true);
+		}
+
+		app.shit.items.refresh();
 	},
 
 	items: {

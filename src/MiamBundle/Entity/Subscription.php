@@ -2,6 +2,8 @@
 
 namespace MiamBundle\Entity;
 
+use MiamBundle\Entity\Category;
+
 class Subscription
 {
     private $id;
@@ -18,6 +20,10 @@ class Subscription
     {
         $this->dateCreated = new \DateTime("now");
         $this->categories = new \Doctrine\Common\Collections\ArrayCollection();
+    }
+
+    public function getPath(Category $category) {
+        return $category->getPath().' / '.$this->getName();
     }
 
     /**
