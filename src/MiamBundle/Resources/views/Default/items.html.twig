@@ -4,7 +4,7 @@
 {% if items is defined and items|length > 0 %}
 	{% for item in items %}
 		{% set itemData = dataItems[item.id] is defined ? dataItems[item.id] : null %}
-		<div class="item {{ itemData and itemData.isRead ? 'read' }} {{ itemData and itemData.isStarred ? 'starred' }}" data-item="{{ item.id }}" data-feed="{{ item.feed.id }}">
+		<article class="item {{ itemData and itemData.isRead ? 'read' }} {{ itemData and itemData.isStarred ? 'starred' }}" data-item="{{ item.id }}" data-feed="{{ item.feed.id }}">
 			<a class="header" href="{{ item.link }}" target="_blank">
 				<span class="feed">
 					<span class="name">
@@ -94,7 +94,7 @@
 
 				<span class="details_toggle">+</span>
 			{% endif %}
-		</div>
+		</article>
 	{% endfor %}
 
 	{% if loadMore %}
