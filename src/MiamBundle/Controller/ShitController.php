@@ -134,48 +134,48 @@ class ShitController extends MainController
         }
 
         if($request->isXmlHttpRequest() && $success) {
+            $options = array(
+                'subscriber' => $subscriber
+            );
+
             $marker = null;
             if($this->isLogged() && $subscriber->getId() == $this->getUser()->getId()) {
                 $marker = $this->getUser();
-            }
-            
-            $feedId = intval($request->get('feed'));
-            $feed = null;
-            if($feedId > 0) {
-                $feed = $this->getRepo('Feed')->find($feedId);
+                $options['marker'] = $marker;
             }
 
-            $categoryId = intval($request->get('category'));
-            $category = null;
-            if($categoryId > 0) {
-                $category = $this->getRepo('Category')->findOneBy(array(
-                    'id' => $categoryId,
-                    'user' => $subscriber
-                ));
+            $type = $request->get('type');
+            if($type == 'feed') {
+                $feed = $this->getRepo('Feed')->find($request->get('feed'));
+                if($feed) {
+                    $options['feed'] = $feed;
+                }
+            } elseif($type == 'category') {
+                $category = $this->getRepo('Category')->find($request->get('category'));
+                if($category) {
+                    $options['category'] = $category;
+                }
+            } else {
+                $options['type'] = $type;
             }
             
             $createdAfter = \DateTime::createFromFormat("Y-m-d H:i:s", $request->get("createdAfter"));
+            if($createdAfter !== false) {
+                $options['createdAfter'] = $createdAfter;
+            }
 
             $page = intval($request->get('page'));
-            if($page <= 0) {
+            if($page < 1) {
                 $page = 1;
             }
+            $options['page'] = $page;
 
             $offset = intval($request->get('offset'));
-            if($offset < 0) {
-                $offset = 0;
+            if($offset > 0) {
+                $options['offset'] = $offset;
             }
 
-            $items = $this->get('item_manager')->getItems(array(
-                'createdAfter' => $createdAfter,
-                'category' => $category,
-                'feed' => $feed,
-                'marker' => $marker,
-                'offset' => $offset,
-                'page' => $page,
-                'subscriber' => $subscriber,
-                'type' => $request->get('type')
-            ));
+            $items = $this->get('item_manager')->getItems($options);
 
             $dataItems = $this->get('item_manager')->getDataForItems($items, array(
                 'subscriber' => $subscriber,

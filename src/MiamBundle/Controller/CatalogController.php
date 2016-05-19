@@ -28,11 +28,31 @@ class CatalogController extends MainController
         ));
 	}
 
+	public function showFeedAction($id) {
+		$feed = $this->getRepo('Feed')->find($id);
+		if(!$feed && !$feed->getIsCatalog()) {
+			return $this->redirectToRoute('catalog_feeds');
+		}
+
+		$items = $this->get('item_manager')->getItems(array(
+			'catalog' => true,
+			'feed' => $feed,
+			'nb' => 50
+		));
+
+		$dataItems = $this->get('item_manager')->getDataForItems($items);
+
+		return $this->render('MiamBundle:Catalog:feed.html.twig', array(
+			'feed' => $feed,
+			'items' => $items,
+			'dataItems' => $dataItems
+		));
+	}
+
 	public function showItemsAction() {
 		$items = $this->get('item_manager')->getItems(array(
 			'catalog' => true,
-			'nb' => 50,
-			'reader' => $this->getUser()
+			'nb' => 50
 		));
 
 		$dataItems = $this->get('item_manager')->getDataForItems($items);

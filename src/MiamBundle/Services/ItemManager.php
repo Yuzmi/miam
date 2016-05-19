@@ -20,42 +20,44 @@ class ItemManager extends MainService {
 	}
 
 	public function getItems($options = array()) {
-		$catalog = isset($options['catalog']) ? $options['catalog'] : null;
-		$category = isset($options['category']) ? $options['category'] : null;
-		$createdAfter = isset($options['createdAfter']) ? $options['createdAfter'] : null;
-		$feed = isset($options['feed']) ? $options['feed'] : null;
-		$marker = isset($options['marker']) ? $options['marker'] : null;
-		$nb = isset($options['nb']) ? intval($options['nb']) : $this->nbItems;
-		$offset = isset($options['offset']) ? intval($options['offset']) : 0;
-		$page = isset($options['page']) ? $options['page'] : 1;
-		$subscriber = isset($options['subscriber']) ? $options['subscriber'] : null;
-		$subscription = isset($options['subscription']) ? $options['subscription'] : null;
-		$type = isset($options['type']) ? $options['type'] : 'all';
-
 		$qb = $this->getRepo('Item')->createQueryBuilder('i')
 			->innerJoin('i.feed', 'f')->addSelect('f');
 
-		if($type == 'feed' && $feed) {
+		$feed = isset($options['feed']) ? $options['feed'] : null;
+		if($feed) {
 			$qb->andWhere('i.feed = :feed')->setParameter('feed', $feed);
 		}
 
-		if($subscriber) {
-			$qb->innerJoin('f.subscriptions', 's', 'with', 's.user = :subscriber');
-			$qb->setParameter('subscriber', $subscriber);
+		$subscriber = isset($options['subscriber']) ? $options['subscriber'] : null;
+		$category = isset($options['category']) ? $options['category'] : null;
+		if($subscriber || $category) {
+			$qb->innerJoin('f.subscriptions', 's');
 
-			if($type == 'category' && $category) {
-				$qb->innerJoin('s.categories', 'c', 'with', 'c.user = :subscriber');
+			if($subscriber) {
+				$qb->andWhere('s.user = :subscriber');
+				$qb->setParameter('subscriber', $subscriber);
+			}
+
+			if($category) {
+				$qb->innerJoin('s.categories', 'c');
+
 				$qb->andWhere('c.leftPosition >= :catLeft AND c.rightPosition <= :catRight');
 				$qb->setParameter('catLeft', $category->getLeftPosition());
 				$qb->setParameter('catRight', $category->getRightPosition());
+
+				if($subscriber) {
+					$qb->andWhere('c.user = :subscriber');
+				}
 			}
 		}
 
+		$marker = isset($options['marker']) ? $options['marker'] : null;
 		if($marker) {
 			$qb->leftJoin('i.marks', 'im', 'with', 'im.user = :marker');
 			$qb->leftJoin('f.marks', 'fm', 'with', 'fm.user = :marker');
 			$qb->setParameter('marker', $marker);
 
+			$type = isset($options['type']) ? $options['type'] : 'all';
 			if($type == 'unread') {
 				$qb->andWhere('im.isRead IS NULL OR im.isRead = FALSE');
 				$qb->andWhere('fm.id IS NULL OR fm.dateRead < i.dateCreated');
@@ -64,17 +66,20 @@ class ItemManager extends MainService {
 			}
 		}
 
+		$catalog = isset($options['catalog']) ? $options['catalog'] : null;
 		if($catalog === true) {
 			$qb->andWhere('f.isCatalog = TRUE');
 		} elseif($catalog === false) {
 			$qb->andWhere('f.isCatalog = FALSE');
 		}
 
+		$createdAfter = isset($options['createdAfter']) ? $options['createdAfter'] : null;
 		if($createdAfter) {
 			$qb->andWhere('i.dateCreated > :createdAfter');
 			$qb->setParameter('createdAfter', $createdAfter);
 		}
 
+		$nb = isset($options['nb']) ? intval($options['nb']) : $this->nbItems;
 		if($nb > $this->nbMaxItems) {
 			$nb = $this->nbMaxItems;
 		} elseif($nb <= 0) {
@@ -82,6 +87,8 @@ class ItemManager extends MainService {
 		}
 		$qb->setMaxResults($nb);
 
+		$offset = isset($options['offset']) ? intval($options['offset']) : 0;
+		$page = isset($options['page']) ? $options['page'] : 1;
 		$offset += $nb * ($page - 1);
 		$qb->setFirstResult($offset);
 

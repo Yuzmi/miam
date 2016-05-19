@@ -1,13 +1,28 @@
 {% extends 'MiamBundle:Catalog:base.html.twig' %}
 
 {% block content %}
-	<div class="feeds">
-		{% for feed in feeds %}
-			<div class="feed feed{{ feed.id }} {% if feed.id in subscribedFeedIds %}subscribed{% endif %}" data-feed="{{ feed.id }}" title="{{ feed.name }} - {{ feed.url }}">
-				<span class="name">{{ feed.name ? feed.name|shorten(32) : feed.url|shorten(32) }}</span>
-			</div>
-		{% endfor %}
-	</div>
+	{% spaceless %}
+		<div class="feeds">
+			{% for feed in feeds %}
+				<div class="feed {% if feed.id in subscribedFeedIds %}subscribed{% endif %}" data-feed="{{ feed.id }}">
+					<span class="name" title="{{ feed.name ? feed.name ~ " - " ~ feed.url : feed.url }}">
+						{{ feed.name ? feed.name|shorten(30) : "[NO NAME]" }}
+					</span>
+					<span class="options">
+						<span class="subscribe" title="Subscribe / Unsubscribe">
+							<i class="fa fa-rss"></i>
+						</span>
+						<a class="url" href="{{ feed.url }}" target="_blank" title="Source">
+							<i class="fa fa-code"></i>
+						</a>
+						<a class="website" href="{{ feed.website ?: feed.url }}" target="_blank" title="Website">
+							<i class="fa fa-globe"></i>
+						</a>
+					</span>
+				</div>
+			{% endfor %}
+		</div>
+	{% endspaceless %}
 {% endblock %}
 
 {% block javascripts %}
@@ -15,17 +30,17 @@
 
 	{% if app.user %}
 		<script type="text/javascript">
-			$(".feed").on('click', function() {
-				var feedId = $(this).data('feed');
+			$(".feed .subscribe").on('click', function() {
+				var feedId = $(this).closest('.feed').data('feed');
 				
-				if($(this).hasClass('subscribed')) {
+				if($(".feed[data-feed="+feedId+"]").hasClass('subscribed')) {
 					$.ajax({
 						type: "POST",
 						url: Routing.generate('ajax_catalog_feed_unsubscribe', {id: feedId}, true),
 						dataType: "json",
 						success: function(result) {
 							if(result.success) {
-								$(".feed"+feedId).removeClass("subscribed");
+								$(".feed[data-feed="+feedId+"]").removeClass("subscribed");
 							}
 						}
 					});
@@ -36,7 +51,7 @@
 						dataType: "json",
 						success: function(result) {
 							if(result.success) {
-								$(".feed"+feedId).addClass("subscribed");
+								$(".feed[data-feed="+feedId+"]").addClass("subscribed");
 							}
 						}
 					});
