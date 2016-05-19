@@ -19,7 +19,7 @@ a {
 
 noscript {
 	background-color:#fcc;
-	border-bottom:solid 1px red;
+	border-bottom:solid 0.1rem red;
 	color:red;
 	display:block;
 	font-weight:700;
@@ -29,7 +29,7 @@ noscript {
 
 header {
 	background-color:white;
-	border-bottom:solid 1px black;
+	border-bottom:solid 0.1rem black;
 
 	a {
 		display:inline-block;
@@ -48,14 +48,14 @@ header {
 	}
 
 	& > a {
-		border-right:solid 1px black;
+		border-right:solid 0.1rem black;
 	}
 
 	.rightSide {
 		float:right;
 
 		& > a {
-			border-left:solid 1px black;
+			border-left:solid 0.1rem black;
 		}
 	}
 
@@ -68,7 +68,7 @@ header {
 
 input, select, textarea, button {
 	background-color:white;
-	border:solid 1px black;
+	border:solid 0.1rem black;
 	color:black;
 	padding:0.4rem 0.8rem;
 }
@@ -94,7 +94,7 @@ button {
 
 		.flashMessage {
 			background-color:lightgrey;
-			border:solid 1px darkgrey;
+			border:solid 0.1rem darkgrey;
 			display:inline-block;
 			font-size:1.6rem;
 			padding:8px 12px;
@@ -185,20 +185,20 @@ button {
 
 	.item {
 		background-color:white;
-		border-bottom:solid 1px black;
+		border-bottom:solid 0.1rem black;
 		color:black;
 		position:relative;
 		text-align:left;
 
 		&:first-of-type {
-			border-top:solid 1px black;
+			border-top:solid 0.1rem black;
 		}
 
 		.header {
 			text-decoration:none;
 
 			.hide {
-				border:solid 1px black;
+				border:solid 0.1rem black;
 				cursor:pointer;
 				display:none;
 				height:1.2rem;
@@ -279,7 +279,7 @@ button {
 		}
 
 		.content {
-			border-top:solid 1px black;
+			border-top:solid 0.1rem black;
 			display:none;
 			font-size:1.3rem;
 			line-height:2.4rem;
@@ -294,7 +294,7 @@ button {
 				background-image:url('/images/image.png');
 				background-position:center;
 				background-repeat:no-repeat;
-				border:solid 1px rgba(0, 0, 0, 0.2);
+				border:solid 0.1rem rgba(0, 0, 0, 0.2);
 				cursor:pointer;
 				display:inline-block;
 				min-height:24px;
@@ -304,7 +304,7 @@ button {
 		}
 
 		.details {
-			border-top:solid 1px black;
+			border-top:solid 0.1rem black;
 			display:none;
 			font-size:1.3rem;
 			line-height:2rem;
@@ -321,8 +321,8 @@ button {
 		}
 
 		.details_toggle {
-			border-left:solid 1px black;
-			border-top:solid 1px black;
+			border-left:solid 0.1rem black;
+			border-top:solid 0.1rem black;
 			bottom:0px;
 			color:black;
 			cursor:pointer;
