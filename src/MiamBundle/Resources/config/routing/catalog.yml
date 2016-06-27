@@ -6,6 +6,11 @@ catalog_feeds:
     path: /feeds
     defaults: { _controller: MiamBundle:Catalog:showFeeds }
 
+catalog_feed:
+    path: /feed/{id}
+    defaults: { _controller: MiamBundle:Catalog:showFeed }
+    requirements: { id: \d+ }
+
 catalog_items:
     path: /items
     defaults: { _controller: MiamBundle:Catalog:showItems }
