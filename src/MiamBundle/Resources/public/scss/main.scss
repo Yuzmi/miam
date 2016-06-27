@@ -262,8 +262,8 @@ button {
 			}
 		}
 
-		&.read .header {
-			background-color:rgba(0, 0, 0, 0.1);
+		&.read .header * {
+			color:rgba(0, 0, 0, 0.6);
 		}
 
 		&.starred .header {
