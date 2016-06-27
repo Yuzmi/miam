@@ -425,7 +425,7 @@ class ManagerController extends MainController
 
         $categories = $this->getRepo("Category")->findForUserWithMore($this->getUser());
         $subscriptions = $this->getRepo("Subscription")->findForUserWithMore($this->getUser());
-        $settings = array();
+        $settings = $this->getUser()->getSettings();
 
         $opml = $this->renderView("MiamBundle:Manager:export.opml.twig", array(
             'what' => $what,
@@ -489,9 +489,10 @@ class ManagerController extends MainController
         return $this->redirectToRoute("manager", array("tab" => "catsubs"));
     }
 
+    // Fucking SimpleXMLElement
     private function importOPMLOutlineForUser($outline, User $user, Category $parentCategory = null) {
         $em = $this->getEm();
-
+        
         $type = isset($outline['type']) ? trim($outline['type']) : null;
         if(isset($outline["xmlUrl"])) {
             $subscription = null;
@@ -527,7 +528,14 @@ class ManagerController extends MainController
                 $em->flush();
             }
         } elseif($type == "setting") {
-            // TODO
+            $name = isset($outline['name']) ? (string) $outline['name'] : null;
+            $value = isset($outline['value']) ? (string) $outline['value'] : null;
+            if($name && $value !== null) {
+                $user->setSetting($name, $value);
+
+                $em->persist($user);
+                $em->flush();
+            }
         } else {
             $category = null;
             if(isset($outline['text']) || isset($outline['title'])) {

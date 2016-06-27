@@ -8,8 +8,8 @@
 	</head>
 	<body>
 		{% if what == "settings" %}
-			{% for s in settings %}
-				{{ macros.setting(s) }}
+			{% for s, val in settings %}
+				{{ macros.setting(s, val) }}
 			{% endfor %}
 		{% elseif what == "subscriptions" %}
 			{% for s in subscriptions %}
@@ -32,8 +32,8 @@
 				{{ macros.subscription(s) }}
 			{% endfor %}
 
-			{% for s in settings %}
-				{{ macros.setting(s) }}
+			{% for s, val in settings %}
+				{{ macros.setting(s, val) }}
 			{% endfor %}
 		{% endif %}
 	</body>
@@ -56,8 +56,8 @@
 	<outline type="rss" text="{{ s.name }}" title="{{ s.name }}" xmlUrl="{{ s.feed.url }}" />
 {% endmacro %}
 
-{% macro setting(s) %}
-	{# TODO #}
+{% macro setting(name, value) %}
+	<outline type="setting" name="{{ name }}" value="{{ value }}" />
 {% endmacro %}
 
 {# http://dev.opml.org/spec2.html #}
