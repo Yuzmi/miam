@@ -31,8 +31,8 @@
 					</span>
 				{% endif %}
 
-				<span class="datetime">
-					{% if item.datePublished|date('d/m/Y') == "now"|date('d/m/Y') %}
+				<span class="datetime" title="{{ item.datePublished|date('Y-m-d H:i:s') }}">
+					{% if item.datePublished|date('Y-m-d') == "now"|date('Y-m-d') %}
 						{{ item.datePublished|date('H:i') }}
 					{% elseif item.datePublished|date('Y') == "now"|date('Y') %}
 						{{ item.datePublished|date('m/d H:i') }}
