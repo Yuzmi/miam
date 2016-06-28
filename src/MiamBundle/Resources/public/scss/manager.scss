@@ -113,7 +113,7 @@
 		}
 	}
 
-	&.editSubscription {
+	&.newSubscription, &.editSubscription {
 		.categories {
 			border:solid 1px black;
 			display:inline-block;

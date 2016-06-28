@@ -10,7 +10,7 @@ ajax_manager_popup_category_new:
 
 manager_category_create:
     path: /category/create
-    defaults: { _controller: MiamBundle:Manager:createCategory }
+    defaults: { _controller: MiamBundle:Manager:saveCategory }
 
 ajax_manager_popup_category_edit:
     path: /ajax/popup/category/{id}/edit
@@ -18,7 +18,7 @@ ajax_manager_popup_category_edit:
 
 manager_category_update:
     path: /category/{id}/update
-    defaults: { _controller: MiamBundle:Manager:updateCategory }
+    defaults: { _controller: MiamBundle:Manager:saveCategory }
     requirements: { id: \d+ }
 
 ajax_manager_popup_category_delete:
@@ -39,7 +39,7 @@ ajax_manager_popup_subscription_new:
 
 manager_subscription_create:
     path: /subscription/create
-    defaults: { _controller: MiamBundle:Manager:createSubscription }
+    defaults: { _controller: MiamBundle:Manager:saveSubscription }
 
 ajax_manager_popup_subscription_edit:
     path: /ajax/popup/subscription/{id}/edit
@@ -48,7 +48,7 @@ ajax_manager_popup_subscription_edit:
 
 manager_subscription_update:
     path: /subscription/{id}/update
-    defaults: { _controller: MiamBundle:Manager:updateSubscription }
+    defaults: { _controller: MiamBundle:Manager:saveSubscription }
     requirements: { id: \d+ }
 
 ajax_manager_popup_subscription_delete:

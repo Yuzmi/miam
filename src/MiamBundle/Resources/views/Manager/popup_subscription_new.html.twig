@@ -1,5 +1,7 @@
 {% extends "MiamBundle:Default:popup.html.twig" %}
 
+{% block popupContainerClass %}newSubscription{% endblock %}
+
 {% block popupTitle %}New subscription{% endblock %}
 
 {% block popupContent %}
@@ -12,7 +14,20 @@
 		<label for="url">URL:</label>
 		<input type="text" id="url" name="url" required>
 
-		<input type="hidden" name="csrf_token" value="{{ csrf_token('manager_subscription_create') }}">
+		<br><br>
+
+		<label>Categories:</label>
+		<br>
+		<div class="categories">
+			{% for c in categories %}
+				<div class="category">
+					<input type="checkbox" name="categories[]" value="{{ c.id }}">
+					{{ c.path }}
+				</div>
+			{% endfor %}
+		</div>
+
+		<input type="hidden" name="csrf_token" value="{{ csrf_token('manager_subscription_save') }}">
 
 		<br><br>
 

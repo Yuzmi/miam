@@ -44,42 +44,6 @@ class ManagerController extends MainController
         return new JsonResponse($response);
     }
 
-    public function createCategoryAction(Request $request) {
-        if($this->isTokenValid('manager_category_create', $request->get('csrf_token'))) {
-            $name = trim($request->get("name"));
-            if(!empty($name)) {
-                $category = new Category();
-                $category->setUser($this->getUser());
-                $category->setName($name);
-
-                $parentId = intval($request->get('parent'));
-                if($parentId > 0) {
-                    $parent = $this->getRepo("Category")->findOneBy(array(
-                        'id' => $parentId,
-                        'user' => $this->getUser()
-                    ));
-                    if($parent) {
-                        $category->setParent($parent);
-                    }
-                }
-
-                $em = $this->getEm();
-                $em->persist($category);
-                $em->flush();
-
-                $this->get('category_manager')->updateForUser($this->getUser());
-
-                $this->addFm("Category created", "success");
-            } else {
-                $this->addFm("Error", "error");
-            }
-        } else {
-            $this->addFm("Invalid token", "error");
-        }
-
-        return $this->redirectToRoute("manager", array("tab" => "catsubs"));
-    }
-
     public function ajaxPopupEditCategoryAction(Request $request, $id) {
         $response = array(
             "success" => false
@@ -105,46 +69,53 @@ class ManagerController extends MainController
         return new JsonResponse($response);
     }
 
-    public function updateCategoryAction(request $request, $id) {
-        if($this->isTokenValid('manager_category_update', $request->get('csrf_token'))) {
-            $category = $this->getRepo("Category")->findOneBy(array(
-                'id' => $id,
-                'user' => $this->getUser()
-            ));
+    public function saveCategoryAction(Request $request, $id = null) {
+        $em = $this->getEm();
 
-            $name = trim($request->get("name"));
-
-            $parentId = intval($request->get("parent"));
-            $parent = null;
-            if($parentId > 0) {
-                $parent = $this->getRepo("Category")->findOneBy(array(
-                    'id' => $parentId,
+        if($this->isTokenValid('manager_category_save', $request->get('csrf_token'))) {
+            $category = null;
+            if($id) {
+                $category = $this->getRepo("Category")->findOneBy(array(
+                    'id' => $id,
                     'user' => $this->getUser()
                 ));
-                
-                if($parent && $parent->getId() == $category->getId()) {
-                    $parent = null;
-                }
             }
 
-            $subscriptionIds = $request->get("subscriptions");
-            $subscriptions = array();
-            if(is_array($subscriptionIds) && !empty($subscriptionIds)) {
-                $subscriptions = $this->getRepo("Subscription")->createQueryBuilder("s")
-                    ->where("s.user = :user")->setParameter("user", $this->getUser())
-                    ->andWhere("s.id IN (:ids)")->setParameter("ids", $subscriptionIds)
-                    ->getQuery()->getResult();
+            $new_category = false;
+            if(!$category) {
+                $category = new Category();
+                $category->setUser($this->getUser());
+
+                $new_category = true;
             }
-            
-            if($category && !empty($name)) {
+
+            $name = trim($request->get("name"));
+            if(!empty($name)) {
                 $category->setName($name);
 
+                $parent = $this->getRepo("Category")->findOneBy(array(
+                    'id' => $request->get('parent'),
+                    'user' => $this->getUser()
+                ));
                 if($parent) {
-                    $category->setParent($parent);
+                    if($parent->getId() == $category->getId()) {
+                        $category->setParent(null);
+                    } else {
+                        $category->setParent($parent);
+                    }
                 } else {
                     $category->setParent(null);
                 }
-                
+
+                $subscriptionIds = (array) $request->get("subscriptions");
+                $subscriptions = array();
+                if(!empty($subscriptionIds)) {
+                    $subscriptions = $this->getRepo("Subscription")->createQueryBuilder("s")
+                        ->where("s.user = :user")->setParameter("user", $this->getUser())
+                        ->andWhere("s.id IN (:ids)")->setParameter("ids", $subscriptionIds)
+                        ->getQuery()->getResult();
+                }
+
                 foreach($category->getSubscriptions() as $s) {
                     if(!in_array($s->getId(), $subscriptionIds)) {
                         $category->removeSubscription($s);
@@ -156,21 +127,24 @@ class ManagerController extends MainController
                         $category->addSubscription($s);
                     }
                 }
-                
-                $em = $this->getEm();
+
                 $em->persist($category);
                 $em->flush();
 
                 $this->get('category_manager')->updateForUser($this->getUser());
 
-                $this->addFm("Category updated", "success");
+                if($new_category) {
+                    $this->addFm("Category created", "success");
+                } else {
+                    $this->addFm("Category updated", "success");
+                }
             } else {
-                $this->addFm("Error", "error");
+                $this->addFm("Invalid name", "error");
             }
         } else {
             $this->addFm("Invalid token", "error");
         }
-        
+
         return $this->redirectToRoute("manager", array("tab" => "catsubs"));
     }
 
@@ -227,51 +201,17 @@ class ManagerController extends MainController
         );
 
         if($request->isXmlHttpRequest() && $this->isLogged()) {
-            $html = $this->renderView("MiamBundle:Manager:popup_subscription_new.html.twig");
+            $categories = $this->getRepo("Category")->findForUser($this->getUser(), "leftPosition");
+
+            $html = $this->renderView("MiamBundle:Manager:popup_subscription_new.html.twig", array(
+                "categories" => $categories
+            ));
 
             $response["success"] = true;
             $response["html"] = $html;
         }
 
         return new JsonResponse($response);
-    }
-
-    public function createSubscriptionAction(Request $request) {
-        if($this->isTokenValid('manager_subscription_create', $request->get('csrf_token'))) {
-            $feed = $this->get('feed_manager')->getFeedForUrl($request->get('url'));
-            if($feed) {
-                $subscription = $this->getRepo('Subscription')->findOneBy(array(
-                    'user' => $this->getUser(),
-                    'feed' => $feed
-                ));
-                if(!$subscription) {
-                    $subscription = new Subscription();
-                    $subscription->setUser($this->getUser());
-                    $subscription->setFeed($feed);
-
-                    $name = trim($request->get("name"));
-                    if(!empty($name)) {
-                        $subscription->setName($name);
-                    } else {
-                        $subscription->setName($feed->getName());
-                    }
-
-                    $em = $this->getEm();
-                    $em->persist($subscription);
-                    $em->flush();
-
-                    $this->addFm("Feed subscribed", "success");
-                } else {
-                    $this->addFm("Feed already subscribed", "error");
-                }
-            } else {
-                $this->addFm("Error", "error");
-            }
-        } else {
-            $this->addFm("Invalid token", "error");
-        }
-
-        return $this->redirectToRoute("manager", array("tab" => "catsubs"));
     }
 
     public function ajaxPopupEditSubscriptionAction(Request $request, $id) {
@@ -297,37 +237,40 @@ class ManagerController extends MainController
         return new JsonResponse($response);
     }
 
-    public function updateSubscriptionAction(Request $request, $id) {
-        if($this->isTokenValid('manager_subscription_update', $request->get('csrf_token'))) {
-            $subscription = $this->getRepo("Subscription")->findOneBy(array(
-                'id' => $id,
-                'user' => $this->getUser()
-            ));
-            if($subscription) {
-                $em = $this->getEm();
+    public function saveSubscriptionAction(Request $request, $id = null) {
+        $em = $this->getEm();
+
+        if($this->isTokenValid('manager_subscription_save', $request->get('csrf_token'))) {
+            $subscription = null;
+            if($id) {
+                $subscription = $this->getRepo("Subscription")->findOneBy(array(
+                    'id' => $id,
+                    'user' => $this->getUser()
+                ));
+            }
+
+            $new_subscription = false;
+            if(!$subscription) {
+                $subscription = new Subscription();
+                $subscription->setUser($this->getUser());
+
+                $new_subscription = true;
+            }
+
+            $feed = $this->get('feed_manager')->getFeedForUrl($request->get('url'));
+            if($feed) {
+                $subscription->setFeed($feed);
 
                 $name = trim($request->get("name"));
                 if(!empty($name)) {
                     $subscription->setName($name);
+                } else {
+                    $subscription->setName($feed->getName());
                 }
 
-                $url = $request->get("url");
-                $feed = $this->get("feed_manager")->getFeedForUrl($url);
-                if($feed && $feed->getId() != $subscription->getFeed()->getId()) {
-                    $feedSubscription = $this->getRepo("Subscription")->findOneBy(array(
-                        'feed' => $feed,
-                        'user' => $this->getUser()
-                    ));
-                    if(!$feedSubscription) {
-                        $subscription->setFeed($feed);
-                    } else {
-                        $this->addFm("Subscription already exists for the given URL", "error");
-                    }
-                }
-
-                $categoryIds = $request->get("categories");
+                $categoryIds = (array) $request->get("categories");
                 $categories = array();
-                if(is_array($categoryIds) && !empty($categoryIds)) {
+                if(!empty($categoryIds)) {
                     $categories = $this->getRepo("Category")->createQueryBuilder('c')
                         ->where("c.user = :user")->setParameter("user", $this->getUser())
                         ->andWhere("c.id IN (:ids)")->setParameter("ids", $categoryIds)
@@ -351,9 +294,13 @@ class ManagerController extends MainController
                 $em->persist($subscription);
                 $em->flush();
 
-                $this->addFm("Subscription updated", "success");
+                if($new_subscription) {
+                    $this->addFm("Feed subscribed", "success");
+                } else {
+                    $this->addFm("Feed updated", "success");
+                }
             } else {
-                $this->addFm("Error", "error");
+                $this->addFm("Feed not found", "error");
             }
         } else {
             $this->addFm("Invalid token", "error");
