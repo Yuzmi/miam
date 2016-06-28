@@ -12,7 +12,7 @@ class UpdateFeedIconCommand extends ContainerAwareCommand {
 	protected function configure() {
         $this
             ->setName('miam:update:feed:icon')
-            ->setDescription("Met à jour l'icône d'un flux")
+            ->setDescription("Update a feed icon")
             ->addArgument('feed', InputArgument::REQUIRED)
         ;
     }

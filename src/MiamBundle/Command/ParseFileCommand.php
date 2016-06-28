@@ -12,7 +12,7 @@ class ParseFileCommand extends ContainerAwareCommand {
 	protected function configure() {
         $this
             ->setName('miam:parse:file')
-            ->setDescription('Traite un fichier donné')
+            ->setDescription('Parse a file')
             ->addArgument('filename', InputArgument::REQUIRED)
         ;
     }

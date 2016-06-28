@@ -12,7 +12,7 @@ class UpdateFeedsCommand extends ContainerAwareCommand {
 	protected function configure() {
         $this
             ->setName('miam:update:feeds')
-            ->setDescription('Met à jour les informations des flux')
+            ->setDescription('Update data about feeds')
         ;
     }
 

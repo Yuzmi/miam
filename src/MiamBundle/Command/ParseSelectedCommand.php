@@ -12,7 +12,7 @@ class ParseSelectedCommand extends ContainerAwareCommand {
 	protected function configure() {
         $this
             ->setName('miam:parse:selected')
-            ->setDescription('Récupère une sélection de flux')
+            ->setDescription('Parse a selected collection of feeds')
         ;
     }
 

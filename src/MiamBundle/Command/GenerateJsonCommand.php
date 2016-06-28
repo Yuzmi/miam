@@ -12,7 +12,7 @@ class GenerateJsonCommand extends ContainerAwareCommand {
 	protected function configure() {
         $this
             ->setName('miam:generate:json')
-            ->setDescription('Génère le fichier JSON des flux à récupérer')
+            ->setDescription('Generate a JSON file containing feeds to parse')
         ;
     }
 

@@ -12,7 +12,7 @@ class ParseAllCommand extends ContainerAwareCommand {
 	protected function configure() {
         $this
             ->setName('miam:parse:all')
-            ->setDescription('Récupère tous les flux')
+            ->setDescription('Parse all feeds')
         ;
     }
 

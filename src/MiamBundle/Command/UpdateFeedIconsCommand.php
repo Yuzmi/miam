@@ -12,7 +12,7 @@ class UpdateFeedIconsCommand extends ContainerAwareCommand {
 	protected function configure() {
         $this
             ->setName('miam:update:feeds:icons')
-            ->setDescription('Met à jour les icônes des flux')
+            ->setDescription('Updates feeds\'icons')
         ;
     }
 

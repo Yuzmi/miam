@@ -12,7 +12,7 @@ class ParseSubscribedCommand extends ContainerAwareCommand {
 	protected function configure() {
         $this
             ->setName('miam:parse:subscribed')
-            ->setDescription('Récupère les flux abonnés')
+            ->setDescription('Parse all feeds with subscribers')
         ;
     }
 

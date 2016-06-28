@@ -12,7 +12,7 @@ class ParseFeedCommand extends ContainerAwareCommand {
 	protected function configure() {
         $this
             ->setName('miam:parse:feed')
-            ->setDescription('Récupère un flux donné')
+            ->setDescription('Parse a feed')
             ->addArgument('feed', InputArgument::REQUIRED)
         ;
     }

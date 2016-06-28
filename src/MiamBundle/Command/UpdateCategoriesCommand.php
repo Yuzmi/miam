@@ -12,7 +12,7 @@ class UpdateCategoriesCommand extends ContainerAwareCommand {
 	protected function configure() {
         $this
             ->setName('miam:update:categories')
-            ->setDescription('Met à jour les catégories')
+            ->setDescription('Update categories')
         ;
     }
 

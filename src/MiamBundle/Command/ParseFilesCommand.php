@@ -12,7 +12,7 @@ class ParseFilesCommand extends ContainerAwareCommand {
 	protected function configure() {
         $this
             ->setName('miam:parse:files')
-            ->setDescription('Traite tous les fichiers stockés')
+            ->setDescription('Parse all files')
         ;
     }
 
