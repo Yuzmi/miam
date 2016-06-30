@@ -66,7 +66,7 @@ class DataParsing extends MainService {
 				$feed->setNbItems($countItems);
 			}
 
-			// Récupération/création des tags
+			// Find and create new tags
 			$cache_tags = array();
 			foreach($items as $i) {
 				$tags = $i->get_categories() ?: array();
@@ -96,7 +96,7 @@ class DataParsing extends MainService {
 				$item_identifier = $i->get_id();
 				$item_hash = $i->get_id(true); // md5(serialize($this->data))
 				
-				// On ignore les doublons (Quoi ?! T'es pas content ?!)
+				// Ignore duplicates (Not happy? Deal with it!)
 				if(in_array($item_identifier, $identifiers)) {
 					continue;
 				} else {
@@ -105,18 +105,19 @@ class DataParsing extends MainService {
 
 				$is_new_item = false;
 				
-				// On vérifie l'existence de l'article
+				// Check if item exists
 				$item = $this->getRepo('Item')->findOneBy(array(
 					'feed' => $feed,
 					'identifier' => $item_identifier
 				));
 				
-				// Création de l'article si c'est un nouveau
+				// Creation if new item
 				if(!$item) {
 					$item = new Item();
 					$item->setFeed($feed);
 					$item->setIdentifier($item_identifier);
 
+					// Published date
 					$date_published = $i->get_date(DATE_ATOM);
                     if($date_published) {
                     	$date_published = new \DateTime($date_published);
@@ -134,27 +135,27 @@ class DataParsing extends MainService {
                 if($is_new_item || $item->getHash() != $item_hash) {
 	                $item->setHash($item_hash);
 
-	                // Titre
+	                // Title
 					$item_title = html_entity_decode(trim($i->get_title()), ENT_COMPAT | ENT_HTML5, 'utf-8');
 					$item->setTitle($item_title);
 
-					// Contenu de base
+					// Basic content
 					$content = (string) $i->get_content();
 					
-					// Contenu HTML
+					// HTML content
 					$item->setHtmlContent($content);
 
-					// Contenu texte
+					// Text content
 					$textContent = html_entity_decode(trim(strip_tags($content)), ENT_COMPAT | ENT_HTML5, 'utf-8'); // A améliorer
 					$item->setTextContent($textContent);
 
-					// Lien
+					// Link
 					$link = trim($i->get_link());
 					if(filter_var($link, FILTER_VALIDATE_URL) !== false) {
 						$item->setLink($link);
 					}
 
-					// Date de mise à jour
+					// Updated date
 					$date_updated = $i->get_updated_date(DATE_ATOM);
 	                if($date_updated) {
 	                	$date_updated = new \DateTime($date_updated);
@@ -163,7 +164,10 @@ class DataParsing extends MainService {
 	                }
 	                $item->setDateUpdated($date_updated);
 
-					// Auteur(s)
+	                // Modified date
+	        		$item->setDateModified($now);
+
+					// Author(s)
 					$as = $i->get_authors();
 					if(count($as) > 0) {
 						$authors = array();
@@ -212,7 +216,7 @@ class DataParsing extends MainService {
 						}
 					}
 					
-					// Pièce(s) jointe(s)
+					// Enclosure(s)
 					$enclosures = $i->get_enclosures();
 					$enclosure_urls = array();
 

@@ -15,6 +15,7 @@ class Item
     private $dateCreated;
     private $datePublished;
     private $dateUpdated;
+    private $dateModified;
     private $feed;
     private $tags;
     private $enclosures;
@@ -24,6 +25,7 @@ class Item
         $this->dateCreated = new \DateTime("now");
         $this->datePublished = new \DateTime("now");
         $this->dateUpdated = new \DateTime("now");
+        $this->dateModified = new \DateTime("now");
         $this->tags = new \Doctrine\Common\Collections\ArrayCollection();
         $this->enclosures = new \Doctrine\Common\Collections\ArrayCollection();
         $this->marks = new \Doctrine\Common\Collections\ArrayCollection();
@@ -213,6 +215,30 @@ class Item
     public function getDateUpdated()
     {
         return $this->dateUpdated;
+    }
+
+    /**
+     * Set dateModified
+     *
+     * @param \DateTime $dateModified
+     *
+     * @return Item
+     */
+    public function setDateModified($dateModified)
+    {
+        $this->dateModified = $dateModified;
+
+        return $this;
+    }
+
+    /**
+     * Get dateModified
+     *
+     * @return \DateTime
+     */
+    public function getDateModified()
+    {
+        return $this->dateModified;
     }
 
     /**

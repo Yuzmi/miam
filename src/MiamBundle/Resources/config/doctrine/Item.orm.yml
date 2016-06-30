@@ -35,6 +35,9 @@ MiamBundle\Entity\Item:
         dateUpdated:
             type: datetime
             column: date_updated
+        dateModified:
+            type: datetime
+            column: date_modified
     manyToMany:
         tags:
             targetEntity: Tag
