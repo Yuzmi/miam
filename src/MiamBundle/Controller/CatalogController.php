@@ -99,10 +99,15 @@ class CatalogController extends MainController
 		if($this->isLogged()) {
 			$feed = $this->getRepo('Feed')->find($id);
 			if($feed) {
-				$unsubscribe = $this->get('feed_manager')->unsubscribeUserFromFeed($this->getUser(), $feed);
-				if($unsubscribe) {
-					$success = true;
+				$subscription = $this->getRepo('Subscription')->findOneBy(array(
+					'user' => $user,
+					'feed' => $feed
+				));
+				if($subscription) {
+					$this->get('feed_manager')->deleteSubscription($subscription);
 				}
+				
+				$success = true;
 			}
 		}
 

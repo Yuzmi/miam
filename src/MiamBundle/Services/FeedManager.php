@@ -64,18 +64,6 @@ class FeedManager extends MainService {
 		return $feed;
 	}
 
-	public function unsubscribeUserFromFeed(User $user, Feed $feed) {
-		$subscription = $this->getRepo('Subscription')->findOneBy(array(
-			'user' => $user,
-			'feed' => $feed
-		));
-		if($subscription) {
-			$this->deleteSubscription($subscription);
-		}
-
-		return true;
-	}
-
 	public function deleteSubscription(Subscription $subscription) {
 		$marks = $this->getRepo("ItemMark")->findStarredForFeedAndUser(
 			$subscription->getFeed(), 
@@ -97,62 +85,4 @@ class FeedManager extends MainService {
 		$this->em->remove($feed);
 		$this->em->flush();
 	}
-
-	public function updateFeeds() {
-    	$oneMonthAgo = new \DateTime("now - 30 days");
-    	$oneWeekAgo = new \DateTime("now - 7 days");
-
-    	$feeds = $this->getRepo('Feed')->findAll();
-    	foreach($feeds as $feed) {
-    		$nbItems = 0;
-    		$nbMonthItems = 0;
-    		$nbWeekItems = 0;
-
-    		$items = $feed->getItems();
-    		foreach($items as $item) {
-    			$nbItems++;
-
-    			if($item->getDatePublished() >= $oneMonthAgo) {
-    				$nbMonthItems++;
-    			}
-
-    			if($item->getDatePublished() >= $oneWeekAgo) {
-    				$nbWeekItems++;
-    			}
-    		}
-
-    		$interval = date_diff($feed->getDateCreated(), new \DateTime("now"), true);
-    		$daysSinceCreation = $interval->format("%a");
-
-    		$dailyRate = round(($nbItems - $feed->getNbItems()) / ($daysSinceCreation ?: 1), 5);
-    		$feed->setGlobalRate($dailyRate);
-
-    		$monthDailyRate = round($nbMonthItems / 30, 5);
-    		$feed->setMonthRate($monthDailyRate);
-
-    		$weekDailyRate = round($nbWeekItems / 7, 5);
-    		$feed->setWeekRate($weekDailyRate);
-
-    		$this->em->persist($feed);
-    	}
-
-    	$this->em->flush();
-
-    	$subscriptions = $this->getRepo('Subscription')
-    		->createQueryBuilder("s")
-    		->innerJoin("s.feed", "f")->addSelect("f")
-    		->where("s.name IS NULL")
-    		->getQuery()->getResult();
-
-    	foreach($subscriptions as $s) {
-    		$name = $s->getName();
-    		$feedName = $s->getFeed()->getName();
-    		if(empty($name) && !empty($feedName)) {
-    			$s->setName($feedName);
-    			$this->em->persist($s);
-    		}
-    	}
-
-    	$this->em->flush();
-    }
 }

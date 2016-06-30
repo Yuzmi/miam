@@ -8,11 +8,11 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 
-class UpdateFeedIconCommand extends ContainerAwareCommand {
+class UpdateFaviconCommand extends ContainerAwareCommand {
 	protected function configure() {
         $this
-            ->setName('miam:update:feed:icon')
-            ->setDescription("Update a feed icon")
+            ->setName('miam:update:favicon')
+            ->setDescription("Update a feed's favicon")
             ->addArgument('feed', InputArgument::REQUIRED)
         ;
     }
@@ -32,9 +32,9 @@ class UpdateFeedIconCommand extends ContainerAwareCommand {
         }
 
         if($feed) {
-            $output->write('Update feed icon... ');
+            $output->write('Update favicon... ');
 
-            $this->getContainer()->get('data_parsing')->updateFeedIcon($feed);
+            $this->getContainer()->get('data_parsing')->updateFavicon($feed);
 
             $output->writeln('Done.');
         } else {

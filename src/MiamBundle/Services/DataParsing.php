@@ -326,14 +326,14 @@ class DataParsing extends MainService {
 		return $generate !== false ? true : false;
 	}
 
-    public function updateFeedIcons() {
+    public function updateFavicons() {
     	$feeds = $this->getRepo('Feed')->findAll();
     	foreach($feeds as $feed) {
-	    	$icon = $this->updateFeedIcon($feed);
+	    	$icon = $this->updateFavicon($feed);
     	}
     }
 
-    public function updateFeedIcon(Feed $feed) {
+    public function updateFavicon(Feed $feed) {
     	$success = false;
 
     	// Dossier des images du flux
