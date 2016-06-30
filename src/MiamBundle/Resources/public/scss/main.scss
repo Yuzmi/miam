@@ -308,7 +308,9 @@ button {
 			display:none;
 			font-size:1.3rem;
 			line-height:2rem;
-			overflow:hidden;
+			max-height:200px;
+			overflow-x:hidden;
+			overflow-y:auto;
 			padding:0.6rem 0.8rem;
 
 			& > div {
@@ -388,6 +390,42 @@ button {
 
 			i.icon-loading {
 				display:inline-block;
+			}
+		}
+	}
+
+	@media (max-height:1200px) {
+		.item {
+			.content {
+				max-height:600px;
+			}
+
+			.details {
+				max-height:300px;
+			}
+		}
+	}
+
+	@media (max-height:800px) {
+		.item {
+			.content {
+				max-height:300px;
+			}
+
+			.details {
+				max-height:150px;
+			}
+		}
+	}
+
+	@media (max-height:600px) {
+		.item {
+			.content {
+				max-height:200px;
+			}
+
+			.details {
+				max-height:100px;
 			}
 		}
 	}
