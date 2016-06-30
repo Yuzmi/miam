@@ -71,64 +71,62 @@
 {% import _self as macros %}
 
 {% block body %}
-	<div class="body_shit">
-		{% embed 'MiamBundle:Default:header.html.twig' %}
-			{% block preLink %}
-				<a href="#" class="sidebar_toggle">
-					<i class="fa fa-bars"></i>
-				</a>
-			{% endblock %}
-		{% endembed %}
+	{% embed 'MiamBundle:Default:header.html.twig' %}
+		{% block preLink %}
+			<a href="#" class="sidebar_toggle">
+				<i class="fa fa-bars"></i>
+			</a>
+		{% endblock %}
+	{% endembed %}
 
-		<aside class="sidebar">
-			<div class="row selected" data-type="all">
-				<i class="fa fa-globe"></i>
-				All articles
+	<aside class="sidebar">
+		<div class="row selected" data-type="all">
+			<i class="fa fa-globe"></i>
+			All articles
+		</div>
+
+		{% if app.user and app.user.id == subscriber.id %}
+			<div class="row" data-type="unread">
+				<i class="fa fa-envelope"></i>
+				Unread
+				<span class="unreadCount">0</span>
 			</div>
 
+			<div class="row" data-type="starred">
+				<i class="fa fa-star"></i>
+				Starred
+				<span class="count">{{ starredCount is defined ? starredCount : 0 }}</span>
+			</div>
+		{% endif %}
+
+		{{ macros.rows(tree, unreadCounts) }}
+	</aside>
+
+	<aside class="topbar">
+		<select class="catsubs">
+			<option data-type="all">
+				<i class="fa fa-globe"></i> All Articles
+			</option>
+
 			{% if app.user and app.user.id == subscriber.id %}
-				<div class="row" data-type="unread">
+				<option data-type="unread">
 					<i class="fa fa-envelope"></i>
 					Unread
-					<span class="unreadCount">0</span>
-				</div>
-
-				<div class="row" data-type="starred">
-					<i class="fa fa-star"></i>
-					Starred
-					<span class="count">{{ starredCount is defined ? starredCount : 0 }}</span>
-				</div>
-			{% endif %}
-
-			{{ macros.rows(tree, unreadCounts) }}
-		</aside>
-
-		<aside class="topbar">
-			<select class="catsubs">
-				<option data-type="all">
-					<i class="fa fa-globe"></i> All Articles
 				</option>
 
-				{% if app.user and app.user.id == subscriber.id %}
-					<option data-type="unread">
-						<i class="fa fa-envelope"></i>
-						Unread
-					</option>
+				<option data-type="starred">
+					<i class="fa fa-star"></i>
+					Starred
+				</option>
+			{% endif %}
 
-					<option data-type="starred">
-						<i class="fa fa-star"></i>
-						Starred
-					</option>
-				{% endif %}
+			{{ macros.options(tree, unreadCounts) }}
+		</select>
+	</aside>
 
-				{{ macros.options(tree, unreadCounts) }}
-			</select>
-		</aside>
-
-		<main class="items">
-			{% include 'MiamBundle:Default:items.html.twig' with {'loadMore': true} %}
-		</main>
-	</div>
+	<main class="items">
+		{% include 'MiamBundle:Default:items.html.twig' with {'loadMore': true} %}
+	</main>
 {% endblock %}
 
 {% block javascripts %}

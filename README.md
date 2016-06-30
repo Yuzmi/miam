@@ -43,7 +43,6 @@ DocumentRoot /var/www/miam/web
 cd /var/www
 git clone https://github.com/Yuzmi/miam.git
 cd miam
-composer selfupdate
 composer install
 
 // ACL
@@ -66,7 +65,7 @@ php app/console cache:warmup
 // Default cron
 */30 * * * * php /var/www/miam/bin/console miam:parse:all
 
-//With NodeJS, faster but experimental
+// With NodeJS, faster but experimental
 */30 * * * * php /var/www/miam/bin/console miam:generate:json && nodejs /var/www/miam/get_feeds.js && php /var/www/miam/bin/console miam:parse:files
 ```
 

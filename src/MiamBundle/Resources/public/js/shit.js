@@ -50,7 +50,7 @@ app.shit = {
 			// Sidebar toggle
 			$(".sidebar_toggle").off("click");
 			$(".sidebar_toggle").on("click", function() {
-				$(".body_shit").toggleClass("hide_sidebar");
+				$("body").toggleClass("hide_sidebar");
 			});
 
 			if(app.user && app.shit.items.subscriber && app.user.id == app.shit.items.subscriber) {
@@ -88,7 +88,7 @@ app.shit = {
 					}
 
 					if(countOptions > 0) {
-						$(".body_shit").append(menu);
+						$("body").append(menu);
 
 						$(".sidebarRowMenu .option").click(function(e) {
 							var action = $(this).data("action");
@@ -340,7 +340,7 @@ app.shit = {
 					}
 					menu.append(menuOption);
 
-					$(".body_shit").append(menu);
+					$("body").append(menu);
 
 					$(".itemMenu .option").on("click", function(e) {
 						var action = $(this).data("action");

@@ -321,6 +321,7 @@ button {
 		}
 
 		.details_toggle {
+			background-color:inherit;
 			border-left:solid 0.1rem black;
 			border-top:solid 0.1rem black;
 			bottom:0px;
@@ -371,12 +372,23 @@ button {
 		padding-bottom:0.8rem;
 		text-align:center;
 
-		i {
-			visibility:hidden;
+		i.icon-more {
+			font-size:2em;
 		}
 
-		&.loading i {
-			visibility:visible;
+		i.icon-loading {
+			display:none;
+			font-size:1.2em;
+		}
+
+		&.loading {
+			i.icon-more {
+				display:none;
+			}
+
+			i.icon-loading {
+				display:inline-block;
+			}
 		}
 	}
 
