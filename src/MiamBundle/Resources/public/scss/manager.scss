@@ -1,97 +1,98 @@
-.body_manager {
+h1 {
+	text-align:center;
+}
+
+.tab {
+	background-color:white;
+	border:solid 2px black;
+	margin:30px 40px 0;
 	text-align:center;
 
-	.tab {
-		background-color:white;
-		border:solid 2px black;
-		margin:30px 40px 0;
+	&:first-of-type {
+		margin-top:0;
+	}
 
-		&:first-of-type {
-			margin-top:0;
-		}
+	.header {
+		background-color:black;
+		color:white;
+		cursor:pointer;
+		font-weight:700;
+		padding:10px;
+	}
 
-		.header {
-			background-color:black;
-			color:white;
-			cursor:pointer;
-			font-weight:700;
-			padding:10px;
-		}
+	.content {
+		border-top:solid 1px black;
+		display:none;
+		padding:10px;
+	}
 
+	&.catsubs {
 		.content {
-			border-top:solid 1px black;
-			display:none;
-			padding:10px;
-		}
+			padding:0;
 
-		&.catsubs {
-			.content {
-				padding:0;
+			.buttons {
+				padding:1rem;
+			}
 
-				.buttons {
-					padding:1rem;
+			.tree {
+				text-align:left;
+
+				.row {
+					background-color:white;
+					border-bottom:solid 1px black;
+					height:3rem;
+					line-height:3rem;
+					overflow:hidden;
+					padding:0 1rem;
+
+					.icon {
+						margin-right:0.2rem;
+						vertical-align:middle;
+					}
+
+					.actions {
+						float:right;
+
+						i {
+							cursor:pointer;
+							padding:0 0.4rem;
+						}
+					}
 				}
 
-				.tree {
-					text-align:left;
+				& > div:first-of-type {
+					border-top:solid 1px black;
+				}
 
-					.row {
-						background-color:white;
-						border-bottom:solid 1px black;
-						height:3rem;
-						line-height:3rem;
-						overflow:hidden;
-						padding:0 1rem;
+				.category {
+					.toggle {
+						cursor:pointer;
+						display:inline-block;
+						width:1rem;
 
-						.icon {
-							margin-right:0.2rem;
-							vertical-align:middle;
-						}
-
-						.actions {
-							float:right;
-
-							i {
-								cursor:pointer;
-								padding:0 0.4rem;
-							}
+						.open {
+							display:none;
 						}
 					}
 
-					& > div:first-of-type {
-						border-top:solid 1px black;
-					}
-
-					.category {
+					&.expanded {
 						.toggle {
-							cursor:pointer;
-							display:inline-block;
-							width:1rem;
-
 							.open {
+								display:inline-block;
+							}
+
+							.closed {
 								display:none;
 							}
 						}
-
-						&.expanded {
-							.toggle {
-								.open {
-									display:inline-block;
-								}
-
-								.closed {
-									display:none;
-								}
-							}
-						}
 					}
+				}
 
-					.rowChildren {
-						display:none;
+				.rowChildren {
+					display:none;
 
-						&.expanded {
-							display:block;
-						}
+					&.expanded {
+						display:block;
 					}
 				}
 			}

@@ -10,64 +10,62 @@
 {% block body %}
 	{% include 'MiamBundle:Default:header.html.twig' %}
 	
-	<div class="body_manager">
-		<h1>Manager</h1>
+	<h1>Manager</h1>
+	
+	<section class="tab catsubs">
+		<div class="header">
+			Categories & Subscriptions
+		</div>
+		<div class="content">
+			<div class="buttons">
+				<button class="createCategory">
+					Create a category
+				</button>
 
-		<section class="tab catsubs">
-			<div class="header">
-				Categories & Subscriptions
+				<button class="createSubscription">
+					Subscribe to a feed
+				</button>
+
+				<button class="exportOPML">
+					Export OPML
+				</button>
+
+				<button class="importOPML">
+					Import OPML
+				</button>
 			</div>
-			<div class="content">
-				<div class="buttons">
-					<button class="createCategory">
-						Create a category
-					</button>
 
-					<button class="createSubscription">
-						Subscribe to a feed
-					</button>
-
-					<button class="exportOPML">
-						Export OPML
-					</button>
-
-					<button class="importOPML">
-						Import OPML
-					</button>
-				</div>
-
-				<div class="tree">
-					{% include 'MiamBundle:Manager:tree.html.twig' %}
-				</div>
+			<div class="tree">
+				{% include 'MiamBundle:Manager:tree.html.twig' %}
 			</div>
-		</section>
+		</div>
+	</section>
 
-		<section class="tab settings">
-			<div class="header">
-				Settings
-			</div>
-			<div class="content">
-				<form method="POST" action="{{ path('manager_settings_update') }}">
-					Show item pictures :
-					<select name="DISPLAY_PICTURES">
-						<option value="yes" {{ app.user.setting('DISPLAY_PICTURES') == 'yes' ? 'selected' }}>Always</option>
-						<option value="onclick" {{ app.user.setting('DISPLAY_PICTURES') == 'onclick' ? 'selected' }}>On click</option>
-						<option value="no" {{ app.user.setting('DISPLAY_PICTURES') == 'no' ? 'selected' }}>Never</option>
-					</select>
+	<section class="tab settings">
+		<div class="header">
+			Settings
+		</div>
+		<div class="content">
+			<form method="POST" action="{{ path('manager_settings_update') }}">
+				Show item pictures :
+				<select name="DISPLAY_PICTURES">
+					<option value="yes" {{ app.user.setting('DISPLAY_PICTURES') == 'yes' ? 'selected' }}>Always</option>
+					<option value="onclick" {{ app.user.setting('DISPLAY_PICTURES') == 'onclick' ? 'selected' }}>On click</option>
+					<option value="no" {{ app.user.setting('DISPLAY_PICTURES') == 'no' ? 'selected' }}>Never</option>
+				</select>
 
-					<br><br>
+				<br><br>
 
-					Publish my feeds : <input type="checkbox" name="IS_PUBLIC" value="1" {{ app.user.setting('IS_PUBLIC') ? 'checked' }}>
+				Publish my feeds : <input type="checkbox" name="IS_PUBLIC" value="1" {{ app.user.setting('IS_PUBLIC') ? 'checked' }}>
 
-					<br><br>
+				<br><br>
 
-					<button type="submit">Enregistrer</button>
+				<button type="submit">Enregistrer</button>
 
-					<input type="hidden" name="csrf_token" value="{{ csrf_token('manager_settings_update') }}">
-				</form>
-			</div>
-		</section>
-	</div>
+				<input type="hidden" name="csrf_token" value="{{ csrf_token('manager_settings_update') }}">
+			</form>
+		</div>
+	</section>
 {% endblock %}
 
 {% block javascripts %}
