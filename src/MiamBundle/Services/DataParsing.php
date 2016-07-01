@@ -277,7 +277,7 @@ class DataParsing extends MainService {
 		}
 
 		if($firstParsing) {
-			$this->updateFeedIcon($feed);
+			$this->updateFavicon($feed);
 		}
 	}
 
