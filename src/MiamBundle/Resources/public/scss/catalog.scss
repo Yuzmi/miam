@@ -1,95 +1,97 @@
-.body_catalog {
+h1 {
 	text-align:center;
+}
 
-	.feeds {
+.feeds {
+	.feed {
+		background-color:white;
+		border:solid 0.1rem black;
+		display:inline-block;
+		margin:0.6rem;
+		position:relative;
+
+		.name {
+			display:block;
+			font-weight:700;
+			text-align:center;
+		}
+
+		.options {
+			display:block;
+
+			.subscribe, .url, .website {
+				display:block;
+				text-align:center;
+			}
+
+			.subscribe {
+				cursor:pointer;
+			}
+		}
+
+		&.subscribed .options {
+			.subscribe {
+				background-color:black;
+				color:white;
+			}
+		}
+	}
+
+	@media (min-width:601px) {
 		.feed {
-			background-color:white;
-			border:solid 0.1rem black;
-			display:inline-block;
-			margin:0.6rem;
-			position:relative;
+			height:6.2rem;
+			width:24rem;
 
 			.name {
-				display:block;
-				font-weight:700;
+				float:left;
+				height:6.2rem;
+				line-height:6.2rem;
+				position:absolute;
+				width:20rem;
 			}
 
 			.options {
-				display:block;
-
-				.subscribe, .url, .website {
-					display:block;
-				}
-
-				.subscribe {
-					cursor:pointer;
-				}
+				border-left:solid 0.1rem black;
+				position:absolute;
+				right:0px;
+				width:3.9rem;
 			}
 
-			&.subscribed .options {
-				.subscribe {
-					background-color:black;
-					color:white;
-				}
+			.subscribe, .url, .website {
+				height:2rem;
+				line-height:2rem;
+			}
+
+			.url {
+				border-bottom:solid 0.1rem black;
+				border-top:solid 0.1rem black;
 			}
 		}
+	}
 
-		@media (min-width:601px) {
-			.feed {
-				height:6.2rem;
-				width:24rem;
+	@media (max-width:600px) {
+		.feed {
+			width:24rem;
 
-				.name {
+			.name {
+				height:2rem;
+				line-height:2rem;
+				padding:1rem 0.5rem;
+			}
+
+			.options {
+				border-top:solid 0.1rem black;
+
+				.subscribe, .url, .website {
+					border-right:solid 0.1rem black;
 					float:left;
-					height:6.2rem;
-					line-height:6.2rem;
-					position:absolute;
-					width:20rem;
+					padding:0.5rem 0;
+					width:7.9rem;
 				}
 
-				.options {
-					border-left:solid 0.1rem black;
-					position:absolute;
-					right:0px;
-					width:3.9rem;
-				}
-
-				.subscribe, .url, .website {
-					height:2rem;
-					line-height:2rem;
-				}
-
-				.url {
-					border-bottom:solid 0.1rem black;
-					border-top:solid 0.1rem black;
-				}
-			}
-		}
-
-		@media (max-width:600px) {
-			.feed {
-				width:24rem;
-
-				.name {
-					height:2rem;
-					line-height:2rem;
-					padding:1rem 0.5rem;
-				}
-
-				.options {
-					border-top:solid 0.1rem black;
-
-					.subscribe, .url, .website {
-						border-right:solid 0.1rem black;
-						float:left;
-						padding:0.5rem 0;
-						width:7.9rem;
-					}
-
-					.website {
-						border-right:0;
-						width:8rem;
-					}
+				.website {
+					border-right:0;
+					width:8rem;
 				}
 			}
 		}
