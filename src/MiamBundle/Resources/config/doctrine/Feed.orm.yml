@@ -29,15 +29,6 @@ MiamBundle\Entity\Feed:
         hasIcon:
             type: boolean
             column: has_icon
-        globalRate:
-            type: float
-            column: rate_global
-        monthRate:
-            type: float
-            column: rate_month
-        weekRate:
-            type: float
-            column: rate_week
         dataLength:
             type: integer
             column: data_length

@@ -9,9 +9,6 @@ class Feed
     private $customName;
     private $url;
     private $website;
-    private $globalRate;
-    private $monthRate;
-    private $weekRate;
     private $dataLength;
     private $nbItems;
     private $nbErrors;
@@ -27,9 +24,6 @@ class Feed
 
     public function __construct()
     {
-        $this->globalRate = 0;
-        $this->monthRate = 0;
-        $this->weekRate = 0;
         $this->dataLength = 0;
         $this->nbItems = 0;
         $this->nbErrors = 0;
@@ -321,78 +315,6 @@ class Feed
     public function getCustomName()
     {
         return $this->customName;
-    }
-
-    /**
-     * Set globalRate
-     *
-     * @param float $globalRate
-     *
-     * @return Feed
-     */
-    public function setGlobalRate($globalRate)
-    {
-        $this->globalRate = $globalRate;
-
-        return $this;
-    }
-
-    /**
-     * Get globalRate
-     *
-     * @return float
-     */
-    public function getGlobalRate()
-    {
-        return $this->globalRate;
-    }
-
-    /**
-     * Set monthRate
-     *
-     * @param float $monthRate
-     *
-     * @return Feed
-     */
-    public function setMonthRate($monthRate)
-    {
-        $this->monthRate = $monthRate;
-
-        return $this;
-    }
-
-    /**
-     * Get monthRate
-     *
-     * @return float
-     */
-    public function getMonthRate()
-    {
-        return $this->monthRate;
-    }
-
-    /**
-     * Set weekRate
-     *
-     * @param float $weekRate
-     *
-     * @return Feed
-     */
-    public function setWeekRate($weekRate)
-    {
-        $this->weekRate = $weekRate;
-
-        return $this;
-    }
-
-    /**
-     * Get weekRate
-     *
-     * @return float
-     */
-    public function getWeekRate()
-    {
-        return $this->weekRate;
     }
 
     /**
