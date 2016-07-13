@@ -24,7 +24,7 @@
 			{% endstylesheets %}
 		{% endblock %}
 	</head>
-	<body>
+	<body class="{% block bodyClasses %}{% endblock %}">
 		<noscript>Y U DO THAT TO ME !? PLEASE DISABLE NOSCRIPT ! :-(</noscript>
 
 		{% block body %}{% endblock %}

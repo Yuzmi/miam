@@ -55,9 +55,9 @@
 
 			<div class="content">
 				{% if item.htmlContent %}
-					{% if app.user.setting('DISPLAY_PICTURES') == 'no' %}
+					{% if app.user and app.user.setting('SHOW_PICTURES') == 'no' %}
 						{{ item.htmlContent|safeHtml|removePictures }}
-					{% elseif app.user.setting('DISPLAY_PICTURES') == 'onclick' %}
+					{% elseif app.user and app.user.setting('SHOW_PICTURES') == 'onclick' %}
 						{{ item.htmlContent|safeHtml|clickForPictures }}
 					{% else %}
 						{{ item.htmlContent|safeHtml }}

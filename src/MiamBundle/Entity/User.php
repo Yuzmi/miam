@@ -275,9 +275,11 @@ class User implements UserInterface, \Serializable
 
         if(array_key_exists($key, $settings)) {
             return $settings[$key];
-        } elseif($key == 'DISPLAY_PICTURES') {
+        } elseif($key == 'SHOW_PICTURES') {
             return "yes";
         } elseif($key == 'IS_PUBLIC') {
+            return false;
+        } elseif($key == 'HIDE_SIDEBAR') {
             return false;
         }
 

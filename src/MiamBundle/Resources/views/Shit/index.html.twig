@@ -70,6 +70,12 @@
 
 {% import _self as macros %}
 
+{% block bodyClasses %}
+	{% if app.user and app.user.setting('HIDE_SIDEBAR') %}
+		hide_sidebar
+	{% endif %}
+{% endblock %}
+
 {% block body %}
 	{% embed 'MiamBundle:Default:header.html.twig' %}
 		{% block preLink %}

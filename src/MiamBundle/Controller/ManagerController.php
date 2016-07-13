@@ -518,11 +518,14 @@ class ManagerController extends MainController
         if($this->isTokenValid('manager_settings_update', $request->get('csrf_token'))) {
             $user = $this->getUser();
             
-            $display_pictures = $request->get("DISPLAY_PICTURES");
-            $user->setSetting('DISPLAY_PICTURES', $display_pictures);
+            $show_pictures = $request->get("SHOW_PICTURES");
+            $user->setSetting('SHOW_PICTURES', $show_pictures);
 
             $is_public = $request->get("IS_PUBLIC") ? true : false;
             $user->setSetting('IS_PUBLIC', $is_public);
+
+            $hide_sidebar = $request->get("HIDE_SIDEBAR");
+            $user->setSetting('HIDE_SIDEBAR', $hide_sidebar);
 
             $em = $this->getEm();
             $em->persist($user);
