@@ -25,29 +25,21 @@ class ParseSelectedCommand extends ContainerAwareCommand {
 
         $em = $this->getContainer()->get('doctrine')->getEntityManager();
         
-        $feeds = $em->getRepository('MiamBundle:Feed')->findAll();
+        $feeds = $em->getRepository('MiamBundle:Feed')
+            ->createQueryBuilder("f")
+            ->select("f, COUNT(s.id) AS countSubs")
+            ->leftJoin("f.subscriptions", "s")
+            ->groupBy("f")
+            ->getQuery()->getResult();
 
         $nb = 0;
-        foreach($feeds as $feed) {
-            $feed = $em->getRepository('MiamBundle:Feed')->find($feed->getId());
+        foreach($feeds as $f) {
+            $feed = $em->getRepository('MiamBundle:Feed')->find($f[0]->getId());
+            
+            if($feed && ($feed->getIsCatalog() || $f["countSubs"] > 0)) {
+                $this->getContainer()->get('data_parsing')->parseFeed($feed, array('verbose' => true));
 
-            if($feed) {
-                $now = new \DateTime("now");
-                $oneHourAgo = new \DateTime("now - 1 hour");
-                $oneDayAgo = new \DateTime("now - 1 day");
-                $oneWeekAgo = new \DateTime("now - 1 week");
-                $oneMonthAgo = new \DateTime("now - 1 month");
-
-                $date = $feed->getDateNewItem() ?: $feed->getDateCreated();
-                if(
-                    $date > $oneWeekAgo
-                    || ($date > $oneMonthAgo && $feed->getDateParsed() < $oneHourAgo)
-                    || ($date < $oneMonthAgo && $feed->getDateParsed() < $oneDayAgo)
-                ) {
-                    $this->getContainer()->get('data_parsing')->parseFeed($feed, array('verbose' => true));
-
-                    $nb++;
-                }
+                $nb++;
             }
 
             if($nb%20 == 0) {
