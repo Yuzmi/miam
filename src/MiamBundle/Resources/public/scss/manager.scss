@@ -45,6 +45,10 @@ h1 {
 					overflow:hidden;
 					padding:0 1rem;
 
+					&.errors .name {
+						color:red;
+					}
+
 					.icon {
 						margin-right:0.2rem;
 						vertical-align:middle;

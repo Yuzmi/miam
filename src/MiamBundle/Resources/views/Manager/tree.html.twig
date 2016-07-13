@@ -16,7 +16,7 @@
 			<i class="fa fa-caret-right closed"></i>
 		</span>
 
-		{{ category.name }}
+		<span class="name">{{ category.name }}</span>
 
 		<span class="feedCount">
 			(<span class="count">0</span>)
@@ -33,7 +33,7 @@
 {% endmacro %}
 
 {% macro subscription(s) %}
-	<div class="row subscription" data-subscription="{{ s.id }}">
+	<div class="row subscription {{ s.feed.nbErrors > 0 ? "errors" }}" data-subscription="{{ s.id }}">
 		<span class="actions">
 			<span class="edit">
 				<i class="fa fa-edit"></i>
@@ -45,7 +45,7 @@
 
 		<img class="icon" src="{{ asset(s.feed.icon) }}" alt="">
 
-		<span title="{{ s.feed.url }}">{{ s.name ?: s.feed.url }}</span>
+		<span class="name" title="{{ s.feed.url }}">{{ s.name ?: s.feed.url }}</span>
 	</div>
 {% endmacro %}
 

@@ -19,7 +19,7 @@
 		{% for feed in feeds %}
 			<tr class="feed {{ feed.isCatalog ? "catalog" }}" data-feed="{{ feed.id }}">
 				<td>
-					{% if feed.nbErrors > 10 %}
+					{% if feed.nbErrors > 0 %}
 						<i class="fa fa-warning"></i>
 					{% endif %}
 				</td>
