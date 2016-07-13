@@ -28,7 +28,7 @@ class ShitController extends MainController
         if($this->isLogged() && $subscriber->getId() == $this->getUser()->getId()) {
             $marker = $this->getUser();
             $unreadCounts = $this->get('mark_manager')->getUnreadCounts($subscriber, $marker);
-            $starredCount = $this->getRepo("ItemMark")->countStarredForUser($this->getUser());
+            $starredCount = $this->getRepo("ItemMark")->countStarredAndSubscribedForUser($this->getUser());
         }
 
         $items = $this->get('item_manager')->getItems(array(

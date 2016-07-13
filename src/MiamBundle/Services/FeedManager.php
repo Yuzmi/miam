@@ -65,18 +65,6 @@ class FeedManager extends MainService {
 	}
 
 	public function deleteSubscription(Subscription $subscription) {
-		$marks = $this->getRepo("ItemMark")->findStarredForFeedAndUser(
-			$subscription->getFeed(), 
-			$subscription->getUser()
-		);
-		
-		foreach($marks as $mark) {
-			if($mark->getIsStarred()) {
-				$mark->setIsStarred(false);
-				$this->em->persist($mark);
-			}
-		}
-
 		$this->em->remove($subscription);
 		$this->em->flush();
 	}
