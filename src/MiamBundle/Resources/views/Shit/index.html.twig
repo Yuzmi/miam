@@ -32,7 +32,7 @@
 	{% endfor %}
 
 	{% for s in tree.subscriptions %}
-		<div class="row" data-type="feed" data-id="{{ s.feed.id }}">
+		<div class="row" data-type="feed" data-id="{{ s.feed.id }}" title="{{ s.name }}">
 			<span class="name">
 				{% if s.feed.hasIcon %}
 					<img class="icon" src="{{ asset(s.feed.icon) }}" alt="">

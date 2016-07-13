@@ -6,15 +6,16 @@
 		{% set itemData = dataItems[item.id] is defined ? dataItems[item.id] : null %}
 		<article class="item {{ itemData and itemData.isRead ? 'read' }} {{ itemData and itemData.isStarred ? 'starred' }}" data-item="{{ item.id }}" data-feed="{{ item.feed.id }}">
 			<a class="header" href="{{ item.link }}" target="_blank">
-				<span class="feed">
+				{% if itemData and itemData.feedName %}
+					{% set feedName = itemData.feedName %}
+				{% elseif item.feed.name %}
+					{% set feedName = item.feed.name %}
+				{% else %}
+					{% set feedName = item.feed.url %}
+				{% endif %}
+				<span class="feed" title="{{ feedName }}">
 					<span class="name">
-						{% if itemData and itemData.feedName %}
-							{{ itemData.feedName }}
-						{% elseif item.feed.name %}
-							{{ item.feed.name }}
-						{% else %}
-							{{ item.feed.url }}
-						{% endif %}
+						{{ feedName|shorten(60) }}
 					</span>
 
 					{% if item.feed.hasIcon %}
