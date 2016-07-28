@@ -1,31 +1,83 @@
-A Symfony project created on December 12, 2015, 9:25 pm.
-Well, that's what it says...
+# Miam
 
-### Server commands
+RSS agregator using [Symfony 3](https://symfony.com/) & [SimplePie](https://github.com/simplepie/simplepie).
+Potentially unstable as it's still on development and not restricted to stable versions.
 
+#### Features
+
+- Multi-user
+- Catalog & Admin
+- Categories
+- Read/Starred items
+- User settings
+- Import/Export OPML
+
+#### Requirements
+
+- Linux (Tested on Ubuntu & Raspbian)
+
+- Apache + Mod rewrite
 ```shell
-// Apache + PHP
-sudo apt-get install apache2 php5 libapache2-mod-php5 php5-curl php5-gd php5-imagick php5-tidy
-sudo service apache2 restart
-
-// MySQL
-sudo apt-get install mysql-server php5-mysql
-
-// Mod rewrite if disabled
+sudo apt-get install apache2
 sudo a2enmod rewrite
-sudo service apache2 restart
+```
 
-// Sass
+- PHP 5 + extensions (Curl, GD, Imagick, Tidy)
+```shell
+sudo apt-get install php5 libapache2-mod-php5 php5-curl php5-gd php5-imagick php5-tidy
+```
+
+- MySQL (Never tried PostgreSQL & SQLite)
+```shell
+sudo apt-get install mysql-server php5-mysql
+```
+
+- Sass
+```shell
 sudo apt-get install ruby
 gem install sass
+```
 
-// NodeJS (only for the experimental cron)
+- NodeJS (only for the experimental cron)
+```shell
 sudo apt-get install nodejs
 sudo apt-get install npm
 ```
 
-### Apache config
+- [Composer](https://getcomposer.org/download/)
 
+#### Installation
+
+- Clone the project (or install it manually)
+```shell
+git clone https://github.com/Yuzmi/miam.git
+```
+
+- Dependencies
+```shell
+composer install
+```
+
+- ACL
+```shell
+sudo apt-get install acl
+sudo setfacl -R -m u:www-data:rwX -m u:`whoami`:rwX var/cache var/logs rss web/images
+sudo setfacl -dR -m u:www-data:rwX -m u:`whoami`:rwX var/cache var/logs rss web/images
+```
+
+- Doctrine, assets, cache
+```shell
+php bin/console doctrine:database:create
+php bin/console doctrine:schema:create
+php bin/console assetic:dump
+php bin/console assets:install
+php app/console cache:clear
+php app/console cache:warmup
+```
+
+#### Apache config
+
+I suppose the project folder is /var/www/miam
 ```apache
 DocumentRoot /var/www/miam/web
 
@@ -36,30 +88,7 @@ DocumentRoot /var/www/miam/web
 </Directory>
 ```
 
-### Installation
-
-```shell
-// Git & Composer (https://getcomposer.org/download/)
-cd /var/www
-git clone https://github.com/Yuzmi/miam.git
-cd miam
-composer install
-
-// ACL
-sudo apt-get install acl
-sudo setfacl -R -m u:www-data:rwX -m u:`whoami`:rwX var/cache var/logs rss web/images
-sudo setfacl -dR -m u:www-data:rwX -m u:`whoami`:rwX var/cache var/logs rss web/images
-
-// Doctrine, assets, cache
-php bin/console doctrine:database:create
-php bin/console doctrine:schema:create
-php bin/console assetic:dump
-php bin/console assets:install
-php app/console cache:clear
-php app/console cache:warmup
-```
-
-### CRON
+#### CRON
 
 ```
 // Default cron
@@ -69,14 +98,8 @@ php app/console cache:warmup
 */30 * * * * php /var/www/miam/bin/console miam:generate:json && nodejs /var/www/miam/get_feeds.js && php /var/www/miam/bin/console miam:parse:files
 ```
 
-### TODO
+#### TODO
 
-- catalog remake
-- try postgresql and sqlite
-- order of categories and feeds
-- manage if data in favicon href
-- improve textContent
-- subscription_item => filters
+- order management for categories and feeds
 - dark theme
-
-It's probably not up-to-date...
+- filters => subscription_item
