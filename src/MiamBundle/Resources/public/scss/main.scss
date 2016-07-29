@@ -217,16 +217,16 @@ button {
 			.star {
 				margin-right:0.25rem;
 
-				.full {
+				.icon-full {
 					display:none;
 				}
 
 				&:hover {
-					.empty {
+					.icon-empty {
 						display:none;
 					}
 
-					.full {
+					.icon-full {
 						display:inline-block;
 					}
 				}
@@ -268,11 +268,11 @@ button {
 
 		&.starred .header {
 			.star {
-				.empty {
+				.icon-empty {
 					display:none;
 				}
 
-				.full {
+				.icon-full {
 					display:inline-block;
 				}
 			}
@@ -384,6 +384,8 @@ button {
 		}
 
 		&.loading {
+			padding-top:0.6rem;
+
 			i.icon-more {
 				display:none;
 			}
