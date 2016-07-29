@@ -8,11 +8,11 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 
-class ParseSelectedCommand extends ContainerAwareCommand {
+class ParseUsedCommand extends ContainerAwareCommand {
 	protected function configure() {
         $this
-            ->setName('miam:parse:selected')
-            ->setDescription('Parse a selected collection of feeds')
+            ->setName('miam:parse:used')
+            ->setDescription('Parse used feeds')
         ;
     }
 
