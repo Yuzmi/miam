@@ -48,10 +48,18 @@
 		<div class="content">
 			<form method="POST" action="{{ path('manager_settings_update') }}">
 				Show item pictures :
-				<select name="SHOW_PICTURES">
-					<option value="yes" {{ app.user.setting('SHOW_PICTURES') == 'yes' ? 'selected' }}>Always</option>
-					<option value="onclick" {{ app.user.setting('SHOW_PICTURES') == 'onclick' ? 'selected' }}>On click</option>
-					<option value="no" {{ app.user.setting('SHOW_PICTURES') == 'no' ? 'selected' }}>Never</option>
+				<select name="SHOW_ITEM_PICTURES">
+					<option value="always" {{ app.user.setting('SHOW_ITEM_PICTURES') == 'always' ? 'selected' }}>Always</option>
+					<option value="onclick" {{ app.user.setting('SHOW_ITEM_PICTURES') == 'onclick' ? 'selected' }}>On click</option>
+					<option value="never" {{ app.user.setting('SHOW_ITEM_PICTURES') == 'never' ? 'selected' }}>Never</option>
+				</select>
+
+				<br><br>
+
+				Show item details :
+				<select name="SHOW_ITEM_DETAILS">
+					<option value="always" {{ app.user.setting('SHOW_ITEM_DETAILS') == 'always' ? 'selected' }}>Always</option>
+					<option value="onclick" {{ app.user.setting('SHOW_ITEM_DETAILS') == 'onclick' ? 'selected' }}>On click</option>
 				</select>
 
 				<br><br>

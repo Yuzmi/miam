@@ -4,7 +4,12 @@
 {% if items is defined and items|length > 0 %}
 	{% for item in items %}
 		{% set itemData = dataItems[item.id] is defined ? dataItems[item.id] : null %}
-		<article class="item {{ itemData and itemData.isRead ? 'read' }} {{ itemData and itemData.isStarred ? 'starred' }}" data-item="{{ item.id }}" data-feed="{{ item.feed.id }}">
+		<article class="item 
+				{{ itemData and itemData.isRead ? 'read' }} 
+				{{ itemData and itemData.isStarred ? 'starred' }}
+				{{ app.user and app.user.setting('SHOW_ITEM_DETAILS') == "always" ? 'expandedDetails' }}"
+			data-item="{{ item.id }}" 
+			data-feed="{{ item.feed.id }}">
 			<a class="header" href="{{ item.link }}" target="_blank">
 				{% if itemData and itemData.feedName %}
 					{% set feedName = itemData.feedName %}
@@ -55,9 +60,9 @@
 
 			<div class="content">
 				{% if item.htmlContent %}
-					{% if app.user and app.user.setting('SHOW_PICTURES') == 'no' %}
+					{% if app.user and app.user.setting('SHOW_ITEM_PICTURES') == 'never' %}
 						{{ item.htmlContent|safeHtml|removePictures }}
-					{% elseif app.user and app.user.setting('SHOW_PICTURES') == 'onclick' %}
+					{% elseif app.user and app.user.setting('SHOW_ITEM_PICTURES') == 'onclick' %}
 						{{ item.htmlContent|safeHtml|clickForPictures }}
 					{% else %}
 						{{ item.htmlContent|safeHtml }}

@@ -518,8 +518,11 @@ class ManagerController extends MainController
         if($this->isTokenValid('manager_settings_update', $request->get('csrf_token'))) {
             $user = $this->getUser();
             
-            $show_pictures = $request->get("SHOW_PICTURES");
-            $user->setSetting('SHOW_PICTURES', $show_pictures);
+            $show_item_pictures = $request->get("SHOW_ITEM_PICTURES");
+            $user->setSetting('SHOW_ITEM_PICTURES', $show_item_pictures);
+
+            $show_item_details = $request->get("SHOW_ITEM_DETAILS");
+            $user->setSetting('SHOW_ITEM_DETAILS', $show_item_details);
 
             $is_public = $request->get("IS_PUBLIC") ? true : false;
             $user->setSetting('IS_PUBLIC', $is_public);
