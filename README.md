@@ -3,16 +3,16 @@
 RSS agregator using [Symfony 3](https://symfony.com/) & [SimplePie](https://github.com/simplepie/simplepie).
 Potentially unstable as it's still on development and not restricted to stable versions.
 
-#### Features
+### Features
 
 - Multi-user
-- Catalog & Admin
+- Catalog & Admin (WIP)
 - Categories
 - Read/Starred items
 - User settings
 - Import/Export OPML
 
-#### Requirements
+### Requirements
 
 - Linux (Tested on Ubuntu & Raspbian)
 
@@ -46,7 +46,7 @@ sudo apt-get install npm
 
 - [Composer](https://getcomposer.org/download/)
 
-#### Installation
+### Installation
 
 - Clone the project (or install it manually)
 ```shell
@@ -65,17 +65,17 @@ sudo setfacl -R -m u:www-data:rwX -m u:`whoami`:rwX var/cache var/logs rss web/i
 sudo setfacl -dR -m u:www-data:rwX -m u:`whoami`:rwX var/cache var/logs rss web/images
 ```
 
-- Doctrine, assets, cache
+- Database, assets, cache
 ```shell
 php bin/console doctrine:database:create
 php bin/console doctrine:schema:create
-php bin/console assetic:dump
-php bin/console assets:install
-php app/console cache:clear
-php app/console cache:warmup
+php bin/console assetic:dump --env=prod
+php bin/console assets:install --env=prod
+php app/console cache:clear --env=prod
+php app/console cache:warmup --env=prod
 ```
 
-#### Apache config
+### Apache config
 
 I suppose the project folder is /var/www/miam
 ```apache
@@ -88,17 +88,17 @@ DocumentRoot /var/www/miam/web
 </Directory>
 ```
 
-#### CRON
+### CRON
 
 ```
 // Default cron
-*/30 * * * * php /var/www/miam/bin/console miam:parse:all
+*/30 * * * * php /var/www/miam/bin/console miam:parse:used
 
 // With NodeJS, faster but experimental
 */30 * * * * php /var/www/miam/bin/console miam:generate:json && nodejs /var/www/miam/get_feeds.js && php /var/www/miam/bin/console miam:parse:files
 ```
 
-#### TODO
+### TODO
 
 - order management for categories and feeds
 - dark theme
