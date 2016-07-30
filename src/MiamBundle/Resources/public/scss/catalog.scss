@@ -3,8 +3,9 @@ h1 {
 }
 
 .feeds {
+	text-align:center;
+
 	.feed {
-		background-color:white;
 		border:solid 0.1rem black;
 		display:inline-block;
 		margin:0.6rem;
@@ -92,6 +93,29 @@ h1 {
 				.website {
 					border-right:0;
 					width:8rem;
+				}
+			}
+		}
+	}
+}
+
+body.night {
+	.feeds {
+		.feed {
+			border-color:#363636;
+
+			.options {
+				border-color:#363636;
+
+				.subscribe, .url, .website {
+					border-color:#363636;
+				}
+			}
+
+			&.subscribed .options {
+				.subscribe {
+					background-color:#363636;
+					color:inherit;
 				}
 			}
 		}

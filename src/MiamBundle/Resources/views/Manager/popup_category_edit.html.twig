@@ -27,8 +27,8 @@
 		<div class="subscriptions">
 			{% for s in subscriptions %}
 				<div class="subscription">
-					<input type="checkbox" name="subscriptions[]" value="{{ s.id }}" {{ s in category.subscriptions ? "checked" }}>
-					{{ s.name ?: s.feed.url }}
+					<input id="editCatSub{{ s.id }}" type="checkbox" name="subscriptions[]" value="{{ s.id }}" {{ s in category.subscriptions ? "checked" }}>
+					<label for="editCatSub{{ s.id }}">{{ s.name ?: s.feed.url }}</label>
 				</div>
 			{% endfor %}
 		</div>

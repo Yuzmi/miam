@@ -24,7 +24,7 @@
 			{% endstylesheets %}
 		{% endblock %}
 	</head>
-	<body class="{% block bodyClasses %}{% endblock %}">
+	<body class="{{ app.user and app.user.setting('THEME') == "night" ? "night" }} {% block bodyClasses %}{% endblock %}">
 		<noscript>Y U DO THAT TO ME !? PLEASE DISABLE NOSCRIPT ! :-(</noscript>
 
 		{% block body %}{% endblock %}

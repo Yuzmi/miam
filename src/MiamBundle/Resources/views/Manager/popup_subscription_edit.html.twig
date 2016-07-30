@@ -21,8 +21,8 @@
 		<div class="categories">
 			{% for c in categories %}
 				<div class="category">
-					<input type="checkbox" name="categories[]" value="{{ c.id }}" {{ c in subscription.categories ? "checked" }}>
-					{{ c.path }}
+					<input id="editSubCat{{ c.id }}" type="checkbox" name="categories[]" value="{{ c.id }}" {{ c in subscription.categories ? "checked" }}>
+					<label for="editSubCat{{ c.id }}">{{ c.path }}</label>
 				</div>
 			{% endfor %}
 		</div>

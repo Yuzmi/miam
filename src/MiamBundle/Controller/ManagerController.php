@@ -530,6 +530,9 @@ class ManagerController extends MainController
             $hide_sidebar = $request->get("HIDE_SIDEBAR");
             $user->setSetting('HIDE_SIDEBAR', $hide_sidebar);
 
+            $theme = $request->get("THEME");
+            $user->setSetting('THEME', $theme);
+
             $em = $this->getEm();
             $em->persist($user);
             $em->flush();

@@ -3,7 +3,6 @@ h1 {
 }
 
 .tab {
-	background-color:white;
 	border:solid 2px black;
 	margin:30px 40px 0;
 	text-align:center;
@@ -21,7 +20,6 @@ h1 {
 	}
 
 	.content {
-		border-top:solid 1px black;
 		display:none;
 		padding:10px;
 	}
@@ -38,7 +36,6 @@ h1 {
 				text-align:left;
 
 				.row {
-					background-color:white;
 					border-bottom:solid 1px black;
 					height:3rem;
 					line-height:3rem;
@@ -115,13 +112,23 @@ h1 {
 			overflow:auto;
 			padding:0.5rem 1rem;
 			text-align:left;
+
+			.subscription {
+				input {
+					vertical-align:middle;
+				}
+
+				label {
+					display:inline-block;
+					vertical-align:middle;
+				}
+			}
 		}
 	}
 
 	&.newSubscription, &.editSubscription {
 		.categories {
 			border:solid 1px black;
-			display:inline-block;
 			margin:auto;
 			margin-top:1rem;
 			max-height:40rem;
@@ -129,6 +136,52 @@ h1 {
 			overflow:auto;
 			padding:0.5rem 1rem;
 			text-align:left;
+
+			.category {
+				input {
+					vertical-align:middle;
+				}
+
+				label {
+					display:inline-block;
+					vertical-align:middle;
+				}
+			}
+		}
+	}
+}
+
+body.night {
+	.tab {
+		border-color:#363636;
+
+		.header {
+			background-color:#363636;
+			color:#a8a8a8;
+		}
+
+		&.catsubs {
+			.content {
+				.tree {
+					.row {
+						border-color:#363636;
+					}
+				}
+			}
+		}
+	}
+
+	.popupContainer {
+		&.editCategory {
+			.subscriptions {
+				border-color:#363636;
+			}
+		}
+
+		&.newSubscription, &.editSubscription {
+			.categories {
+				border-color:#363636;
+			}
 		}
 	}
 }

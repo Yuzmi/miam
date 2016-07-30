@@ -11,7 +11,6 @@ header {
 }
 
 .sidebar {
-	background-color:white;
 	border-right:solid 1px black;
 	bottom:0px;
 	overflow-x:hidden;
@@ -120,7 +119,6 @@ header {
 .contextMenu {
 	background-color:white;
 	border:solid 1px black;
-	color:black;
 	font-weight:700;
 	position:fixed;
 
@@ -180,6 +178,52 @@ body.hide_sidebar {
 
 		.items {
 			top:4rem;
+		}
+	}
+}
+
+body.night {
+	.sidebar {
+		border-color:#363636;
+
+		.row {
+			border-color:#363636;
+
+			.unreadCount, .count {
+				background-color:#363636;
+			}
+
+			&:hover {
+				background-color:inherit;
+				color:#cfcfcf;
+			}
+
+			&.selected {
+				background-color:#363636;
+				color:#cfcfcf;
+
+				.unreadCount, .count {
+					background-color:#161616;
+				}
+			}
+		}
+	}
+
+	.topbar {
+		border-color:#363636;
+	}
+
+	.contextMenu {
+		background-color:#161616;
+		border-color:#363636;
+
+		.option {
+			border-color:#363636;
+
+			&:hover {
+				background-color:#363636;
+				color:#cfcfcf;
+			}
 		}
 	}
 }

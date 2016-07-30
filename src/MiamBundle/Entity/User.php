@@ -283,6 +283,8 @@ class User implements UserInterface, \Serializable
             return false;
         } elseif($key == 'HIDE_SIDEBAR') {
             return false;
+        } elseif($key == 'THEME') {
+            return "light";
         }
 
         return null;

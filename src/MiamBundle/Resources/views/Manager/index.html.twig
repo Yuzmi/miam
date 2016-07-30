@@ -72,6 +72,14 @@
 
 				<br><br>
 
+				Theme :
+				<select name="THEME">
+					<option value="light" {{ app.user.setting('THEME') == 'light' ? 'selected' }}>Light</option>
+					<option value="night" {{ app.user.setting('THEME') == 'night' ? 'selected' }}>Night</option>
+				</select>
+
+				<br><br>
+
 				<button type="submit">Enregistrer</button>
 
 				<input type="hidden" name="csrf_token" value="{{ csrf_token('manager_settings_update') }}">

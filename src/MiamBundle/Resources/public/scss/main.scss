@@ -28,7 +28,6 @@ noscript {
 }
 
 header {
-	background-color:white;
 	border-bottom:solid 0.1rem black;
 
 	a {
@@ -170,8 +169,6 @@ button {
 
 .items {
 	.item .header, .loadMore {
-		background-color:white;
-		color:black;
 		cursor:pointer;
 		display:block;
 		font-size:1.3rem;
@@ -184,9 +181,7 @@ button {
 	}
 
 	.item {
-		background-color:white;
 		border-bottom:solid 0.1rem black;
-		color:black;
 		position:relative;
 		text-align:left;
 
@@ -236,16 +231,11 @@ button {
 				margin-right:0.25rem;
 			}
 
-			.title {
-				color:black;
-			}
-
 			&:hover .title {
 				text-decoration:underline;
 			}
 
 			.summary {
-				color:black;
 				font-size:0.8em;
 				font-weight:normal;
 				margin-left:1rem;
@@ -263,7 +253,7 @@ button {
 		}
 
 		&.read .header * {
-			color:rgba(0, 0, 0, 0.6);
+			opacity:0.6;
 		}
 
 		&.starred .header {
@@ -438,6 +428,104 @@ button {
 				.feed .name {
 					display:none;
 				}
+			}
+		}
+	}
+}
+
+body.night {
+	background-color:#161616;
+	color:#a8a8a8;
+
+	a {
+		color:#a8a8a8;
+	}
+
+	header {
+		border-bottom-color:#363636;
+
+		a:hover {
+			color:#cfcfcf;
+		}
+
+		& > a {
+			border-right-color:#363636;
+		}
+
+		.rightSide {
+			& > a {
+				border-left-color:#363636;
+			}
+		}
+	}
+
+	input, select, textarea, button {
+		background-color:#363636;
+		border-color:#363636;
+		color:#a8a8a8;
+	}
+
+	button:hover {
+		background-color:#363636;
+		color:#cfcfcf;
+	}
+
+	.flashMessages {
+		.flashMessageContainer {
+			.flashMessage {
+				background-color:#363636;
+				border-color:#363636;
+			}
+		}
+	}
+
+	.popupContainer {
+		.popup {
+			background-color:#161616;
+			border-color:#262626;
+
+			.popupTitle {
+				background-color:#262626;
+				color:inherit;
+			}
+
+			.popupClose {
+				color:inherit;
+			}
+		}
+	}
+
+	.items {
+		.item {
+			border-color:#363636;
+
+			.header {
+				.hide {
+					border-color:#363636;
+					color:#a8a8a8;
+
+					&:hover {
+						background-color:#363636;
+						color:#cfcfcf;
+					}
+				}
+			}
+
+			.content {
+				border-color:#363636;
+
+				img.clickToShow {
+					border-color:#363636;
+				}
+			}
+
+			.details {
+				border-color:#363636;
+			}
+
+			.details_toggle {
+				border-color:#363636;
+				color:inherit;
 			}
 		}
 	}
