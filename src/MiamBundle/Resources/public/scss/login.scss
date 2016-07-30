@@ -30,3 +30,16 @@
 		}
 	}
 }
+
+body.night {
+	.body_login {
+		.authentication, .register {
+			border-color:#363636;
+
+			.header {
+				background-color:#363636;
+				color:#a8a8a8;
+			}
+		}
+	}
+}
