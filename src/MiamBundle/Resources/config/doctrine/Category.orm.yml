@@ -22,6 +22,9 @@ MiamBundle\Entity\Category:
             type: integer
             column: right_position
             nullable: true
+        level:
+            type: integer
+            column: level
     manyToMany:
         subscriptions:
             targetEntity: Subscription

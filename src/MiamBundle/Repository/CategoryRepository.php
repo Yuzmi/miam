@@ -47,7 +47,8 @@ class CategoryRepository extends \Doctrine\ORM\EntityRepository
 			->leftJoin('c.subscriptions', 's')->addSelect('s')
 			->where('c.user = :user')
 			->andWhere('c.leftPosition < :left OR c.rightPosition > :right')
-			->orderBy('c.name', 'ASC')
+			->orderBy('c.level', 'ASC')
+			->addOrderBy('c.name', 'ASC')
 			->addOrderBy('s.name', 'ASC')
 			->setParameters(array(
 				'user' => $user,

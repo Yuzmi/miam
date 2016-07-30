@@ -16,10 +16,12 @@ class CategoryManager extends MainService {
 
 	public function updateAll() {
 		$this->updatePositions();
+		$this->updateLevels();
 	}
 
 	public function updateForUser(User $user) {
 		$this->updatePositionsForUser($user);
+		$this->updateLevelsForUser($user);
 	}
 
 	public function updatePositions() {
@@ -53,8 +55,8 @@ class CategoryManager extends MainService {
 
 		$subcategories = $category->getSubcategories();
 		if(!empty($subcategories)) {
-			foreach($subcategories as $sc) {
-				$this->updatePositionsForCategory($sc, $value);
+			foreach($subcategories as $c) {
+				$this->updatePositionsForCategory($c, $value);
 			}
 		}
 
@@ -62,5 +64,37 @@ class CategoryManager extends MainService {
 		$category->setRightPosition($value);
 
 		$this->em->persist($category);
+	}
+
+	public function updateLevels() {
+		$users = $this->getRepo("User")->findAll();
+		foreach($users as $u) {
+			$this->updateLevelsForUser($u);
+		}
+	}
+
+	public function updateLevelsForUser(User $user) {
+		$categories = $this->getRepo("Category")
+			->createQueryBuilder("c")
+			->where("c.user = :user AND c.parent IS NULL")
+			->setParameter("user", $user)
+			->getQuery()->getResult();
+
+		if(count($categories) > 0) {
+			foreach($categories as $c) {
+				$this->updateLevelsForCategory($c, 0);
+			}
+
+			$this->em->flush();
+		}
+	}
+
+	private function updateLevelsForCategory(Category $category, $value) {
+		$category->setLevel($value);
+		$this->em->persist($category);
+
+		foreach($category->getSubcategories() as $c) {
+			$this->updateLevelsForCategory($c, $value + 1);
+		}
 	}
 }

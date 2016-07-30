@@ -9,6 +9,7 @@ class Category
     private $dateCreated;
     private $leftPosition;
     private $rightPosition;
+    private $level;
     private $parent;
     private $user;
     private $subcategories;
@@ -17,6 +18,7 @@ class Category
     public function __construct()
     {
         $this->dateCreated = new \DateTime("now");
+        $this->level = 0;
         $this->subscriptions = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
@@ -216,6 +218,30 @@ class Category
     public function getRightPosition()
     {
         return $this->rightPosition;
+    }
+
+    /**
+     * Set level
+     *
+     * @param integer $level
+     *
+     * @return Category
+     */
+    public function setLevel($level)
+    {
+        $this->level = $level;
+
+        return $this;
+    }
+
+    /**
+     * Get level
+     *
+     * @return integer
+     */
+    public function getLevel()
+    {
+        return $this->level;
     }
 
     /**
