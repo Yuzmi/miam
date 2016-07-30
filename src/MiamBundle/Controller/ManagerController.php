@@ -52,7 +52,7 @@ class ManagerController extends MainController
         if($request->isXmlHttpRequest() && $this->isLogged()) {
             $category = $this->getRepo("Category")->findOneForUserWithMore($id, $this->getUser());
             if($category) {
-                $categories = $this->getRepo("Category")->findForUserWithMore($this->getUser());
+                $categories = $this->getRepo("Category")->findForUserWithMoreOutOf($this->getUser(), $category);
                 $subscriptions = $this->getRepo("Subscription")->findForUserWithMore($this->getUser());
 
                 $html = $this->renderView("MiamBundle:Manager:popup_category_edit.html.twig", array(
@@ -98,7 +98,7 @@ class ManagerController extends MainController
                     'user' => $this->getUser()
                 ));
                 if($parent) {
-                    if($parent->getId() == $category->getId()) {
+                    if(!$new_category && $parent->getLeftPosition() >= $category->getLeftPosition() && $parent->getRightPosition() <= $category->getRightPosition()) {
                         $category->setParent(null);
                     } else {
                         $category->setParent($parent);

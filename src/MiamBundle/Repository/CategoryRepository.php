@@ -2,6 +2,7 @@
 
 namespace MiamBundle\Repository;
 
+use MiamBundle\Entity\Category;
 use MiamBundle\Entity\User;
 
 class CategoryRepository extends \Doctrine\ORM\EntityRepository
@@ -40,33 +41,19 @@ class CategoryRepository extends \Doctrine\ORM\EntityRepository
 			->getQuery()->getOneOrNullResult();
 	}
 
-	/*
-	public function findPathesForUser(User $user) {
-		$categories = $this->findForUser($user);
-
-		$pathes = array();
-
-		$change = true;
-		while($change) {
-			$change = false;
-
-			foreach($categories as $c) {
-				$path = $c->getName();
-
-				if($c->getParent()) {
-					if(isset($pathes[$c->getParent()->getId()])) {
-						$path = $pathes[$c->getParent()->getId()].'/'.$path;
-					}
-				}
-
-				if(!isset($pathes[$c->getId()]) || $pathes[$c->getId()] != $path) {
-					$pathes[$c->getId()] = $path;
-					$change = true;
-				}
-			}
-		}
-
-		return $pathes;
+	public function findForUserWithMoreOutOf(User $user, Category $category) {
+		return $this->createQueryBuilder('c')
+			->leftJoin('c.parent', 'p')->addSelect('p')
+			->leftJoin('c.subscriptions', 's')->addSelect('s')
+			->where('c.user = :user')
+			->andWhere('c.leftPosition < :left OR c.rightPosition > :right')
+			->orderBy('c.name', 'ASC')
+			->addOrderBy('s.name', 'ASC')
+			->setParameters(array(
+				'user' => $user,
+				'left' => $category->getLeftPosition(),
+				'right' => $category->getRightPosition()
+			))
+			->getQuery()->getResult();
 	}
-	*/
 }
