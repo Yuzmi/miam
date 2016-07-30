@@ -101,5 +101,4 @@ DocumentRoot /var/www/miam/web
 ### TODO
 
 - order management for categories and feeds
-- dark theme
 - filters => subscription_item
