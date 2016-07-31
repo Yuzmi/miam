@@ -7,7 +7,7 @@ class TextExtension extends \Twig_Extension
 	public function getFilters() {
 		return array(
 			new \Twig_SimpleFilter('shorten', array($this, 'shorten')),
-            new \Twig_SimpleFilter('safeHtml', array($this, 'safeHtml'), array('is_safe' => array('html'))),
+            new \Twig_SimpleFilter('tidyHtml', array($this, 'tidyHtml'), array('is_safe' => array('html'))),
             new \Twig_SimpleFilter('removePictures', array($this, 'removePictures'), array('is_safe' => array('html'))),
             new \Twig_SimpleFilter('clickForPictures', array($this, 'clickForPictures'), array('is_safe' => array('html'))),
 		);
@@ -83,7 +83,7 @@ class TextExtension extends \Twig_Extension
         return substr($string, 0, $length);
     }
 
-    public function safeHtml($html) {
+    public function tidyHtml($html) {
         $html = tidy_repair_string($html, array(
             "output-html" => true
         ), "utf8");

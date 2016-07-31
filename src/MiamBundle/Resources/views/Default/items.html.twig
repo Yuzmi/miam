@@ -61,11 +61,11 @@
 			<div class="content">
 				{% if item.htmlContent %}
 					{% if app.user and app.user.setting('SHOW_ITEM_PICTURES') == 'never' %}
-						{{ item.htmlContent|safeHtml|removePictures }}
+						{{ item.htmlContent|tidyHtml|removePictures }}
 					{% elseif app.user and app.user.setting('SHOW_ITEM_PICTURES') == 'onclick' %}
-						{{ item.htmlContent|safeHtml|clickForPictures }}
+						{{ item.htmlContent|tidyHtml|clickForPictures }}
 					{% else %}
-						{{ item.htmlContent|safeHtml }}
+						{{ item.htmlContent|tidyHtml }}
 					{% endif %}
 				{% elseif item.textContent %}
 					{{ item.textContent|nl2br }}
