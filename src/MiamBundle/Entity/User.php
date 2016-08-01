@@ -256,14 +256,23 @@ class User implements UserInterface, \Serializable
         return $this->categories;
     }
 
+    // All settings and their default values
+    private $allSettings = array(
+        'SHOW_ITEM_PICTURES' => "always",
+        'SHOW_ITEM_DETAILS' => "onclick",
+        'IS_PUBLIC' => false,
+        'HIDE_SIDEBAR' => false,
+        'THEME' => "light"
+    );
+
     public function getSettings() {
         try {
-            $settings = unserialize($this->settings);
+            $settings = (array) unserialize($this->settings);
         } catch(\Exception $e) {
             $settings = array();
         }
 
-        return is_array($settings) ? $settings : array();
+        return array_intersect_key($settings, $this->allSettings);
     }
 
     public function setSettings(array $settings) {
@@ -275,16 +284,8 @@ class User implements UserInterface, \Serializable
 
         if(array_key_exists($key, $settings)) {
             return $settings[$key];
-        } elseif($key == 'SHOW_ITEM_PICTURES') {
-            return "always";
-        } elseif($key == 'SHOW_ITEM_DETAILS') {
-            return "onclick";
-        } elseif($key == 'IS_PUBLIC') {
-            return false;
-        } elseif($key == 'HIDE_SIDEBAR') {
-            return false;
-        } elseif($key == 'THEME') {
-            return "light";
+        } elseif(array_key_exists($key, $this->allSettings)) {
+            return $this->allSettings[$key];
         }
 
         return null;
