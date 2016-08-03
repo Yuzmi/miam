@@ -336,7 +336,7 @@ class DataParsing extends MainService {
     public function updateFavicon(Feed $feed) {
     	$success = false;
 
-    	// Dossier des images du flux
+    	// Feed's pictures directory
     	$feedDir = $this->rootDir.'/web/images/feeds/'.$feed->getId();
     	if(!is_dir($feedDir)) {
     		mkdir($feedDir, 0777, true);
@@ -345,7 +345,7 @@ class DataParsing extends MainService {
     	$tmpPath = $feedDir.'/icon.tmp';
     	$iconPath = $feedDir.'/icon.png';
 
-    	// Récupération de l'URL de l'icône
+    	// Parse the icon URL
     	$favicon = $this->getUrlForFeedIcon($feed);
     	if($favicon) {
     		try {
@@ -358,7 +358,7 @@ class DataParsing extends MainService {
 
     	$iconSize = 16;
 
-    	// Conversion et stockage
+    	// Convert and store
     	if(is_file($tmpPath)) {
     		try {
     			$iconData = @getimagesize($tmpPath);
@@ -371,7 +371,7 @@ class DataParsing extends MainService {
 	    		$iconSrcHeight = $iconData[1];
 	    		$iconSrcType = $iconData[2];
 	    		
-	    		if($iconSrcType == IMAGETYPE_GIF) {
+	    		if($iconSrcType == IMAGETYPE_GIF && extension_loaded('gd')) {
 	    			$iconDst = imagecreatetruecolor($iconSize, $iconSize);
 					
 					$blackBg = imagecolorallocate($iconDst, 0, 0, 0);
@@ -384,7 +384,7 @@ class DataParsing extends MainService {
 	            	imagedestroy($iconDst);
 
 	            	$success = true;
-	    		} elseif($iconSrcType == IMAGETYPE_JPEG) {
+	    		} elseif($iconSrcType == IMAGETYPE_JPEG && extension_loaded('gd')) {
 	    			$iconDst = imagecreatetruecolor($iconSize, $iconSize);
 
 					$iconSrc = imagecreatefromjpeg($tmpPath);
@@ -394,7 +394,7 @@ class DataParsing extends MainService {
 	            	imagedestroy($iconDst);
 
 	            	$success = true;
-	    		} elseif($iconSrcType == IMAGETYPE_PNG) {
+	    		} elseif($iconSrcType == IMAGETYPE_PNG && extension_loaded('gd')) {
 	    			$iconDst = imagecreatetruecolor($iconSize, $iconSize);
 
 	    			$blackBg = imagecolorallocate($iconDst, 0, 0, 0);
@@ -409,7 +409,7 @@ class DataParsing extends MainService {
 	            	imagedestroy($iconDst);
 
 	            	$success = true;
-	    		} elseif($iconSrcType == IMAGETYPE_BMP) {
+	    		} elseif($iconSrcType == IMAGETYPE_BMP && extension_loaded('imagick')) {
 	    			$icon = new \Imagick($tmpPath);
 					$icon->thumbnailImage($iconSize, $iconSize);
 					$icon->setImageFormat('png');
@@ -418,7 +418,7 @@ class DataParsing extends MainService {
 					$icon->destroy();
 
 	    			$success = true;
-	    		} elseif($iconSrcType == IMAGETYPE_ICO) {
+	    		} elseif($iconSrcType == IMAGETYPE_ICO && extension_loaded('imagick')) {
 	    			// Must edit the extension here or it fails
 					$icoPath = $feedDir.'/icon.ico';
 					rename($tmpPath, $icoPath);
@@ -433,7 +433,7 @@ class DataParsing extends MainService {
 	    			@unlink($icoPath);
 
 	    			$success = true;
-	    		} else {
+	    		} elseif(extension_loaded('imagick')) {
 	    			try {
 	    				$icon = new \Imagick($tmpPath);
 						$icon->thumbnailImage($iconSize, $iconSize);
@@ -452,7 +452,7 @@ class DataParsing extends MainService {
     		@unlink($tmpPath);
     	}
 
-    	// Mise à jour du flux
+    	// Feed update
     	if($success && !$feed->getHasIcon()) {
     		$feed->setHasIcon(true);
 

@@ -83,16 +83,19 @@ class TextExtension extends \Twig_Extension
         return substr($string, 0, $length);
     }
 
+    // To avoid unclosed tags
     public function tidyHtml($html) {
-        $html = tidy_repair_string($html, array(
-            "output-html" => true
-        ), "utf8");
-        
-        // Seriously, Tidy, why do you add html and body tags...
-        if(preg_match('#<body>(.*)</body>#is', $html, $matches)) {
-            $html = $matches[1];
-        } else {
-            $html = "";
+        if(extension_loaded('tidy')) {
+            $html = tidy_repair_string($html, array(
+                "output-html" => true
+            ), "utf8");
+            
+            // Seriously, Tidy, why do you add html and body tags...
+            if(preg_match('#<body>(.*)</body>#is', $html, $matches)) {
+                $html = $matches[1];
+            } else {
+                $html = "";
+            }
         }
 
         return $html;
