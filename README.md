@@ -15,36 +15,12 @@ Potentially unstable as it's still on development and not restricted to stable v
 ### Requirements
 
 - Linux (Tested on Ubuntu & Raspbian)
-
 - Apache + Mod rewrite
-```shell
-sudo apt-get install apache2
-sudo a2enmod rewrite
-```
-
-- PHP 5 + extensions (Curl, GD, Imagick, Tidy)
-```shell
-sudo apt-get install php5 libapache2-mod-php5 php5-curl php5-gd php5-imagick php5-tidy
-```
-
+- PHP 5 + extensions (curl, gd, imagick, mbstring, tidy, zlib)
 - MySQL (Never tried PostgreSQL & SQLite)
-```shell
-sudo apt-get install mysql-server php5-mysql
-```
-
-- Sass
-```shell
-sudo apt-get install ruby
-gem install sass
-```
-
-- NodeJS (only for the experimental cron)
-```shell
-sudo apt-get install nodejs
-sudo apt-get install npm
-```
-
+- [Sass](http://sass-lang.com/install)
 - [Composer](https://getcomposer.org/download/)
+- [NodeJS](https://nodejs.org/en/download/) (only for the experimental cron)
 
 ### Installation
 
