@@ -74,8 +74,14 @@
 				{% endif %}
 			</div>
 
-			{% if itemData and (itemData.tags|length > 0 or itemData.enclosures|length > 0) %}
+			{% if item.author or (itemData and (itemData.tags|length > 0 or itemData.enclosures|length > 0)) %}
 				<div class="details">
+					{% if item.author %}
+						<div class="authors">
+							Author: {{ item.author }}
+						</div>
+					{% endif %}
+
 					{% if itemData.tags|length > 0 %}
 						<div class="tags">
 							Tag{{ itemData.tags|length > 1 ? "s" }}:
