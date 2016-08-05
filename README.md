@@ -24,7 +24,7 @@ Potentially unstable as it's still on development and not restricted to stable v
 
 ### Installation
 
-- Clone the project (or install it manually)
+- Clone the project (or download it manually)
 ```shell
 git clone https://github.com/Yuzmi/miam.git
 ```
@@ -32,13 +32,6 @@ git clone https://github.com/Yuzmi/miam.git
 - Dependencies
 ```shell
 composer install
-```
-
-- ACL
-```shell
-sudo apt-get install acl
-sudo setfacl -R -m u:www-data:rwX -m u:`whoami`:rwX var/cache var/logs rss web/images
-sudo setfacl -dR -m u:www-data:rwX -m u:`whoami`:rwX var/cache var/logs rss web/images
 ```
 
 - Database, assets, cache
@@ -51,6 +44,13 @@ php bin/console cache:clear --env=prod
 php bin/console cache:warmup --env=prod
 ```
 
+- ACL
+```shell
+sudo apt-get install acl
+sudo setfacl -R -m u:www-data:rwX var/cache var/logs rss web/images
+sudo setfacl -dR -m u:www-data:rwX var/cache var/logs rss web/images
+```
+
 ### Apache config
 
 I suppose the project folder is /var/www/miam
@@ -59,8 +59,6 @@ DocumentRoot /var/www/miam/web
 
 <Directory "/var/www/miam/web">
 	AllowOverride All
-	#Order Allow,Deny
-	#Allow from All
 </Directory>
 ```
 
