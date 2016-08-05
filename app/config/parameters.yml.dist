@@ -18,4 +18,4 @@ parameters:
     # A secret key that's used to generate certain security-related tokens
     secret:            AreYouFuckingKiddingMeRightNow?
     
-    scss_path: /usr/bin/scss
+    scss_path:  /usr/local/bin/scss
