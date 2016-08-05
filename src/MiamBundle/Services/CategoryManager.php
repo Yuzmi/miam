@@ -93,8 +93,11 @@ class CategoryManager extends MainService {
 		$category->setLevel($value);
 		$this->em->persist($category);
 
-		foreach($category->getSubcategories() as $c) {
-			$this->updateLevelsForCategory($c, $value + 1);
+		$subcategories = $category->getSubcategories();
+		if(!empty($subcategories)) {
+			foreach($subcategories as $c) {
+				$this->updateLevelsForCategory($c, $value + 1);
+			}
 		}
 	}
 }
