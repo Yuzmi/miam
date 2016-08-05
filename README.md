@@ -47,8 +47,8 @@ php bin/console doctrine:database:create
 php bin/console doctrine:schema:create
 php bin/console assetic:dump --env=prod
 php bin/console assets:install --env=prod
-php app/console cache:clear --env=prod
-php app/console cache:warmup --env=prod
+php bin/console cache:clear --env=prod
+php bin/console cache:warmup --env=prod
 ```
 
 ### Apache config
