@@ -14,9 +14,7 @@ class TextExtension extends \Twig_Extension
 	}
 
 	public function getFunctions() {
-		return array(
-			new \Twig_SimpleFunction('lipsum', array($this, 'lipsum'), array('is_safe' => array('html'))),
-		);
+		return array();
 	}
 
 	public function getName() {
@@ -54,35 +52,6 @@ class TextExtension extends \Twig_Extension
         return $string;
     }
 
-    public function lipsum($length = 0) {
-        $string = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse molestie bibendum nulla, at dignissim mauris suscipit ut. 
-        	Pellentesque convallis purus in arcu rutrum feugiat. Fusce viverra efficitur enim eget gravida. 
-        	Etiam sed nisi id tellus egestas fringilla in in erat. Cras quis erat eget augue blandit sagittis quis varius risus. 
-        	Maecenas faucibus ullamcorper risus. Quisque eu convallis purus. 
-        	Suspendisse nec tincidunt tortor. Duis auctor consequat sapien vitae ultricies. 
-        	Integer sit amet interdum magna, id porta justo. Suspendisse potenti. Proin feugiat massa eget faucibus varius. 
-        	Pellentesque ullamcorper leo id ex facilisis faucibus. Proin finibus scelerisque libero, vel accumsan libero. 
-        	Mauris sed placerat lacus. Integer vel massa vestibulum, vulputate purus et, faucibus dolor. 
-        	Aliquam diam urna, commodo sit amet lectus et, faucibus consequat diam. Integer vel nulla hendrerit, ornare velit vel, dignissim felis. 
-        	Mauris tempus viverra lectus in dictum. Sed vel cursus purus. Fusce est nisl, efficitur sit amet risus id, placerat pharetra nibh. 
-        	Curabitur dapibus justo accumsan volutpat volutpat. Etiam eu accumsan nisl. Nulla ultricies turpis a blandit porttitor. 
-        	Proin ac tempor massa. Cras consectetur, nisi eget malesuada bibendum, lorem dolor aliquam diam, eget semper felis nibh in nulla. 
-        	Etiam ullamcorper pulvinar mi, vitae varius neque sodales non.
-        ";
-
-        if($length > 0) {
-        	$nb = ceil($length / strlen($string));
-
-        	$str = '';
-        	for($i=0;$i<$nb;$i++) {
-        		$str .= $string;
-        	}
-        	$string = $str;
-        }
-
-        return substr($string, 0, $length);
-    }
-
     // To avoid unclosed tags
     public function tidyHtml($html) {
         if(extension_loaded('tidy')) {
@@ -109,9 +78,11 @@ class TextExtension extends \Twig_Extension
         return preg_replace_callback('#<img([^>]*)>#isU', function($matches) {
             $img = $matches[0];
 
-            $img = preg_replace('#class=[\s]*".*"#isU', '', $img);
-            $img = preg_replace('#src=#isU', 'class="clickToShow"  data-src=', $img);
-            $img = preg_replace('#srcset=#isU', 'data-srcset=', $img);
+            $img = preg_replace('#class\s*=\s*".*"#isU', '', $img);
+            $img = preg_replace('#data-[a-z]+\s*=\s*".*"#isU', '', $img);
+
+            $img = preg_replace('#src\s*=#isU', 'class="clickToShow"  data-src=', $img);
+            $img = preg_replace('#srcset\s*=#isU', 'data-srcset=', $img);
 
             return $img;
         }, $html);
