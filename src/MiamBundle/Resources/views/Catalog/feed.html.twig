@@ -9,9 +9,7 @@
 {% block javascripts %}
 	{{ parent() }}
 
-	{% javascripts "@MiamBundle/Resources/public/js/items.js" %}
-		<script src="{{ asset_url }}"></script>
-	{% endjavascripts %}
+	<script type="text/javascript" src="{{ asset('js/items.js') }}"></script>
 
 	<script type="text/javascript">
 		$(document).ready(function() {

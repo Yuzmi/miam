@@ -74,25 +74,6 @@ swiftmailer:
 assetic:
     debug:  "%kernel.debug%"
     use_controller: "%kernel.debug%"
-    assets:
-        font-awesome-otf:
-            inputs: '@MiamBundle/Resources/public/fonts/FontAwesome.otf'
-            output: 'fonts/FontAwesome.otf'
-        font-awesome-eot:
-            inputs: '@MiamBundle/Resources/public/fonts/fontawesome-webfont.eot'
-            output: 'fonts/fontawesome-webfont.eot'
-        font-awesome-svg:
-            inputs: '@MiamBundle/Resources/public/fonts/fontawesome-webfont.svg'
-            output: 'fonts/fontawesome-webfont.svg'
-        font-awesome-ttf:
-            inputs: '@MiamBundle/Resources/public/fonts/fontawesome-webfont.ttf'
-            output: 'fonts/fontawesome-webfont.ttf'
-        font-awesome-woff:
-            inputs: '@MiamBundle/Resources/public/fonts/fontawesome-webfont.woff'
-            output: 'fonts/fontawesome-webfont.woff'
-        font-awesome-woff2:
-            inputs: '@MiamBundle/Resources/public/fonts/fontawesome-webfont.woff2'
-            output: 'fonts/fontawesome-webfont.woff2'
     filters:
         cssrewrite: ~
         scss:

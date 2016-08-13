@@ -14,11 +14,9 @@
 		</title>
 		<link rel="icon" href="{{ asset('favicon.ico') }}" />
 		
-		{% stylesheets "@MiamBundle/Resources/public/css/*.css" %}
-			<link href="{{ asset_url }}" type="text/css" rel="stylesheet">
-		{% endstylesheets %}
-
 		{% block stylesheets %}
+			<link href="{{ asset('css/font-awesome.min.css') }}" type="text/css" rel="stylesheet">
+
 			{% stylesheets "@MiamBundle/Resources/public/scss/main.scss" filter='scss' output='css/main.css' %}
 				<link href="{{ asset_url }}" type="text/css" rel="stylesheet">
 			{% endstylesheets %}
@@ -48,13 +46,8 @@
 		{% endif %}
 
 		{% block javascripts %}
-			{% javascripts
-				"@MiamBundle/Resources/public/js/jquery.js"
-				"@MiamBundle/Resources/public/js/main.js"
-				"@MiamBundle/Resources/public/js/items.js"
-			%}
-				<script type="text/javascript" src="{{ asset_url }}"></script>
-			{% endjavascripts %}
+			<script type="text/javascript" src="{{ asset('js/jquery.js') }}"></script>
+			<script type="text/javascript" src="{{ asset('js/main.js') }}"></script>
 
 			<script type="text/javascript" src="{{ asset('bundles/fosjsrouting/js/router.js') }}"></script>
 			<script type="text/javascript" src="{{ path('fos_js_routing_js', {'callback': 'fos.Router.setData'}) }}"></script>

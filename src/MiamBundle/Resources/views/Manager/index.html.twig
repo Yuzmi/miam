@@ -2,6 +2,7 @@
 
 {% block stylesheets %}
 	{{ parent() }}
+	
 	{% stylesheets "@MiamBundle/Resources/public/scss/manager.scss" filter='scss' output='css/manager.css' %}
 		<link href="{{ asset_url }}" type="text/css" rel="stylesheet">
 	{% endstylesheets %}
@@ -91,9 +92,7 @@
 {% block javascripts %}
 	{{ parent() }}
 
-	{% javascripts "@MiamBundle/Resources/public/js/manager.js" %}
-		<script src="{{ asset_url }}"></script>
-	{% endjavascripts %}
+	<script type="text/javascript" src="{{ asset('js/manager.js') }}"></script>
 
 	<script type="text/javascript">
 		app.manager.init();

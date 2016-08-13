@@ -2,6 +2,7 @@
 
 {% block stylesheets %}
 	{{ parent() }}
+	
 	{% stylesheets "@MiamBundle/Resources/public/scss/shit.scss" filter='scss' output='css/shit.css' %}
 		<link href="{{ asset_url }}" type="text/css" rel="stylesheet">
 	{% endstylesheets %}
@@ -138,12 +139,8 @@
 {% block javascripts %}
 	{{ parent() }}
 
-	{% javascripts 
-		"@MiamBundle/Resources/public/js/items.js" 
-		"@MiamBundle/Resources/public/js/shit.js" 
-	%}
-		<script src="{{ asset_url }}"></script>
-	{% endjavascripts %}
+	<script type="text/javascript" src="{{ asset('js/items.js') }}"></script>
+	<script type="text/javascript" src="{{ asset('js/shit.js') }}"></script>
 
 	<script type="text/javascript">
 		$(document).ready(function() {

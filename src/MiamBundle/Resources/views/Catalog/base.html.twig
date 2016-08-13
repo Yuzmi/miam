@@ -2,6 +2,7 @@
 
 {% block stylesheets %}
 	{{ parent() }}
+	
 	{% stylesheets "@MiamBundle/Resources/public/scss/catalog.scss" filter='scss' output='css/catalog.css' %}
 		<link href="{{ asset_url }}" type="text/css" rel="stylesheet">
 	{% endstylesheets %}

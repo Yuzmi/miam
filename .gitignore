@@ -15,17 +15,14 @@
 /vendor/
 /web/bundles/
 
+/feeds.json
+/node_modules
 /rss/*
 !/rss/.gitkeep
 
-/feeds.json
-/node_modules
-
 /src/MiamBundle/Entity/*.php~
 
-/web/css
-/web/fonts
-/web/js
-/web/feeds/*
+/web/css/*
+!web/css/font-awesome.min.css
 /web/images/feeds/*
 !web/images/feeds/.gitkeep
