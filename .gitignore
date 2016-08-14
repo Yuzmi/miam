@@ -24,5 +24,6 @@
 
 /web/css/*
 !web/css/font-awesome.min.css
+!web/css/open-sans.css
 /web/images/feeds/*
 !web/images/feeds/.gitkeep
