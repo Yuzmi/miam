@@ -3,8 +3,8 @@ h1 {
 }
 
 .tab {
-	border:solid 2px black;
-	margin:30px 40px 0;
+	border:solid 0.2rem black;
+	margin:3rem 4rem;
 	text-align:center;
 
 	&:first-of-type {
@@ -16,18 +16,15 @@ h1 {
 		color:white;
 		cursor:pointer;
 		font-weight:700;
-		padding:10px;
+		padding:1rem;
 	}
 
 	.content {
 		display:none;
-		padding:10px;
 	}
 
 	&.catsubs {
 		.content {
-			padding:0;
-
 			.buttons {
 				padding:1rem;
 			}
@@ -99,6 +96,26 @@ h1 {
 			}
 		}
 	}
+
+	&.settings {
+		.content {
+			form {
+				border-top:0.2rem solid #363636;
+				padding:2rem 1rem;
+			}
+
+			form:first-of-type {
+				border-top:0;
+			}
+
+			.password-form {
+				label {
+					display:block;
+					margin-bottom:1rem;
+				}
+			}
+		}
+	}
 }
 
 .popupContainer {
@@ -128,7 +145,7 @@ h1 {
 
 	&.newSubscription, &.editSubscription {
 		.categories {
-			border:solid 1px black;
+			border:solid 0.1rem black;
 			margin:auto;
 			margin-top:1rem;
 			max-height:40rem;

@@ -544,4 +544,36 @@ class ManagerController extends MainController
 
         return $this->redirectToRoute("manager", array("tab" => "settings"));
     }
+
+    public function updatePasswordAction(Request $request) {
+        if($this->isTokenValid('manager_password_update', $request->get('csrf_token'))) {
+            $encoder = $this->get('security.password_encoder');
+            $user = $this->getUser();
+
+            $current_password = $request->get('current_password');
+            $new_password = $request->get('new_password');
+            $new_password_again = $request->get('new_password_again');
+
+            if(!$encoder->isPasswordValid($user, $current_password)) {
+                $this->addFm("Current password is wrong", "error");
+            } elseif(empty($new_password)) {
+                $this->addFm("New password is empty");
+            } elseif($new_password != $new_password_again) {
+                $this->addFm("New password not identical");
+            } else {
+                $password = $encoder->encodePassword($user, $new_password);
+                $user->setPassword($password);
+
+                $em = $this->getEm();
+                $em->persist($user);
+                $em->flush();
+
+                $this->addFm("Password updated", "success");
+            }
+        } else {
+            $this->addFm("Invalid token", "error");
+        }
+
+        return $this->redirectToRoute("manager", array("tab" => "settings"));
+    }
 }

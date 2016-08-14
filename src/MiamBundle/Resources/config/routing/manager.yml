@@ -84,3 +84,7 @@ manager_opml_import:
 manager_settings_update:
     path: /settings/update
     defaults: { _controller: MiamBundle:Manager:updateSettings }
+
+manager_password_update:
+    path: /password/update
+    defaults: { _controller: MiamBundle:Manager:updatePassword }
