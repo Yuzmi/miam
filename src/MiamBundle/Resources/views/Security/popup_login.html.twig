@@ -6,13 +6,13 @@
 
 {% block popupContent %}
 	<form method="POST" action="{{ path('login_check') }}">
-	    <label for="username">Username:</label>
-	    <input type="text" id="username" name="_username" placeholder="Username">
+	    <label for="popup_username">Username:</label>
+	    <input type="text" id="popup_username" name="_username" placeholder="Username">
 
 	    <br>
 
-	    <label for="password">Password:</label>
-	    <input type="password" id="password" name="_password" placeholder="Password">
+	    <label for="popup_password">Password:</label>
+	    <input type="password" id="popup_password" name="_password" placeholder="Password">
 
 	    <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
 

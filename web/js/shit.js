@@ -18,7 +18,7 @@ app.shit = {
 		init: function() {
 			// Indentation des catégories
 			$(".sidebar .row").each(function() {
-				$(this).children(".name").css('padding-left', $(this).parents(".rowChildren").length+"em");
+				$(this).children(".name").css('padding-left', ($(this).parents(".rowChildren").length * 1.5)+"rem");
 			});
 
 			// Sélection d'un flux ou d'une catégorie

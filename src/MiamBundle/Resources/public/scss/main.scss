@@ -38,7 +38,7 @@ header {
 
 		.label {
 			display:inline-block;
-			margin-left:0.5rem;
+			margin-left:0.75rem;
 		}
 
 		&:hover {
@@ -429,6 +429,14 @@ button {
 					display:none;
 				}
 			}
+		}
+	}
+
+	@media (max-width:991px) {
+		.item .header, .loadMore {
+			font-size:1.4rem;
+			height:2.8rem;
+			line-height:2.8rem;
 		}
 	}
 }

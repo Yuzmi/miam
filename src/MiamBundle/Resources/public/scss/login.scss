@@ -1,45 +1,41 @@
 @import "vars.scss";
 
-.body_login {
-	.authentication, .register {
-		border:solid 1px black;
-		margin:auto;
-		margin-top:40px;
-		text-align:center;
-		width:300px;
+.authentication, .register {
+	border:solid 1px black;
+	margin:auto;
+	margin-top:40px;
+	text-align:center;
+	width:360px;
 
-		.header {
-			background-color:black;
-			color:white;
-			font-weight:700;
-			padding:1rem;
+	.header {
+		background-color:black;
+		color:white;
+		font-weight:700;
+		padding:1rem;
+	}
+
+	.content {
+		padding:1rem 2rem;
+
+		label {
+			display:block;
+			margin-bottom:0.6rem;
 		}
 
-		.content {
-			padding:1rem 2rem;
-
-			label {
-				display:inline-block;
-				margin-bottom:0.6rem;
-			}
-
-			input {
-				display:inline-block;
-				margin-bottom:1.2rem;
-			}
+		input {
+			display:inline-block;
+			margin-bottom:1.2rem;
 		}
 	}
 }
 
 body.night {
-	.body_login {
-		.authentication, .register {
-			border-color:#363636;
+	.authentication, .register {
+		border-color:#363636;
 
-			.header {
-				background-color:#363636;
-				color:#a8a8a8;
-			}
+		.header {
+			background-color:#363636;
+			color:#a8a8a8;
 		}
 	}
 }
