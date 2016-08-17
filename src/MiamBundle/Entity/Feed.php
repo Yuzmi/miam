@@ -40,7 +40,7 @@ class Feed
     }
 
     public function getIcon() {
-        return $this->hasIcon ? 'images/feeds/'.$this->id.'/icon.png' : '';
+        return $this->hasIcon ? 'images/feeds/icon-'.$this->id.'.png' : '';
     }
 
     /**

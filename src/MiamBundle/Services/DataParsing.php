@@ -44,12 +44,12 @@ class DataParsing extends MainService {
 		if($pie_init) {
 			$feed->setDateSuccess($now);
 			
-			$feed_name = html_entity_decode(trim($pie->get_title()), ENT_COMPAT | ENT_HTML5, 'utf-8');
+			$feed_name = $this->sanitizeText($pie->get_title());
 			if($feed_name) {
 				$feed->setName($feed_name);
 			}
 
-			$feed_website = trim($pie->get_link());
+			$feed_website = $this->sanitizeUrl($pie->get_link());
 			if(filter_var($feed_website, FILTER_VALIDATE_URL) !== false) {
 				$feed->setWebsite($feed_website);
 			}
@@ -71,7 +71,7 @@ class DataParsing extends MainService {
 			foreach($items as $i) {
 				$tags = $i->get_categories() ?: array();
 				foreach($tags as $t) {
-					$tag_name = trim($t->get_label());
+					$tag_name = $this->sanitizeText($t->get_label());
 					if($tag_name) {
 						if(array_key_exists($tag_name, $cache_tags)) {
 							$tag = $cache_tags[$tag_name];
@@ -136,7 +136,7 @@ class DataParsing extends MainService {
 	                $item->setHash($item_hash);
 
 	                // Title
-					$item_title = html_entity_decode(trim($i->get_title()), ENT_COMPAT | ENT_HTML5, 'utf-8');
+					$item_title = $this->sanitizeText($i->get_title());
 					$item->setTitle($item_title);
 
 					// Basic content
@@ -146,11 +146,11 @@ class DataParsing extends MainService {
 					$item->setHtmlContent($content);
 
 					// Text content
-					$textContent = html_entity_decode(trim(strip_tags($content)), ENT_COMPAT | ENT_HTML5, 'utf-8'); // A améliorer
+					$textContent = $this->sanitizeText(strip_tags($content));
 					$item->setTextContent($textContent);
 
 					// Link
-					$link = trim($i->get_link());
+					$link = $this->sanitizeUrl($i->get_link());
 					if(filter_var($link, FILTER_VALIDATE_URL) !== false) {
 						$item->setLink($link);
 					}
@@ -173,8 +173,8 @@ class DataParsing extends MainService {
 						$authors = array();
 
 						foreach($as as $a) {
-							$author_name = trim($a->get_name());
-							$author_email = trim($a->get_email());
+							$author_name = $this->sanitizeText($a->get_name());
+							$author_email = $this->sanitizeText($a->get_email());
 
 							if($author_name) {
 								$authors[] = $author_name;
@@ -193,7 +193,7 @@ class DataParsing extends MainService {
 					// New tags
 					$tags = $i->get_categories() ?: array();
 					foreach($tags as $t) {
-						$tag_name = trim($t->get_label());
+						$tag_name = $this->sanitizeText($t->get_label());
 						if(!empty($tag_name)) {
 							if(array_key_exists($tag_name, $cache_tags)) {
 								$tag = $cache_tags[$tag_name];
@@ -221,7 +221,7 @@ class DataParsing extends MainService {
 					$enclosure_urls = array();
 
 					foreach($enclosures as $e) {
-						$enclosure_url = trim($e->get_link());
+						$enclosure_url = $this->sanitizeUrl($e->get_link());
 						if(filter_var($enclosure_url, FILTER_VALIDATE_URL) !== false) {
 							$enclosure = null;
 							if(!$is_new_item) {
@@ -235,10 +235,18 @@ class DataParsing extends MainService {
 								$enclosure = new Enclosure();
 								$enclosure->setItem($item);
 								$enclosure->setUrl($enclosure_url);
-								$enclosure->setType($e->get_type());
-								$enclosure->setLength($e->get_length());
-								$enclosure->setTitle(trim($e->get_title()));
-								$enclosure->setDescription(trim($e->get_description()));
+
+								$enclosure_type = $this->sanitizeText($e->get_type());
+								$enclosure->setType($enclosure_type);
+
+								$enclosure_length = intval($e->get_length());
+								$enclosure->setLength($enclosure_length);
+
+								$enclosure_title = $this->sanitizeText($e->get_title());
+								$enclosure->setTitle($enclosure_title);
+
+								$enclosure_description = $this->sanitizeText($e->get_description());
+								$enclosure->setDescription($enclosure_description);
 
 								$this->em->persist($enclosure);
 
@@ -279,6 +287,14 @@ class DataParsing extends MainService {
 		if($firstParsing) {
 			$this->updateFavicon($feed);
 		}
+	}
+
+	private function sanitizeText($text) {
+		return html_entity_decode(trim($text), ENT_COMPAT | ENT_HTML5, 'utf-8');
+	}
+
+	private function sanitizeUrl($url) {
+		return trim($url);
 	}
 
 	public function parseFile($filename, $options = array()) {
@@ -337,13 +353,13 @@ class DataParsing extends MainService {
     	$success = false;
 
     	// Feed's pictures directory
-    	$feedDir = $this->rootDir.'/web/images/feeds/'.$feed->getId();
+    	$feedDir = $this->rootDir.'/web/images/feeds';
     	if(!is_dir($feedDir)) {
     		mkdir($feedDir, 0777, true);
     	}
 
-    	$tmpPath = $feedDir.'/icon.tmp';
-    	$iconPath = $feedDir.'/icon.png';
+    	$tmpPath = $feedDir.'/icon-'.$feed->getId().'.tmp';
+    	$iconPath = $feedDir.'/icon-'.$feed->getId().'.png';
 
     	// Parse the icon URL
     	$favicon = $this->getUrlForFeedIcon($feed);
@@ -420,7 +436,7 @@ class DataParsing extends MainService {
 	    			$success = true;
 	    		} elseif($iconSrcType == IMAGETYPE_ICO && extension_loaded('imagick')) {
 	    			// Must edit the extension here or it fails
-					$icoPath = $feedDir.'/icon.ico';
+					$icoPath = $feedDir.'/icon-'.$feed->getId().'.ico';
 					rename($tmpPath, $icoPath);
 
 					$icon = new \Imagick($icoPath);
@@ -459,6 +475,8 @@ class DataParsing extends MainService {
     		$this->em->persist($feed);
     		$this->em->flush();
     	}
+
+    	return $success;
     }
 
     // May need improvements
@@ -495,7 +513,7 @@ class DataParsing extends MainService {
     		$doc = new \DOMDocument();
     		$doc->strictErrorChecking = false;
 
-    		// Récupération du chemin de l'icône
+    		// Get icon path
     		try {
 	    		$html = file_get_contents($rootUrl);
 	    		if($html && $doc->loadHTML($html) !== false) {
@@ -513,12 +531,12 @@ class DataParsing extends MainService {
 			    }
 			} catch(\Exception $e) {}
 
-		    // Sinon on tente celui par défaut
+		    // Default otherwise
 		    if(!$favicon) {
 		    	$favicon = "/favicon.ico";
 		    }
 		    
-		    // Correction en cas d'erreurs
+		    // Fix if invalid url
 		    if(!filter_var($favicon, FILTER_VALIDATE_URL) !== false) {
 		    	$parsedFav = parse_url($favicon);
 
