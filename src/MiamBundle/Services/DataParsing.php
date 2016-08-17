@@ -386,71 +386,15 @@ class DataParsing extends MainService {
 	    		$iconSrcWidth = $iconData[0];
 	    		$iconSrcHeight = $iconData[1];
 	    		$iconSrcType = $iconData[2];
-	    		
-	    		if($iconSrcType == IMAGETYPE_GIF && extension_loaded('gd')) {
-	    			$iconDst = imagecreatetruecolor($iconSize, $iconSize);
-					
-					$blackBg = imagecolorallocate($iconDst, 0, 0, 0);
-	    			imagecolortransparent($iconDst, $blackBg);
 
-					$iconSrc = imagecreatefromgif($tmpPath);
-					imagecopyresampled($iconDst, $iconSrc, 0, 0, 0, 0, $iconSize, $iconSize, $iconSrcWidth, $iconSrcHeight);
-					
-					imagepng($iconDst, $iconPath);
-	            	imagedestroy($iconDst);
+	    		if(extension_loaded('imagick')) {
+	    			if($iconSrcType == IMAGETYPE_ICO) {
+		    			// Must edit the extension for ICO icons or it fails
+						$icoPath = $feedDir.'/icon-'.$feed->getId().'.ico';
+						rename($tmpPath, $icoPath);
+					}
 
-	            	$success = true;
-	    		} elseif($iconSrcType == IMAGETYPE_JPEG && extension_loaded('gd')) {
-	    			$iconDst = imagecreatetruecolor($iconSize, $iconSize);
-
-					$iconSrc = imagecreatefromjpeg($tmpPath);
-					imagecopyresampled($iconDst, $iconSrc, 0, 0, 0, 0, $iconSize, $iconSize, $iconSrcWidth, $iconSrcHeight);
-					
-					imagepng($iconDst, $iconPath);
-	            	imagedestroy($iconDst);
-
-	            	$success = true;
-	    		} elseif($iconSrcType == IMAGETYPE_PNG && extension_loaded('gd')) {
-	    			$iconDst = imagecreatetruecolor($iconSize, $iconSize);
-
-	    			$blackBg = imagecolorallocate($iconDst, 0, 0, 0);
-	    			imagecolortransparent($iconDst, $blackBg);
-	            	imagealphablending($iconDst, false);
-	            	imagesavealpha($iconDst, true);
-
-	            	$iconSrc = imagecreatefrompng($tmpPath);
-	            	imagecopyresampled($iconDst, $iconSrc, 0, 0, 0, 0, $iconSize, $iconSize, $iconSrcWidth, $iconSrcHeight);
-
-	            	imagepng($iconDst, $iconPath);
-	            	imagedestroy($iconDst);
-
-	            	$success = true;
-	    		} elseif($iconSrcType == IMAGETYPE_BMP && extension_loaded('imagick')) {
-	    			$icon = new \Imagick($tmpPath);
-					$icon->thumbnailImage($iconSize, $iconSize);
-					$icon->setImageFormat('png');
-					$icon->writeImage($iconPath);
-					$icon->clear();
-					$icon->destroy();
-
-	    			$success = true;
-	    		} elseif($iconSrcType == IMAGETYPE_ICO && extension_loaded('imagick')) {
-	    			// Must edit the extension here or it fails
-					$icoPath = $feedDir.'/icon-'.$feed->getId().'.ico';
-					rename($tmpPath, $icoPath);
-
-					$icon = new \Imagick($icoPath);
-					$icon->thumbnailImage($iconSize, $iconSize);
-					$icon->setImageFormat('png');
-					$icon->writeImage($iconPath);
-					$icon->clear();
-					$icon->destroy();
-
-	    			@unlink($icoPath);
-
-	    			$success = true;
-	    		} elseif(extension_loaded('imagick')) {
-	    			try {
+					try {
 	    				$icon = new \Imagick($tmpPath);
 						$icon->thumbnailImage($iconSize, $iconSize);
 						$icon->setImageFormat('png');
@@ -462,6 +406,52 @@ class DataParsing extends MainService {
 	    			} catch(\Exception $e) {
 	    				$success = false;
 	    			}
+
+	    			if($iconSrcType == IMAGETYPE_ICO) {
+		    			@unlink($icoPath);
+		    		}
+	    		}
+
+	    		if(!$success && extension_loaded('gd')) {
+	    			if($iconSrcType == IMAGETYPE_GIF) {
+		    			$iconDst = imagecreatetruecolor($iconSize, $iconSize);
+						
+						$blackBg = imagecolorallocate($iconDst, 0, 0, 0);
+		    			imagecolortransparent($iconDst, $blackBg);
+
+						$iconSrc = imagecreatefromgif($tmpPath);
+						imagecopyresampled($iconDst, $iconSrc, 0, 0, 0, 0, $iconSize, $iconSize, $iconSrcWidth, $iconSrcHeight);
+						
+						imagepng($iconDst, $iconPath);
+		            	imagedestroy($iconDst);
+
+		            	$success = true;
+		    		} elseif($iconSrcType == IMAGETYPE_JPEG) {
+		    			$iconDst = imagecreatetruecolor($iconSize, $iconSize);
+
+						$iconSrc = imagecreatefromjpeg($tmpPath);
+						imagecopyresampled($iconDst, $iconSrc, 0, 0, 0, 0, $iconSize, $iconSize, $iconSrcWidth, $iconSrcHeight);
+						
+						imagepng($iconDst, $iconPath);
+		            	imagedestroy($iconDst);
+
+		            	$success = true;
+		    		} elseif($iconSrcType == IMAGETYPE_PNG) {
+		    			$iconDst = imagecreatetruecolor($iconSize, $iconSize);
+
+		    			$blackBg = imagecolorallocate($iconDst, 0, 0, 0);
+		    			imagecolortransparent($iconDst, $blackBg);
+		            	imagealphablending($iconDst, false);
+		            	imagesavealpha($iconDst, true);
+
+		            	$iconSrc = imagecreatefrompng($tmpPath);
+		            	imagecopyresampled($iconDst, $iconSrc, 0, 0, 0, 0, $iconSize, $iconSize, $iconSrcWidth, $iconSrcHeight);
+
+		            	imagepng($iconDst, $iconPath);
+		            	imagedestroy($iconDst);
+
+		            	$success = true;
+		    		}
 	    		}
 	    	}
 
