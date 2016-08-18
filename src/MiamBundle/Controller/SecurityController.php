@@ -24,7 +24,7 @@ class SecurityController extends MainController
 	}
 
     public function registerCheckAction(Request $request) {
-        $username = trim($request->get('username'));
+        $username = substr(trim($request->get('username')), 0, 255);
         $password = $request->get('password');
         $passwordAgain = $request->get('password_again');
 
