@@ -16,8 +16,8 @@ Potentially unstable as it's still on development and not restricted to stable v
 
 - Linux (Tested on Ubuntu & Raspbian)
 - Apache + Mod rewrite
-- PHP 5 + extensions (curl, gd, imagick, mbstring, tidy, zlib)
-- MySQL (Never tried PostgreSQL & SQLite)
+- PHP 5.5 + extensions (curl, gd, imagick, mbstring, tidy, zlib)
+- MySQL
 - [Sass](http://sass-lang.com/install)
 - [Composer](https://getcomposer.org/download/)
 - [NodeJS](https://nodejs.org/en/download/) (only for the experimental cron)
@@ -29,26 +29,38 @@ Potentially unstable as it's still on development and not restricted to stable v
 git clone https://github.com/Yuzmi/miam.git
 ```
 
-- Dependencies
+- Install depenencies
 ```shell
 composer install
 ```
 
-- Database, assets, cache
+- Create the database
 ```shell
 php bin/console doctrine:database:create
 php bin/console doctrine:schema:create
+```
+
+- Install assets
+```shell
 php bin/console assetic:dump --env=prod
 php bin/console assets:install --env=prod
+```
+
+- Prepare the cache
+```shell
 php bin/console cache:clear --env=prod
 php bin/console cache:warmup --env=prod
 ```
 
-- ACL
+- Grant write permissions to www-data on these directories : rss, var/cache, var/logs, web/images
 ```shell
 sudo apt-get install acl
-sudo setfacl -R -m u:www-data:rwX var/cache var/logs rss web/images
-sudo setfacl -dR -m u:www-data:rwX var/cache var/logs rss web/images
+setfacl -R -m u:www-data:rwX rss var/cache var/logs web/images
+setfacl -dR -m u:www-data:rwX rss var/cache var/logs web/images
+
+# OR
+
+sudo chmod -R 777 rss var/cache var/logs web/images
 ```
 
 ### Apache config
@@ -56,8 +68,7 @@ sudo setfacl -dR -m u:www-data:rwX var/cache var/logs rss web/images
 I suppose the project folder is /var/www/miam
 ```apache
 DocumentRoot /var/www/miam/web
-
-<Directory "/var/www/miam/web">
+<Directory /var/www/miam/web>
 	AllowOverride All
 </Directory>
 ```
@@ -76,3 +87,5 @@ DocumentRoot /var/www/miam/web
 
 - order management for categories and feeds
 - filters => subscription_item
+- postgresql & sqlite
+- ico to png without imagick
