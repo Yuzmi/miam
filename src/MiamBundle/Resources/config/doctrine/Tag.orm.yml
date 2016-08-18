@@ -12,7 +12,7 @@ MiamBundle\Entity\Tag:
         name:
             type: string
             options:
-                collation: utf8_bin
+                collation: utf8mb4_bin
         dateCreated:
             type: datetime
             column: date_created

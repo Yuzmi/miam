@@ -19,7 +19,7 @@ MiamBundle\Entity\Feed:
         url:
             type: string
             options:
-                collation: utf8_bin
+                collation: utf8mb4_bin
         website:
             type: string
             nullable: true

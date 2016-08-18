@@ -12,7 +12,7 @@ MiamBundle\Entity\Enclosure:
         url:
             type: string
             options:
-                collation: utf8_bin
+                collation: utf8mb4_bin
         type:
             type: string
             nullable: true
