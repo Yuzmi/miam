@@ -230,8 +230,11 @@ class MarkManager extends MainService {
             ->leftJoin('i.marks', 'im', 'with', 'im.user = :reader')
             ->leftJoin('f.marks', 'fm', 'with', 'fm.user = :reader')
             ->where('s.user = :subscriber')
-            ->andWhere('im.id IS NULL OR im.isRead = FALSE')
-            ->andWhere('fm.id IS NULL OR fm.dateRead < i.dateCreated')
+            ->andWhere('
+            	((im.id IS NULL OR im.isRead = FALSE) AND (fm.id IS NULL OR fm.isRead = FALSE OR fm.dateRead < i.dateCreated))
+            	OR (im.isRead = TRUE AND (fm.isRead = FALSE OR fm.dateRead < i.dateCreated) AND im.dateRead < fm.dateRead)
+            	OR (im.isRead = FALSE AND (fm.isRead = TRUE AND fm.dateRead >= i.dateCreated) AND im.dateRead > fm.dateRead)
+            ')
             ->groupBy('f.id')
             ->setParameters(array(
             	'subscriber' => $subscriber,

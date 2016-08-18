@@ -59,8 +59,11 @@ class ItemManager extends MainService {
 
 			$type = isset($options['type']) ? $options['type'] : 'all';
 			if($type == 'unread') {
-				$qb->andWhere('im.isRead IS NULL OR im.isRead = FALSE');
-				$qb->andWhere('fm.id IS NULL OR fm.dateRead < i.dateCreated');
+				$qb->andWhere('
+	            	((im.id IS NULL OR im.isRead = FALSE) AND (fm.id IS NULL OR fm.isRead = FALSE OR fm.dateRead < i.dateCreated))
+            		OR (im.isRead = TRUE AND (fm.isRead = FALSE OR fm.dateRead < i.dateCreated) AND im.dateRead < fm.dateRead)
+            		OR (im.isRead = FALSE AND (fm.isRead = TRUE AND fm.dateRead >= i.dateCreated) AND im.dateRead > fm.dateRead)
+	            ');
 			} elseif($type == 'starred') {
 				$qb->andWhere('im.isStarred = TRUE');
 			}
@@ -148,10 +151,10 @@ class ItemManager extends MainService {
 			}
 
 			if($marker) {
-				$lastDateRead = null;
+				$lastDateRead = $i->getDateCreated();
 
 				foreach($i->getMarks() as $m) {
-					if($m->getDateRead() && (is_null($lastDateRead) || $lastDateRead < $m->getDateRead())) {
+					if($m->getDateRead() && ($lastDateRead < $m->getDateRead())) {
 						$data[$i->getId()]['isRead'] = $m->getIsRead();
 						$lastDateRead = $m->getDateRead();
 					}
@@ -162,7 +165,7 @@ class ItemManager extends MainService {
 				}
 
 				foreach($i->getFeed()->getMarks() as $m) {
-					if($m->getDateRead() && $i->getDateCreated() < $m->getDateRead() && (is_null($lastDateRead) || $lastDateRead < $m->getDateRead())) {
+					if($m->getDateRead() && $lastDateRead < $m->getDateRead()) {
 						$data[$i->getId()]['isRead'] = $m->getIsRead();
 						$lastDateRead = $m->getDateRead();
 					}
