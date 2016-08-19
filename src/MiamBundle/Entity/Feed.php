@@ -8,7 +8,7 @@ class Feed
     private $name;
     private $customName;
     private $url;
-    private $urlIcon;
+    private $iconUrl;
     private $website;
     private $dataLength;
     private $nbItems;
@@ -108,27 +108,27 @@ class Feed
     }
 
     /**
-     * Set urlIcon
+     * Set iconUrl
      *
-     * @param string $urlIcon
+     * @param string $iconUrl
      *
      * @return Feed
      */
-    public function setUrlIcon($urlIcon)
+    public function setIconUrl($iconUrl)
     {
-        $this->urlIcon = $urlIcon;
+        $this->iconUrl = $iconUrl;
 
         return $this;
     }
 
     /**
-     * Get urlIcon
+     * Get iconUrl
      *
      * @return string
      */
-    public function getUrlIcon()
+    public function getIconUrl()
     {
-        return $this->urlIcon;
+        return $this->iconUrl;
     }
 
     /**

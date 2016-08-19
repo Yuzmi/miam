@@ -20,9 +20,9 @@ MiamBundle\Entity\Feed:
             type: string
             options:
                 collation: utf8mb4_bin
-        urlIcon:
+        iconUrl:
             type: string
-            column: url_icon
+            column: icon_url
             nullable: true
         website:
             type: string

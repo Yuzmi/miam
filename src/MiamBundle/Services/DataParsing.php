@@ -56,7 +56,7 @@ class DataParsing extends MainService {
 
 			$feed_icon = $this->sanitizeUrl($pie->get_image_url());
 			if(filter_var($feed_icon, FILTER_VALIDATE_URL) !== false) {
-				$feed->setUrlIcon($feed_icon);
+				$feed->setIconUrl($feed_icon);
 			}
 
 			$dataLength = strlen($pie->get_raw_data());
@@ -377,7 +377,7 @@ class DataParsing extends MainService {
     	$iconPath = $feedDir.'/icon-'.$feed->getId().'.png';
 
     	// Parse the icon URL
-    	$icon = $feed->getUrlIcon() ?: $this->getFaviconUrl($feed);
+    	$icon = $feed->getIconUrl() ?: $this->getFaviconUrl($feed);
     	if($icon) {
     		try {
 	    		$content = file_get_contents($icon);
