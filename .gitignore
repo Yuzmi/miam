@@ -18,7 +18,7 @@
 /feeds.json
 /node_modules
 /rss/*
-!/rss/.gitkeep
+!rss/.gitkeep
 
 /src/MiamBundle/Entity/*.php~
 
