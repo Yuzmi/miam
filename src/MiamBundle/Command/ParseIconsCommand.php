@@ -19,10 +19,30 @@ class ParseIconsCommand extends ContainerAwareCommand {
     protected function execute(InputInterface $input, OutputInterface $output) {
         error_reporting(0);
 
+        $em = $this->getContainer()->get('doctrine')->getEntityManager();
+
         $output->write('Parsing icons... ');
+        $time_begin = time();
 
-        $this->getContainer()->get('data_parsing')->parseIcons();
+        $feeds = $em->getRepository('MiamBundle:Feed')->findAll();
 
-        $output->writeln('Done.');
+        $nb = 0;
+        foreach($feeds as $f) {
+            $feed = $em->getRepository('MiamBundle:Feed')->find($f->getId());
+            if(!$feed) {
+                continue;
+            }
+
+            $this->getContainer()->get('data_parsing')->parseIcon($feed);
+
+            $nb++;
+
+            if($nb%50 == 0) {
+                $em->clear();
+            }
+        }
+
+        $duration = time() - $time_begin;
+        $output->writeln('Done. Duration: '.$duration.'s');
     }
 }

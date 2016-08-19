@@ -291,7 +291,7 @@ class DataParsing extends MainService {
 
 		// Get icon every 7 days
 		$sevenDaysAgo = new \DateTime("now - 7 days");
-		if(!$feed->getDateIcon() || $feed->getDateIcon() > $sevenDaysAgo) {
+		if(!$feed->getDateIcon() || $feed->getDateIcon() < $sevenDaysAgo) {
 			$this->parseIcon($feed);
 		}
 	}
@@ -356,13 +356,6 @@ class DataParsing extends MainService {
 
 		return $generate !== false ? true : false;
 	}
-
-    public function parseIcons() {
-    	$feeds = $this->getRepo('Feed')->findAll();
-    	foreach($feeds as $feed) {
-	    	$icon = $this->parseIcon($feed);
-    	}
-    }
 
     public function parseIcon(Feed $feed) {
     	$success = false;

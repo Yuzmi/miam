@@ -39,14 +39,15 @@ class ParseSubscribedCommand extends ContainerAwareCommand {
             ->getQuery()->getResult();*/
 
         $nb = 0;
-        foreach($feeds as $feed) {
-            $feed = $em->getRepository('MiamBundle:Feed')->find($feed->getId());
-
-            if($feed) {
-                $this->getContainer()->get('data_parsing')->parseFeed($feed, array('verbose' => true));
-
-                $nb++;
+        foreach($feeds as $f) {
+            $feed = $em->getRepository('MiamBundle:Feed')->find($f->getId());
+            if(!$feed) {
+                continue;
             }
+
+            $this->getContainer()->get('data_parsing')->parseFeed($feed, array('verbose' => true));
+
+            $nb++;
 
             if($nb%20 == 0) {
                 $em->clear();

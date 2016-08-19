@@ -30,17 +30,19 @@ class ParseUsedCommand extends ContainerAwareCommand {
             ->select("f, COUNT(s.id) AS countSubs")
             ->leftJoin("f.subscriptions", "s")
             ->groupBy("f")
+            ->having("f.isCatalog = TRUE OR countSubs > 0")
             ->getQuery()->getResult();
 
         $nb = 0;
         foreach($feeds as $f) {
             $feed = $em->getRepository('MiamBundle:Feed')->find($f[0]->getId());
-            
-            if($feed && ($feed->getIsCatalog() || $f["countSubs"] > 0)) {
-                $this->getContainer()->get('data_parsing')->parseFeed($feed, array('verbose' => true));
-
-                $nb++;
+            if(!$feed) {
+                continue;
             }
+            
+            $this->getContainer()->get('data_parsing')->parseFeed($feed, array('verbose' => true));
+
+            $nb++;
 
             if($nb%20 == 0) {
                 $em->clear();
