@@ -54,6 +54,11 @@ class DataParsing extends MainService {
 				$feed->setWebsite($feed_website);
 			}
 
+			$feed_icon = $this->sanitizeUrl($pie->get_image_url());
+			if(filter_var($feed_icon, FILTER_VALIDATE_URL) !== false) {
+				$feed->setUrlIcon($feed_icon);
+			}
+
 			$dataLength = strlen($pie->get_raw_data());
 			if($dataLength > 0) {
 				$feed->setDataLength($dataLength);
@@ -284,7 +289,9 @@ class DataParsing extends MainService {
 			}
 		}
 
-		if($firstParsing) {
+		// Get icon every 7 days
+		$sevenDaysAgo = new \DateTime("now - 7 days");
+		if(!$feed->getDateIcon() || $feed->getDateIcon() > $sevenDaysAgo) {
 			$this->updateFavicon($feed);
 		}
 	}
@@ -370,7 +377,7 @@ class DataParsing extends MainService {
     	$iconPath = $feedDir.'/icon-'.$feed->getId().'.png';
 
     	// Parse the icon URL
-    	$favicon = $this->getUrlForFeedIcon($feed);
+    	$favicon = $feed->getUrlIcon() ?: $this->getUrlForFeedIcon($feed);
     	if($favicon) {
     		try {
 	    		$content = file_get_contents($favicon);
@@ -467,12 +474,13 @@ class DataParsing extends MainService {
     	}
 
     	// Feed update
-    	if($success && !$feed->getHasIcon()) {
+    	if($success) {
     		$feed->setHasIcon(true);
-
-    		$this->em->persist($feed);
-    		$this->em->flush();
     	}
+    	$feed->setDateIcon(new \DateTime("now"));
+
+    	$this->em->persist($feed);
+    	$this->em->flush();
 
     	return $success;
     }

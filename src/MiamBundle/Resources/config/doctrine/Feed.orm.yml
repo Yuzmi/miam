@@ -20,6 +20,10 @@ MiamBundle\Entity\Feed:
             type: string
             options:
                 collation: utf8mb4_bin
+        urlIcon:
+            type: string
+            column: url_icon
+            nullable: true
         website:
             type: string
             nullable: true
@@ -52,6 +56,10 @@ MiamBundle\Entity\Feed:
         dateNewItem:
             type: datetime
             column: date_new_item
+            nullable: true
+        dateIcon:
+            type: datetime
+            column: date_icon
             nullable: true
     oneToMany:
         items:

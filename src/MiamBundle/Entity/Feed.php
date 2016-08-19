@@ -8,6 +8,7 @@ class Feed
     private $name;
     private $customName;
     private $url;
+    private $urlIcon;
     private $website;
     private $dataLength;
     private $nbItems;
@@ -18,6 +19,7 @@ class Feed
     private $dateParsed;
     private $dateSuccess;
     private $dateNewItem;
+    private $dateIcon;
     private $items;
     private $subscriptions;
     private $marks;
@@ -103,6 +105,30 @@ class Feed
     public function getUrl()
     {
         return $this->url;
+    }
+
+    /**
+     * Set urlIcon
+     *
+     * @param string $urlIcon
+     *
+     * @return Feed
+     */
+    public function setUrlIcon($urlIcon)
+    {
+        $this->urlIcon = $urlIcon;
+
+        return $this;
+    }
+
+    /**
+     * Get urlIcon
+     *
+     * @return string
+     */
+    public function getUrlIcon()
+    {
+        return $this->urlIcon;
     }
 
     /**
@@ -198,30 +224,6 @@ class Feed
     }
 
     /**
-     * Set dateNewItem
-     *
-     * @param \DateTime $dateNewItem
-     *
-     * @return Feed
-     */
-    public function setDateNewItem($dateNewItem)
-    {
-        $this->dateNewItem = $dateNewItem;
-
-        return $this;
-    }
-
-    /**
-     * Get dateNewItem
-     *
-     * @return \DateTime
-     */
-    public function getDateNewItem()
-    {
-        return $this->dateNewItem;
-    }
-
-    /**
      * Set website
      *
      * @param string $website
@@ -291,6 +293,54 @@ class Feed
     public function getDateSuccess()
     {
         return $this->dateSuccess;
+    }
+
+    /**
+     * Set dateNewItem
+     *
+     * @param \DateTime $dateNewItem
+     *
+     * @return Feed
+     */
+    public function setDateNewItem($dateNewItem)
+    {
+        $this->dateNewItem = $dateNewItem;
+
+        return $this;
+    }
+
+    /**
+     * Get dateNewItem
+     *
+     * @return \DateTime
+     */
+    public function getDateNewItem()
+    {
+        return $this->dateNewItem;
+    }
+
+    /**
+     * Set dateIcon
+     *
+     * @param \DateTime $dateIcon
+     *
+     * @return Feed
+     */
+    public function setDateIcon($dateIcon)
+    {
+        $this->dateIcon = $dateIcon;
+
+        return $this;
+    }
+
+    /**
+     * Get dateIcon
+     *
+     * @return \DateTime
+     */
+    public function getDateIcon()
+    {
+        return $this->dateIcon;
     }
 
     /**
