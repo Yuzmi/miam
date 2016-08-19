@@ -8,20 +8,20 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 
-class UpdateFaviconsCommand extends ContainerAwareCommand {
+class ParseIconsCommand extends ContainerAwareCommand {
 	protected function configure() {
         $this
-            ->setName('miam:update:favicons')
-            ->setDescription('Update favicons')
+            ->setName('miam:parse:icons')
+            ->setDescription('Parse icons')
         ;
     }
 
     protected function execute(InputInterface $input, OutputInterface $output) {
         error_reporting(0);
 
-        $output->write('Update favicons... ');
+        $output->write('Parsing icons... ');
 
-        $this->getContainer()->get('data_parsing')->updateFavicons();
+        $this->getContainer()->get('data_parsing')->parseIcons();
 
         $output->writeln('Done.');
     }

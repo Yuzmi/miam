@@ -292,7 +292,7 @@ class DataParsing extends MainService {
 		// Get icon every 7 days
 		$sevenDaysAgo = new \DateTime("now - 7 days");
 		if(!$feed->getDateIcon() || $feed->getDateIcon() > $sevenDaysAgo) {
-			$this->updateFavicon($feed);
+			$this->parseIcon($feed);
 		}
 	}
 
@@ -357,14 +357,14 @@ class DataParsing extends MainService {
 		return $generate !== false ? true : false;
 	}
 
-    public function updateFavicons() {
+    public function parseIcons() {
     	$feeds = $this->getRepo('Feed')->findAll();
     	foreach($feeds as $feed) {
-	    	$icon = $this->updateFavicon($feed);
+	    	$icon = $this->parseIcon($feed);
     	}
     }
 
-    public function updateFavicon(Feed $feed) {
+    public function parseIcon(Feed $feed) {
     	$success = false;
 
     	// Feed's pictures directory
@@ -377,10 +377,10 @@ class DataParsing extends MainService {
     	$iconPath = $feedDir.'/icon-'.$feed->getId().'.png';
 
     	// Parse the icon URL
-    	$favicon = $feed->getUrlIcon() ?: $this->getUrlForFeedIcon($feed);
-    	if($favicon) {
+    	$icon = $feed->getUrlIcon() ?: $this->getFaviconUrl($feed);
+    	if($icon) {
     		try {
-	    		$content = file_get_contents($favicon);
+	    		$content = file_get_contents($icon);
 	    		if($content !== false) {
 	    			file_put_contents($tmpPath, $content);
 	    		}
@@ -486,7 +486,7 @@ class DataParsing extends MainService {
     }
 
     // May need improvements
-    private function getUrlForFeedIcon(Feed $feed) {
+    private function getFaviconUrl(Feed $feed) {
     	$favicon = null;
     	
     	$url = $feed->getWebsite();
