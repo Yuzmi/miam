@@ -364,32 +364,48 @@ class DataParsing extends MainService {
     public function parseIcon(Feed $feed) {
     	$success = false;
 
-    	// Feed's pictures directory
     	$feedDir = $this->rootDir.'/web/images/feeds';
-    	if(!is_dir($feedDir)) {
-    		mkdir($feedDir, 0777, true);
-    	}
 
     	$tmpPath = $feedDir.'/icon-'.$feed->getId().'.tmp';
     	$iconPath = $feedDir.'/icon-'.$feed->getId().'.png';
 
-    	// Parse the icon URL
-    	$icon = $feed->getIconUrl() ?: $this->getFaviconUrl($feed);
-    	if($icon) {
+    	$tmpIcon = false;
+
+    	// Get the icon
+    	$iconUrl = $feed->getIconUrl();
+    	if($iconUrl) {
     		try {
-	    		$content = file_get_contents($icon);
-	    		if($content !== false) {
-	    			file_put_contents($tmpPath, $content);
-	    		}
-	    	} catch(\Exception $e) {}
+    			$content = file_get_contents($iconUrl);
+    			if($content !== false && $content !== "") {
+    				if(file_put_contents($tmpPath, $content) !== false) {
+	    				$iconData = getimagesize($tmpPath);
+
+	    				// Non-square icons are bad
+	    				if($iconData && abs($iconData[0] - $iconData[1]) <= 2) {
+	    					$tmpIcon = true;
+	    				}
+	    			}
+    			}
+    		} catch(\Exception $e) {}
     	}
-
+    	
+    	// Get the favicon if no icon
+    	if(!$tmpIcon) {
+    		$faviconUrl = $this->getFaviconUrl($feed);
+    		try {
+    			$content = file_get_contents($faviconUrl);
+    			if($content !== false && $content !== "") {
+    				file_put_contents($tmpPath, $content);
+    			}
+    		} catch(\Exception $e) {}
+    	}
+    	
     	$iconSize = 16;
-
+    	
     	// Convert and store
     	if(is_file($tmpPath)) {
     		try {
-    			$iconData = @getimagesize($tmpPath);
+    			$iconData = getimagesize($tmpPath);
     		} catch(\Exception $e) {
     			$iconData = false;
     		}
