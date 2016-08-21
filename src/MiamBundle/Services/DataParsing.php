@@ -143,15 +143,26 @@ class DataParsing extends MainService {
 	                // Title
 					$item_title = $this->sanitizeString($i->get_title());
 					$item->setTitle($item_title);
-
-					// Basic content
-					$content = (string) $i->get_content();
 					
 					// HTML content
-					$item->setHtmlContent($content);
+					$htmlContent = (string) $i->get_content();
+					if(extension_loaded('tidy')) {
+						// To avoid unclosed tags
+						$htmlContent = tidy_repair_string($htmlContent, array(
+			                "output-html" => true
+			            ), "utf8");
+			            
+			            // Seriously, Tidy, why do you add html and body tags...
+			            if(preg_match('#<body>(.*)</body>#is', $htmlContent, $matches)) {
+			                $htmlContent = $matches[1];
+			            } else {
+			                $htmlContent = "";
+			            }
+					}
+					$item->setHtmlContent($htmlContent);
 
 					// Text content
-					$textContent = $this->sanitizeText(strip_tags($content));
+					$textContent = $this->sanitizeText(strip_tags($htmlContent));
 					$item->setTextContent($textContent);
 
 					// Link
