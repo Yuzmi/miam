@@ -2,34 +2,14 @@
 
 namespace MiamBundle\Entity;
 
-/**
- * Tag
- */
 class Tag
 {
-    /**
-     * @var integer
-     */
     private $id;
-
-    /**
-     * @var string
-     */
     private $name;
-
-    /**
-     * @var \DateTime
-     */
+    private $hash;
     private $dateCreated;
-
-    /**
-     * @var \Doctrine\Common\Collections\Collection
-     */
     private $items;
 
-    /**
-     * Constructor
-     */
     public function __construct()
     {
         $this->dateCreated = new \DateTime("now");
@@ -68,6 +48,16 @@ class Tag
     public function getName()
     {
         return $this->name;
+    }
+
+    public function setHash($hash) {
+        $this->hash = $hash;
+
+        return $this;
+    }
+
+    public function getHash() {
+        return $this->hash;
     }
 
     /**

@@ -2,39 +2,14 @@
 
 namespace MiamBundle\Entity;
 
-/**
- * Enclosure
- */
 class Enclosure
 {
-    /**
-     * @var integer
-     */
     private $id;
-
-    /**
-     * @var string
-     */
     private $url;
-
-    /**
-     * @var string
-     */
+    private $hash;
     private $type;
-
-    /**
-     * @var integer
-     */
     private $length;
-
-    /**
-     * @var \DateTime
-     */
     private $dateCreated;
-
-    /**
-     * @var \MiamBundle\Entity\Item
-     */
     private $item;
 
     public function __construct() {
@@ -73,6 +48,16 @@ class Enclosure
     public function getUrl()
     {
         return $this->url;
+    }
+
+    public function setHash($hash) {
+        $this->hash = $hash;
+
+        return $this;
+    }
+
+    public function getHash() {
+        return $this->hash;
     }
 
     /**

@@ -78,18 +78,18 @@ class DataParsing extends MainService {
 				foreach($tags as $t) {
 					$tag_name = $this->sanitizeString($t->get_label());
 					if($tag_name) {
-						if(array_key_exists($tag_name, $cache_tags)) {
-							$tag = $cache_tags[$tag_name];
-						} else {
-							$tag = $this->getRepo('Tag')->findOneByName($tag_name);
+						$tag_hash = hash('sha1', $tag_name);
+						if(!array_key_exists($tag_hash, $cache_tags)) {
+							$tag = $this->getRepo('Tag')->findOneByHash($tag_hash);
 							if(!$tag) {
 								$tag = new Tag();
 								$tag->setName($tag_name);
+								$tag->setHash($tag_hash);
 
 								$this->em->persist($tag);
 							}
 
-							$cache_tags[$tag_name] = $tag;
+							$cache_tags[$tag_hash] = $tag;
 						}
 					}
 				}
@@ -199,47 +199,51 @@ class DataParsing extends MainService {
 					$tags = $i->get_categories() ?: array();
 					foreach($tags as $t) {
 						$tag_name = $this->sanitizeString($t->get_label());
-						if(!empty($tag_name)) {
-							if(array_key_exists($tag_name, $cache_tags)) {
-								$tag = $cache_tags[$tag_name];
+						if($tag_name) {
+							$tag_hash = hash('sha1', $tag_name);
+							if(array_key_exists($tag_hash, $cache_tags)) {
+								$tag = $cache_tags[$tag_hash];
 
-								if(($is_new_item || !$item->getTags()->contains($tag)) && !in_array($tag_name, $new_tags)) {
+								if(($is_new_item || !$item->getTags()->contains($tag)) && !in_array($tag_hash, $new_tags)) {
 									$item->addTag($tag);
 
-									$new_tags[] = $tag_name;
+									$new_tags[] = $tag_hash;
 								}
 							}
 
-							$all_tags[] = $tag_name;
+							$all_tags[] = $tag_hash;
 						}
 					}
 
 					// Remove obsolete tags
 					foreach($item->getTags() as $t) {
-						if(!in_array($t->getName(), $all_tags)) {
+						if(!in_array($t->getHash(), $all_tags)) {
 							$item->removeTag($t);
 						}
 					}
 					
 					// Enclosure(s)
 					$enclosures = $i->get_enclosures();
-					$enclosure_urls = array();
+					$enclosure_hashes = array();
 
 					foreach($enclosures as $e) {
 						$enclosure_url = $this->sanitizeUrl($e->get_link());
 						if(filter_var($enclosure_url, FILTER_VALIDATE_URL) !== false) {
 							$enclosure = null;
+
+							$enclosure_hash = hash('sha1', $enclosure_url);
 							if(!$is_new_item) {
 								$enclosure = $this->getRepo('Enclosure')->findOneBy(array(
 									'item' => $item,
-									'url' => $enclosure_url
+									'hash' => $enclosure_hash
 								));
 							}
 
-							if(!$enclosure && !in_array($enclosure_url, $enclosure_urls)) {
+							if(!$enclosure && !in_array($enclosure_hash, $enclosure_hashes)) {
 								$enclosure = new Enclosure();
 								$enclosure->setItem($item);
 								$enclosure->setUrl($enclosure_url);
+								$enclosure->setHash($enclosure_hash);
 
 								$enclosure_type = $this->sanitizeString($e->get_type());
 								$enclosure->setType($enclosure_type);
@@ -255,7 +259,7 @@ class DataParsing extends MainService {
 
 								$this->em->persist($enclosure);
 
-								$enclosure_urls[] = $enclosure_url;
+								$enclosure_hashes[] = $enclosure_hash;
 							}
 						}
 					}

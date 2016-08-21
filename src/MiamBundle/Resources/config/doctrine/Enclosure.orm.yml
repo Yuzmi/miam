@@ -11,8 +11,9 @@ MiamBundle\Entity\Enclosure:
     fields:
         url:
             type: string
-            options:
-                collation: utf8mb4_bin
+        hash:
+            type: string
+            length: 40
         type:
             type: string
             nullable: true
@@ -36,6 +37,6 @@ MiamBundle\Entity\Enclosure:
                 name: item_id
                 referencedColumnName: id
     uniqueConstraints:
-        item_url_idx:
-            columns: [ item_id, url ]
+        item_hash_idx:
+            columns: [ item_id, hash ]
     lifecycleCallbacks: {  }
