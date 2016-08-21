@@ -392,12 +392,14 @@ class DataParsing extends MainService {
     	// Get the favicon if no icon
     	if(!$tmpIcon) {
     		$faviconUrl = $this->getFaviconUrl($feed);
-    		try {
-    			$content = file_get_contents($faviconUrl);
-    			if($content !== false && $content !== "") {
-    				file_put_contents($tmpPath, $content);
-    			}
-    		} catch(\Exception $e) {}
+    		if($faviconUrl) {
+	    		try {
+	    			$content = file_get_contents($faviconUrl);
+	    			if($content !== false && $content !== "") {
+	    				file_put_contents($tmpPath, $content);
+	    			}
+	    		} catch(\Exception $e) {}
+	    	}
     	}
     	
     	$iconSize = 16;
@@ -529,13 +531,13 @@ class DataParsing extends MainService {
     		$doc = new \DOMDocument();
     		$doc->strictErrorChecking = false;
 
-    		// Get icon path
+    		// Get favicon path
     		try {
 	    		$html = file_get_contents($rootUrl);
 	    		if($html && $doc->loadHTML($html) !== false) {
 		    		$xml = simplexml_import_dom($doc);
 		    		if($xml instanceof \SimpleXmlElement) {
-		    			$rels = array("shortcut icon", "SHORTCUT ICON", "icon", "ICON");
+		    			$rels = array("shortcut icon", "icon", "SHORTCUT ICON", "ICON");
 		    			foreach($rels as $rel) {
 		    				$arr = $xml->xpath('//link[@rel="'.$rel.'"]');
 		    				if(isset($arr[0]['href'])) {
