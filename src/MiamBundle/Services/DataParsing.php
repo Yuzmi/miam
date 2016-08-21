@@ -420,6 +420,7 @@ class DataParsing extends MainService {
 		    			// Must edit the extension for ICO icons or it fails
 						$icoPath = $feedDir.'/icon-'.$feed->getId().'.ico';
 						rename($tmpPath, $icoPath);
+						$tmpPath = $icoPath;
 					}
 
 					try {
@@ -434,10 +435,6 @@ class DataParsing extends MainService {
 	    			} catch(\Exception $e) {
 	    				$success = false;
 	    			}
-
-	    			if($iconSrcType == IMAGETYPE_ICO) {
-		    			@unlink($icoPath);
-		    		}
 	    		}
 
 	    		if(!$success && extension_loaded('gd')) {
