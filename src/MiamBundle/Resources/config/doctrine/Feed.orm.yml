@@ -10,22 +10,23 @@ MiamBundle\Entity\Feed:
                 strategy: AUTO
     fields:
         name:
-            type: string
+            type: text
             nullable: true
         customName:
-            type: string
+            type: text
             column: name_custom
             nullable: true
         url:
+            type: text
+        hash:
             type: string
-            options:
-                collation: utf8mb4_bin
+            length: 40
         iconUrl:
-            type: string
+            type: text
             column: icon_url
             nullable: true
         website:
-            type: string
+            type: text
             nullable: true
         isCatalog:
             type: boolean
@@ -75,8 +76,8 @@ MiamBundle\Entity\Feed:
             mappedBy: feed
             cascade: ["remove"]
     uniqueConstraints:
-        url_idx:
-            columns: [ url ]
+        hash_idx:
+            columns: [ hash ]
     lifecycleCallbacks:
         preRemove: [ prepareIconRemoval ]
         postRemove: [ removeIcon ]

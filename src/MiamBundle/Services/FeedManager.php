@@ -46,11 +46,13 @@ class FeedManager extends MainService {
 
 		if(filter_var($url, FILTER_VALIDATE_URL) !== false) {
 			$url = $this->formatUrl($url);
+			$hash = hash('sha1', $url);
 
-			$feed = $this->getRepo("Feed")->findOneByUrl($url);
+			$feed = $this->getRepo("Feed")->findOneByHash($hash);
 			if(!$feed) {
 				$feed = new Feed();
 				$feed->setUrl($url);
+				$feed->setHash($hash);
 
 				$this->em->persist($feed);
 				$this->em->flush();

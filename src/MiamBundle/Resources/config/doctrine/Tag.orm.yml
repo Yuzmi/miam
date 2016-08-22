@@ -10,7 +10,7 @@ MiamBundle\Entity\Tag:
                 strategy: AUTO
     fields:
         name:
-            type: string
+            type: text
         hash:
             type: string
             length: 40

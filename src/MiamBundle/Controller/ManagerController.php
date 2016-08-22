@@ -89,7 +89,7 @@ class ManagerController extends MainController
                 $new_category = true;
             }
 
-            $name = substr(trim($request->get("name")), 0, 255);
+            $name = trim($request->get("name"));
             if(!empty($name)) {
                 $category->setName($name);
 
@@ -261,7 +261,7 @@ class ManagerController extends MainController
             if($feed) {
                 $subscription->setFeed($feed);
 
-                $name = substr(trim($request->get("name")), 0, 255);
+                $name = trim($request->get("name"));
                 if(!empty($name)) {
                     $subscription->setName($name);
                 } else {

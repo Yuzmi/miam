@@ -10,15 +10,15 @@ MiamBundle\Entity\Item:
                 strategy: AUTO
     fields:
         title:
-            type: string
+            type: text
         link:
-            type: string
+            type: text
         identifier:
             type: string
-            options:
-                collation: utf8mb4_bin
+            length: 40
         hash:
             type: string
+            length: 40
         htmlContent:
             type: text
             column: content_html
@@ -68,4 +68,7 @@ MiamBundle\Entity\Item:
             targetEntity: ItemMark
             mappedBy: item
             cascade: ["remove"]
+    uniqueConstraints:
+        feed_identifier_idx:
+            columns: [ feed_id, identifier ]
     lifecycleCallbacks: {  }

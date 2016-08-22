@@ -11,6 +11,7 @@ MiamBundle\Entity\User:
     fields:
         username:
             type: string
+            length: 255
         password:
             type: string
         salt:

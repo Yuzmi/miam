@@ -10,18 +10,18 @@ MiamBundle\Entity\Enclosure:
                 strategy: AUTO
     fields:
         url:
-            type: string
+            type: text
         hash:
             type: string
             length: 40
         type:
-            type: string
+            type: text
             nullable: true
         length:
             type: integer
             nullable: true
         title:
-            type: string
+            type: text
             nullable: true
         description:
             type: text

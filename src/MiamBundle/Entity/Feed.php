@@ -8,6 +8,7 @@ class Feed
     private $name;
     private $customName;
     private $url;
+    private $hash;
     private $iconUrl;
     private $website;
     private $dataLength;
@@ -101,6 +102,30 @@ class Feed
     public function getUrl()
     {
         return $this->url;
+    }
+
+    /**
+     * Set hash
+     *
+     * @param string $hash
+     *
+     * @return Feed
+     */
+    public function setHash($hash)
+    {
+        $this->hash = $hash;
+
+        return $this;
+    }
+
+    /**
+     * Get hash
+     *
+     * @return string
+     */
+    public function getHash()
+    {
+        return $this->hash;
     }
 
     /**

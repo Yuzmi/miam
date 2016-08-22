@@ -44,7 +44,7 @@ class DataParsing extends MainService {
 		if($pie_init) {
 			$feed->setDateSuccess($now);
 			
-			$feed_name = $this->sanitizeString($pie->get_title());
+			$feed_name = $this->sanitizeText($pie->get_title());
 			if($feed_name) {
 				$feed->setName($feed_name);
 			}
@@ -76,7 +76,7 @@ class DataParsing extends MainService {
 			foreach($items as $i) {
 				$tags = $i->get_categories() ?: array();
 				foreach($tags as $t) {
-					$tag_name = $this->sanitizeString($t->get_label());
+					$tag_name = $this->sanitizeText($t->get_label());
 					if($tag_name) {
 						$tag_hash = hash('sha1', $tag_name);
 						if(!array_key_exists($tag_hash, $cache_tags)) {
@@ -98,7 +98,7 @@ class DataParsing extends MainService {
 			
 			$identifiers = array();
 			foreach($items as $i) {
-				$item_identifier = $this->sanitizeIdentifier($i->get_id());
+				$item_identifier = hash('sha1', $i->get_id());
 				$item_hash = $i->get_id(true); // md5(serialize($this->data))
 				
 				// Ignore duplicates (Not happy? Deal with it!)
@@ -141,7 +141,7 @@ class DataParsing extends MainService {
 	                $item->setHash($item_hash);
 
 	                // Title
-					$item_title = $this->sanitizeString($i->get_title());
+					$item_title = $this->sanitizeText($i->get_title());
 					$item->setTitle($item_title);
 					
 					// HTML content
@@ -189,8 +189,8 @@ class DataParsing extends MainService {
 						$authors = array();
 
 						foreach($as as $a) {
-							$author_name = $this->sanitizeString($a->get_name());
-							$author_email = $this->sanitizeString($a->get_email());
+							$author_name = $this->sanitizeText($a->get_name());
+							$author_email = $this->sanitizeText($a->get_email());
 
 							if($author_name) {
 								$authors[] = $author_name;
@@ -209,7 +209,7 @@ class DataParsing extends MainService {
 					// New tags
 					$tags = $i->get_categories() ?: array();
 					foreach($tags as $t) {
-						$tag_name = $this->sanitizeString($t->get_label());
+						$tag_name = $this->sanitizeText($t->get_label());
 						if($tag_name) {
 							$tag_hash = hash('sha1', $tag_name);
 							if(array_key_exists($tag_hash, $cache_tags)) {
@@ -256,13 +256,13 @@ class DataParsing extends MainService {
 								$enclosure->setUrl($enclosure_url);
 								$enclosure->setHash($enclosure_hash);
 
-								$enclosure_type = $this->sanitizeString($e->get_type());
+								$enclosure_type = $this->sanitizeText($e->get_type());
 								$enclosure->setType($enclosure_type);
 
 								$enclosure_length = intval($e->get_length());
 								$enclosure->setLength($enclosure_length);
 
-								$enclosure_title = $this->sanitizeString($e->get_title());
+								$enclosure_title = $this->sanitizeText($e->get_title());
 								$enclosure->setTitle($enclosure_title);
 
 								$enclosure_description = $this->sanitizeText($e->get_description());
@@ -311,20 +311,12 @@ class DataParsing extends MainService {
 		}
 	}
 
-	private function sanitizeIdentifier($identifier) {
-		return substr(trim($identifier), 0, 255);
-	}
-
-	private function sanitizeString($string) {
-		return substr(html_entity_decode(trim($string), ENT_COMPAT | ENT_HTML5, 'utf-8'), 0, 255);
-	}
-
 	private function sanitizeText($text) {
 		return html_entity_decode(trim($text), ENT_COMPAT | ENT_HTML5, 'utf-8');
 	}
 
 	private function sanitizeUrl($url) {
-		return substr(trim($url), 0, 255);
+		return trim($url);
 	}
 
 	public function parseFile($filename, $options = array()) {
