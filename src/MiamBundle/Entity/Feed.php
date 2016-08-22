@@ -41,10 +41,6 @@ class Feed
         return $this->name ?: $this->url;
     }
 
-    public function getIcon() {
-        return $this->hasIcon ? 'images/feeds/icon-'.$this->id.'.png' : '';
-    }
-
     /**
      * Get id
      *
@@ -519,5 +515,25 @@ class Feed
     public function getHasIcon()
     {
         return $this->hasIcon;
+    }
+
+    public function getIcon() {
+        return $this->hasIcon ? $this->getIconPath() : '';
+    }
+
+    private function getIconPath() {
+        return 'images/feeds/icon-'.$this->id.'.png';
+    }
+
+    private $iconPathForRemoval;
+
+    public function prepareIconRemoval() {
+        $this->iconPathForRemoval = __DIR__.'/../../../web/'.$this->getIconPath();
+    }
+
+    public function removeIcon() {
+        if(is_file($this->iconPathForRemoval)) {
+            @unlink($this->iconPathForRemoval);
+        }
     }
 }

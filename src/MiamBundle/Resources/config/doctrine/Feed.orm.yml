@@ -77,4 +77,6 @@ MiamBundle\Entity\Feed:
     uniqueConstraints:
         url_idx:
             columns: [ url ]
-    lifecycleCallbacks: {  }
+    lifecycleCallbacks:
+        preRemove: [ prepareIconRemoval ]
+        postRemove: [ removeIcon ]
