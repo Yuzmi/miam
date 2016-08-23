@@ -93,10 +93,14 @@ class ManagerController extends MainController
             if(!empty($name)) {
                 $category->setName($name);
 
-                $parent = $this->getRepo("Category")->findOneBy(array(
-                    'id' => $request->get('parent'),
-                    'user' => $this->getUser()
-                ));
+                $parentId = intval($request->get('parent'));
+                $parent = null;
+                if($parentId) {
+                    $parent = $this->getRepo("Category")->findOneBy(array(
+                        'id' => $parentId,
+                        'user' => $this->getUser()
+                    ));
+                }
                 if($parent) {
                     if(!$new_category && $parent->getLeftPosition() >= $category->getLeftPosition() && $parent->getRightPosition() <= $category->getRightPosition()) {
                         $category->setParent(null);
