@@ -27,10 +27,10 @@ class ParseUsedCommand extends ContainerAwareCommand {
         
         $feeds = $em->getRepository('MiamBundle:Feed')
             ->createQueryBuilder("f")
-            ->select("f, COUNT(s.id) AS countSubs")
+            ->select("f, COUNT(s.id)")
             ->leftJoin("f.subscriptions", "s")
             ->groupBy("f")
-            ->having("f.isCatalog = TRUE OR countSubs > 0")
+            ->having("f.isCatalog = TRUE OR COUNT(s.id) > 0")
             ->getQuery()->getResult();
 
         $nb = 0;
