@@ -543,7 +543,7 @@ class Feed
     }
 
     public function getIcon() {
-        return $this->hasIcon ? $this->getIconPath() : '';
+        return $this->hasIcon ? $this->getIconPath() : 'images/no-icon.png';
     }
 
     private function getIconPath() {

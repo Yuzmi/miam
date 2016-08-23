@@ -35,9 +35,7 @@
 	{% for s in tree.subscriptions %}
 		<div class="row" data-type="feed" data-id="{{ s.feed.id }}" title="{{ s.name }}">
 			<span class="name">
-				{% if s.feed.hasIcon %}
-					<img class="icon" src="{{ asset(s.feed.icon) }}" alt="">
-				{% endif %}
+				<img class="icon" src="{{ asset(s.feed.icon) }}" alt="">
 				{{ s.name ?: "[NO TITLE]" }}
 			</span>
 			<span class="unreadCount">{{ unreadCounts[s.feed.id] is defined ? unreadCounts[s.feed.id] : 0 }}</span>
