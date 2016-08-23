@@ -1,6 +1,6 @@
 MiamBundle\Entity\User:
     type: entity
-    table: user
+    table: "`user`"
     repositoryClass: MiamBundle\Repository\UserRepository
     id:
         id:
