@@ -23,6 +23,6 @@ MiamBundle\Entity\Tag:
             targetEntity: Item
             mappedBy: tags
     uniqueConstraints:
-        hash_idx:
+        tag_hash_idx:
             columns: [ hash ]
     lifecycleCallbacks: {  }

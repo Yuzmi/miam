@@ -30,6 +30,6 @@ MiamBundle\Entity\ItemMark:
                 name: user_id
                 referencedColumnName: id
     uniqueConstraints:
-        item_user_idx:
+        itemmark_item_user_idx:
             columns: [ item_id, user_id ]
     lifecycleCallbacks: {  }

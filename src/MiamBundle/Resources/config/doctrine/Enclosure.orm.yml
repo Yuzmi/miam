@@ -39,6 +39,6 @@ MiamBundle\Entity\Enclosure:
                 name: item_id
                 referencedColumnName: id
     uniqueConstraints:
-        item_hash_idx:
+        enclosure_item_hash_idx:
             columns: [ item_id, hash ]
     lifecycleCallbacks: {  }

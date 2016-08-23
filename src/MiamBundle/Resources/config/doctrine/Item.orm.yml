@@ -70,6 +70,6 @@ MiamBundle\Entity\Item:
             mappedBy: item
             cascade: ["remove"]
     uniqueConstraints:
-        feed_identifier_idx:
+        item_feed_identifier_idx:
             columns: [ feed_id, identifier ]
     lifecycleCallbacks: {  }

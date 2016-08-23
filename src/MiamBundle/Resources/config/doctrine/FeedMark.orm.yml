@@ -28,6 +28,6 @@ MiamBundle\Entity\FeedMark:
                 name: user_id
                 referencedColumnName: id
     uniqueConstraints:
-        feed_user_idx:
+        feedmark_feed_user_idx:
             columns: [ feed_id, user_id ]
     lifecycleCallbacks: {  }

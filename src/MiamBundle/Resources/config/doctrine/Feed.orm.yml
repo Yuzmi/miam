@@ -78,7 +78,7 @@ MiamBundle\Entity\Feed:
             mappedBy: feed
             cascade: ["remove"]
     uniqueConstraints:
-        hash_idx:
+        feed_hash_idx:
             columns: [ hash ]
     lifecycleCallbacks:
         preRemove: [ prepareIconRemoval ]
