@@ -44,7 +44,7 @@ class DataParsing extends MainService {
 		if($pie_init) {
 			$feed->setDateSuccess($now);
 			
-			$feed_name = $this->sanitizeText($pie->get_title());
+			$feed_name = $this->sanitizeText($pie->get_title(), 100);
 			if($feed_name) {
 				$feed->setName($feed_name);
 			}
@@ -76,7 +76,7 @@ class DataParsing extends MainService {
 			foreach($items as $i) {
 				$tags = $i->get_categories() ?: array();
 				foreach($tags as $t) {
-					$tag_name = $this->sanitizeText($t->get_label());
+					$tag_name = $this->sanitizeText($t->get_label(), 50);
 					if($tag_name) {
 						$tag_hash = hash('sha1', $tag_name);
 						if(!array_key_exists($tag_hash, $cache_tags)) {
@@ -141,7 +141,7 @@ class DataParsing extends MainService {
 	                $item->setHash($item_hash);
 
 	                // Title
-					$item_title = $this->sanitizeText($i->get_title());
+					$item_title = $this->sanitizeText($i->get_title(), 255);
 					$item->setTitle($item_title);
 					
 					// HTML content
@@ -209,7 +209,7 @@ class DataParsing extends MainService {
 					// New tags
 					$tags = $i->get_categories() ?: array();
 					foreach($tags as $t) {
-						$tag_name = $this->sanitizeText($t->get_label());
+						$tag_name = $this->sanitizeText($t->get_label(), 50);
 						if($tag_name) {
 							$tag_hash = hash('sha1', $tag_name);
 							if(array_key_exists($tag_hash, $cache_tags)) {
@@ -256,13 +256,13 @@ class DataParsing extends MainService {
 								$enclosure->setUrl($enclosure_url);
 								$enclosure->setHash($enclosure_hash);
 
-								$enclosure_type = $this->sanitizeText($e->get_type());
+								$enclosure_type = $this->sanitizeText($e->get_type(), 50);
 								$enclosure->setType($enclosure_type);
 
 								$enclosure_length = intval($e->get_length());
 								$enclosure->setLength($enclosure_length);
 
-								$enclosure_title = $this->sanitizeText($e->get_title());
+								$enclosure_title = $this->sanitizeText($e->get_title(), 255);
 								$enclosure->setTitle($enclosure_title);
 
 								$enclosure_description = $this->sanitizeText($e->get_description());
@@ -311,8 +311,14 @@ class DataParsing extends MainService {
 		}
 	}
 
-	private function sanitizeText($text) {
-		return html_entity_decode(trim($text), ENT_COMPAT | ENT_HTML5, 'utf-8');
+	private function sanitizeText($text, $maxLength = 0) {
+		$text = html_entity_decode(trim($text), ENT_COMPAT | ENT_HTML5, 'utf-8');
+
+		if($maxLength > 0) {
+			$text = substr($text, 0, $maxLength);
+		}
+
+		return $text;
 	}
 
 	private function sanitizeUrl($url) {

@@ -10,7 +10,8 @@ MiamBundle\Entity\Subscription:
                 strategy: AUTO
     fields:
         name:
-            type: text
+            type: string
+            length: 100
             nullable: true
         dateCreated:
             type: datetime

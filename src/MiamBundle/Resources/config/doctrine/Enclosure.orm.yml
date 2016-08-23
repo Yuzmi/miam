@@ -15,13 +15,15 @@ MiamBundle\Entity\Enclosure:
             type: string
             length: 40
         type:
-            type: text
+            type: string
+            length: 50
             nullable: true
         length:
             type: integer
             nullable: true
         title:
-            type: text
+            type: string
+            length: 255
             nullable: true
         description:
             type: text

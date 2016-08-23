@@ -10,7 +10,8 @@ MiamBundle\Entity\Category:
                 strategy: AUTO
     fields:
         name:
-            type: text
+            type: string
+            length: 50
         dateCreated:
             type: datetime
             column: date_created

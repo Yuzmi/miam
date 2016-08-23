@@ -10,7 +10,8 @@ MiamBundle\Entity\Item:
                 strategy: AUTO
     fields:
         title:
-            type: text
+            type: string
+            length: 255
         link:
             type: text
         identifier:
@@ -26,7 +27,7 @@ MiamBundle\Entity\Item:
             type: text
             column: content_text
         author:
-            type: string
+            type: text
             nullable: true
         dateCreated:
             type: datetime

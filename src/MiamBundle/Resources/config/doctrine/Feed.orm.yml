@@ -10,11 +10,13 @@ MiamBundle\Entity\Feed:
                 strategy: AUTO
     fields:
         name:
-            type: text
+            type: string
+            length: 100
             nullable: true
         customName:
-            type: text
+            type: string
             column: name_custom
+            length: 100
             nullable: true
         url:
             type: text
