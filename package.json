@@ -1,9 +1,0 @@
-{
-	"name": "miam",
-	"version": "0.1.0",
-	"author": "Yuzmi",
-	"description": "Récupère des flux RSS",
-	"dependencies": {
-		"request": "2.x"
-	}
-}

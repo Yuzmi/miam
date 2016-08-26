@@ -15,11 +15,6 @@
 /vendor/
 /web/bundles/
 
-/feeds.json
-/node_modules
-/rss/*
-!rss/.gitkeep
-
 /src/MiamBundle/Entity/*.php~
 
 /web/css/*

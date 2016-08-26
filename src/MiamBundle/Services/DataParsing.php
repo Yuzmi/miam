@@ -318,51 +318,6 @@ class DataParsing extends MainService {
 		return trim($url);
 	}
 
-	public function parseFile($filename, $options = array()) {
-		$path = $this->rssDir.'/'.$filename;
-		if(preg_match('#^([0-9]+)\.rss$#', $filename, $match) && file_exists($path)) {
-			$feed = $this->getRepo('Feed')->find($match[1]);
-			if($feed) {
-				$data = file_get_contents($path);
-				$this->parseFeed($feed, array_merge($options, array('data' => $data)));
-			}
-
-			@unlink($path);
-		}
-	}
-
-	public function parseFiles($options = array()) {
-		$handle = opendir($this->rssDir);
-		if($handle) {
-			$nb = 0;
-			while(($entry = readdir($handle)) !== false) {
-				$this->parseFile($entry, $options);
-
-				$nb++;
-
-				if($nb%20 == 0) {
-					$this->em->clear();
-				}
-			}
-		}
-	}
-
-	public function generateJson() {
-		$array = array();
-
-		$feeds = $this->getRepo('Feed')->findAll();
-		foreach($feeds as $feed) {
-			$array[] = array(
-				'id' => $feed->getId(),
-				'url' => $feed->getUrl()
-			);
-		}
-
-		$generate = file_put_contents($this->rootDir.'/feeds.json', json_encode($array));
-
-		return $generate !== false ? true : false;
-	}
-
     public function parseIcon(Feed $feed) {
     	$success = false;
 
