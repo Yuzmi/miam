@@ -20,7 +20,6 @@ Potentially unstable as it's still on development and not restricted to stable v
 - MySQL
 - [Sass](http://sass-lang.com/install)
 - [Composer](https://getcomposer.org/download/)
-- [NodeJS](https://nodejs.org/en/download/) (only for the experimental cron)
 
 ### Installation
 
