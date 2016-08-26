@@ -40,7 +40,16 @@ class ParseUsedCommand extends ContainerAwareCommand {
                 continue;
             }
             
-            $this->getContainer()->get('data_parsing')->parseFeed($feed, array('verbose' => true));
+            $result = $this->getContainer()->get('data_parsing')->parseFeed($feed);
+            if($result['success']) {
+                if($result['countNewItems'] > 0) {
+                    $output->write('+');
+                } else {
+                    $output->write('-');
+                }
+            } else {
+                $output->write('x');
+            }
 
             $nb++;
 

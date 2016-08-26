@@ -34,9 +34,16 @@ class ParseFeedCommand extends ContainerAwareCommand {
         if($feed) {
             $output->write('Parsing... ');
 
-            $this->getContainer()->get('data_parsing')->parseFeed($feed);
-
-            $output->writeln('Done.');
+            $result = $this->getContainer()->get('data_parsing')->parseFeed($feed);
+            if($result['success']) {
+                if($result['countNewItems'] > 0) {
+                    $output->writeln('Success. '.$result['countNewItems'].' new item'.($result['countNewItems'] > 1 ? 's' : ''));
+                } else {
+                    $output->writeln('Success.');
+                }
+            } else {
+                $output->writeln('Failure.');
+            }
         } else {
             $output->writeln('Feed unknown...');
         }

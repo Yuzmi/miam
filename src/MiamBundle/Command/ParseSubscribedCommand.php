@@ -32,10 +32,10 @@ class ParseSubscribedCommand extends ContainerAwareCommand {
 
         /*$feeds = $em->getRepository('MiamBundle:Feed')
             ->createQueryBuilder('f')
-            ->select('f, COUNT(s.id) AS countSubs')
+            ->select('f, COUNT(s.id)')
             ->leftJoin('f.subscriptions', 's')
             ->groupBy('f')
-            ->having('countSubs > 0')
+            ->having('COUNT(s.id) > 0')
             ->getQuery()->getResult();*/
 
         $nb = 0;
@@ -45,7 +45,16 @@ class ParseSubscribedCommand extends ContainerAwareCommand {
                 continue;
             }
 
-            $this->getContainer()->get('data_parsing')->parseFeed($feed, array('verbose' => true));
+            $result = $this->getContainer()->get('data_parsing')->parseFeed($feed);
+            if($result['success']) {
+                if($result['countNewItems'] > 0) {
+                    $output->write('+');
+                } else {
+                    $output->write('-');
+                }
+            } else {
+                $output->write('x');
+            }
 
             $nb++;
 

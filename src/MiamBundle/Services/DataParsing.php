@@ -292,23 +292,16 @@ class DataParsing extends MainService {
 		
 		$this->em->flush();
 
-		if(isset($options['verbose']) && $options['verbose']) {
-			if($pie_init) {
-				if($countNewItems > 0) {
-					echo '+';
-				} else {
-					echo '-';
-				}
-			} else {
-				echo 'x';
-			}
-		}
-
 		// Get icon every 7 days
 		$sevenDaysAgo = new \DateTime("now - 7 days");
 		if(!$feed->getDateIcon() || $feed->getDateIcon() < $sevenDaysAgo) {
 			$this->parseIcon($feed);
 		}
+
+		return array(
+			'success' => $pie_init,
+			'countNewItems' => $countNewItems
+		);
 	}
 
 	private function sanitizeText($text, $maxLength = 0) {
@@ -503,7 +496,9 @@ class DataParsing extends MainService {
     	$this->em->persist($feed);
     	$this->em->flush();
 
-    	return $success;
+    	return array(
+    		'success' => $success
+    	);
     }
 
     // May need improvements

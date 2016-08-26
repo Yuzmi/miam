@@ -21,7 +21,7 @@ class ParseIconsCommand extends ContainerAwareCommand {
 
         $em = $this->getContainer()->get('doctrine')->getEntityManager();
 
-        $output->write('Parsing icons... ');
+        $output->writeln('Parsing icons... ');
         $time_begin = time();
 
         $feeds = $em->getRepository('MiamBundle:Feed')->findAll();
@@ -33,7 +33,12 @@ class ParseIconsCommand extends ContainerAwareCommand {
                 continue;
             }
 
-            $this->getContainer()->get('data_parsing')->parseIcon($feed);
+            $result = $this->getContainer()->get('data_parsing')->parseIcon($feed);
+            if($result['success']) {
+                $output->write('O');
+            } else {
+                $output->write('x');
+            }
 
             $nb++;
 
@@ -43,6 +48,8 @@ class ParseIconsCommand extends ContainerAwareCommand {
         }
 
         $duration = time() - $time_begin;
+
+        $output->writeln('');
         $output->writeln('Done. Duration: '.$duration.'s');
     }
 }

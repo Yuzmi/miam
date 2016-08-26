@@ -34,9 +34,12 @@ class ParseIconCommand extends ContainerAwareCommand {
         if($feed) {
             $output->write('Parsing icon... ');
 
-            $this->getContainer()->get('data_parsing')->parseIcon($feed);
-
-            $output->writeln('Done.');
+            $result = $this->getContainer()->get('data_parsing')->parseIcon($feed);
+            if($result['success']) {
+                $output->writeln('Success.');
+            } else {
+                $output->writeln('Failure.');
+            }
         } else {
             $output->writeln('Feed unknown...');
         }
