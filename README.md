@@ -14,9 +14,9 @@ Potentially unstable as it's still on development and not restricted to stable v
 
 ### Requirements
 
-- Linux (Tested on Ubuntu & Raspbian)
+- Linux
 - Apache + Mod rewrite
-- PHP 5.5 + extensions (curl, gd, imagick, mbstring, tidy, zlib)
+- PHP 5.5.9+ / Extensions : curl, gd, iconv, imagick, json, mbstring, tidy, xml
 - MySQL
 - [Sass](http://sass-lang.com/install)
 - [Composer](https://getcomposer.org/download/)
@@ -29,7 +29,7 @@ Potentially unstable as it's still on development and not restricted to stable v
 git clone https://github.com/Yuzmi/miam.git
 ```
 
-- Install depenencies
+- Install dependencies
 ```shell
 composer install
 ```
@@ -54,18 +54,15 @@ php bin/console cache:warmup --env=prod
 
 - Grant write permissions to www-data on these directories : rss, var/cache, var/logs, web/images
 ```shell
-sudo apt-get install acl
-setfacl -R -m u:www-data:rwX rss var/cache var/logs web/images
-setfacl -dR -m u:www-data:rwX rss var/cache var/logs web/images
-
+apt install acl
+setfacl -R -m u:www-data:rwX var/cache var/logs web/images
+setfacl -dR -m u:www-data:rwX var/cache var/logs web/images
 # OR
-
-sudo chmod -R 777 rss var/cache var/logs web/images
+chmod -R 777 var/cache var/logs web/images
 ```
 
 ### Apache config
 
-I suppose the project folder is /var/www/miam
 ```apache
 DocumentRoot /var/www/miam/web
 <Directory /var/www/miam/web>
@@ -76,11 +73,7 @@ DocumentRoot /var/www/miam/web
 ### CRON
 
 ```
-// Default cron
-*/30 * * * * php /var/www/miam/bin/console miam:parse:used
-
-// With NodeJS, faster but experimental
-*/30 * * * * php /var/www/miam/bin/console miam:generate:json && nodejs /var/www/miam/get_feeds.js && php /var/www/miam/bin/console miam:parse:files
+*/30 * * * * php /var/www/miam/bin/console miam:parse:used --env=prod
 ```
 
 ### TODO
