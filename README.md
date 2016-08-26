@@ -52,7 +52,7 @@ php bin/console cache:clear --env=prod
 php bin/console cache:warmup --env=prod
 ```
 
-- Grant write permissions to www-data on these directories : rss, var/cache, var/logs, web/images
+- Grant write permissions to www-data on these directories : var/cache, var/logs, web/images
 ```shell
 apt install acl
 setfacl -R -m u:www-data:rwX var/cache var/logs web/images
