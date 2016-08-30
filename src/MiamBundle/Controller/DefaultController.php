@@ -11,6 +11,6 @@ class DefaultController extends MainController
             ));
         }
 
-    	return $this->redirectToRoute('login');
+    	return $this->redirectToRoute('catalog');
 	}
 }
