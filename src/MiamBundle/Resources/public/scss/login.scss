@@ -1,5 +1,3 @@
-@import "vars.scss";
-
 .authentication, .register {
 	border:solid 1px black;
 	margin:auto;
@@ -29,13 +27,24 @@
 	}
 }
 
-body.night {
+body.dark {
 	.authentication, .register {
 		border-color:#363636;
 
 		.header {
 			background-color:#363636;
 			color:#a8a8a8;
+		}
+	}
+}
+
+body.orange {
+	.authentication, .register {
+		border-color:#e69030;
+
+		.header {
+			background-color:#e69030;
+			color:white;
 		}
 	}
 }

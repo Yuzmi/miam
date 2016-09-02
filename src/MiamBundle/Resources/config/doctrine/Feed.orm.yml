@@ -11,12 +11,12 @@ MiamBundle\Entity\Feed:
     fields:
         name:
             type: string
-            length: 100
+            length: 255
             nullable: true
         customName:
             type: string
             column: name_custom
-            length: 100
+            length: 255
             nullable: true
         url:
             type: text
@@ -28,6 +28,9 @@ MiamBundle\Entity\Feed:
             column: icon_url
             nullable: true
         website:
+            type: text
+            nullable: true
+        author:
             type: text
             nullable: true
         isCatalog:

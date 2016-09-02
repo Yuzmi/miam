@@ -11,7 +11,7 @@ MiamBundle\Entity\Tag:
     fields:
         name:
             type: string
-            length: 50
+            length: 255
         hash:
             type: string
             length: 40

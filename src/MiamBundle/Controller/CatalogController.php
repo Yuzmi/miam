@@ -30,7 +30,7 @@ class CatalogController extends MainController
 
 	public function showFeedAction($id) {
 		$feed = $this->getRepo('Feed')->find($id);
-		if(!$feed && !$feed->getIsCatalog()) {
+		if(!$feed || !$feed->getIsCatalog()) {
 			return $this->redirectToRoute('catalog_feeds');
 		}
 
@@ -100,7 +100,7 @@ class CatalogController extends MainController
 			$feed = $this->getRepo('Feed')->find($id);
 			if($feed) {
 				$subscription = $this->getRepo('Subscription')->findOneBy(array(
-					'user' => $user,
+					'user' => $this->getUser(),
 					'feed' => $feed
 				));
 				if($subscription) {
@@ -113,6 +113,37 @@ class CatalogController extends MainController
 
 		return new Response(json_encode(array(
 			'success' => $success
+		)));
+	}
+
+	public function ajaxGetItemsForFeedAction($id, $page) {
+		$success = false;
+		$htmlItems = null;
+
+		$feed = $this->getRepo('Feed')->find($id);
+		if($feed && $feed->getIsCatalog()) {
+			$page = max(1, intval($page));
+
+			$items = $this->get('item_manager')->getItems(array(
+				'feed' => $feed,
+				'page' => $page
+			));
+
+			$dataItems = $this->get('item_manager')->getDataForItems($items);
+
+			$htmlItems = $this->renderView('MiamBundle:Default:items.html.twig', array(
+				'items' => $items,
+				'dataItems' => $dataItems,
+				'loadMore' => true
+			));
+
+			$success = true;
+		}
+
+		return new Response(json_encode(array(
+			'success' => $success,
+			'items' => $htmlItems,
+			'page' => $page
 		)));
 	}
 }

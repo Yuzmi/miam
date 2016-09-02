@@ -16,7 +16,7 @@ MiamBundle\Entity\Enclosure:
             length: 40
         type:
             type: string
-            length: 50
+            length: 255
             nullable: true
         length:
             type: integer

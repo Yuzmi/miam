@@ -89,7 +89,7 @@ class ManagerController extends MainController
                 $new_category = true;
             }
 
-            $name = substr(trim($request->get("name")), 0, 50);
+            $name = substr(trim($request->get("name")), 0, 255);
             if(!empty($name)) {
                 $category->setName($name);
 
@@ -265,7 +265,7 @@ class ManagerController extends MainController
             if($feed) {
                 $subscription->setFeed($feed);
 
-                $name = substr(trim($request->get("name")), 0, 100);
+                $name = substr(trim($request->get("name")), 0, 255);
                 if(!empty($name)) {
                     $subscription->setName($name);
                 } else {
@@ -463,7 +463,7 @@ class ManagerController extends MainController
 
                 if(isset($outline['text']) || isset($outline['title'])) {
                     $name = isset($outline['text']) ? $outline['text'] : $outline['title'];
-                    $name = substr(trim($name), 0, 100);
+                    $name = substr(trim($name), 0, 255);
                     if(!empty($name)) {
                         $subscription->setName($name);
                     }
@@ -491,7 +491,7 @@ class ManagerController extends MainController
             $category = null;
             if(isset($outline['text']) || isset($outline['title'])) {
                 $name = isset($outline['text']) ? $outline['text'] : $outline['title'];
-                $name = substr(trim($name), 0, 50);
+                $name = substr(trim($name), 0, 255);
                 if(!empty($name)) {
                     $category = $this->getRepo("Category")->findOneBy(array(
                         'name' => $name,

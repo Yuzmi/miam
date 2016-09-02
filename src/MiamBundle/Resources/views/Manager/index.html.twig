@@ -1,5 +1,9 @@
 {% extends 'MiamBundle::base.html.twig' %}
 
+{% block head_title %}
+	{{ parent() }} - Manager
+{% endblock %}
+
 {% block stylesheets %}
 	{{ parent() }}
 	
@@ -10,8 +14,6 @@
 
 {% block body %}
 	{% include 'MiamBundle:Default:header.html.twig' %}
-	
-	<h1>Manager</h1>
 	
 	<section class="tab catsubs">
 		<div class="header">
@@ -75,8 +77,9 @@
 
 				Theme :
 				<select name="THEME">
-					<option value="light" {{ app.user.setting('THEME') == 'light' ? 'selected' }}>Light</option>
-					<option value="night" {{ app.user.setting('THEME') == 'night' ? 'selected' }}>Night</option>
+					<option value="basic" {{ app.user.setting('THEME') == 'basic' ? 'selected' }}>Basic</option>
+					<option value="dark" {{ app.user.setting('THEME') == 'dark' ? 'selected' }}>Dark</option>
+					<option value="orange" {{ app.user.setting('THEME') == 'orange' ? 'selected' }}>Orange</option>
 				</select>
 
 				<br><br>

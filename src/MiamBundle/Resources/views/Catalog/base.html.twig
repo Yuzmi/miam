@@ -11,15 +11,5 @@
 {% block body %}
 	{% include 'MiamBundle:Default:header.html.twig' %}
 
-	<h1>
-		Catalog
-		<br>
-		<small>
-			<a href="{{ path('catalog_feeds') }}">Feeds</a>
-			-
-			<a href="{{ path('catalog_items') }}">Items</a>
-		</small>
-	</h1>
-
 	{% block content %}{% endblock %}
 {% endblock %}

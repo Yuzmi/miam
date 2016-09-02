@@ -1,5 +1,3 @@
-@import "vars.scss";
-
 html {
 	font-size:10px;
 }
@@ -19,12 +17,16 @@ a {
 
 noscript {
 	background-color:#fcc;
-	border-bottom:solid 0.1rem red;
+	border-top:solid 0.1rem red;
+	bottom:0px;
 	color:red;
-	display:block;
-	font-weight:700;
-	padding:1rem;
+	font-size:1rem;
+	margin:auto;
+	padding:0.5rem;
+	position:fixed;
 	text-align:center;
+	width:100%;
+	z-index:10;
 }
 
 header {
@@ -32,7 +34,7 @@ header {
 
 	a {
 		display:inline-block;
-		line-height:2rem;
+		line-height:1.9rem;
 		padding:1rem 1.4rem;
 		text-decoration:none;
 
@@ -42,7 +44,8 @@ header {
 		}
 
 		&:hover {
-			background-color:rgba(0, 0, 0, 0.1);
+			background-color:black;
+			color:white;
 		}
 	}
 
@@ -107,7 +110,7 @@ button {
 
 .popupContainer {
 	align-items:center;
-	background-color:rgba(0, 0, 0, 0.25);
+	background-color:rgba(0, 0, 0, 0.5);
 	bottom:0px;
 	display:flex;
 	justify-content:center;
@@ -160,10 +163,6 @@ button {
 			top:0.4rem;
 			width:1.6rem;
 		}
-	}
-
-	&.hidden {
-		display:none;
 	}
 }
 
@@ -441,7 +440,7 @@ button {
 	}
 }
 
-body.night {
+body.dark {
 	background-color:#161616;
 	color:#a8a8a8;
 
@@ -453,6 +452,7 @@ body.night {
 		border-bottom-color:#363636;
 
 		a:hover {
+			background-color:inherit;
 			color:#cfcfcf;
 		}
 
@@ -534,6 +534,100 @@ body.night {
 			.details_toggle {
 				border-color:#363636;
 				color:inherit;
+			}
+		}
+	}
+}
+
+body.orange {
+	color:#e69030;
+
+	a {
+		color:#e69030;
+	}
+
+	header {
+		border-bottom-color:#e69030;
+
+		a:hover {
+			background-color:#e69030;
+		}
+
+		& > a {
+			border-right-color:#e69030;
+		}
+
+		.rightSide {
+			& > a {
+				border-left-color:#e69030;
+			}
+		}
+	}
+
+	input, select, textarea, button {
+		background-color:white;
+		border-color:#e69030;
+		color:#e69030;
+	}
+
+	button:hover {
+		background-color:#e69030;
+		color:white;
+	}
+
+	.flashMessages {
+		.flashMessageContainer {
+			.flashMessage {
+				border-color:#e69030;
+			}
+		}
+	}
+
+	.popupContainer {
+		.popup {
+			border-color:#e69030;
+
+			.popupTitle {
+				background-color:#e69030;
+				color:white;
+			}
+
+			.popupClose {
+				color:white;
+			}
+		}
+	}
+
+	.items {
+		.item {
+			border-color:#e69030;
+
+			.header {
+				.hide {
+					border-color:#e69030;
+
+					&:hover {
+						background-color:#e69030;
+						color:white;
+					}
+				}
+			}
+
+			.content {
+				border-color:#e69030;
+
+				img.clickToShow {
+					border-color:#e69030;
+				}
+			}
+
+			.details {
+				border-color:#e69030;
+			}
+
+			.details_toggle {
+				border-color:#e69030;
+				color:#e69030;
 			}
 		}
 	}

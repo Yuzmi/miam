@@ -1,6 +1,10 @@
 {% extends 'MiamBundle:Catalog:base.html.twig' %}
 
 {% block content %}
+	<h1>Catalog - Items</h1>
+
+	<p><a href="{{ path('catalog_feeds') }}">Show feeds</a></p>
+
 	<div class="items">
 		{% include 'MiamBundle:Default:items.html.twig' %}
 	</div>

@@ -1,122 +1,100 @@
 h1 {
+	margin:1rem 2rem;
 	text-align:center;
+}
+
+p {
+	text-align:center;
+
+	.icon {
+		display:block;
+		margin:auto;
+		margin-bottom:1rem;
+	}
 }
 
 .feeds {
-	text-align:center;
-
 	.feed {
-		border:solid 0.1rem black;
-		display:inline-block;
-		margin:0.6rem;
-		position:relative;
+		border-color:black;
+		border-style:solid;
+		border-bottom-width:0.1rem;
+		display:block;
+		height:3rem;
+		line-height:3rem;
+		overflow:hidden;
+		text-decoration:none;
+
+		&:first-of-type {
+			border-top-width:0.1rem;
+		}
 
 		.name {
-			display:block;
-			font-weight:700;
+			padding:0 1rem;
+
+			img {
+				margin-right:0.5rem;
+				vertical-align:middle;
+			}
+		}
+
+		.subscribe {
+			border-left:solid 1px black;
+			cursor:pointer;
+			float:right;
+			padding:0 1rem;
 			text-align:center;
 		}
 
-		.options {
-			display:block;
-
-			.subscribe, .url, .website {
-				display:block;
-				text-align:center;
-			}
-
-			.subscribe {
-				cursor:pointer;
-			}
-		}
-
-		&.subscribed .options {
-			.subscribe {
-				background-color:black;
-				color:white;
-			}
-		}
-	}
-
-	@media (min-width:601px) {
-		.feed {
-			height:6.2rem;
-			width:24rem;
-
-			.name {
-				float:left;
-				height:6.2rem;
-				line-height:6.2rem;
-				position:absolute;
-				width:20rem;
-			}
-
-			.options {
-				border-left:solid 0.1rem black;
-				position:absolute;
-				right:0px;
-				width:3.9rem;
-			}
-
-			.subscribe, .url, .website {
-				height:2rem;
-				line-height:2rem;
-			}
-
-			.url {
-				border-bottom:solid 0.1rem black;
-				border-top:solid 0.1rem black;
-			}
-		}
-	}
-
-	@media (max-width:600px) {
-		.feed {
-			width:24rem;
-
-			.name {
-				height:2rem;
-				line-height:2rem;
-				padding:1rem 0.5rem;
-			}
-
-			.options {
-				border-top:solid 0.1rem black;
-
-				.subscribe, .url, .website {
-					border-right:solid 0.1rem black;
-					float:left;
-					padding:0.5rem 0;
-					width:7.9rem;
-				}
-
-				.website {
-					border-right:0;
-					width:8rem;
-				}
-			}
+		&.subscribed .subscribe, .subscribe:hover {
+			background-color:black;
+			color:white;
 		}
 	}
 }
 
-body.night {
+@media (min-width:801px) {
+	.feeds {
+		text-align:center;
+
+		.feed {
+			border-width:0.1rem;
+			display:inline-block;
+			margin:3px 6px;
+			text-align:left;
+			width:380px;
+		}
+	}
+}
+
+body.dark {
 	.feeds {
 		.feed {
 			border-color:#363636;
 
-			.options {
+			.subscribe {
 				border-color:#363636;
-
-				.subscribe, .url, .website {
-					border-color:#363636;
-				}
 			}
 
-			&.subscribed .options {
-				.subscribe {
-					background-color:#363636;
-					color:inherit;
-				}
+			&.subscribed .subscribe, .subscribe:hover {
+				background-color:#363636;
+				color:white;
+			}
+		}
+	}
+}
+
+body.orange {
+	.feeds {
+		.feed {
+			border-color:#e69030;
+
+			.subscribe {
+				border-color:#e69030;
+			}
+
+			&.subscribed .subscribe, .subscribe:hover {
+				background-color:#e69030;
+				color:white;
 			}
 		}
 	}

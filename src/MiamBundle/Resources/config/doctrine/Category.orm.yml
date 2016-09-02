@@ -11,7 +11,7 @@ MiamBundle\Entity\Category:
     fields:
         name:
             type: string
-            length: 50
+            length: 255
         dateCreated:
             type: datetime
             column: date_created

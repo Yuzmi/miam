@@ -10,111 +10,26 @@ class Tag
     private $dateCreated;
     private $items;
 
-    public function __construct()
-    {
+    public function __construct() {
         $this->dateCreated = new \DateTime("now");
         $this->items = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
-    /**
-     * Get id
-     *
-     * @return integer
-     */
-    public function getId()
-    {
-        return $this->id;
-    }
+    // Getters
+    public function getId() { return $this->id; }
+    public function getName() { return $this->name; }
+    public function getHash() { return $this->hash; }
+    public function getDateCreated() { return $this->dateCreated; }
+    public function getItems() { return $this->items; }
 
-    /**
-     * Set name
-     *
-     * @param string $name
-     *
-     * @return Tag
-     */
-    public function setName($name)
-    {
-        $this->name = $name;
+    // Setters
+    public function setName($name) { $this->name = $name; return $this; }
+    public function setHash($hash) { $this->hash = $hash; return $this; }
+    public function setDateCreated($dateCreated) { $this->dateCreated = $dateCreated; return $this; }
 
-        return $this;
-    }
+    // Add to collection
+    public function addItem(\MiamBundle\Entity\Item $item) { $this->items[] = $item; return $this; }
 
-    /**
-     * Get name
-     *
-     * @return string
-     */
-    public function getName()
-    {
-        return $this->name;
-    }
-
-    public function setHash($hash) {
-        $this->hash = $hash;
-
-        return $this;
-    }
-
-    public function getHash() {
-        return $this->hash;
-    }
-
-    /**
-     * Set dateCreated
-     *
-     * @param \DateTime $dateCreated
-     *
-     * @return Tag
-     */
-    public function setDateCreated($dateCreated)
-    {
-        $this->dateCreated = $dateCreated;
-
-        return $this;
-    }
-
-    /**
-     * Get dateCreated
-     *
-     * @return \DateTime
-     */
-    public function getDateCreated()
-    {
-        return $this->dateCreated;
-    }
-
-    /**
-     * Add item
-     *
-     * @param \MiamBundle\Entity\Item $item
-     *
-     * @return Tag
-     */
-    public function addItem(\MiamBundle\Entity\Item $item)
-    {
-        $this->items[] = $item;
-
-        return $this;
-    }
-
-    /**
-     * Remove item
-     *
-     * @param \MiamBundle\Entity\Item $item
-     */
-    public function removeItem(\MiamBundle\Entity\Item $item)
-    {
-        $this->items->removeElement($item);
-    }
-
-    /**
-     * Get items
-     *
-     * @return \Doctrine\Common\Collections\Collection
-     */
-    public function getItems()
-    {
-        return $this->items;
-    }
+    // Remove from collection
+    public function removeItem(\MiamBundle\Entity\Item $item) { $this->items->removeElement($item); }
 }

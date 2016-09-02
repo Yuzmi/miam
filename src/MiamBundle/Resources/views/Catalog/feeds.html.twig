@@ -1,28 +1,27 @@
 {% extends 'MiamBundle:Catalog:base.html.twig' %}
 
 {% block content %}
-	{% spaceless %}
-		<div class="feeds">
-			{% for feed in feeds %}
-				<div class="feed {% if feed.id in subscribedFeedIds %}subscribed{% endif %}" data-feed="{{ feed.id }}">
-					<span class="name" title="{{ feed.name ? feed.name ~ " - " ~ feed.url : feed.url }}">
-						{{ feed.name ? feed.name|shorten(30) : "[NO NAME]" }}
+	<h1>Catalog - Feeds</h1>
+
+	<p><a href="{{ path('catalog_items') }}">Show items</a></p>
+
+	<div class="feeds">
+		{% for feed in feeds %}
+			<a class="feed {% if feed.id in subscribedFeedIds %}subscribed{% endif %}" href="{{ path('catalog_feed', {'id': feed.id}) }}" title="{{ feed.name ? feed.name ~ " - " ~ feed.url : feed.url }}" data-feed="{{ feed.id }}">
+				{% if app.user %}
+					<span class="subscribe" title="Subscribe / Unsubscribe">
+						<i class="fa fa-rss"></i>
 					</span>
-					<span class="options">
-						<span class="subscribe" title="Subscribe / Unsubscribe">
-							<i class="fa fa-rss"></i>
-						</span>
-						<a class="url" href="{{ feed.url }}" target="_blank" title="Source">
-							<i class="fa fa-code"></i>
-						</a>
-						<a class="website" href="{{ feed.website ?: feed.url }}" target="_blank" title="Website">
-							<i class="fa fa-globe"></i>
-						</a>
-					</span>
-				</div>
-			{% endfor %}
-		</div>
-	{% endspaceless %}
+				{% endif %}
+				<span class="name">
+					{% if feed.hasIcon %}
+						<img src="{{ asset(feed.icon) }}" alt="">
+					{% endif %}
+					{{ feed.name ? feed.name : "[NO NAME]" }}
+				</span>
+			</a>
+		{% endfor %}
+	</div>
 {% endblock %}
 
 {% block javascripts %}
@@ -30,7 +29,9 @@
 
 	{% if app.user %}
 		<script type="text/javascript">
-			$(".feed .subscribe").on('click', function() {
+			$(".feed .subscribe").on('click', function(e) {
+				e.preventDefault();
+
 				var feedId = $(this).closest('.feed').data('feed');
 				
 				if($(".feed[data-feed="+feedId+"]").hasClass('subscribed')) {

@@ -15,7 +15,6 @@ class DataParsing extends MainService {
 		$this->em = $em;
 		$this->container = $container;
 		$this->rootDir = $this->container->get('kernel')->getRootDir().'/..';
-		$this->rssDir = $this->rootDir.'/rss';
 	}
 
 	public function parseFeed(Feed $feed, $options = array()) {
@@ -27,9 +26,11 @@ class DataParsing extends MainService {
 		} else {
 			$pie->set_feed_url($feed->getUrl());
 			$pie->force_feed(true);
-			$pie->enable_cache(false);
 			$pie->set_timeout(10);
 			$pie->set_autodiscovery_level(SIMPLEPIE_LOCATOR_NONE);
+			$pie->enable_cache(true);
+			$pie->set_cache_duration(300);
+			$pie->set_cache_location($this->rootDir.'/var/cache/simplepie');
 		}
 
 		$firstParsing = false;
@@ -44,21 +45,45 @@ class DataParsing extends MainService {
 		if($pie_init) {
 			$feed->setDateSuccess($now);
 			
-			$feed_name = $this->sanitizeText($pie->get_title(), 100);
+			// Name
+			$feed_name = $this->sanitizeText($pie->get_title(), 255);
 			if($feed_name) {
 				$feed->setName($feed_name);
 			}
 
+			// Website
 			$feed_website = $this->sanitizeUrl($pie->get_link());
 			if(filter_var($feed_website, FILTER_VALIDATE_URL) !== false) {
 				$feed->setWebsite($feed_website);
 			}
 
+			// Icon Url
 			$feed_icon = $this->sanitizeUrl($pie->get_image_url());
 			if(filter_var($feed_icon, FILTER_VALIDATE_URL) !== false) {
 				$feed->setIconUrl($feed_icon);
 			}
 
+			// Author(s)
+			$fas = $pie->get_authors();
+			if(count($fas) > 0) {
+				$feed_authors = array();
+
+				foreach($fas as $fa) {
+					$feed_author_name = $this->sanitizeText($fa->get_name());
+					$feed_author_email = $this->sanitizeText($fa->get_email());
+
+					if($feed_author_name) {
+						$feed_authors[] = $feed_author_name;
+					} elseif($feed_author_email) {
+						$feed_authors[] = $feed_author_email;
+					}
+				}
+
+				$feed_authors = implode(', ', $feed_authors);
+				$feed->setAuthor($feed_authors);
+			}
+
+			// Data length
 			$dataLength = strlen($pie->get_raw_data());
 			if($dataLength > 0) {
 				$feed->setDataLength($dataLength);
@@ -76,7 +101,7 @@ class DataParsing extends MainService {
 			foreach($items as $i) {
 				$tags = $i->get_categories() ?: array();
 				foreach($tags as $t) {
-					$tag_name = $this->sanitizeText($t->get_label(), 50);
+					$tag_name = $this->sanitizeText($t->get_label(), 255);
 					if($tag_name) {
 						$tag_hash = hash('sha1', $tag_name);
 						if(!array_key_exists($tag_hash, $cache_tags)) {
@@ -209,7 +234,7 @@ class DataParsing extends MainService {
 					// New tags
 					$tags = $i->get_categories() ?: array();
 					foreach($tags as $t) {
-						$tag_name = $this->sanitizeText($t->get_label(), 50);
+						$tag_name = $this->sanitizeText($t->get_label(), 255);
 						if($tag_name) {
 							$tag_hash = hash('sha1', $tag_name);
 							if(array_key_exists($tag_hash, $cache_tags)) {
@@ -256,7 +281,7 @@ class DataParsing extends MainService {
 								$enclosure->setUrl($enclosure_url);
 								$enclosure->setHash($enclosure_hash);
 
-								$enclosure_type = $this->sanitizeText($e->get_type(), 50);
+								$enclosure_type = $this->sanitizeText($e->get_type(), 255);
 								$enclosure->setType($enclosure_type);
 
 								$enclosure_length = intval($e->get_length());
@@ -491,6 +516,7 @@ class DataParsing extends MainService {
     		$doc->strictErrorChecking = false;
 
     		// Get favicon path
+    		libxml_use_internal_errors(true);
     		try {
 	    		$html = file_get_contents($rootUrl);
 	    		if($html && $doc->loadHTML($html) !== false) {
@@ -507,6 +533,7 @@ class DataParsing extends MainService {
 			    	}
 			    }
 			} catch(\Exception $e) {}
+			libxml_clear_errors();
 
 		    // Default otherwise
 		    if(!$favicon) {

@@ -17,8 +17,7 @@ class User implements UserInterface, \Serializable
     private $subscriptions;
     private $categories;
 
-    public function __construct()
-    {
+    public function __construct() {
         $this->salt = uniqid(mt_rand(), true);
         $this->dateCreated = new \DateTime("now");
         $this->isAdmin = false;
@@ -30,21 +29,34 @@ class User implements UserInterface, \Serializable
         return $this->id." - ".$this->username;
     }
 
-    public function getId() {
-        return $this->id;
-    }
+    // Getters
+    public function getId() { return $this->id; }
+    public function getUsername() { return $this->username; }
+    public function getPassword() { return $this->password; }
+    public function getSalt() { return $this->salt; }
+    public function getIsAdmin() { return $this->isAdmin; }
+    public function getDateCreated() { return $this->dateCreated; }
+    public function getDateLogin() { return $this->dateLogin; }
+    public function getSubscriptions() { return $this->subscriptions; }
+    public function getCategories() { return $this->categories; }
 
-    public function getUsername() {
-        return $this->username;
-    }
+    // Setters
+    public function setUsername($username) { $this->username = $username; return $this; }
+    public function setPassword($password) { $this->password = $password; return $this; }
+    public function setSalt($salt) { $this->salt = $salt; return $this; }
+    public function setIsAdmin($isAdmin) { $this->isAdmin = $isAdmin; return $this; }
+    public function setDateCreated($dateCreated) { $this->dateCreated = $dateCreated; return $this; }
+    public function setDateLogin($dateLogin) { $this->dateLogin = $dateLogin; return $this; }
 
-    public function getPassword() {
-        return $this->password;
-    }
+    // Add to collection
+    public function addSubscription(\MiamBundle\Entity\Subscription $subscription) { $this->subscriptions[] = $subscription; return $this; }
+    public function addCategory(\MiamBundle\Entity\Category $category) { $this->categories[] = $category; return $this; }
 
-    public function getSalt() {
-        return $this->salt;
-    }
+    // Remove from collection
+    public function removeSubscription(\MiamBundle\Entity\Subscription $subscription) { $this->subscriptions->removeElement($subscription); }
+    public function removeCategory(\MiamBundle\Entity\Category $category) { $this->categories->removeElement($category); }
+
+    // UserInterface methods
 
     public function getRoles() {
         $roles = array('ROLE_USER');
@@ -55,6 +67,10 @@ class User implements UserInterface, \Serializable
 
         return $roles;
     }
+
+    public function eraseCredentials() {}
+
+    // Serializable methods
 
     public function serialize() {
         return serialize(array(
@@ -72,189 +88,7 @@ class User implements UserInterface, \Serializable
         ) = unserialize($serialized);
     }
 
-    public function eraseCredentials() {}
-
-    /**
-     * Set username
-     *
-     * @param string $username
-     *
-     * @return User
-     */
-    public function setUsername($username)
-    {
-        $this->username = $username;
-
-        return $this;
-    }
-
-    /**
-     * Set password
-     *
-     * @param string $password
-     *
-     * @return User
-     */
-    public function setPassword($password)
-    {
-        $this->password = $password;
-
-        return $this;
-    }
-
-    /**
-     * Set salt
-     *
-     * @param string $salt
-     *
-     * @return User
-     */
-    public function setSalt($salt)
-    {
-        $this->salt = $salt;
-
-        return $this;
-    }
-
-    /**
-     * Set dateCreated
-     *
-     * @param \DateTime $dateCreated
-     *
-     * @return User
-     */
-    public function setDateCreated($dateCreated)
-    {
-        $this->dateCreated = $dateCreated;
-
-        return $this;
-    }
-
-    /**
-     * Get dateCreated
-     *
-     * @return \DateTime
-     */
-    public function getDateCreated()
-    {
-        return $this->dateCreated;
-    }
-
-    /**
-     * Set dateLogin
-     *
-     * @param \DateTime $dateLogin
-     *
-     * @return User
-     */
-    public function setDateLogin($dateLogin)
-    {
-        $this->dateLogin = $dateLogin;
-
-        return $this;
-    }
-
-    /**
-     * Get dateLogin
-     *
-     * @return \DateTime
-     */
-    public function getDateLogin()
-    {
-        return $this->dateLogin;
-    }
-
-    /**
-     * Add subscription
-     *
-     * @param \MiamBundle\Entity\Subscription $subscription
-     *
-     * @return User
-     */
-    public function addSubscription(\MiamBundle\Entity\Subscription $subscription)
-    {
-        $this->subscriptions[] = $subscription;
-
-        return $this;
-    }
-
-    /**
-     * Remove subscription
-     *
-     * @param \MiamBundle\Entity\Subscription $subscription
-     */
-    public function removeSubscription(\MiamBundle\Entity\Subscription $subscription)
-    {
-        $this->subscriptions->removeElement($subscription);
-    }
-
-    /**
-     * Get subscriptions
-     *
-     * @return \Doctrine\Common\Collections\Collection
-     */
-    public function getSubscriptions()
-    {
-        return $this->subscriptions;
-    }
-
-    /**
-     * Set isAdmin
-     *
-     * @param boolean $isAdmin
-     *
-     * @return User
-     */
-    public function setIsAdmin($isAdmin)
-    {
-        $this->isAdmin = $isAdmin;
-
-        return $this;
-    }
-
-    /**
-     * Get isAdmin
-     *
-     * @return boolean
-     */
-    public function getIsAdmin()
-    {
-        return $this->isAdmin;
-    }
-
-    /**
-     * Add category
-     *
-     * @param \MiamBundle\Entity\Category $category
-     *
-     * @return User
-     */
-    public function addCategory(\MiamBundle\Entity\Category $category)
-    {
-        $this->categories[] = $category;
-
-        return $this;
-    }
-
-    /**
-     * Remove category
-     *
-     * @param \MiamBundle\Entity\Category $category
-     */
-    public function removeCategory(\MiamBundle\Entity\Category $category)
-    {
-        $this->categories->removeElement($category);
-    }
-
-    /**
-     * Get categories
-     *
-     * @return \Doctrine\Common\Collections\Collection
-     */
-    public function getCategories()
-    {
-        return $this->categories;
-    }
+    // Settings-related methods
 
     // All settings and their default values
     private $allSettings = array(
@@ -262,7 +96,7 @@ class User implements UserInterface, \Serializable
         'SHOW_ITEM_DETAILS' => "onclick",
         'IS_PUBLIC' => false,
         'HIDE_SIDEBAR' => false,
-        'THEME' => "light"
+        'THEME' => "basic"
     );
 
     public function getSettings() {

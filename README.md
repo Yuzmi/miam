@@ -72,7 +72,7 @@ DocumentRoot /var/www/miam/web
 ### CRON
 
 ```
-*/30 * * * * php /var/www/miam/bin/console miam:parse:used --env=prod
+*/30 * * * * php /var/www/miam/bin/console miam:parse:feeds used
 ```
 
 ### TODO

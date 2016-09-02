@@ -1,8 +1,20 @@
 {% extends 'MiamBundle:Catalog:base.html.twig' %}
 
 {% block content %}
+	<h1>{{ feed.name }}</h1>
+
+	<p>
+		{% if feed.hasIcon %}
+			<img class="icon" src="{{ asset(feed.icon) }}" alt="">
+		{% endif %}
+		<a href="{{ feed.url }}">Source</a>
+		{% if feed.website %}
+			- <a href="{{ feed.website }}">Website</a>
+		{% endif %}
+	</p>
+
 	<div class="items">
-		{% include 'MiamBundle:Default:items.html.twig' %}
+		{% include 'MiamBundle:Default:items.html.twig' with {'loadMore': true} %}
 	</div>
 {% endblock %}
 
@@ -10,10 +22,14 @@
 	{{ parent() }}
 
 	<script type="text/javascript" src="{{ asset('js/items.js') }}"></script>
+	<script type="text/javascript" src="{{ asset('js/catalog.js') }}"></script>
 
 	<script type="text/javascript">
 		$(document).ready(function() {
+			app.catalog.items.feed = {{ feed.id }};
+
 			app.items.init();
+			app.catalog.init();
 		});
 	</script>
 {% endblock %}

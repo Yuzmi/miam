@@ -109,11 +109,11 @@ app.shit = {
 					}
 				});
 
-				// Refresh unread counts every 5 minutes
+				// Refresh unread counts every minute
 				clearInterval(app.shit.sidebar.intervalRefreshUnreadCounts);
 				this.intervalRefreshUnreadCounts = setInterval(function() {
 					app.shit.sidebar.refreshUnreadCounts();
-				}, 300000);
+				}, 60000);
 			}
 
 			this.countUnread();
@@ -282,7 +282,10 @@ app.shit = {
 
 	items: {
 		category: null,
+		countNewAdded: 0,
+		dateRefresh: null,
 		feed: null,
+		page: 1,
 		subscriber: null,
 		type: null,
 
@@ -293,6 +296,10 @@ app.shit = {
 				if(!item.hasClass("read")) {
 					app.shit.items.readItem(item.data("item"));
 				}
+			}
+
+			if(app.shit.items.dateRefresh == null) {
+				app.shit.items.dateRefresh = app.dateLoaded;
 			}
 
 			$(".item .star").off("click");
@@ -358,11 +365,11 @@ app.shit = {
 				});
 			}
 
-			// Get last items every 5 minutes
+			// Get last items every minute
 			clearInterval(app.shit.items.intervalLoadNew);
 			this.intervalLoadNew = setInterval(function() {
 				app.shit.items.loadNew();
-			}, 300000);
+			}, 60000);
 		},
 
 		get: function(data, callback) {
@@ -390,16 +397,16 @@ app.shit = {
 					app.items.init();
 					app.shit.items.init();
 
-					app.items.countNewAdded = 0;
-					app.items.dateRefresh = result.dateRefresh;
-					app.items.page = 1;
+					app.shit.items.countNewAdded = 0;
+					app.shit.items.dateRefresh = result.dateRefresh;
+					app.shit.items.page = 1;
 				}
 			});
 		},
 
 		loadNew: function() {
 			this.get({
-				createdAfter: app.items.dateRefresh,
+				createdAfter: app.shit.items.dateRefresh,
 				category: app.shit.items.category,
 				feed: app.shit.items.feed,
 				subscriber: app.shit.items.subscriber,
@@ -411,8 +418,8 @@ app.shit = {
 					app.items.init();
 					app.shit.items.init();
 
-					app.items.countNewAdded += result.count;
-					app.items.dateRefresh = result.dateRefresh;
+					app.shit.items.countNewAdded += result.count;
+					app.shit.items.dateRefresh = result.dateRefresh;
 				}
 			});
 		},
@@ -423,18 +430,18 @@ app.shit = {
 				category: app.shit.items.category,
 				feed: app.shit.items.feed,
 				loadMore: true,
-				offset: app.items.countNewAdded,
-				page: app.items.page + 1,
+				offset: app.shit.items.countNewAdded,
+				page: app.shit.items.page + 1,
 				subscriber: app.shit.items.subscriber,
 				type: app.shit.items.type
 			}, function(result) {
-				if(result.success && result.page == app.items.page + 1) {
+				if(result.success && result.page == app.shit.items.page + 1) {
 					$(".items .loadMore").replaceWith(result.items);
 
 					app.items.init();
 					app.shit.items.init();
 
-					app.items.page += 1;
+					app.shit.items.page += 1;
 				}
 			});
 		},

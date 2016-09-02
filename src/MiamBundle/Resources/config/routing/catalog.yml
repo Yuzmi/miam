@@ -18,7 +18,14 @@ catalog_items:
 ajax_catalog_feed_subscribe:
     path: /ajax/feed/{id}/subscribe
     defaults: { _controller: MiamBundle:Catalog:ajaxSubscribeToFeed }
+    requirements: { id: \d+ }
 
 ajax_catalog_feed_unsubscribe:
     path: /ajax/feed/{id}/unsubscribe
     defaults: { _controller: MiamBundle:Catalog:ajaxUnsubscribeFromFeed }
+    requirements: { id: \d+ }
+
+ajax_catalog_feed_get_items:
+    path: /ajax/feed/{id}/items/{page}
+    defaults: { _controller: MiamBundle:Catalog:ajaxGetItemsForFeed }
+    requirements: { id: \d+, page: \d+ }

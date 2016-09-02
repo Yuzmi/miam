@@ -1,15 +1,7 @@
-h1 {
-	text-align:center;
-}
-
 .tab {
 	border:solid 0.2rem black;
 	margin:3rem 4rem;
 	text-align:center;
-
-	&:first-of-type {
-		margin-top:0;
-	}
 
 	.header {
 		background-color:black;
@@ -33,7 +25,7 @@ h1 {
 				text-align:left;
 
 				.row {
-					border-bottom:solid 1px black;
+					border-top:solid 1px black;
 					height:3rem;
 					line-height:3rem;
 					overflow:hidden;
@@ -56,10 +48,6 @@ h1 {
 							padding:0 0.4rem;
 						}
 					}
-				}
-
-				& > div:first-of-type {
-					border-top:solid 1px black;
 				}
 
 				.category {
@@ -100,7 +88,7 @@ h1 {
 	&.settings {
 		.content {
 			form {
-				border-top:0.2rem solid #363636;
+				border-top:0.2rem solid black;
 				padding:2rem 1rem;
 			}
 
@@ -168,7 +156,7 @@ h1 {
 	}
 }
 
-body.night {
+body.dark {
 	.tab {
 		border-color:#363636;
 
@@ -186,6 +174,14 @@ body.night {
 				}
 			}
 		}
+
+		&.settings {
+			.content {
+				form {
+					border-color:#363636;
+				}
+			}
+		}
 	}
 
 	.popupContainer {
@@ -198,6 +194,49 @@ body.night {
 		&.newSubscription, &.editSubscription {
 			.categories {
 				border-color:#363636;
+			}
+		}
+	}
+}
+
+body.orange {
+	.tab {
+		border-color:#e69030;
+
+		.header {
+			background-color:#e69030;
+			color:white;
+		}
+
+		&.catsubs {
+			.content {
+				.tree {
+					.row {
+						border-color:#e69030;
+					}
+				}
+			}
+		}
+
+		&.settings {
+			.content {
+				form {
+					border-color:#e69030;
+				}
+			}
+		}
+	}
+
+	.popupContainer {
+		&.editCategory {
+			.subscriptions {
+				border-color:#e69030;
+			}
+		}
+
+		&.newSubscription, &.editSubscription {
+			.categories {
+				border-color:#e69030;
 			}
 		}
 	}

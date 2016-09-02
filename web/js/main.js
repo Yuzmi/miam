@@ -1,16 +1,6 @@
 var app = {
 	init: function() {
 		app.popup.init();
-
-		$(".showLogin").click(function(e) {
-			e.preventDefault();
-			$(".popupContainer.login").removeClass("hidden");
-		});
-
-		$(".showRegister").click(function(e) {
-			e.preventDefault();
-			$(".popupContainer.register").removeClass("hidden");
-		});
 	},
 
 	// http://jquery-howto.blogspot.fr/2009/09/get-url-parameters-values-with-jquery.html
@@ -46,11 +36,7 @@ var app = {
 
 		closeAll: function() {
 			$(".popupContainer").each(function() {
-				if($(this).hasClass("login") || $(this).hasClass("register")) {
-					$(this).addClass("hidden");
-				} else {
-					$(this).remove();
-				}
+				$(this).remove();
 			});
 		}
 	}

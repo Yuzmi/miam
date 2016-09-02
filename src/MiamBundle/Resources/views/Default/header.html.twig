@@ -29,14 +29,10 @@
 					<i class="fa fa-sign-out"></i>
 					<span class="label">Logout</span>
 				</a>
-			{% elseif route != "login" %}
-				<a class="showLogin" href="{{ path('login') }}" title="Login">
+			{% else %}
+				<a href="{{ path('login') }}" title="Login">
 					<i class="fa fa-sign-in"></i>
 					<span class="label">Login</span>
-				</a>
-				<a class="showRegister" href="{{ path('login') }}" title="Register">
-					<i class="fa fa-user-plus"></i>
-					<span class="label">Register</span>
 				</a>
 			{% endif %}
 		</span>
