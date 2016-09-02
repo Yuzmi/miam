@@ -18,6 +18,8 @@ class ParseFeedsCommand extends ContainerAwareCommand {
     }
 
     protected function execute(InputInterface $input, OutputInterface $output) {
+        error_reporting(0);
+
         $output->writeln('Fetching and parsing...');
 
         $time_begin = time();
