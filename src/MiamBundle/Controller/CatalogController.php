@@ -51,8 +51,7 @@ class CatalogController extends MainController
 
 	public function showItemsAction() {
 		$items = $this->get('item_manager')->getItems(array(
-			'catalog' => true,
-			'nb' => 50
+			'catalog' => true
 		));
 
 		$dataItems = $this->get('item_manager')->getDataForItems($items);
@@ -113,6 +112,29 @@ class CatalogController extends MainController
 
 		return new Response(json_encode(array(
 			'success' => $success
+		)));
+	}
+
+	public function ajaxGetItemsAction($page) {
+		$page = max(1, intval($page));
+
+		$items = $this->get('item_manager')->getItems(array(
+			'catalog' => true,
+			'page' => $page
+		));
+
+		$dataItems = $this->get('item_manager')->getDataForItems($items);
+
+		$htmlItems = $this->renderView('MiamBundle:Default:items.html.twig', array(
+			'items' => $items,
+			'dataItems' => $dataItems,
+			'loadMore' => true
+		));
+
+		return new Response(json_encode(array(
+			'success' => true,
+			'items' => $htmlItems,
+			'page' => $page
 		)));
 	}
 

@@ -25,6 +25,11 @@ ajax_catalog_feed_unsubscribe:
     defaults: { _controller: MiamBundle:Catalog:ajaxUnsubscribeFromFeed }
     requirements: { id: \d+ }
 
+ajax_catalog_get_items:
+    path: /ajax/items/{page}
+    defaults: { _controller: MiamBundle:Catalog:ajaxGetItems }
+    requirements: { page: \d+ }
+
 ajax_catalog_feed_get_items:
     path: /ajax/feed/{id}/items/{page}
     defaults: { _controller: MiamBundle:Catalog:ajaxGetItemsForFeed }

@@ -6,7 +6,7 @@
 	<p><a href="{{ path('catalog_feeds') }}">Show feeds</a></p>
 
 	<div class="items">
-		{% include 'MiamBundle:Default:items.html.twig' %}
+		{% include 'MiamBundle:Default:items.html.twig' with {'loadMore': true} %}
 	</div>
 {% endblock %}
 
@@ -14,10 +14,12 @@
 	{{ parent() }}
 
 	<script type="text/javascript" src="{{ asset('js/items.js') }}"></script>
+	<script type="text/javascript" src="{{ asset('js/catalog.js') }}"></script>
 
 	<script type="text/javascript">
 		$(document).ready(function() {
 			app.items.init();
+			app.catalog.init();
 		});
 	</script>
 {% endblock %}

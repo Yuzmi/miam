@@ -17,12 +17,20 @@ app.catalog = {
 		loadMore: function() {
 			$(".items .loadMore").addClass("loading");
 
-			$.ajax({
-				type: "POST",
-				url: Routing.generate('ajax_catalog_feed_get_items', {
+			if(app.catalog.items.feed) {
+				var url = Routing.generate('ajax_catalog_feed_get_items', {
 					id: app.catalog.items.feed,
 					page: app.catalog.items.page + 1
-				}),
+				});
+			} else {
+				var url = Routing.generate('ajax_catalog_get_items', {
+					page: app.catalog.items.page + 1
+				});
+			}
+
+			$.ajax({
+				type: "GET",
+				url: url,
 				dataType: "json"
 			}).done(function(result) {
 				if(result.success && result.page == app.catalog.items.page + 1) {
