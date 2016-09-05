@@ -40,6 +40,7 @@ class DataParsing extends MainService {
 		$feed->setDateParsed($now);
 
 		$countNewItems = 0;
+		$error = null;
 
 		$pie_init = $pie->init();
 		if($pie_init) {
@@ -307,6 +308,7 @@ class DataParsing extends MainService {
 			$feed->setNbErrors(0);
 		} else {
 			$feed->setNbErrors($feed->getNbErrors() + 1);
+			$error = $pie->error();
 		}
 
 		if($countNewItems > 0) {
@@ -325,7 +327,8 @@ class DataParsing extends MainService {
 
 		return array(
 			'success' => $pie_init,
-			'countNewItems' => $countNewItems
+			'countNewItems' => $countNewItems,
+			'error' => $error
 		);
 	}
 

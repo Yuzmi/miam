@@ -14,15 +14,14 @@ class ParseFeedsCommand extends ContainerAwareCommand {
             ->setName('miam:parse:feeds')
             ->setDescription('Parse feeds')
             ->addArgument('feeds', InputArgument::OPTIONAL)
+            ->addOption('list-errors', InputOption::VALUE_NONE)
         ;
     }
 
     protected function execute(InputInterface $input, OutputInterface $output) {
         error_reporting(0);
 
-        $output->writeln('Fetching and parsing...');
-
-        $time_begin = time();
+        $time_start = time();
 
         $em = $this->getContainer()->get('doctrine')->getEntityManager();
 
@@ -60,11 +59,29 @@ class ParseFeedsCommand extends ContainerAwareCommand {
             foreach($fs as $f) {
                 $feeds[] = $f[0];
             }
+        } elseif($arg == 'unused') {
+            $fs = $em->getRepository('MiamBundle:Feed')
+                ->createQueryBuilder("f")
+                ->select("f, COUNT(s.id)")
+                ->leftJoin("f.subscriptions", "s")
+                ->groupBy("f")
+                ->having("f.isCatalog = FALSE AND COUNT(s.id) = 0")
+                ->getQuery()->getResult();
+
+            $feeds = array();
+            foreach($fs as $f) {
+                $feeds[] = $f[0];
+            }
         } else {
             $feeds = $em->getRepository('MiamBundle:Feed')->findAll();
         }
 
-        $totalNewItems = 0;
+        $countFeeds = count($feeds);
+        $countValidFeeds = 0;
+        $countNewItems = 0;
+        $errors = array();
+
+        $output->writeln('Fetching and parsing...');
 
         $nb = 0;
         foreach($feeds as $f) {
@@ -78,12 +95,16 @@ class ParseFeedsCommand extends ContainerAwareCommand {
                 if($result['countNewItems'] > 0) {
                     $output->write('+');
 
-                    $totalNewItems += $result['countNewItems'];
+                    $countNewItems += $result['countNewItems'];
                 } else {
                     $output->write('-');
                 }
+
+                $countValidFeeds++;
             } else {
                 $output->write('x');
+
+                $errors[] = $feed->getId().' - '.$feed->getUrl().' - '.$result['error'];
             }
 
             $nb++;
@@ -93,9 +114,21 @@ class ParseFeedsCommand extends ContainerAwareCommand {
             }
         }
 
-        $duration = time() - $time_begin;
+        $duration = time() - $time_start;
 
         $output->writeln('');
-        $output->writeln('New item(s): '.$totalNewItems.' - Duration: '.$duration.'s');
+        $output->writeln('Valid feeds: '.$countValidFeeds.'/'.$countFeeds.' - New item(s): '.$countNewItems.' - Duration: '.$duration.'s');
+
+        if($input->getOption('list-errors')) {
+            if(count($errors) > 0) {
+                $output->writeln('Errors:');
+
+                foreach($errors as $error) {
+                    $output->writeln($error);
+                }
+            } else {
+                $output->writeln('No error occured');
+            }
+        }
     }
 }
