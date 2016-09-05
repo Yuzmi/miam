@@ -1,9 +1,10 @@
 h1 {
-	margin:1rem 2rem;
+	margin:1.5rem 2rem;
 	text-align:center;
 }
 
 p {
+	margin-bottom:2rem;
 	text-align:center;
 
 	.icon {
@@ -17,6 +18,7 @@ p {
 	.feed {
 		border-color:black;
 		border-style:solid;
+		border-width:0;
 		border-bottom-width:0.1rem;
 		display:block;
 		height:3rem;
@@ -32,7 +34,9 @@ p {
 			padding:0 1rem;
 
 			img {
-				margin-right:0.5rem;
+				margin-right:0.4em;
+				position:relative;
+				top:-1px;
 				vertical-align:middle;
 			}
 		}
@@ -41,13 +45,23 @@ p {
 			border-left:solid 1px black;
 			cursor:pointer;
 			float:right;
-			padding:0 1rem;
+			padding:0 1em;
 			text-align:center;
 		}
 
 		&.subscribed .subscribe, .subscribe:hover {
 			background-color:black;
 			color:white;
+		}
+	}
+}
+
+@media (max-width:800px) {
+	.feeds {
+		.feed {
+			font-size:1.4em;
+			height:5rem;
+			line-height:5rem;
 		}
 	}
 }
