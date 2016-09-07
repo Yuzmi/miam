@@ -14,7 +14,8 @@ class Feed
     private $author;
     private $dataLength;
     private $nbItems;
-    private $nbErrors;
+    private $errorCount;
+    private $errorMessage;
     private $isCatalog;
     private $hasIcon;
     private $dateCreated;
@@ -29,7 +30,7 @@ class Feed
     public function __construct() {
         $this->dataLength = 0;
         $this->nbItems = 0;
-        $this->nbErrors = 0;
+        $this->errorCount = 0;
         $this->isCatalog = false;
         $this->hasIcon = false;
         $this->dateCreated = new \DateTime("now");
@@ -53,7 +54,8 @@ class Feed
     public function getAuthor() { return $this->author; }
     public function getDataLength() { return $this->dataLength; }
     public function getNbItems() { return $this->nbItems; }
-    public function getNbErrors() { return $this->nbErrors; }
+    public function getErrorCount() { return $this->errorCount; }
+    public function getErrorMessage() { return $this->errorMessage; }
     public function getIsCatalog() { return $this->isCatalog; }
     public function getHasIcon() { return $this->hasIcon; }
     public function getDateCreated() { return $this->dateCreated; }
@@ -75,7 +77,8 @@ class Feed
     public function setAuthor($author) { $this->author = $author; return $this; }
     public function setDataLength($dataLength) { $this->dataLength = $dataLength; return $this; }
     public function setNbItems($nbItems) { $this->nbItems = $nbItems; return $this; }
-    public function setNbErrors($nbErrors) { $this->nbErrors = $nbErrors; return $this; }
+    public function setErrorCount($errorCount) { $this->errorCount = $errorCount; return $this; }
+    public function setErrorMessage($errorMessage) { $this->errorMessage = $errorMessage; return $this; }
     public function setIsCatalog($isCatalog) { $this->isCatalog = $isCatalog; return $this; }
     public function setHasIcon($hasIcon) { $this->hasIcon = $hasIcon; return $this; }
     public function setDateCreated($dateCreated) { $this->dateCreated = $dateCreated; return $this; }

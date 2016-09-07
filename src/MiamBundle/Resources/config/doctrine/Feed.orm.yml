@@ -45,9 +45,13 @@ MiamBundle\Entity\Feed:
         nbItems:
             type: integer
             column: nb_items_on_parsing
-        nbErrors:
+        errorCount:
             type: integer
-            column: nb_error_parsing
+            column: error_count
+        errorMessage:
+            type: text
+            column: error_message
+            nullable: true
         dateCreated:
             type: datetime
             column: date_created

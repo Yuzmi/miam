@@ -33,7 +33,7 @@
 {% endmacro %}
 
 {% macro subscription(s) %}
-	<div class="row subscription {{ s.feed.nbErrors > 0 ? "errors" }}" data-subscription="{{ s.id }}">
+	<div class="row subscription {{ s.feed.errorCount > 0 ? "errors" }}" data-subscription="{{ s.id }}">
 		<span class="actions">
 			<span class="edit">
 				<i class="fa fa-edit"></i>

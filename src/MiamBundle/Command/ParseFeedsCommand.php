@@ -14,7 +14,9 @@ class ParseFeedsCommand extends ContainerAwareCommand {
             ->setName('miam:parse:feeds')
             ->setDescription('Parse feeds')
             ->addArgument('feeds', InputArgument::OPTIONAL)
-            ->addOption('list-errors', InputOption::VALUE_NONE)
+            ->addOption('list-errors', null, InputOption::VALUE_NONE, "List errors at the end")
+            ->addOption('no-cache', null, InputOption::VALUE_NONE, "Disable the cache")
+            ->addOption('timeout', null, InputOption::VALUE_REQUIRED, "Set the timeout to fetch a feed (seconds)")
         ;
     }
 
@@ -80,6 +82,15 @@ class ParseFeedsCommand extends ContainerAwareCommand {
         $countValidFeeds = 0;
         $countNewItems = 0;
         $errors = array();
+        $options = array();
+
+        if($input->getOption('no-cache')) {
+            $options['cache'] = false;
+        }
+
+        if($input->getOption('timeout')) {
+            $options['timeout'] = $input->getOption('timeout');
+        }
 
         $output->writeln('Fetching and parsing...');
 
@@ -90,7 +101,7 @@ class ParseFeedsCommand extends ContainerAwareCommand {
                 continue;
             }
 
-            $result = $this->getContainer()->get('data_parsing')->parseFeed($feed);
+            $result = $this->getContainer()->get('data_parsing')->parseFeed($feed, $options);
             if($result['success']) {
                 if($result['countNewItems'] > 0) {
                     $output->write('+');

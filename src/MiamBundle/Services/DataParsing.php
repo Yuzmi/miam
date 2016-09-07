@@ -26,11 +26,22 @@ class DataParsing extends MainService {
 		} else {
 			$pie->set_feed_url($feed->getUrl());
 			$pie->force_feed(true);
-			$pie->set_timeout(10);
 			$pie->set_autodiscovery_level(SIMPLEPIE_LOCATOR_NONE);
-			$pie->enable_cache(true);
-			$pie->set_cache_duration(300);
-			$pie->set_cache_location($this->rootDir.'/var/cache/simplepie');
+
+			$timeout = isset($options['timeout']) ? intval($options['timeout']) : 10;
+			if($timeout > 0) {
+				$pie->set_timeout($timeout);
+			} else {
+				$pie->set_timeout(10);
+			}
+
+			if(isset($options['cache']) && !$options['cache']) {
+				$pie->enable_cache(false);
+			} else {
+				$pie->enable_cache(true);
+				$pie->set_cache_duration(300);
+				$pie->set_cache_location($this->rootDir.'/var/cache/simplepie');
+			}
 		}
 
 		$firstParsing = false;
@@ -305,10 +316,12 @@ class DataParsing extends MainService {
 				}
 			}
 			
-			$feed->setNbErrors(0);
+			$feed->setErrorCount(0);
 		} else {
-			$feed->setNbErrors($feed->getNbErrors() + 1);
 			$error = $pie->error();
+
+			$feed->setErrorCount($feed->getErrorCount() + 1);
+			$feed->setErrorMessage($error);
 		}
 
 		if($countNewItems > 0) {
