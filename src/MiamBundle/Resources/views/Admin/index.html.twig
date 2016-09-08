@@ -11,20 +11,20 @@
 	<table>
 		<tr>
 			<th></th>
-			<th>Name</th>
-			<th>URL</th>
+			<th class="name">Name</th>
+			<th class="url">URL</th>
 			<th>Catalog</th>
 		</tr>
 		{% for feed in feeds %}
 			<tr class="feed {{ feed.isCatalog ? "catalog" }}" data-feed="{{ feed.id }}">
-				<td>
+				<td class="icon">
 					{% if feed.hasIcon %}
 						<img src="{{ asset(feed.icon) }}" alt="">
 					{% endif %}
 				</td>
 				<td class="name" title="{{ feed.name }}">
 					{% if feed.errorCount > 0 %}
-						<i class="errors fa fa-warning"></i>
+						<i class="errors fa fa-warning" title="{{ feed.errorMessage }}"></i>
 					{% endif %}
 
 					{% if feed.website %}
@@ -36,17 +36,23 @@
 				<td title="{{ feed.url }}">
 					<a href="{{ feed.url }}">{{ feed.url|shorten(60) }}</a>
 				</td>
-				<td>
-					<button class="addToCatalog">Add</button>
-					<button class="removeFromCatalog">Remove</button>
+				<td class="catalog">
+					<button class="addToCatalog" title="Add to catalog">
+						<i class="fa fa-plus"></i>
+					</button>
+					<button class="removeFromCatalog" title="Remove from catalog">
+						<i class="fa fa-minus"></i>
+					</button>
 				</td>
-				<td>
-					<button class="parse">
+				<td class="parse">
+					<button class="parse" title="Parse">
 						Parse
 					</button>
 				</td>
-				<td>
-					<button class="delete">X</button>
+				<td class="delete">
+					<button class="delete" title="Delete">
+						<i class="fa fa-times"></i>
+					</button>
 				</td>
 			</tr>
 		{% endfor %}
@@ -65,6 +71,10 @@
 			width:100%;
 		}
 
+		table th.name, table th.url {
+			text-align:left;
+		}
+
 		.feed .removeFromCatalog {
 			display:none;
 		}
@@ -80,6 +90,10 @@
 		.feed .name i.errors {
 			color:red;
 			margin-right:2px;
+		}
+
+		.feed .icon, .feed .catalog, .feed .parse, .feed .delete {
+			text-align:center;
 		}
 	</style>
 {% endblock %}
