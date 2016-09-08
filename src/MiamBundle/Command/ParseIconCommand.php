@@ -12,7 +12,7 @@ class ParseIconCommand extends ContainerAwareCommand {
 	protected function configure() {
         $this
             ->setName('miam:parse:icon')
-            ->setDescription("Parse a feed's icon")
+            ->setDescription("Parse a feed icon")
             ->addArgument('feed', InputArgument::REQUIRED)
         ;
     }
