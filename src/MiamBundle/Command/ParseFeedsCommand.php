@@ -13,10 +13,11 @@ class ParseFeedsCommand extends ContainerAwareCommand {
         $this
             ->setName('miam:parse:feeds')
             ->setDescription('Parse feeds')
-            ->addArgument('feeds', InputArgument::OPTIONAL)
+            ->addArgument('feeds', InputArgument::OPTIONAL, "Which feeds will you parse (all/catalog/subscribed/used/unused) ?")
             ->addOption('list-errors', null, InputOption::VALUE_NONE, "List errors at the end")
             ->addOption('no-cache', null, InputOption::VALUE_NONE, "Disable the cache")
             ->addOption('timeout', null, InputOption::VALUE_REQUIRED, "Set the timeout to fetch a feed (seconds)")
+            ->addOption('ignore-invalid', null, Inputoption::VALUE_NONE, "Ignore invalid feeds")
         ;
     }
 
@@ -78,7 +79,7 @@ class ParseFeedsCommand extends ContainerAwareCommand {
             $feeds = $em->getRepository('MiamBundle:Feed')->findAll();
         }
 
-        $countFeeds = count($feeds);
+        $countFeeds = 0;
         $countValidFeeds = 0;
         $countNewItems = 0;
         $errors = array();
@@ -101,27 +102,36 @@ class ParseFeedsCommand extends ContainerAwareCommand {
                 continue;
             }
 
-            $result = $this->getContainer()->get('data_parsing')->parseFeed($feed, $options);
-            if($result['success']) {
-                if($result['countNewItems'] > 0) {
-                    $output->write('+');
-
-                    $countNewItems += $result['countNewItems'];
-                } else {
-                    $output->write('-');
-                }
-
-                $countValidFeeds++;
-            } else {
-                $output->write('x');
-
-                $errors[] = $feed->getId().' - '.$feed->getUrl().' - '.$result['error'];
+            $parse = true;
+            if($input->getOption('ignore-invalid') && $feed->getErrorCount() > 0) {
+                $parse = false;
             }
 
-            $nb++;
+            if($parse) {
+                $result = $this->getContainer()->get('data_parsing')->parseFeed($feed, $options);
+                if($result['success']) {
+                    if($result['countNewItems'] > 0) {
+                        $output->write('+');
 
-            if($nb%20 == 0) {
-                $em->clear();
+                        $countNewItems += $result['countNewItems'];
+                    } else {
+                        $output->write('-');
+                    }
+
+                    $countValidFeeds++;
+                } else {
+                    $output->write('x');
+
+                    $errors[] = $feed->getId().' - '.$feed->getUrl().' - '.$result['error'];
+                }
+
+                $countFeeds++;
+
+                $nb++;
+
+                if($nb%20 == 0) {
+                    $em->clear();
+                }
             }
         }
 
