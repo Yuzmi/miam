@@ -45,12 +45,12 @@
 					</button>
 				</td>
 				<td class="parse">
-					<button class="parse" title="Parse">
+					<button title="Parse">
 						Parse
 					</button>
 				</td>
 				<td class="delete">
-					<button class="delete" title="Delete">
+					<button title="Delete">
 						<i class="fa fa-times"></i>
 					</button>
 				</td>
@@ -92,7 +92,7 @@
 			margin-right:2px;
 		}
 
-		.feed .icon, .feed .catalog, .feed .parse, .feed .delete {
+		.feed td.icon, .feed td.catalog, .feed td.parse, .feed td.delete {
 			text-align:center;
 		}
 	</style>
@@ -132,7 +132,7 @@
 			});
 		});
 
-		$(".feed .parse").click(function() {
+		$(".feed .parse button").click(function() {
 			var feedId = $(this).closest(".feed").data('feed');
 
 			if(!$(this).closest(".feed").hasClass("parsing")) {
@@ -151,19 +151,21 @@
 			}
 		});
 
-		$(".feed .delete").click(function() {
+		$(".feed .delete button").on("click", function() {
 			var feedId = $(this).closest(".feed").data('feed');
-
-			$.ajax({
-				type: "POST",
-				url: Routing.generate('ajax_admin_feed_delete', {id: feedId}, true),
-				dataType: "json",
-				success: function(result) {
-					if(result.success) {
-						$(".feed[data-feed="+feedId+"]").remove();
+			
+			if(confirm("Delete the feed and everything related ?")) {
+				$.ajax({
+					type: "POST",
+					url: Routing.generate('ajax_admin_feed_delete', {id: feedId}, true),
+					dataType: "json",
+					success: function(result) {
+						if(result.success) {
+							$(".feed[data-feed="+feedId+"]").remove();
+						}
 					}
-				}
-			});
+				});
+			}
 		});
 	</script>
 {% endblock %}
