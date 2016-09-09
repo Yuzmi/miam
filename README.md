@@ -16,7 +16,7 @@ Potentially unstable as it's still on development and not restricted to stable v
 
 - Linux
 - Apache + Mod rewrite
-- PHP 5.5.9+ / Extensions : curl, gd, iconv, imagick, json, mbstring, tidy, xml
+- PHP 5.5.9+ / Extensions: curl, iconv, imagick, json, mbstring, tidy, xml
 - MySQL
 - [Sass](http://sass-lang.com/install)
 - [Composer](https://getcomposer.org/download/)
@@ -31,6 +31,12 @@ git clone https://github.com/Yuzmi/miam.git
 - Install dependencies
 ```shell
 composer install
+```
+
+- Check requirements
+```shell
+php bin/symfony_requirements
+php bin/console miam:requirements:check
 ```
 
 - Create the database
