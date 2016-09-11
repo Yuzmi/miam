@@ -12,6 +12,7 @@ class Feed
     private $iconUrl;
     private $website;
     private $author;
+    private $language;
     private $dataLength;
     private $nbItems;
     private $errorCount;
@@ -52,6 +53,7 @@ class Feed
     public function getIconUrl() { return $this->iconUrl; }
     public function getWebsite() { return $this->website; }
     public function getAuthor() { return $this->author; }
+    public function getLanguage() { return $this->language; }
     public function getDataLength() { return $this->dataLength; }
     public function getNbItems() { return $this->nbItems; }
     public function getErrorCount() { return $this->errorCount; }
@@ -75,6 +77,7 @@ class Feed
     public function setIconUrl($iconUrl) { $this->iconUrl = $iconUrl; return $this; }
     public function setWebsite($website) { $this->website = $website; return $this; }
     public function setAuthor($author) { $this->author = $author; return $this; }
+    public function setLanguage($language) { $this->language = $language; return $this; }
     public function setDataLength($dataLength) { $this->dataLength = $dataLength; return $this; }
     public function setNbItems($nbItems) { $this->nbItems = $nbItems; return $this; }
     public function setErrorCount($errorCount) { $this->errorCount = $errorCount; return $this; }

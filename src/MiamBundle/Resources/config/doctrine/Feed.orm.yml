@@ -33,12 +33,10 @@ MiamBundle\Entity\Feed:
         author:
             type: text
             nullable: true
-        isCatalog:
-            type: boolean
-            column: is_catalog
-        hasIcon:
-            type: boolean
-            column: has_icon
+        language:
+            type: string
+            length: 255
+            nullable: true
         dataLength:
             type: integer
             column: data_length
@@ -52,6 +50,12 @@ MiamBundle\Entity\Feed:
             type: text
             column: error_message
             nullable: true
+        isCatalog:
+            type: boolean
+            column: is_catalog
+        hasIcon:
+            type: boolean
+            column: has_icon
         dateCreated:
             type: datetime
             column: date_created

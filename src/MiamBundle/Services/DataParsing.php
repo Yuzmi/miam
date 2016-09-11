@@ -95,6 +95,12 @@ class DataParsing extends MainService {
 				$feed->setAuthor($feed_authors);
 			}
 
+			// Language
+			$feed_language = $this->sanitizeText($pie->get_language(), 255);
+			if($feed_language) {
+				$feed->setLanguage($feed_language);
+			}
+
 			// Data length
 			$dataLength = strlen($pie->get_raw_data());
 			if($dataLength > 0) {
