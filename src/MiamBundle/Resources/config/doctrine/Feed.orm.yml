@@ -84,6 +84,10 @@ MiamBundle\Entity\Feed:
             targetEntity: FeedMark
             mappedBy: feed
             cascade: ["remove"]
+        pshbSubscriptions:
+            targetEntity: PshbSubscription
+            mappedBy: feed
+            cascade: ["remove"]
         subscriptions:
             targetEntity: Subscription
             mappedBy: feed

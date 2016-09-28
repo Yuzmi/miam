@@ -25,6 +25,7 @@ class Feed
     private $dateNewItem;
     private $dateIcon;
     private $items;
+    private $pshbSubscriptions;
     private $subscriptions;
     private $marks;
 
@@ -36,6 +37,7 @@ class Feed
         $this->hasIcon = false;
         $this->dateCreated = new \DateTime("now");
         $this->items = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->pshbSubscriptions = new \Doctrine\Common\Collections\ArrayCollection();
         $this->subscriptions = new \Doctrine\Common\Collections\ArrayCollection();
         $this->marks = new \Doctrine\Common\Collections\ArrayCollection();
     }
@@ -92,11 +94,13 @@ class Feed
 
     // Add to collection
     public function addItem(\MiamBundle\Entity\Item $item) { $this->items[] = $item; return $this; }
+    public function addPshbSubscription(\MiamBundle\Entity\PshbSubscription $pshbSubscription) { $this->pshbSubscriptions[] = $pshbSubscription; return $this; }
     public function addSubscription(\MiamBundle\Entity\Subscription $subscription) { $this->subscriptions[] = $subscription; return $this; }
     public function addMark(\MiamBundle\Entity\FeedMark $mark) { $this->marks[] = $mark; return $this; }
 
     // Remove from collection
     public function removeItem(\MiamBundle\Entity\Item $item) { $this->items->removeElement($item); }
+    public function removePshbSubscription(\MiamBundle\Entity\PshbSubscription $pshbSubscription) { $this->pshbSubscriptions->removeElement($pshbSubscription); }
     public function removeSubscription(\MiamBundle\Entity\Subscription $subscription) { $this->subscriptions->removeElement($subscription); }
     public function removeMark(\MiamBundle\Entity\FeedMark $mark) { $this->marks->removeElement($mark); }
 

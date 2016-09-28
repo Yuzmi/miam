@@ -14,6 +14,9 @@ services:
     mark_manager:
         class: MiamBundle\Services\MarkManager
         arguments: ["@doctrine.orm.default_entity_manager"]
+    pubsubhubbub:
+        class: MiamBundle\Services\PubSubHubBub
+        arguments: ["@doctrine.orm.default_entity_manager", "@service_container"]
     text_extension:
         class: MiamBundle\Twig\TextExtension
         public: false

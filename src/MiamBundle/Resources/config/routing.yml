@@ -25,3 +25,7 @@ user:
     path: /user/{userId}
     defaults: { _controller: MiamBundle:Shit:index }
     requirements: { userId: \d+ }
+
+pubsubhubbub:
+    path: /pshb
+    defaults: { _controller: MiamBundle:Default:pshb }

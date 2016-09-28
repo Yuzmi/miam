@@ -13,7 +13,7 @@ class ParseFeedsCommand extends ContainerAwareCommand {
         $this
             ->setName('miam:parse:feeds')
             ->setDescription('Parse feeds')
-            ->addArgument('feeds', InputArgument::OPTIONAL, "Which feeds will you parse (all/catalog/subscribed/used/unused) ?")
+            ->addArgument('feeds', InputArgument::OPTIONAL, "Which feeds will you parse ?")
             ->addOption('list-errors', null, InputOption::VALUE_NONE, "List errors at the end")
             ->addOption('no-cache', null, InputOption::VALUE_NONE, "Disable the cache")
             ->addOption('timeout', null, InputOption::VALUE_REQUIRED, "Set the timeout to fetch a feed (seconds)")
@@ -30,51 +30,13 @@ class ParseFeedsCommand extends ContainerAwareCommand {
 
         $arg = $input->getArgument('feeds');
         if($arg == 'catalog') {
-            $feeds = $em->getRepository('MiamBundle:Feed')
-                ->createQueryBuilder('f')
-                ->where('f.isCatalog = TRUE')
-                ->getQuery()->getResult();
+            $feeds = $em->getRepository('MiamBundle:Feed')->findCatalog();
         } elseif($arg == 'subscribed') {
-            $feeds = $em->getRepository('MiamBundle:Feed')
-                ->createQueryBuilder('f')
-                ->innerJoin('f.subscriptions', 's')
-                ->getQuery()->getResult();
-
-            /*
-            $feeds = $em->getRepository('MiamBundle:Feed')
-                ->createQueryBuilder('f')
-                ->select('f, COUNT(s.id)')
-                ->leftJoin('f.subscriptions', 's')
-                ->groupBy('f')
-                ->having('COUNT(s.id) > 0')
-                ->getQuery()->getResult();
-            */
+            $feeds = $em->getRepository('MiamBundle:Feed')->findSubscribed();
         } elseif($arg == 'used') {
-            $fs = $em->getRepository('MiamBundle:Feed')
-                ->createQueryBuilder("f")
-                ->select("f, COUNT(s.id)")
-                ->leftJoin("f.subscriptions", "s")
-                ->groupBy("f")
-                ->having("f.isCatalog = TRUE OR COUNT(s.id) > 0")
-                ->getQuery()->getResult();
-
-            $feeds = array();
-            foreach($fs as $f) {
-                $feeds[] = $f[0];
-            }
+            $feeds = $em->getRepository('MiamBundle:Feed')->findUsed();
         } elseif($arg == 'unused') {
-            $fs = $em->getRepository('MiamBundle:Feed')
-                ->createQueryBuilder("f")
-                ->select("f, COUNT(s.id)")
-                ->leftJoin("f.subscriptions", "s")
-                ->groupBy("f")
-                ->having("f.isCatalog = FALSE AND COUNT(s.id) = 0")
-                ->getQuery()->getResult();
-
-            $feeds = array();
-            foreach($fs as $f) {
-                $feeds[] = $f[0];
-            }
+            $feeds = $em->getRepository('MiamBundle:Feed')->findUnused();
         } else {
             $feeds = $em->getRepository('MiamBundle:Feed')->findAll();
         }
