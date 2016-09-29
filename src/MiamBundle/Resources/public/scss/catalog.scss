@@ -96,20 +96,3 @@ body.dark {
 		}
 	}
 }
-
-body.orange {
-	.feeds {
-		.feed {
-			border-color:#e69030;
-
-			.subscribe {
-				border-color:#e69030;
-			}
-
-			&.subscribed .subscribe, .subscribe:hover {
-				background-color:#e69030;
-				color:white;
-			}
-		}
-	}
-}

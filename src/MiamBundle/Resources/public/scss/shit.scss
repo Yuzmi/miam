@@ -229,39 +229,3 @@ body.dark {
 		}
 	}
 }
-
-body.orange {
-	.sidebar {
-		border-color:#e69030;
-
-		.row {
-			border-color:#e69030;
-
-			.unreadCount, .count {
-				background-color:#e69030;
-			}
-
-			&:hover, &.selected {
-				background-color:#e69030;
-				color:white;
-			}
-		}
-	}
-
-	.topbar {
-		border-color:#e69030;
-	}
-
-	.contextMenu {
-		border-color:#e69030;
-
-		.option {
-			border-color:#e69030;
-
-			&:hover {
-				background-color:#e69030;
-				color:white;
-			}
-		}
-	}
-}
