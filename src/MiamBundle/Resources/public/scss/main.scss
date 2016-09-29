@@ -75,6 +75,11 @@ input, select, textarea, button {
 	padding:0.4rem 0.8rem;
 }
 
+input[type=file] {
+	background-color:transparent;
+	border-color:transparent;
+}
+
 button {
 	cursor:pointer;
 
@@ -126,7 +131,7 @@ button {
 		display:inline-block;
 		max-height:90%;
 		max-width:90%;
-		min-width:25%;
+		min-width:30%;
 		position:relative;
 		text-align:center;
 
@@ -141,13 +146,22 @@ button {
 		.popupContent {
 			padding:1rem 2rem;
 
-			label {
-				display:inline-block;
-			}
+			form {
+				& > label {
+					display:block;
+				}
 
-			input, select {
-				display:inline-block;
-				margin-top:0.6rem;
+				& > input, & > select {
+					display:block;
+					margin:auto;
+					margin-top:1rem;
+				}
+
+				& > select {
+					margin-left:auto;
+					margin-right:auto;
+					min-width:60%;
+				}
 			}
 		}
 
@@ -473,6 +487,11 @@ body.dark {
 		color:#a8a8a8;
 	}
 
+	input[type=file] {
+		background-color:transparent;
+		border-color:transparent;
+	}
+
 	button:hover {
 		background-color:#363636;
 		color:#cfcfcf;
@@ -568,6 +587,11 @@ body.orange {
 		background-color:white;
 		border-color:#e69030;
 		color:#e69030;
+	}
+
+	input[type=file] {
+		background-color:transparent;
+		border-color:transparent;
 	}
 
 	button:hover {

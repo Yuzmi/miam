@@ -6,11 +6,11 @@
 	<form method="POST" action="{{ path('manager_subscription_delete', {'id': subscription.id}) }}">
 		Unsubscribe "{{ subscription.name }}" ?
 
-		<input type="hidden" name="csrf_token" value="{{ csrf_token('manager_subscription_delete') }}">
-
 		<br><br>
 
 		<button type="submit">Yes</button>
 		<button class="closePopup" type="button">No</button>
+
+		<input type="hidden" name="csrf_token" value="{{ csrf_token('manager_subscription_delete') }}">
 	</form>
 {% endblock %}

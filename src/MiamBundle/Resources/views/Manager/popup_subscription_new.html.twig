@@ -9,28 +9,29 @@
 		<label for="name">Name:</label>
 		<input type="text" id="name" name="name">
 
-		<br><br>
+		<br>
 
 		<label for="url">URL:</label>
 		<input type="text" id="url" name="url" required>
 
-		<br><br>
-
-		<label>Categories:</label>
 		<br>
-		<div class="categories">
-			{% for c in categories %}
-				<div class="category">
-					<input id="newSubCat{{ c.id }}" type="checkbox" name="categories[]" value="{{ c.id }}">
-					<label for="newSubCat{{ c.id }}">{{ c.path }}</label>
-				</div>
-			{% endfor %}
-		</div>
 
-		<input type="hidden" name="csrf_token" value="{{ csrf_token('manager_subscription_save') }}">
+		{% if categories|length > 0 %}
+			<label>Categories:</label>
+			<div class="categories">
+				{% for c in categories %}
+					<div class="category">
+						<input id="newSubCat{{ c.id }}" type="checkbox" name="categories[]" value="{{ c.id }}">
+						<label for="newSubCat{{ c.id }}">{{ c.path }}</label>
+					</div>
+				{% endfor %}
+			</div>
 
-		<br><br>
+			<br>
+		{% endif %}
 
 		<button type="submit">Create</button>
+
+		<input type="hidden" name="csrf_token" value="{{ csrf_token('manager_subscription_save') }}">
 	</form>
 {% endblock %}

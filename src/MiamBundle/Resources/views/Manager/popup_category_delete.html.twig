@@ -6,11 +6,11 @@
 	<form method="POST" action="{{ path('manager_category_delete', {'id': category.id}) }}">
 		Delete "{{ category.name }}" and all subcategories ?
 
-		<input type="hidden" name="csrf_token" value="{{ csrf_token('manager_category_delete') }}">
-
 		<br><br>
 
 		<button type="submit">Yes</button>
 		<button class="closePopup" type="button">No</button>
+
+		<input type="hidden" name="csrf_token" value="{{ csrf_token('manager_category_delete') }}">
 	</form>
 {% endblock %}

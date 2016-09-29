@@ -4,14 +4,12 @@
 
 {% block popupContent %}
 	<form method="POST" action="{{ path('manager_opml_import') }}" enctype="multipart/form-data">
-		<label for="opml">Import and OPML file.</label>
-		<br>
 		<input type="file" id="opml" name="opml">
 
-		<input type="hidden" name="csrf_token" value="{{ csrf_token('manager_opml_import') }}">
-
-		<br><br>
+		<br>
 
 		<button type="submit">Import</button>
+
+		<input type="hidden" name="csrf_token" value="{{ csrf_token('manager_opml_import') }}">
 	</form>
 {% endblock %}
