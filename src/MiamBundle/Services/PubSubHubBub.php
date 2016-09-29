@@ -3,7 +3,6 @@
 namespace MiamBundle\Services;
 
 /*
-	Inspired by
 	https://github.com/pubsubhubbub/php-subscriber
 	https://pubsubhubbub.github.io/PubSubHubbub/pubsubhubbub-core-0.4.html
 */
@@ -59,9 +58,9 @@ class PubSubHubBub extends MainService {
 
 		$response = curl_exec($ch);
 		$info = curl_getinfo($ch);
-
+		
 		if(substr($info['http_code'], 0, 1) == "2") {
-			return $response;
+			return true;
 		}
 
 		return false;

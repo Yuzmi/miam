@@ -43,7 +43,7 @@ class PshbSubscribeFeedsCommand extends ContainerAwareCommand {
         $output->writeln('Subscribing...');
 
         foreach($feeds as $feed) {
-            $subscribe = $this->getContainer()->get('pubsubhubbub')->subscribe($feed);
+            $subscribe = $this->getContainer()->get('pubsubhubbub')->subscribe($feed->getUrl());
 
             if($subscribe) {
                 $output->write('+');
