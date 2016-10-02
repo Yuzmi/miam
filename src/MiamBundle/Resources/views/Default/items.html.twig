@@ -1,3 +1,4 @@
+{% set hideFeed = hideFeed is defined and hideFeed ? true : false %}
 {% set markable = markable is defined and markable ? true : false %}
 {% set loadMore = loadMore is defined and loadMore ? true : false %}
 
@@ -11,22 +12,24 @@
 			data-item="{{ item.id }}" 
 			data-feed="{{ item.feed.id }}">
 			<a class="header" href="{{ item.link }}" target="_blank">
-				{% if itemData and itemData.feedName %}
-					{% set feedName = itemData.feedName %}
-				{% elseif item.feed.name %}
-					{% set feedName = item.feed.name %}
-				{% else %}
-					{% set feedName = item.feed.url %}
-				{% endif %}
-				<span class="feed" title="{{ feedName }}">
-					<span class="name">
-						{{ feedName|shorten(50) }}
-					</span>
-
-					{% if item.feed.hasIcon %}
-						<img class="icon" src="{{ asset(item.feed.icon) }}" alt="">
+				{% if not hideFeed %}
+					{% if itemData and itemData.feedName %}
+						{% set feedName = itemData.feedName %}
+					{% elseif item.feed.name %}
+						{% set feedName = item.feed.name %}
+					{% else %}
+						{% set feedName = item.feed.url %}
 					{% endif %}
-				</span>
+					<span class="feed" title="{{ feedName }}">
+						<span class="name">
+							{{ feedName|shorten(50) }}
+						</span>
+
+						{% if item.feed.hasIcon %}
+							<img class="icon" src="{{ asset(item.feed.icon) }}" alt="">
+						{% endif %}
+					</span>
+				{% endif %}
 
 				<span class="hide">-</span>
 
