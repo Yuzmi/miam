@@ -122,8 +122,6 @@ class ParseFeedsCommand extends ContainerAwareCommand {
             }
         }
 
-        $duration = time() - $time_start;
-
         if($countParsedFeeds > 0) {
             if($uniqueFeed) {
                 if($countValidFeeds > 0) {
@@ -140,6 +138,7 @@ class ParseFeedsCommand extends ContainerAwareCommand {
                 $output->write('New item(s): '.$countNewItems.' - ');
             }
 
+            $duration = time() - $time_start;
             $output->writeln('Duration: '.$duration.'s');
 
             if($input->getOption('list-errors')) {
