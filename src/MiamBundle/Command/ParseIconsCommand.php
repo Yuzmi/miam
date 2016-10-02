@@ -13,20 +13,48 @@ class ParseIconsCommand extends ContainerAwareCommand {
         $this
             ->setName('miam:parse:icons')
             ->setDescription('Parse icons')
+            ->addArgument('feed', InputArgument::OPTIONAL)
         ;
     }
 
     protected function execute(InputInterface $input, OutputInterface $output) {
         error_reporting(0);
 
+        $time_start = time();
+
         $em = $this->getContainer()->get('doctrine')->getEntityManager();
+        $feeds = array();
+        $uniqueFeed = false;
 
-        $output->writeln('Parsing icons... ');
-        $time_begin = time();
+        $arg = $input->getArgument('feed');
+        if($arg == 'all' || is_null($arg)) {
+            $feeds = $em->getRepository('MiamBundle:Feed')->findAll();
+        } elseif(filter_var($arg, FILTER_VALIDATE_URL) !== false) {
+            $feed = $this->getContainer()->get('feed_manager')->findFeedForUrl($arg);
+            if($feed) {
+                $feeds[] = $feed;
+                $uniqueFeed = true;
+            } else {
+                $output->writeln('Feed unknown');
+                return;
+            }
+        } elseif(intval($arg) > 0) {
+            $feed = $em->getRepository('MiamBundle:Feed')->find(intval($arg));
+            if($feed) {
+                $feeds[] = $feed;
+                $uniqueFeed = true;
+            } else {
+                $output->writeln('ID unknown');
+                return;
+            }
+        } else {
+            $output->writeln('WTF do you mean ?');
+            return;
+        }
 
-        $feeds = $em->getRepository('MiamBundle:Feed')->findAll();
+        $output->writeln('Parsing... ');
 
-        $nb = 0;
+        $count = 0;
         foreach($feeds as $f) {
             $feed = $em->getRepository('MiamBundle:Feed')->find($f->getId());
             if(!$feed) {
@@ -34,22 +62,27 @@ class ParseIconsCommand extends ContainerAwareCommand {
             }
 
             $result = $this->getContainer()->get('data_parsing')->parseIcon($feed);
-            if($result['success']) {
-                $output->write('O');
-            } else {
-                $output->write('x');
+
+            if(!$uniqueFeed) {
+                if($result['success']) {
+                    $output->write('O');
+                } else {
+                    $output->write('x');
+                }
             }
 
-            $nb++;
+            $count++;
 
-            if($nb%50 == 0) {
+            if($count%50 == 0) {
                 $em->clear();
             }
         }
 
-        $duration = time() - $time_begin;
+        if(!$uniqueFeed) {
+            $output->writeln('');
+        }
 
-        $output->writeln('');
+        $duration = time() - $time_start;
         $output->writeln('Done. Duration: '.$duration.'s');
     }
 }
