@@ -26,7 +26,7 @@ class ParseIconCommand extends ContainerAwareCommand {
         
         $feed = null;
         if(filter_var($feedArgument, FILTER_VALIDATE_URL) !== false) {
-            $feed = $em->getRepository('MiamBundle:Feed')->findOneByUrl($feedArgument);
+            $feed = $this->getContainer()->get('feed_manager')->findFeedForUrl($feedArgument);
         } else {
             $feed = $em->getRepository('MiamBundle:Feed')->find(intval($feedArgument));
         }

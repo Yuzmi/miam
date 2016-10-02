@@ -65,8 +65,4 @@ class FeedRepository extends \Doctrine\ORM\EntityRepository
 			->groupBy('f')
 			->getQuery()->getResult();
 	}
-
-	public function findOneByUrl($url) {
-		return $this->findOneByHash(hash('sha1', $url));
-	}
 }

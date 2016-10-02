@@ -15,7 +15,7 @@ class FeedManager extends MainService {
 		$this->container = $container;
 	}
 
-	public function formatUrl($url) {
+	private function formatUrl($url) {
 		$parsed = parse_url($url);
 
 		$url = strtolower($parsed["scheme"])."://";
@@ -41,12 +41,17 @@ class FeedManager extends MainService {
 		return $url;
 	}
 
+	private function hashUrl($url) {
+		return hash('sha1', $url);
+	}
+
+	// Find a feed, create if not exists
 	public function getFeedForUrl($url, $fast = false) {
 		$feed = null;
 
 		if(filter_var($url, FILTER_VALIDATE_URL) !== false) {
 			$url = $this->formatUrl($url);
-			$hash = hash('sha1', $url);
+			$hash = $this->hashUrl($url);
 
 			$feed = $this->getRepo("Feed")->findOneByHash($hash);
 			if(!$feed) {
@@ -61,6 +66,20 @@ class FeedManager extends MainService {
 					$this->container->get('data_parsing')->parseFeed($feed);
 				}
 			}
+		}
+
+		return $feed;
+	}
+
+	// Find a feed
+	public function findFeedForUrl($url) {
+		$feed = null;
+
+		if(filter_var($url, FILTER_VALIDATE_URL) !== false) {
+			$url = $this->formatUrl($url);
+			$hash = $this->hashUrl($url);
+
+			$feed = $this->getRepo("Feed")->findOneByHash($hash);
 		}
 
 		return $feed;

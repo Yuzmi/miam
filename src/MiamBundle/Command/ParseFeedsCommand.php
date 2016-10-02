@@ -41,7 +41,7 @@ class ParseFeedsCommand extends ContainerAwareCommand {
         } elseif($arg == 'unused') {
             $feeds = $em->getRepository('MiamBundle:Feed')->findUnused();
         } elseif(filter_var($arg, FILTER_VALIDATE_URL) !== false) {
-            $feed = $em->getRepository('MiamBundle:Feed')->findOneByUrl($arg);
+            $feed = $this->getContainer()->get('feed_manager')->findFeedForUrl($arg);
             if($feed) {
                 $feeds[] = $feed;
             } else {
