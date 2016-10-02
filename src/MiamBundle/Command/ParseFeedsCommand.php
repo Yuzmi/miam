@@ -28,6 +28,7 @@ class ParseFeedsCommand extends ContainerAwareCommand {
 
         $em = $this->getContainer()->get('doctrine')->getEntityManager();
         $feeds = array();
+        $uniqueFeed = false;
 
         $arg = $input->getArgument('feeds');
         if($arg == 'all' || is_null($arg)) {
@@ -44,18 +45,23 @@ class ParseFeedsCommand extends ContainerAwareCommand {
             $feed = $this->getContainer()->get('feed_manager')->findFeedForUrl($arg);
             if($feed) {
                 $feeds[] = $feed;
+                $uniqueFeed = true;
             } else {
                 $output->writeln('Feed unknown');
+                return;
             }
         } elseif(intval($arg) > 0) {
             $feed = $em->getRepository('MiamBundle:Feed')->find(intval($arg));
             if($feed) {
                 $feeds[] = $feed;
+                $uniqueFeed = true;
             } else {
                 $output->writeln('ID unknown');
+                return;
             }
         } else {
             $output->writeln('WTF do you mean ?');
+            return;
         }
 
         $countFeeds = count($feeds);
@@ -71,11 +77,6 @@ class ParseFeedsCommand extends ContainerAwareCommand {
 
         if($input->getOption('timeout')) {
             $options['timeout'] = $input->getOption('timeout');
-        }
-
-        $outputParsingResult = true;
-        if($countFeeds <= 1) {
-            $outputParsingResult = false;
         }
 
         if($countFeeds > 0) {
@@ -98,7 +99,7 @@ class ParseFeedsCommand extends ContainerAwareCommand {
 
                     $countValidFeeds++;
 
-                    if($outputParsingResult) {
+                    if(!$uniqueFeed) {
                         if($result['countNewItems'] > 0) {
                             $output->write('+');
                         } else {
@@ -108,7 +109,7 @@ class ParseFeedsCommand extends ContainerAwareCommand {
                 } else {
                     $errors[] = $feed->getId().' - '.$feed->getUrl().' - '.$result['error'];
 
-                    if($outputParsingResult) {
+                    if(!$uniqueFeed) {
                         $output->write('x');
                     }
                 }
@@ -124,18 +125,15 @@ class ParseFeedsCommand extends ContainerAwareCommand {
         $duration = time() - $time_start;
 
         if($countParsedFeeds > 0) {
-            if($outputParsingResult) {
-                $output->writeln('');
-            }
-
-            if($countParsedFeeds > 1) {
-                $output->write('Valid feeds: '.$countValidFeeds.'/'.$countParsedFeeds.' - ');
-            } else {
+            if($uniqueFeed) {
                 if($countValidFeeds > 0) {
                     $output->write('Valid feed - ');
                 } else {
                     $output->write('Invalid feed - ');
                 }
+            } else {
+                $output->writeln('');
+                $output->write('Valid feeds: '.$countValidFeeds.'/'.$countParsedFeeds.' - ');
             }
 
             if($countValidFeeds > 0) {
