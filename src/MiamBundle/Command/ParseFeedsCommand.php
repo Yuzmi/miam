@@ -27,9 +27,12 @@ class ParseFeedsCommand extends ContainerAwareCommand {
         $time_start = time();
 
         $em = $this->getContainer()->get('doctrine')->getEntityManager();
+        $feeds = array();
 
         $arg = $input->getArgument('feeds');
-        if($arg == 'catalog') {
+        if($arg == 'all' || is_null($arg)) {
+            $feeds = $em->getRepository('MiamBundle:Feed')->findAll();
+        } elseif($arg == 'catalog') {
             $feeds = $em->getRepository('MiamBundle:Feed')->findCatalog();
         } elseif($arg == 'subscribed') {
             $feeds = $em->getRepository('MiamBundle:Feed')->findSubscribed();
@@ -37,11 +40,26 @@ class ParseFeedsCommand extends ContainerAwareCommand {
             $feeds = $em->getRepository('MiamBundle:Feed')->findUsed();
         } elseif($arg == 'unused') {
             $feeds = $em->getRepository('MiamBundle:Feed')->findUnused();
+        } elseif(filter_var($arg, FILTER_VALIDATE_URL) !== false) {
+            $feed = $em->getRepository('MiamBundle:Feed')->findOneByUrl($arg);
+            if($feed) {
+                $feeds[] = $feed;
+            } else {
+                $output->writeln('Feed unknown');
+            }
+        } elseif(intval($arg) > 0) {
+            $feed = $em->getRepository('MiamBundle:Feed')->find(intval($arg));
+            if($feed) {
+                $feeds[] = $feed;
+            } else {
+                $output->writeln('ID unknown');
+            }
         } else {
-            $feeds = $em->getRepository('MiamBundle:Feed')->findAll();
+            $output->writeln('WTF do you mean ?');
         }
 
-        $countFeeds = 0;
+        $countFeeds = count($feeds);
+        $countParsedFeeds = 0;
         $countValidFeeds = 0;
         $countNewItems = 0;
         $errors = array();
@@ -55,43 +73,49 @@ class ParseFeedsCommand extends ContainerAwareCommand {
             $options['timeout'] = $input->getOption('timeout');
         }
 
-        $output->writeln('Fetching and parsing...');
+        $outputParsingResult = true;
+        if($countFeeds <= 1) {
+            $outputParsingResult = false;
+        }
 
-        $nb = 0;
-        foreach($feeds as $f) {
-            $feed = $em->getRepository('MiamBundle:Feed')->find($f->getId());
-            if(!$feed) {
-                continue;
-            }
+        if($countFeeds > 0) {
+            $output->writeln('Fetching and parsing...');
 
-            $parse = true;
-            if($input->getOption('ignore-invalid') && $feed->getErrorCount() > 0) {
-                $parse = false;
-            }
-
-            if($parse) {
-                $result = $this->getContainer()->get('data_parsing')->parseFeed($feed, $options);
-                if($result['success']) {
-                    if($result['countNewItems'] > 0) {
-                        $output->write('+');
-
-                        $countNewItems += $result['countNewItems'];
-                    } else {
-                        $output->write('-');
-                    }
-
-                    $countValidFeeds++;
-                } else {
-                    $output->write('x');
-
-                    $errors[] = $feed->getId().' - '.$feed->getUrl().' - '.$result['error'];
+            foreach($feeds as $f) {
+                $feed = $em->getRepository('MiamBundle:Feed')->find($f->getId());
+                if(!$feed) {
+                    continue;
                 }
 
-                $countFeeds++;
+                if($input->getOption('ignore-invalid') && $feed->getErrorCount() > 0) {
+                    continue;
+                }
 
-                $nb++;
+                $result = $this->getContainer()->get('data_parsing')->parseFeed($feed, $options);
+                
+                if($result['success']) {
+                    $countNewItems += $result['countNewItems'];
 
-                if($nb%20 == 0) {
+                    $countValidFeeds++;
+
+                    if($outputParsingResult) {
+                        if($result['countNewItems'] > 0) {
+                            $output->write('+');
+                        } else {
+                            $output->write('-');
+                        }
+                    }
+                } else {
+                    $errors[] = $feed->getId().' - '.$feed->getUrl().' - '.$result['error'];
+
+                    if($outputParsingResult) {
+                        $output->write('x');
+                    }
+                }
+
+                $countParsedFeeds++;
+
+                if($countParsedFeeds%20 == 0) {
                     $em->clear();
                 }
             }
@@ -99,19 +123,40 @@ class ParseFeedsCommand extends ContainerAwareCommand {
 
         $duration = time() - $time_start;
 
-        $output->writeln('');
-        $output->writeln('Valid feeds: '.$countValidFeeds.'/'.$countFeeds.' - New item(s): '.$countNewItems.' - Duration: '.$duration.'s');
-
-        if($input->getOption('list-errors')) {
-            if(count($errors) > 0) {
-                $output->writeln('Errors:');
-
-                foreach($errors as $error) {
-                    $output->writeln($error);
-                }
-            } else {
-                $output->writeln('No error occured');
+        if($countParsedFeeds > 0) {
+            if($outputParsingResult) {
+                $output->writeln('');
             }
+
+            if($countParsedFeeds > 1) {
+                $output->write('Valid feeds: '.$countValidFeeds.'/'.$countParsedFeeds.' - ');
+            } else {
+                if($countValidFeeds > 0) {
+                    $output->write('Valid feed - ');
+                } else {
+                    $output->write('Invalid feed - ');
+                }
+            }
+
+            if($countValidFeeds > 0) {
+                $output->write('New item(s): '.$countNewItems.' - ');
+            }
+
+            $output->writeln('Duration: '.$duration.'s');
+
+            if($input->getOption('list-errors')) {
+                if(count($errors) > 0) {
+                    $output->writeln('Errors:');
+
+                    foreach($errors as $error) {
+                        $output->writeln($error);
+                    }
+                } else {
+                    $output->writeln('No error occured');
+                }
+            }
+        } else {
+            $output->writeln('Nothing happened');
         }
     }
 }
