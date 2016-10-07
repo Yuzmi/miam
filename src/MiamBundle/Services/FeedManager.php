@@ -85,6 +85,33 @@ class FeedManager extends MainService {
 		return $feed;
 	}
 
+	// Find feeds from the argument (for commands)
+	public function getFeeds($arg = null) {
+        if($arg == 'all' || is_null($arg)) {
+            return $this->getRepo("Feed")->findAll();
+        } elseif($arg == 'catalog') {
+            return $this->getRepo("Feed")->findCatalog();
+        } elseif($arg == 'subscribed') {
+            return $this->getRepo("Feed")->findSubscribed();
+        } elseif($arg == 'used') {
+            return $this->getRepo("Feed")->findUsed();
+        } elseif($arg == 'unused') {
+            return $this->getRepo("Feed")->findUnused();
+        } elseif(filter_var($arg, FILTER_VALIDATE_URL) !== false) {
+            $feed = $this->findFeedForUrl($arg);
+            if($feed) {
+            	return array($feed);
+            }
+        } elseif(intval($arg) > 0) {
+            $feed = $this->getRepo("Feed")->find(intval($arg));
+            if($feed) {
+            	return array($feed);
+            }
+        }
+
+        return null;
+    }
+
 	public function deleteSubscription(Subscription $subscription) {
 		$this->em->remove($subscription);
 		$this->em->flush();

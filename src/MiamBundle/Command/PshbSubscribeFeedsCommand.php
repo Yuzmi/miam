@@ -24,17 +24,16 @@ class PshbSubscribeFeedsCommand extends ContainerAwareCommand {
 
         $em = $this->getContainer()->get('doctrine')->getEntityManager();
 
-        $arg = $input->getArgument('feeds');
-        if($arg == 'catalog') {
-            $feeds = $em->getRepository('MiamBundle:Feed')->findCatalog();
-        } elseif($arg == 'subscribed') {
-            $feeds = $em->getRepository('MiamBundle:Feed')->findSubscribed();
-        } elseif($arg == 'used') {
-            $feeds = $em->getRepository('MiamBundle:Feed')->findUsed();
-        } elseif($arg == 'unused') {
-            $feeds = $em->getRepository('MiamBundle:Feed')->findUnused();
-        } else {
-            $feeds = $em->getRepository('MiamBundle:Feed')->findAll();
+        $arg = trim($input->getArgument('feeds'));
+        $feeds = $this->getContainer()->get('feed_manager')->getFeeds($arg);
+
+        if(is_null($feeds)) {
+            if(filter_var($arg, FILTER_VALIDATE_URL) !== false || intval($arg) > 0) {
+                $output->writeln('Feed unknown');
+            } else {
+                $output->writeln('Wrong argument');
+            }
+            return;
         }
 
         $countFeeds = 0;

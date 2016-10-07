@@ -13,7 +13,7 @@ class ParseIconsCommand extends ContainerAwareCommand {
         $this
             ->setName('miam:parse:icons')
             ->setDescription('Parse icons')
-            ->addArgument('feed', InputArgument::OPTIONAL)
+            ->addArgument('feeds', InputArgument::OPTIONAL)
         ;
     }
 
@@ -24,65 +24,62 @@ class ParseIconsCommand extends ContainerAwareCommand {
 
         $em = $this->getContainer()->get('doctrine')->getEntityManager();
         $feeds = array();
-        $uniqueFeed = false;
 
-        $arg = $input->getArgument('feed');
-        if($arg == 'all' || is_null($arg)) {
-            $feeds = $em->getRepository('MiamBundle:Feed')->findAll();
-        } elseif(filter_var($arg, FILTER_VALIDATE_URL) !== false) {
-            $feed = $this->getContainer()->get('feed_manager')->findFeedForUrl($arg);
-            if($feed) {
-                $feeds[] = $feed;
-                $uniqueFeed = true;
-            } else {
+        $arg = trim($input->getArgument('feeds'));
+        $feeds = $this->getContainer()->get('feed_manager')->getFeeds($arg);
+
+        if(is_null($feeds)) {
+            if(filter_var($arg, FILTER_VALIDATE_URL) !== false || intval($arg) > 0) {
                 $output->writeln('Feed unknown');
-                return;
-            }
-        } elseif(intval($arg) > 0) {
-            $feed = $em->getRepository('MiamBundle:Feed')->find(intval($arg));
-            if($feed) {
-                $feeds[] = $feed;
-                $uniqueFeed = true;
             } else {
-                $output->writeln('ID unknown');
-                return;
+                $output->writeln('Wrong argument');
             }
-        } else {
-            $output->writeln('WTF do you mean ?');
+
             return;
         }
 
-        $output->writeln('Parsing... ');
+        $countFeeds = count($feeds);
 
-        $count = 0;
-        foreach($feeds as $f) {
-            $feed = $em->getRepository('MiamBundle:Feed')->find($f->getId());
-            if(!$feed) {
-                continue;
-            }
+        $uniqueFeed = false;
+        if($countFeeds == 1) {
+            $uniqueFeed = true;
+        }
 
-            $result = $this->getContainer()->get('data_parsing')->parseIcon($feed);
+        if($countFeeds > 0) {
+            $output->writeln('Parsing... ');
 
-            if(!$uniqueFeed) {
-                if($result['success']) {
-                    $output->write('O');
-                } else {
-                    $output->write('x');
+            $count = 0;
+            foreach($feeds as $f) {
+                $feed = $em->getRepository('MiamBundle:Feed')->find($f->getId());
+                if(!$feed) {
+                    continue;
+                }
+
+                $result = $this->getContainer()->get('data_parsing')->parseIcon($feed);
+
+                if(!$uniqueFeed) {
+                    if($result['success']) {
+                        $output->write('O');
+                    } else {
+                        $output->write('x');
+                    }
+                }
+
+                $count++;
+
+                if($count%50 == 0) {
+                    $em->clear();
                 }
             }
 
-            $count++;
-
-            if($count%50 == 0) {
-                $em->clear();
+            if(!$uniqueFeed) {
+                $output->writeln('');
             }
-        }
 
-        if(!$uniqueFeed) {
-            $output->writeln('');
+            $duration = time() - $time_start;
+            $output->writeln('Done. Duration: '.$duration.'s');
+        } else {
+            $output->writeln('Nothing happened');
         }
-
-        $duration = time() - $time_start;
-        $output->writeln('Done. Duration: '.$duration.'s');
     }
 }

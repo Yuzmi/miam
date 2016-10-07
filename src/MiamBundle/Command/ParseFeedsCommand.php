@@ -28,39 +28,17 @@ class ParseFeedsCommand extends ContainerAwareCommand {
 
         $em = $this->getContainer()->get('doctrine')->getEntityManager();
         $feeds = array();
-        $uniqueFeed = false;
 
-        $arg = $input->getArgument('feeds');
-        if($arg == 'all' || is_null($arg)) {
-            $feeds = $em->getRepository('MiamBundle:Feed')->findAll();
-        } elseif($arg == 'catalog') {
-            $feeds = $em->getRepository('MiamBundle:Feed')->findCatalog();
-        } elseif($arg == 'subscribed') {
-            $feeds = $em->getRepository('MiamBundle:Feed')->findSubscribed();
-        } elseif($arg == 'used') {
-            $feeds = $em->getRepository('MiamBundle:Feed')->findUsed();
-        } elseif($arg == 'unused') {
-            $feeds = $em->getRepository('MiamBundle:Feed')->findUnused();
-        } elseif(filter_var($arg, FILTER_VALIDATE_URL) !== false) {
-            $feed = $this->getContainer()->get('feed_manager')->findFeedForUrl($arg);
-            if($feed) {
-                $feeds[] = $feed;
-                $uniqueFeed = true;
-            } else {
+        $arg = trim($input->getArgument('feeds'));
+        $feeds = $this->getContainer()->get('feed_manager')->getFeeds($arg);
+
+        if(is_null($feeds)) {
+            if(filter_var($arg, FILTER_VALIDATE_URL) !== false || intval($arg) > 0) {
                 $output->writeln('Feed unknown');
-                return;
-            }
-        } elseif(intval($arg) > 0) {
-            $feed = $em->getRepository('MiamBundle:Feed')->find(intval($arg));
-            if($feed) {
-                $feeds[] = $feed;
-                $uniqueFeed = true;
             } else {
-                $output->writeln('ID unknown');
-                return;
+                $output->writeln('Wrong argument');
             }
-        } else {
-            $output->writeln('WTF do you mean ?');
+
             return;
         }
 
@@ -70,6 +48,11 @@ class ParseFeedsCommand extends ContainerAwareCommand {
         $countNewItems = 0;
         $errors = array();
         $options = array();
+
+        $uniqueFeed = false;
+        if($countFeeds == 1) {
+            $uniqueFeed = true;
+        }
 
         if($input->getOption('no-cache')) {
             $options['cache'] = false;
