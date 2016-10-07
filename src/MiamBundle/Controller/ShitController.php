@@ -31,12 +31,12 @@ class ShitController extends MainController
             $starredCount = $this->getRepo("ItemMark")->countStarredAndSubscribedForUser($this->getUser());
         }
 
-        $items = $this->get('item_manager')->getItems(array(
+        $items = $this->getRepo("Item")->getItems(array(
             'marker' => $marker,
             'subscriber' => $subscriber
         ));
 
-        $dataItems = $this->get('item_manager')->getDataForItems($items, array(
+        $dataItems = $this->getRepo("Item")->getDataForItems($items, array(
             'marker' => $marker,
             'subscriber' => $subscriber
         ));
@@ -175,9 +175,9 @@ class ShitController extends MainController
                 $options['offset'] = $offset;
             }
 
-            $items = $this->get('item_manager')->getItems($options);
+            $items = $this->getRepo("Item")->getItems($options);
 
-            $dataItems = $this->get('item_manager')->getDataForItems($items, array(
+            $dataItems = $this->getRepo("Item")->getDataForItems($items, array(
                 'subscriber' => $subscriber,
                 'marker' => $marker
             ));

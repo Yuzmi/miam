@@ -34,13 +34,13 @@ class CatalogController extends MainController
 			return $this->redirectToRoute('catalog_feeds');
 		}
 
-		$items = $this->get('item_manager')->getItems(array(
+		$items = $this->getRepo("Item")->getItems(array(
 			'catalog' => true,
 			'feed' => $feed,
 			'nb' => 50
 		));
 
-		$dataItems = $this->get('item_manager')->getDataForItems($items);
+		$dataItems = $this->getRepo("Item")->getDataForItems($items);
 
 		return $this->render('MiamBundle:Catalog:feed.html.twig', array(
 			'feed' => $feed,
@@ -50,11 +50,11 @@ class CatalogController extends MainController
 	}
 
 	public function showItemsAction() {
-		$items = $this->get('item_manager')->getItems(array(
+		$items = $this->getRepo("Item")->getItems(array(
 			'catalog' => true
 		));
 
-		$dataItems = $this->get('item_manager')->getDataForItems($items);
+		$dataItems = $this->getRepo("Item")->getDataForItems($items);
 
 		return $this->render('MiamBundle:Catalog:items.html.twig', array(
 			'items' => $items,
@@ -118,12 +118,12 @@ class CatalogController extends MainController
 	public function ajaxGetItemsAction($page) {
 		$page = max(1, intval($page));
 
-		$items = $this->get('item_manager')->getItems(array(
+		$items = $this->getRepo("Item")->getItems(array(
 			'catalog' => true,
 			'page' => $page
 		));
 
-		$dataItems = $this->get('item_manager')->getDataForItems($items);
+		$dataItems = $this->getRepo("Item")->getDataForItems($items);
 
 		$htmlItems = $this->renderView('MiamBundle:Default:items.html.twig', array(
 			'items' => $items,
@@ -146,12 +146,12 @@ class CatalogController extends MainController
 		if($feed && $feed->getIsCatalog()) {
 			$page = max(1, intval($page));
 
-			$items = $this->get('item_manager')->getItems(array(
+			$items = $this->getRepo("Item")->getItems(array(
 				'feed' => $feed,
 				'page' => $page
 			));
 
-			$dataItems = $this->get('item_manager')->getDataForItems($items);
+			$dataItems = $this->getRepo("Item")->getDataForItems($items);
 
 			$htmlItems = $this->renderView('MiamBundle:Default:items.html.twig', array(
 				'items' => $items,

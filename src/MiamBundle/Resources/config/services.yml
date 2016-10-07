@@ -8,9 +8,6 @@ services:
     feed_manager:
         class: MiamBundle\Services\FeedManager
         arguments: ["@doctrine.orm.default_entity_manager", "@service_container"]
-    item_manager:
-        class: MiamBundle\Services\ItemManager
-        arguments: ["@doctrine.orm.default_entity_manager", "@security.token_storage"]
     mark_manager:
         class: MiamBundle\Services\MarkManager
         arguments: ["@doctrine.orm.default_entity_manager"]
