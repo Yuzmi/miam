@@ -22,7 +22,7 @@ class ParseIconsCommand extends ContainerAwareCommand {
 
         $time_start = time();
 
-        $em = $this->getContainer()->get('doctrine')->getEntityManager();
+        $em = $this->getContainer()->get('doctrine')->getManager();
         $feeds = array();
 
         $arg = trim($input->getArgument('feeds'));

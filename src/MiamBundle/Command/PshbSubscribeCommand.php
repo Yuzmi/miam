@@ -23,7 +23,7 @@ class PshbSubscribeCommand extends ContainerAwareCommand {
 
         $time_start = time();
 
-        $em = $this->getContainer()->get('doctrine')->getEntityManager();
+        $em = $this->getContainer()->get('doctrine')->getManager();
 
         $arg = trim($input->getArgument('feeds'));
         $feeds = $this->getContainer()->get('feed_manager')->getFeeds($arg);

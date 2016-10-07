@@ -22,7 +22,7 @@ class AddAdminCommand extends ContainerAwareCommand {
 
         $userArgument = $input->getArgument('user');
 
-        $em = $this->getContainer()->get('doctrine')->getEntityManager();
+        $em = $this->getContainer()->get('doctrine')->getManager();
 
         $user = $em->getRepository('MiamBundle:User')->findOneByUsername($userArgument);
         if(!$user) {
