@@ -16,15 +16,15 @@ class PubSubHubBub extends MainService {
 		$this->container = $container;
 	}
 
-	public function subscribe($feed_url) {
-		return $this->change_subscription("subscribe", $feed_url);
+	public function subscribe($feed_url, $options = array()) {
+		return $this->change_subscription("subscribe", $feed_url, $options);
 	}
 
 	public function unsubscribe($feed_url) {
 		return $this->change_subscription("unsubscribe", $feed_url);
 	}
 
-	private function change_subscription($mode, $feed_url) {
+	private function change_subscription($mode, $feed_url, $options = array()) {
 		$hub_url = $this->container->getParameter("pshb_hub");
 		if(filter_var($hub_url, FILTER_VALIDATE_URL) === false) {
 			throw new \Exception("PSHB: Hub url is invalid");
@@ -39,10 +39,12 @@ class PubSubHubBub extends MainService {
 		$post_string .= "&hub.callback=".urlencode($callback_url);
 		$post_string .= "&hub.topic=".urlencode($feed_url);
 
-		/*$lease_seconds = intval($this->container->getParameter("pshb_lease_seconds"));
-		if($lease_seconds > 0) {
-			$post_string .= "&hub.lease_seconds=".$lease_seconds;
-		}*/
+		if(isset($options['lease-seconds'])) {
+			$lease_seconds = intval($options['lease-seconds']);
+			if($lease_seconds > 0) {
+				$post_string .= "&hub.lease_seconds=".$lease_seconds;
+			}
+		}
 
 		$options = array(
 			CURLOPT_URL => $hub_url,
