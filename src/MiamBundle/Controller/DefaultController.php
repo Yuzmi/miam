@@ -58,18 +58,27 @@ class DefaultController extends MainController
 				}
 			}
 		} elseif($request->getMethod() == "POST") {
+			$feed = null;
 			$header_links = explode(',', $request->headers->get("link"));
 			if($header_links) {
 				foreach($header_links as $hl) {
-					if(preg_match('#^<(.*)>;rel=([a-z]+)$#i', $hl, $matches) && $matches[2] == "self") {
+					if(preg_match('#^<(.*)>;rel=self$#i', $hl, $matches)) {
 						$feed = $this->get('feed_manager')->findFeedForUrl($matches[1]);
-						if($feed) {
-							$data = file_get_contents("php://input");
-							if($data !== false) {
-								$this->get("data_parsing")->parseFeed($feed, array('data' => $data));
-							}
-						}
 					}
+				}
+			}
+
+			$data = file_get_contents("php://input");
+
+			$signature = explode('=', $request->headers->get("X-Hub-Signature"));
+			$received_hmac = count($signature) > 1 ? $signature[1] : null;
+
+			if($feed && $data !== false && !empty($received_hmac)) {
+				$secret = $this->container->getParameter("pshb_secret");
+				$calculated_hmac = hash_hmac('sha1', $data, $secret);
+				error_log($received_hmac." -- ".$calculated_hmac);
+				if($received_hmac == $calculated_hmac) {
+					$this->get("data_parsing")->parseFeed($feed, array('data' => $data));
 				}
 			}
 

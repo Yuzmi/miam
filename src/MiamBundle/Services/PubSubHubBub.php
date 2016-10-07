@@ -35,6 +35,11 @@ class PubSubHubBub extends MainService {
 			throw new \Exception("PSHB: Callback url is invalid");
 		}
 
+		$secret = $this->container->getParameter("pshb_secret");
+		if(empty($secret)) {
+			throw new \Exception("PSHB: Secret is invalid");
+		}
+
 		$post_string = "hub.mode=".$mode;
 		$post_string .= "&hub.callback=".urlencode($callback_url);
 		$post_string .= "&hub.topic=".urlencode($feed_url);
@@ -46,6 +51,8 @@ class PubSubHubBub extends MainService {
 			}
 		}
 
+		$post_string .= "&hub.secret=".urlencode($secret);
+		
 		$options = array(
 			CURLOPT_URL => $hub_url,
 			//CURLOPT_USERAGENT => "Miam Agregator",
