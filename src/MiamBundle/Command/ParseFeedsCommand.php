@@ -17,7 +17,7 @@ class ParseFeedsCommand extends ContainerAwareCommand {
             ->addOption('list-errors', null, InputOption::VALUE_NONE, "List errors at the end")
             ->addOption('no-cache', null, InputOption::VALUE_NONE, "Disable the cache")
             ->addOption('timeout', null, InputOption::VALUE_REQUIRED, "Set the timeout to fetch a feed (seconds)")
-            ->addOption('ignore-invalid', null, Inputoption::VALUE_NONE, "Ignore invalid feeds")
+            ->addOption('ignore-invalid', null, InputOption::VALUE_NONE, "Ignore invalid feeds")
         ;
     }
 
