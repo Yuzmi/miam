@@ -87,7 +87,7 @@ class FeedManager extends MainService {
 
 	// Find feeds from the argument (for commands)
 	public function getFeeds($arg = null) {
-        if($arg == 'all' || is_null($arg)) {
+        if($arg == 'all' || is_null($arg) || $arg == '') {
             return $this->getRepo("Feed")->findAll();
         } elseif($arg == 'catalog') {
             return $this->getRepo("Feed")->findCatalog();
