@@ -58,8 +58,7 @@ class PubSubHubBub extends MainService {
 			//CURLOPT_USERAGENT => "Miam Agregator",
 			CURLOPT_RETURNTRANSFER => true,
 			CURLOPT_POST => true,
-			CURLOPT_POSTFIELDS => $post_string,
-			//CURLOPT_USERPWD => $credentials
+			CURLOPT_POSTFIELDS => $post_string
 		);
 
 		$ch = curl_init();

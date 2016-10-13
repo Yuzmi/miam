@@ -58,6 +58,7 @@ class DefaultController extends MainController
 				}
 			}
 		} elseif($request->getMethod() == "POST") {
+			// Feed
 			$feed = null;
 			$header_links = explode(',', $request->headers->get("link"));
 			if($header_links) {
@@ -68,15 +69,18 @@ class DefaultController extends MainController
 				}
 			}
 
+			// Data
 			$data = file_get_contents("php://input");
 
+			// HMAC
 			$signature = explode('=', $request->headers->get("X-Hub-Signature"));
 			$received_hmac = count($signature) > 1 ? $signature[1] : null;
 
 			if($feed && $data !== false && !empty($received_hmac)) {
 				$secret = $this->container->getParameter("pshb_secret");
 				$calculated_hmac = hash_hmac('sha1', $data, $secret);
-				error_log($received_hmac." -- ".$calculated_hmac);
+				
+				// Check the HMAC and parse the data
 				if($received_hmac == $calculated_hmac) {
 					$this->get("data_parsing")->parseFeed($feed, array('data' => $data));
 				}
