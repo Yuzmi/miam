@@ -17,12 +17,12 @@ a {
 
 noscript {
 	background-color:#fcc;
-	border-top:solid 0.1rem red;
+	border-top:solid 1px red;
 	bottom:0px;
 	color:red;
 	font-size:1rem;
 	margin:auto;
-	padding:0.5rem;
+	padding:0.8em;
 	position:fixed;
 	text-align:center;
 	width:100%;
@@ -30,17 +30,17 @@ noscript {
 }
 
 header {
-	border-bottom:solid 0.1rem black;
+	border-bottom:solid 1px black;
 
 	a {
 		display:inline-block;
-		line-height:1.9rem;
-		padding:1rem 1.4rem;
+		line-height:2em;
+		padding:0.4em 1em;
 		text-decoration:none;
 
 		.label {
 			display:inline-block;
-			margin-left:0.75rem;
+			margin-left:0.75em;
 		}
 
 		&:hover {
@@ -50,14 +50,14 @@ header {
 	}
 
 	& > a {
-		border-right:solid 0.1rem black;
+		border-right:solid 1px black;
 	}
 
 	.rightSide {
 		float:right;
 
 		& > a {
-			border-left:solid 0.1rem black;
+			border-left:solid 1px black;
 		}
 	}
 
@@ -70,7 +70,7 @@ header {
 
 input, select, textarea, button {
 	background-color:white;
-	border:solid 0.1rem black;
+	border:solid 1px black;
 	color:black;
 	padding:0.4rem 0.8rem;
 }
@@ -101,7 +101,7 @@ button {
 
 		.flashMessage {
 			background-color:lightgrey;
-			border:solid 0.1rem darkgrey;
+			border:solid 1px darkgrey;
 			display:inline-block;
 			font-size:1.6rem;
 			padding:8px 12px;
@@ -184,37 +184,36 @@ button {
 	.item .header, .loadMore {
 		cursor:pointer;
 		display:block;
-		font-size:1.3rem;
 		font-weight:700;
-		height:2.4rem;
-		line-height:2.4rem;
+		height:2em;
+		line-height:2em;
 		overflow:hidden;
-		padding:0.4rem 0.8rem;
+		padding:0.4em 0.8em;
 		position:relative;
 	}
 
 	.item {
-		border-bottom:solid 0.1rem black;
+		border-bottom:solid 1px black;
 		position:relative;
 		text-align:left;
 
 		&:first-of-type {
-			border-top:solid 0.1rem black;
+			border-top:solid 1px black;
 		}
 
 		.header {
 			text-decoration:none;
 
 			.hide {
-				border:solid 0.1rem black;
+				border:solid 1px black;
 				cursor:pointer;
 				display:none;
-				height:1.2rem;
-				line-height:1.2rem;
-				margin-right:0.25rem;
-				padding-bottom:0.2rem;
+				height:1.3em;
+				line-height:1.3em;
+				margin-right:0.3em;
+				padding-bottom:2px;
 				text-align:center;
-				width:1.4rem;
+				width:1.4em;
 
 				&:hover {
 					background-color:black;
@@ -223,7 +222,7 @@ button {
 			}
 
 			.star {
-				margin-right:0.5rem;
+				margin-right:0.3em;
 
 				.icon-full {
 					display:none;
@@ -241,7 +240,7 @@ button {
 			}
 
 			.datetime {
-				margin-right:0.5rem;
+				margin-right:0.3em;
 			}
 
 			&:hover .title {
@@ -251,15 +250,15 @@ button {
 			.summary {
 				font-size:0.8em;
 				font-weight:normal;
-				margin-left:1rem;
+				margin-left:1em;
 			}
 
 			.feed {
 				float:right;
-				margin-left:0.5rem;
+				margin-left:0.5em;
 
 				.icon {
-					margin-left:0.25rem;
+					margin-left:0.25em;
 					vertical-align:middle;
 				}
 			}
@@ -282,22 +281,21 @@ button {
 		}
 
 		.content {
-			border-top:solid 0.1rem black;
+			border-top:solid 1px black;
 			display:none;
-			font-size:1.3rem;
-			line-height:2.4rem;
+			line-height:2em;
 			max-height:400px;
-			min-height:1.3rem;
+			min-height:1em;
 			overflow-x:hidden;
 			overflow-y:auto;
-			padding:0.4rem 0.8rem;
+			padding:0.4em 0.8em;
 			position:relative;
 
 			img.clickToShow {
-				background-image:url('/images/image.png');
+				background-image:url('../images/image.png');
 				background-position:center;
 				background-repeat:no-repeat;
-				border:solid 0.1rem rgba(0, 0, 0, 0.2);
+				border:solid 1px rgba(0, 0, 0, 0.2);
 				cursor:pointer;
 				display:inline-block;
 				min-height:24px;
@@ -307,17 +305,17 @@ button {
 		}
 
 		.details {
-			border-top:solid 0.1rem black;
+			border-top:solid 1px black;
 			display:none;
-			font-size:1.1rem;
-			line-height:1.6rem;
+			font-size:0.8em;
+			line-height:1.6em;
 			max-height:100px;
 			overflow-x:hidden;
 			overflow-y:auto;
-			padding:0.6rem 0.8rem;
+			padding:0.6em 0.8em;
 
 			& > div {
-				margin-top:0.6rem;
+				margin-top:0.4em;
 			}
 
 			& > *:first-child {
@@ -327,19 +325,19 @@ button {
 
 		.details_toggle {
 			background-color:inherit;
-			border-left:solid 0.1rem black;
-			border-top:solid 0.1rem black;
+			border-left:solid 1px black;
+			border-top:solid 1px black;
 			bottom:0px;
 			color:black;
 			cursor:pointer;
 			display:none;
-			font-size:1.6rem;
-			height:1.8rem;
-			line-height:1.8rem;
+			font-size:1.2em;
+			height:1.5em;
+			line-height:1.5em;
 			position:absolute;
 			right:0px;
 			text-align:center;
-			width:1.8rem;
+			width:1.5em;
 		}
 
 		&.expanded {
@@ -374,7 +372,7 @@ button {
 	}
 
 	.loadMore {
-		padding-bottom:0.8rem;
+		padding-bottom:0.4em;
 		text-align:center;
 
 		i.icon-more {
@@ -387,7 +385,7 @@ button {
 		}
 
 		&.loading {
-			padding-top:0.6rem;
+			padding-top:0.4em;
 
 			i.icon-more {
 				display:none;
@@ -447,9 +445,7 @@ button {
 
 	@media (max-width:991px) {
 		.item .header, .loadMore {
-			font-size:1.4rem;
-			height:2.8rem;
-			line-height:2.8rem;
+			font-size:1.1em;
 		}
 	}
 }

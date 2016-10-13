@@ -84,29 +84,6 @@
 		{% endblock %}
 	{% endembed %}
 
-	<aside class="sidebar">
-		<div class="row selected" data-type="all">
-			<i class="fa fa-globe"></i>
-			All articles
-		</div>
-
-		{% if app.user and app.user.id == subscriber.id %}
-			<div class="row" data-type="unread">
-				<i class="fa fa-envelope"></i>
-				Unread
-				<span class="unreadCount">0</span>
-			</div>
-
-			<div class="row" data-type="starred">
-				<i class="fa fa-star"></i>
-				Starred
-				<span class="count">{{ starredCount is defined ? starredCount : 0 }}</span>
-			</div>
-		{% endif %}
-
-		{{ macros.rows(tree, unreadCounts) }}
-	</aside>
-
 	<aside class="topbar">
 		<select class="catsubs">
 			<option data-type="all">
@@ -129,9 +106,34 @@
 		</select>
 	</aside>
 
-	<main class="items">
-		{% include 'MiamBundle:Default:items.html.twig' with {'loadMore': true} %}
-	</main>
+	<div class="itemsContainer">
+		<aside class="sidebar">
+			<div class="row selected" data-type="all">
+				<i class="fa fa-globe"></i>
+				All articles
+			</div>
+
+			{% if app.user and app.user.id == subscriber.id %}
+				<div class="row" data-type="unread">
+					<i class="fa fa-envelope"></i>
+					Unread
+					<span class="unreadCount">0</span>
+				</div>
+
+				<div class="row" data-type="starred">
+					<i class="fa fa-star"></i>
+					Starred
+					<span class="count">{{ starredCount is defined ? starredCount : 0 }}</span>
+				</div>
+			{% endif %}
+
+			{{ macros.rows(tree, unreadCounts) }}
+		</aside>
+
+		<main class="items">
+			{% include 'MiamBundle:Default:items.html.twig' with {'loadMore': true} %}
+		</main>
+	</div>
 {% endblock %}
 
 {% block javascripts %}

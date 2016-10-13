@@ -1,5 +1,5 @@
 .tab {
-	border:solid 0.2rem black;
+	border:solid 2px black;
 	margin:3rem 4rem;
 	text-align:center;
 
@@ -26,17 +26,17 @@
 
 				.row {
 					border-top:solid 1px black;
-					height:3rem;
-					line-height:3rem;
+					height:2.6em;
+					line-height:2.6em;
 					overflow:hidden;
-					padding:0 1rem;
+					padding:0 1em;
 
 					&.errors .name {
 						color:red;
 					}
 
 					.icon {
-						margin-right:0.2rem;
+						margin-right:0.5em;
 						vertical-align:middle;
 					}
 
@@ -45,7 +45,7 @@
 
 						i {
 							cursor:pointer;
-							padding:0 0.4rem;
+							padding:0 0.3em;
 						}
 					}
 				}
@@ -88,7 +88,7 @@
 	&.settings {
 		.content {
 			form {
-				border-top:0.2rem solid black;
+				border-top:2px solid black;
 				padding:2rem 1rem;
 			}
 
@@ -132,7 +132,7 @@
 
 	&.newSubscription, &.editSubscription {
 		.categories {
-			border:solid 0.1rem black;
+			border:solid 1px black;
 			margin:auto;
 			margin-top:1rem;
 			max-height:40rem;

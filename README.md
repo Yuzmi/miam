@@ -1,6 +1,6 @@
 # Miam
 
-RSS agregator using [Symfony 3](https://symfony.com/) & [SimplePie](https://github.com/simplepie/simplepie).
+RSS agregator using [Symfony 3](https://symfony.com/), [SimplePie](https://github.com/simplepie/simplepie) & Flexboxes.
 Potentially unstable as it's still on development and not restricted to stable versions.
 
 ### Features
@@ -66,8 +66,7 @@ setfacl -dR -m u:www-data:rwX var/cache var/logs web/images
 chmod -R 777 var/cache var/logs web/images
 ```
 
-### Apache config
-
+- Configure Apache
 ```apache
 DocumentRoot /var/www/miam/web
 <Directory /var/www/miam/web>
@@ -76,12 +75,11 @@ DocumentRoot /var/www/miam/web
 ```
 
 ### CRON
-
 ```
-*/30 * * * * php /var/www/miam/bin/console miam:parse:feeds used
+*/30 * * * * php /var/www/miam/bin/console miam:parse:feeds used --env=prod --no-debug
 ```
 
-### TODO
+### TODO, MAY-DO
 
 - order management for categories and feeds
 - filters => subscription_item

@@ -1,10 +1,10 @@
 h1 {
-	margin:1.5rem 2rem;
+	margin:2rem;
 	text-align:center;
 }
 
 p {
-	margin-bottom:2rem;
+	margin-bottom:2.5rem;
 	text-align:center;
 
 	.icon {
@@ -19,22 +19,22 @@ p {
 		border-color:black;
 		border-style:solid;
 		border-width:0;
-		border-bottom-width:0.1rem;
+		border-bottom-width:1px;
 		display:block;
-		height:3rem;
-		line-height:3rem;
+		height:2.6em;
+		line-height:2.6em;
 		overflow:hidden;
 		text-decoration:none;
 
 		&:first-of-type {
-			border-top-width:0.1rem;
+			border-top-width:1px;
 		}
 
 		.name {
-			padding:0 1rem;
+			padding:0 1em;
 
 			img {
-				margin-right:0.4em;
+				margin-right:0.5em;
 				position:relative;
 				top:-1px;
 				vertical-align:middle;
@@ -59,9 +59,7 @@ p {
 @media (max-width:800px) {
 	.feeds {
 		.feed {
-			font-size:1.4em;
-			height:5rem;
-			line-height:5rem;
+			font-size:2rem;
 		}
 	}
 }
@@ -71,11 +69,11 @@ p {
 		text-align:center;
 
 		.feed {
-			border-width:0.1rem;
+			border-width:1px;
 			display:inline-block;
-			margin:3px 6px;
+			margin:0.4em;
 			text-align:left;
-			width:380px;
+			width:370px;
 		}
 	}
 }
