@@ -62,6 +62,10 @@
 
 			{% if 'loadData' in itemOptions %}
 				{% include 'MiamBundle:Default:item_data.html.twig' %}
+			{% else %}
+				<div class="loading">
+					<i class="fa fa-spinner fa-spin"></i>
+				</div>
 			{% endif %}
 		</article>
 	{% endfor %}

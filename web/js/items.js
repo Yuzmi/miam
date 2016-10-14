@@ -42,6 +42,7 @@ app.items = {
 				dataType: "json"
 			}).done(function(result) {
 				if(result.success && !item.hasClass("loaded")) {
+					item.children(".loading").remove();
 					item.append(result.htmlData);
 					item.addClass("loaded");
 					app.items.init();
