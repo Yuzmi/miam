@@ -6,7 +6,7 @@
 	<p><a href="{{ path('catalog_feeds') }}">Show feeds</a></p>
 
 	<div class="items">
-		{% include 'MiamBundle:Default:items.html.twig' with {'loadMore': true} %}
+		{% include 'MiamBundle:Default:items.html.twig' with {'itemsOptions': ['loadMore']} %}
 	</div>
 {% endblock %}
 

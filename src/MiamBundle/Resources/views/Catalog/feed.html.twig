@@ -14,7 +14,7 @@
 	</p>
 
 	<div class="items">
-		{% include 'MiamBundle:Default:items.html.twig' with {'loadMore': true, 'hideFeed': true} %}
+		{% include 'MiamBundle:Default:items.html.twig' with {'itemOptions': ['loadMore', 'hideFeed']} %}
 	</div>
 {% endblock %}
 

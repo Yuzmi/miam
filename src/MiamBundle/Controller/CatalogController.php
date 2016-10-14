@@ -2,8 +2,8 @@
 
 namespace MiamBundle\Controller;
 
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\Response;
 
 use MiamBundle\Entity\Feed;
 use MiamBundle\Entity\Subscription;
@@ -87,9 +87,9 @@ class CatalogController extends MainController
 			}
 		}
 
-		return new Response(json_encode(array(
+		return new JsonResponse(array(
 			'success' => $success
-		)));
+		));
 	}
 
 	public function ajaxUnsubscribeFromFeedAction($id) {
@@ -110,9 +110,9 @@ class CatalogController extends MainController
 			}
 		}
 
-		return new Response(json_encode(array(
+		return new JsonResponse(array(
 			'success' => $success
-		)));
+		));
 	}
 
 	public function ajaxGetItemsAction($page) {
@@ -128,14 +128,14 @@ class CatalogController extends MainController
 		$htmlItems = $this->renderView('MiamBundle:Default:items.html.twig', array(
 			'items' => $items,
 			'dataItems' => $dataItems,
-			'loadMore' => true
+			'itemOptions' => array('loadMore')
 		));
 
-		return new Response(json_encode(array(
+		return new JsonResponse(array(
 			'success' => true,
 			'items' => $htmlItems,
 			'page' => $page
-		)));
+		));
 	}
 
 	public function ajaxGetItemsForFeedAction($id, $page) {
@@ -156,16 +156,16 @@ class CatalogController extends MainController
 			$htmlItems = $this->renderView('MiamBundle:Default:items.html.twig', array(
 				'items' => $items,
 				'dataItems' => $dataItems,
-				'loadMore' => true
+				'itemOptions' => array('loadMore')
 			));
 
 			$success = true;
 		}
 
-		return new Response(json_encode(array(
+		return new JsonResponse(array(
 			'success' => $success,
 			'items' => $htmlItems,
 			'page' => $page
-		)));
+		));
 	}
 }

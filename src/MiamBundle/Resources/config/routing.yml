@@ -29,3 +29,7 @@ user:
 pubsubhubbub:
     path: /pshb
     defaults: { _controller: MiamBundle:Default:pshb }
+
+ajax_get_item:
+    path: /ajax/item
+    defaults: { _controller: MiamBundle:Default:ajaxGetItem }

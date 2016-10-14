@@ -26,6 +26,9 @@ MiamBundle\Entity\User:
         isAdmin:
             type: boolean
             column: is_admin
+        isPublic:
+            type: boolean
+            column: is_public
         settings:
             type: text
     oneToMany:

@@ -17,10 +17,12 @@ app.items = {
 			e.stopPropagation();
 		});
 
+		$(".item .details_toggle").off("click");
 		$(".item .details_toggle").on("click", function(e) {
 			$(this).closest(".item").addClass("expandedDetails");
 		});
 
+		$(".item .content img.clickToShow").off("click");
 		$(".item .content img.clickToShow").on("click", function(e) {
 			if($(this).hasClass("clickToShow")) {
 				e.preventDefault();
@@ -32,6 +34,21 @@ app.items = {
 	},
 
 	expand: function(item) {
+		if(!item.hasClass("loaded")) {
+			$.ajax({
+				type: "POST",
+				url: Routing.generate('ajax_get_item'),
+				data: {'id': item.data("item")},
+				dataType: "json"
+			}).done(function(result) {
+				if(result.success && !item.hasClass("loaded")) {
+					item.append(result.htmlData);
+					item.addClass("loaded");
+					app.items.init();
+				}
+			});
+		}
+
 		$(".item").removeClass("expanded");
 		item.addClass("expanded");
 

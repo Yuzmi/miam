@@ -3,6 +3,7 @@
 namespace MiamBundle\Repository;
 
 use MiamBundle\Entity\Feed;
+use MiamBundle\Entity\Item;
 
 class ItemRepository extends \Doctrine\ORM\EntityRepository
 {
@@ -132,8 +133,8 @@ class ItemRepository extends \Doctrine\ORM\EntityRepository
 
 		$marker = isset($options['marker']) ? $options['marker'] : null;
 		if($marker) {
-			$qb->leftJoin('i.marks', 'im', 'with', 'im.user = :marker')->addSelect('im');
-			$qb->leftJoin('f.marks', 'fm', 'with', 'fm.user = :marker')->addSelect('fm');
+			$qb->leftJoin('i.marks', 'im', 'WITH', 'im.user = :marker')->addSelect('im');
+			$qb->leftJoin('f.marks', 'fm', 'WITH', 'fm.user = :marker')->addSelect('fm');
 			$qb->setParameter('marker', $marker);
 		}
 
@@ -173,5 +174,10 @@ class ItemRepository extends \Doctrine\ORM\EntityRepository
 		}
 		
 		return $data;
+	}
+
+	public function getDataForItem(Item $item, $options = array()) {
+		$dataItems = $this->getDataForItems(array($item), $options);
+		return $dataItems[$item->getId()];
 	}
 }

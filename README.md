@@ -1,6 +1,6 @@
 # Miam
 
-RSS agregator using [Symfony 3](https://symfony.com/), [SimplePie](https://github.com/simplepie/simplepie) & Flexboxes.
+RSS agregator using [Symfony 3](https://symfony.com/), [SimplePie](https://github.com/simplepie/simplepie).
 Potentially unstable as it's still on development and not restricted to stable versions.
 
 ### Features

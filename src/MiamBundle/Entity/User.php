@@ -13,6 +13,7 @@ class User implements UserInterface, \Serializable
     private $dateCreated;
     private $dateLogin;
     private $isAdmin;
+    private $isPublic;
     private $settings;
     private $subscriptions;
     private $categories;
@@ -21,6 +22,7 @@ class User implements UserInterface, \Serializable
         $this->salt = uniqid(mt_rand(), true);
         $this->dateCreated = new \DateTime("now");
         $this->isAdmin = false;
+        $this->isPublic = false;
         $this->settings = serialize(array());
         $this->subscriptions = new \Doctrine\Common\Collections\ArrayCollection();
     }
@@ -35,6 +37,7 @@ class User implements UserInterface, \Serializable
     public function getPassword() { return $this->password; }
     public function getSalt() { return $this->salt; }
     public function getIsAdmin() { return $this->isAdmin; }
+    public function getIsPublic() { return $this->isPublic; }
     public function getDateCreated() { return $this->dateCreated; }
     public function getDateLogin() { return $this->dateLogin; }
     public function getSubscriptions() { return $this->subscriptions; }
@@ -45,6 +48,7 @@ class User implements UserInterface, \Serializable
     public function setPassword($password) { $this->password = $password; return $this; }
     public function setSalt($salt) { $this->salt = $salt; return $this; }
     public function setIsAdmin($isAdmin) { $this->isAdmin = $isAdmin; return $this; }
+    public function setIsPublic($isPublic) { $this->isPublic = $isPublic; return $this; }
     public function setDateCreated($dateCreated) { $this->dateCreated = $dateCreated; return $this; }
     public function setDateLogin($dateLogin) { $this->dateLogin = $dateLogin; return $this; }
 
@@ -94,7 +98,6 @@ class User implements UserInterface, \Serializable
     private $allSettings = array(
         'SHOW_ITEM_PICTURES' => "always",
         'SHOW_ITEM_DETAILS' => "onclick",
-        'IS_PUBLIC' => false,
         'HIDE_SIDEBAR' => false,
         'THEME' => "basic"
     );

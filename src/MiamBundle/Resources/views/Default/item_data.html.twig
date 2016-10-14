@@ -1,0 +1,52 @@
+{% set dataItem = dataItem is defined ? dataItem : null %}
+
+{% if item is defined %}
+	<div class="content">
+		{% if item.htmlContent %}
+			{% if app.user and app.user.setting('SHOW_ITEM_PICTURES') == 'never' %}
+				{{ item.htmlContent|removePictures }}
+			{% elseif app.user and app.user.setting('SHOW_ITEM_PICTURES') == 'onclick' %}
+				{{ item.htmlContent|clickForPictures }}
+			{% else %}
+				{{ item.htmlContent|raw }}
+			{% endif %}
+		{% elseif item.textContent %}
+			{{ item.textContent|nl2br }}
+		{% else %}
+			[No content]
+		{% endif %}
+	</div>
+
+	{% if item.author or (dataItem and (dataItem.tags|length > 0 or dataItem.enclosures|length > 0)) %}
+		<div class="details">
+			{% if item.author %}
+				<div class="authors">
+					Author: {{ item.author }}
+				</div>
+			{% endif %}
+
+			{% if dataItem.tags|length > 0 %}
+				<div class="tags">
+					Tag{{ dataItem.tags|length > 1 ? "s" }}:
+					{% for tag in dataItem.tags %}
+						{{ tag.name }}{{ loop.index < dataItem.tags|length ? "," }}
+					{% endfor %}
+				</div>
+			{% endif %}
+
+			{% if dataItem.enclosures|length > 0 %}
+				<div class="enclosures">
+					Enclosure{{ dataItem.enclosures|length > 1 ? "s" }}:
+					{% for enclosure in dataItem.enclosures %}
+						<a href="{{ enclosure.url }}" target="_blank">
+							{{ enclosure.title ?: enclosure.url }}
+						</a>
+						{{ loop.index < dataItem.enclosures|length ? "," }}
+					{% endfor %}
+				</div>
+			{% endif %}
+		</div>
+
+		<span class="details_toggle">+</span>
+	{% endif %}
+{% endif %}

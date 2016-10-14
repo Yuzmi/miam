@@ -14,7 +14,7 @@ class ShitController extends MainController
 {
 	public function indexAction($userId) {
         $subscriber = $this->getRepo("User")->find($userId);
-        if(!$subscriber || (!$subscriber->getSetting("IS_PUBLIC") && (!$this->isLogged() || $subscriber->getId() != $this->getUser()->getId()))) 
+        if(!$subscriber || (!$subscriber->getIsPublic() && (!$this->isLogged() || $subscriber->getId() != $this->getUser()->getId()))) 
         {
             return $this->redirectToRoute("index");
         }
@@ -124,7 +124,7 @@ class ShitController extends MainController
         $subscriber = $this->getRepo('User')->find($request->get('subscriber'));
         if(
             !$subscriber || (
-                !$subscriber->getSetting('IS_PUBLIC') && (
+                !$subscriber->getIsPublic() && (
                     !$this->isLogged() || $subscriber->getId() != $this->getUser()->getId()
                 )
             ) 
@@ -182,11 +182,14 @@ class ShitController extends MainController
                 'marker' => $marker
             ));
 
+            $itemOptions = array();
+            if($marker) $itemOptions[] = 'markable';
+            if($request->get("loadMore")) $itemOptions[] = 'loadMore';
+
             $htmlItems = $this->renderView('MiamBundle:Default:items.html.twig', array(
                 'items' => $items,
                 'dataItems' => $dataItems,
-                'markable' => $marker ? true : false,
-                'loadMore' => $request->get("loadMore")
+                'itemOptions' => $itemOptions
             ));
         }
 
@@ -275,7 +278,7 @@ class ShitController extends MainController
 
         if($request->isXmlHttpRequest() && $this->isLogged()) {
             $user = $this->getRepo("User")->find($id);
-            if($user && ($user->getSetting('IS_PUBLIC') || $user->getId() == $this->getUser()->getId())) {
+            if($user && ($user->getIsPublic() || $user->getId() == $this->getUser()->getId())) {
                 $this->get('mark_manager')->readUserForUser($user, $this->getUser());
                 $success = true;
             }

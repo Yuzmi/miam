@@ -2,9 +2,11 @@
 
 namespace MiamBundle\Controller;
 
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
+use MiamBundle\Entity\Item;
 use MiamBundle\Entity\PshbSubscription;
 
 class DefaultController extends MainController
@@ -17,6 +19,60 @@ class DefaultController extends MainController
         }
 
     	return $this->redirectToRoute('catalog');
+	}
+
+	public function ajaxGetItemAction(Request $request) {
+		$success = false;
+		$htmlData = null;
+
+		if($request->isXmlHttpRequest()) {
+			$item = $this->getRepo("Item")->find($request->get("id"));
+			if($item && $this->isItemReadable($item)) {
+				$htmlData = $this->renderView('MiamBundle:Default:item_data.html.twig', array(
+					'item' => $item,
+					'dataItem' => $this->getRepo("Item")->getDataForItem($item)
+				));
+
+				$success = true;
+			}
+		}
+
+		return new JsonResponse(array(
+			'success' => $success,
+			'htmlData' => $htmlData
+		));
+	}
+
+	// Check if you can read an item
+	private function isItemReadable(Item $item) {
+		// Catalog
+		if($item->getFeed()->getIsCatalog()) {
+			return true;
+		}
+
+		// Admin
+		if($this->isLogged() && $this->getUser()->getIsAdmin()) {
+			return true;
+		}
+
+		// User subscription
+		$qb = $this->createQueryBuilder("s")
+			->leftJoin('s.user', 'u')
+			->where('s.feed = :feed')->setParameter('feed', $item->getFeed());
+
+		if($this->isLogged()) {
+			$qb->andWhere('u.id = :userId OR u.isPublic = TRUE');
+			$qb->setParameter('userId', $this->getUser()->getId());
+		} else {
+			$qb->andWhere('u.isPublic = TRUE');
+		}
+		
+		$subscriptions = $qb->getQuery()->getResult();
+		if($subscriptions->count() > 0) {
+			return true;
+		}
+
+		return false;
 	}
 
 	// https://pubsubhubbub.github.io/PubSubHubbub/pubsubhubbub-core-0.4.html

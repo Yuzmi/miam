@@ -1,20 +1,19 @@
-{% set hideFeed = hideFeed is defined and hideFeed ? true : false %}
-{% set markable = markable is defined and markable ? true : false %}
-{% set loadMore = loadMore is defined and loadMore ? true : false %}
+{% set itemOptions = itemOptions is defined ? itemOptions : [] %}
 
 {% if items is defined and items|length > 0 %}
 	{% for item in items %}
-		{% set itemData = dataItems[item.id] is defined ? dataItems[item.id] : null %}
+		{% set dataItem = dataItems[item.id] is defined ? dataItems[item.id] : null %}
 		<article class="item 
-				{{ itemData and itemData.isRead ? 'read' }} 
-				{{ itemData and itemData.isStarred ? 'starred' }}
+				{{ dataItem and dataItem.isRead ? 'read' }} 
+				{{ dataItem and dataItem.isStarred ? 'starred' }}
 				{{ app.user and app.user.setting('SHOW_ITEM_DETAILS') == "always" ? 'expandedDetails' }}"
+				{{ 'loadData' in itemOptions ? 'loaded' }}
 			data-item="{{ item.id }}" 
 			data-feed="{{ item.feed.id }}">
 			<a class="header" href="{{ item.link }}" target="_blank">
-				{% if not hideFeed %}
-					{% if itemData and itemData.feedName %}
-						{% set feedName = itemData.feedName %}
+				{% if 'hideFeed' not in itemOptions %}
+					{% if dataItem and dataItem.feedName %}
+						{% set feedName = dataItem.feedName %}
 					{% elseif item.feed.name %}
 						{% set feedName = item.feed.name %}
 					{% else %}
@@ -33,7 +32,7 @@
 
 				<span class="hide">-</span>
 
-				{% if app.user and markable %}
+				{% if app.user and 'markable' in itemOptions %}
 					<span class="star">
 						<i class="icon-empty fa fa-star-o"></i>
 						<i class="icon-full fa fa-star"></i>
@@ -61,58 +60,13 @@
 				{% endif %}
 			</a>
 
-			<div class="content">
-				{% if item.htmlContent %}
-					{% if app.user and app.user.setting('SHOW_ITEM_PICTURES') == 'never' %}
-						{{ item.htmlContent|removePictures }}
-					{% elseif app.user and app.user.setting('SHOW_ITEM_PICTURES') == 'onclick' %}
-						{{ item.htmlContent|clickForPictures }}
-					{% else %}
-						{{ item.htmlContent }}
-					{% endif %}
-				{% elseif item.textContent %}
-					{{ item.textContent|nl2br }}
-				{% else %}
-					[No content]
-				{% endif %}
-			</div>
-
-			{% if item.author or (itemData and (itemData.tags|length > 0 or itemData.enclosures|length > 0)) %}
-				<div class="details">
-					{% if item.author %}
-						<div class="authors">
-							Author: {{ item.author }}
-						</div>
-					{% endif %}
-
-					{% if itemData.tags|length > 0 %}
-						<div class="tags">
-							Tag{{ itemData.tags|length > 1 ? "s" }}:
-							{% for tag in itemData.tags %}
-								{{ tag.name }}{{ loop.index < itemData.tags|length ? "," }}
-							{% endfor %}
-						</div>
-					{% endif %}
-
-					{% if itemData.enclosures|length > 0 %}
-						<div class="enclosures">
-							Enclosure{{ itemData.enclosures|length > 1 ? "s" }}:
-							{% for enclosure in itemData.enclosures %}
-								<a href="{{ enclosure.url }}" target="_blank">
-									{{ enclosure.title ?: enclosure.url }}
-								</a>
-								{{ loop.index < itemData.enclosures|length ? "," }}
-							{% endfor %}
-						</div>
-					{% endif %}
-				</div>
-
-				<span class="details_toggle">+</span>
+			{% if 'loadData' in itemOptions %}
+				{% include 'MiamBundle:Default:item_data.html.twig' %}
 			{% endif %}
 		</article>
 	{% endfor %}
 
-	{% if loadMore %}
+	{% if 'loadMore' in itemOptions %}
 		<div class="loadMore">
 			<i class="icon-more fa fa-angle-down"></i>
 			<i class="icon-loading fa fa-spinner fa-spin"></i>

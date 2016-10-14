@@ -1,5 +1,5 @@
 ajax_shit_get_items:
-    path: /ajax/items/get
+    path: /ajax/items
     defaults: { _controller: MiamBundle:Shit:ajaxGetItems }
 
 ajax_shit_read_user_items:
@@ -31,9 +31,9 @@ ajax_shit_unstar_item:
     defaults: { _controller: MiamBundle:Shit:ajaxUnstarItem }
 
 ajax_shit_get_tree:
-    path: /ajax/tree/get
+    path: /ajax/tree
     defaults: { _controller: MiamBundle:Shit:ajaxGetTree }
 
 ajax_shit_get_unread_counts:
-    path: /ajax/unread/get
+    path: /ajax/unreadCounts
     defaults: { _controller: MiamBundle:Shit:ajaxGetUnreadCounts }

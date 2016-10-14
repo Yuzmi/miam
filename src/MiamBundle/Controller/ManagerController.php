@@ -530,7 +530,7 @@ class ManagerController extends MainController
             $user->setSetting('SHOW_ITEM_DETAILS', $show_item_details);
 
             $is_public = $request->get("IS_PUBLIC") ? true : false;
-            $user->setSetting('IS_PUBLIC', $is_public);
+            $user->setIsPublic($is_public);
 
             $hide_sidebar = $request->get("HIDE_SIDEBAR");
             $user->setSetting('HIDE_SIDEBAR', $hide_sidebar);
