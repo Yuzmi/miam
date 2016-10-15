@@ -45,7 +45,8 @@ class CatalogController extends MainController
 		return $this->render('MiamBundle:Catalog:feed.html.twig', array(
 			'feed' => $feed,
 			'items' => $items,
-			'dataItems' => $dataItems
+			'dataItems' => $dataItems,
+			'itemOptions' => array('loadMore', 'hideFeed')
 		));
 	}
 
@@ -58,7 +59,8 @@ class CatalogController extends MainController
 
 		return $this->render('MiamBundle:Catalog:items.html.twig', array(
 			'items' => $items,
-			'dataItems' => $dataItems
+			'dataItems' => $dataItems,
+			'itemOptions' => array('loadMore')
 		));
 	}
 
@@ -156,7 +158,7 @@ class CatalogController extends MainController
 			$htmlItems = $this->renderView('MiamBundle:Default:items.html.twig', array(
 				'items' => $items,
 				'dataItems' => $dataItems,
-				'itemOptions' => array('loadMore')
+				'itemOptions' => array('loadMore', 'hideFeed')
 			));
 
 			$success = true;

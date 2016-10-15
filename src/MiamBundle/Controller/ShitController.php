@@ -41,14 +41,17 @@ class ShitController extends MainController
             'subscriber' => $subscriber
         ));
 
+        $itemOptions = array('loadMore');
+        if($marker) $itemOptions[] = 'markable';
+
     	return $this->render('MiamBundle:Shit:index.html.twig', array(
             'items' => $items,
             'dataItems' => $dataItems,
+            'itemOptions' => $itemOptions,
             'tree' => $tree,
             'unreadCounts' => $unreadCounts,
             'starredCount' => $starredCount,
-            'subscriber' => $subscriber,
-            'markable' => $marker ? true : false
+            'subscriber' => $subscriber
         ));
 	}
 
