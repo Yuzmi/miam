@@ -10,7 +10,11 @@
 				{{ 'loadData' in itemOptions ? 'loaded' }}
 			data-item="{{ item.id }}" 
 			data-feed="{{ item.feed.id }}">
-			<a class="header" href="{{ item.link }}" target="_blank">
+			{% if item.link %}
+				<a class="header" href="{{ item.link }}" target="_blank">
+			{% else %}
+				<div class="header">
+			{% endif %}
 				{% if 'hideFeed' not in itemOptions %}
 					{% if dataItem and dataItem.feedName %}
 						{% set feedName = dataItem.feedName %}
@@ -56,7 +60,11 @@
 				{% if summary %}
 					<span class="summary">{{ summary }}</span>
 				{% endif %}
-			</a>
+			{% if item.link %}
+				</a>
+			{% else %}
+				</div>
+			{% endif %}
 
 			{% if 'loadData' in itemOptions %}
 				{% include 'MiamBundle:Default:item_data.html.twig' %}

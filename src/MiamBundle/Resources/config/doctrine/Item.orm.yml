@@ -14,6 +14,7 @@ MiamBundle\Entity\Item:
             length: 255
         link:
             type: text
+            nullable: true
         identifier:
             type: string
             length: 40
