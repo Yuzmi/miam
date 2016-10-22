@@ -120,6 +120,7 @@ body {
 
 		.items {
 			background-color:inherit;
+			flex-grow:1;
 			overflow-y:auto;
 
 			.item:first-of-type {
