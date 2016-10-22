@@ -76,7 +76,7 @@
 		</article>
 	{% endfor %}
 
-	{% if 'loadMore' in itemOptions %}
+	{% if 'loadMore' in itemOptions and (countMaxItems is not defined or countMaxItems == items|length) %}
 		<div class="loadMore">
 			<i class="icon-more fa fa-angle-down"></i>
 			<i class="icon-loading fa fa-spinner fa-spin"></i>

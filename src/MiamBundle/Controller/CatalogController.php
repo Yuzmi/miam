@@ -37,7 +37,7 @@ class CatalogController extends MainController
 		$items = $this->getRepo("Item")->getItems(array(
 			'catalog' => true,
 			'feed' => $feed,
-			'nb' => 50
+			'count' => 50
 		));
 
 		$dataItems = $this->getRepo("Item")->getDataForItems($items);
@@ -46,13 +46,15 @@ class CatalogController extends MainController
 			'feed' => $feed,
 			'items' => $items,
 			'dataItems' => $dataItems,
-			'itemOptions' => array('loadMore', 'hideFeed')
+			'itemOptions' => array('loadMore', 'hideFeed'),
+			'countMaxItems' => 50
 		));
 	}
 
 	public function showItemsAction() {
 		$items = $this->getRepo("Item")->getItems(array(
-			'catalog' => true
+			'catalog' => true,
+			'count' => 50
 		));
 
 		$dataItems = $this->getRepo("Item")->getDataForItems($items);
@@ -122,7 +124,8 @@ class CatalogController extends MainController
 
 		$items = $this->getRepo("Item")->getItems(array(
 			'catalog' => true,
-			'page' => $page
+			'page' => $page,
+			'count' => 50
 		));
 
 		$dataItems = $this->getRepo("Item")->getDataForItems($items);
@@ -130,7 +133,8 @@ class CatalogController extends MainController
 		$htmlItems = $this->renderView('MiamBundle:Default:items.html.twig', array(
 			'items' => $items,
 			'dataItems' => $dataItems,
-			'itemOptions' => array('loadMore')
+			'itemOptions' => array('loadMore'),
+			'countMaxItems' => 50
 		));
 
 		return new JsonResponse(array(
@@ -150,7 +154,8 @@ class CatalogController extends MainController
 
 			$items = $this->getRepo("Item")->getItems(array(
 				'feed' => $feed,
-				'page' => $page
+				'page' => $page,
+				'count' => 50
 			));
 
 			$dataItems = $this->getRepo("Item")->getDataForItems($items);
@@ -158,7 +163,8 @@ class CatalogController extends MainController
 			$htmlItems = $this->renderView('MiamBundle:Default:items.html.twig', array(
 				'items' => $items,
 				'dataItems' => $dataItems,
-				'itemOptions' => array('loadMore', 'hideFeed')
+				'itemOptions' => array('loadMore', 'hideFeed'),
+				'countMaxItems' => 50
 			));
 
 			$success = true;

@@ -33,7 +33,8 @@ class ShitController extends MainController
 
         $items = $this->getRepo("Item")->getItems(array(
             'marker' => $marker,
-            'subscriber' => $subscriber
+            'subscriber' => $subscriber,
+            'count' => 40
         ));
 
         $dataItems = $this->getRepo("Item")->getDataForItems($items, array(
@@ -48,6 +49,7 @@ class ShitController extends MainController
             'items' => $items,
             'dataItems' => $dataItems,
             'itemOptions' => $itemOptions,
+            'countMaxItems' => 40,
             'tree' => $tree,
             'unreadCounts' => $unreadCounts,
             'starredCount' => $starredCount,
@@ -138,7 +140,8 @@ class ShitController extends MainController
 
         if($request->isXmlHttpRequest() && $success) {
             $options = array(
-                'subscriber' => $subscriber
+                'subscriber' => $subscriber,
+                'count' => 40
             );
 
             $marker = null;
@@ -192,7 +195,8 @@ class ShitController extends MainController
             $htmlItems = $this->renderView('MiamBundle:Default:items.html.twig', array(
                 'items' => $items,
                 'dataItems' => $dataItems,
-                'itemOptions' => $itemOptions
+                'itemOptions' => $itemOptions,
+                'countMaxItems' => 40
             ));
         }
 

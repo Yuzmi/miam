@@ -79,20 +79,20 @@ class ItemRepository extends \Doctrine\ORM\EntityRepository
 			$qb->setParameter('createdAfter', $createdAfter);
 		}
 
-		$nbDefaultItems = 40;
-		$nbMaxItems = 100;
+		$countDefaultItems = 40;
+		$countMaxItems = 100;
 
-		$nb = isset($options['nb']) ? intval($options['nb']) : $nbDefaultItems;
-		if($nb > $nbMaxItems) {
-			$nb = $nbMaxItems;
-		} elseif($nb <= 0) {
-			$nb = $nbDefaultItems;
+		$count = isset($options['count']) ? intval($options['count']) : $countDefaultItems;
+		if($count > $countMaxItems) {
+			$count = $countMaxItems;
+		} elseif($count <= 0) {
+			$count = $countDefaultItems;
 		}
-		$qb->setMaxResults($nb);
+		$qb->setMaxResults($count);
 
 		$offset = isset($options['offset']) ? intval($options['offset']) : 0;
 		$page = isset($options['page']) ? $options['page'] : 1;
-		$offset += $nb * ($page - 1);
+		$offset += $count * ($page - 1);
 		$qb->setFirstResult($offset);
 
 		$qb->orderBy('i.datePublished', 'DESC');
