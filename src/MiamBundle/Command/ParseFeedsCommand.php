@@ -71,7 +71,7 @@ class ParseFeedsCommand extends ContainerAwareCommand {
                     continue;
                 }
 
-                if($input->getOption('ignore-invalid') && $feed->getErrorCount() > 0) {
+                if($input->getOption('ignore-invalid') && $feed->getErrorCount() > 5) {
                     continue;
                 }
 
