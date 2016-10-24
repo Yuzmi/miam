@@ -6,8 +6,8 @@
 		<article class="item 
 				{{ dataItem and dataItem.isRead ? 'read' }} 
 				{{ dataItem and dataItem.isStarred ? 'starred' }}
-				{{ app.user and app.user.setting('SHOW_ITEM_DETAILS') == "always" ? 'expandedDetails' }}"
-				{{ 'loadData' in itemOptions ? 'loaded' }}
+				{{ app.user and app.user.setting('SHOW_ITEM_DETAILS') == "always" ? 'expandedDetails' }}
+				{{ 'loadData' in itemOptions ? 'loaded' }}"
 			data-item="{{ item.id }}" 
 			data-feed="{{ item.feed.id }}">
 			{% if item.link %}
