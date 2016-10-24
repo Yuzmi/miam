@@ -185,7 +185,9 @@ class DataParsing extends MainService {
 
 	                // Title
 					$item_title = $this->sanitizeText($i->get_title(), 255);
-					$item->setTitle($item_title);
+					if($item_title) {
+						$item->setTitle($item_title);
+					}
 					
 					// HTML content
 					$htmlContent = (string) $i->get_content();

@@ -12,6 +12,7 @@ MiamBundle\Entity\Item:
         title:
             type: string
             length: 255
+            nullable: true
         link:
             type: text
             nullable: true

@@ -33,7 +33,7 @@ class Item
 
     // Getters
     public function getId() { return $this->id; }
-    public function getTitle() {return $this->title ?: "[NO TITLE]";}
+    public function getTitle() { return $this->title; }
     public function getLink() { return $this->link; }
     public function getIdentifier() { return $this->identifier; }
     public function getHash() { return $this->hash; }

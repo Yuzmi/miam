@@ -53,7 +53,7 @@
 					{% endif %}
 				</span>
 
-				<span class="title">{{ item.title }}</span>
+				<span class="title">{{ item.title ?: item.link }}</span>
 
 				{% set summary = item.textContent|shorten(300) %}
 
