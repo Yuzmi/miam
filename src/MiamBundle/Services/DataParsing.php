@@ -253,6 +253,26 @@ class DataParsing extends MainService {
 						$item->setAuthor($authors);
 					}
 
+					// Contributor(s)
+					$cs = $i->get_contributors();
+					if(count($cs) > 0) {
+						$contributors = array();
+
+						foreach($cs as $c) {
+							$contributor_name = $this->sanitizeText($c->get_name());
+							$contributor_email = $this->sanitizeText($c->get_email());
+
+							if($contributor_name) {
+								$contributors[] = $contributor_name;
+							} elseif($contributor_email) {
+								$contributors[] = $contributor_email;
+							}
+						}
+
+						$contributors = implode(', ', $contributors);
+						$item->setContributor($contributors);
+					}
+
 					$all_tags = array();
 					$new_tags = array();
 

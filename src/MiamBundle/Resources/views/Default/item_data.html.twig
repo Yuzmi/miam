@@ -17,11 +17,17 @@
 		{% endif %}
 	</div>
 
-	{% if item.author or (dataItem and (dataItem.tags|length > 0 or dataItem.enclosures|length > 0)) %}
+	{% if item.author or item.contributor or (dataItem and (dataItem.tags|length > 0 or dataItem.enclosures|length > 0)) %}
 		<div class="details">
 			{% if item.author %}
 				<div class="authors">
 					Author: {{ item.author }}
+				</div>
+			{% endif %}
+
+			{% if item.contributor %}
+				<div class="contributors">
+					Contributor: {{ item.contributor }}
 				</div>
 			{% endif %}
 
@@ -38,10 +44,12 @@
 				<div class="enclosures">
 					Enclosure{{ dataItem.enclosures|length > 1 ? "s" }}:
 					{% for enclosure in dataItem.enclosures %}
+						{% if dataItem.enclosures|length > 1 %}
+							<br>
+						{% endif %}
 						<a href="{{ enclosure.url }}" target="_blank">
 							{{ enclosure.title ?: enclosure.url }}
 						</a>
-						{{ loop.index < dataItem.enclosures|length ? "," }}
 					{% endfor %}
 				</div>
 			{% endif %}

@@ -12,6 +12,7 @@ class Item
     private $htmlContent;
     private $textContent;
     private $author;
+    private $contributor;
     private $dateCreated;
     private $datePublished;
     private $dateUpdated;
@@ -40,6 +41,7 @@ class Item
     public function getHtmlContent() { return $this->htmlContent; }
     public function getTextContent() { return $this->textContent; }
     public function getAuthor() { return $this->author; }
+    public function getContributor() { return $this->contributor; }
     public function getDateCreated() { return $this->dateCreated; }
     public function getDatePublished() { return $this->datePublished; }
     public function getDateUpdated() { return $this->dateUpdated; }
@@ -57,6 +59,7 @@ class Item
     public function setHtmlContent($htmlContent) { $this->htmlContent = $htmlContent; return $this; }
     public function setTextContent($textContent) { $this->textContent = $textContent; return $this; }
     public function setAuthor($author) { $this->author = $author; return $this; }
+    public function setContributor($contributor) { $this->contributor = $contributor; return $this; }
     public function setDateCreated($dateCreated) { $this->dateCreated = $dateCreated; return $this; }
     public function setDatePublished($datePublished) { $this->datePublished = $datePublished; return $this; }
     public function setDateUpdated($dateUpdated) { $this->dateUpdated = $dateUpdated; return $this; }

@@ -31,6 +31,9 @@ MiamBundle\Entity\Item:
         author:
             type: text
             nullable: true
+        contributor:
+            type: text
+            nullable: true
         dateCreated:
             type: datetime
             column: date_created
