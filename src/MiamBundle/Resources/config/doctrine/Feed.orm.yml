@@ -18,6 +18,13 @@ MiamBundle\Entity\Feed:
             column: name_custom
             length: 255
             nullable: true
+        description:
+            type: text
+            nullable: true
+        customDescription:
+            type: text
+            column: description_custom
+            nullable: true
         url:
             type: text
         hash:

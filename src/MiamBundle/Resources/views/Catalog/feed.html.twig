@@ -3,6 +3,10 @@
 {% block content %}
 	<h1>{{ feed.name }}</h1>
 
+	{% if feed.description and feed.description != feed.name %}
+		<p>{{ feed.description }}</p>
+	{% endif %}
+
 	<p>
 		{% if feed.hasIcon %}
 			<img class="icon" src="{{ asset(feed.icon) }}" alt="">

@@ -7,6 +7,8 @@ class Feed
     private $id;
     private $name;
     private $customName;
+    private $description;
+    private $customDescription;
     private $url;
     private $hash;
     private $iconUrl;
@@ -49,7 +51,11 @@ class Feed
     // Getters
     public function getId() { return $this->id; }
     public function getName() { return $this->customName ?: $this->name; }
+    public function getOriginalName() { return $this->name; }
     public function getCustomName() { return $this->customName; }
+    public function getDescription() { return $this->customDescription ?: $this->description; }
+    public function getOriginalDescription() { return $this->description; }
+    public function getCustomDescription() { return $this->customDescription; }
     public function getUrl() { return $this->url; }
     public function getHash() { return $this->hash; }
     public function getIconUrl() { return $this->iconUrl; }
@@ -74,6 +80,8 @@ class Feed
     // Setters
     public function setName($name) { $this->name = $name; return $this; }
     public function setCustomName($customName) { $this->customName = $customName; return $this; }
+    public function setDescription($description) { $this->description = $description; }
+    public function setCustomDescription($customDescription) { $this->customDescription = $customDescription; }
     public function setUrl($url) { $this->url = $url; return $this; }
     public function setHash($hash) { $this->hash = $hash; return $this; }
     public function setIconUrl($iconUrl) { $this->iconUrl = $iconUrl; return $this; }

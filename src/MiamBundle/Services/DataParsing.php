@@ -63,6 +63,11 @@ class DataParsing extends MainService {
 				$feed->setName($feed_name);
 			}
 
+			$feed_description = $this->sanitizeText($pie->get_description());
+			if($feed_description) {
+				$feed->setDescription($feed_description);
+			}
+
 			// Website
 			$feed_website = $this->sanitizeUrl($pie->get_link());
 			if(filter_var($feed_website, FILTER_VALIDATE_URL) !== false) {
@@ -341,8 +346,7 @@ class DataParsing extends MainService {
 		$this->em->flush();
 
 		// Get icon every 7 days
-		$sevenDaysAgo = new \DateTime("now - 7 days");
-		if(!$feed->getDateIcon() || $feed->getDateIcon() < $sevenDaysAgo) {
+		if(!$feed->getDateIcon() || $feed->getDateIcon() < new \DateTime("now - 7 days")) {
 			$this->parseIcon($feed);
 		}
 
