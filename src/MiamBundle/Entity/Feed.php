@@ -80,8 +80,8 @@ class Feed
     // Setters
     public function setName($name) { $this->name = $name; return $this; }
     public function setCustomName($customName) { $this->customName = $customName; return $this; }
-    public function setDescription($description) { $this->description = $description; }
-    public function setCustomDescription($customDescription) { $this->customDescription = $customDescription; }
+    public function setDescription($description) { $this->description = $description; return $this; }
+    public function setCustomDescription($customDescription) { $this->customDescription = $customDescription; return $this; }
     public function setUrl($url) { $this->url = $url; return $this; }
     public function setHash($hash) { $this->hash = $hash; return $this; }
     public function setIconUrl($iconUrl) { $this->iconUrl = $iconUrl; return $this; }
