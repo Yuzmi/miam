@@ -86,20 +86,12 @@
 
 	<aside class="topbar">
 		<select class="catsubs">
-			<option data-type="all">
-				<i class="fa fa-globe"></i> All Articles
-			</option>
+			<option data-type="all">All Articles</option>
 
 			{% if app.user and app.user.id == subscriber.id %}
-				<option data-type="unread">
-					<i class="fa fa-envelope"></i>
-					Unread
-				</option>
-
-				<option data-type="starred">
-					<i class="fa fa-star"></i>
-					Starred
-				</option>
+				<option data-type="unread">Unread</option>
+				<option data-type="starred">Starred</option>
+				<option data-type="read-recently">Read recently</option>
 			{% endif %}
 
 			{{ macros.options(tree, unreadCounts) }}
@@ -124,6 +116,11 @@
 					<i class="fa fa-star"></i>
 					Starred
 					<span class="count">{{ starredCount is defined ? starredCount : 0 }}</span>
+				</div>
+
+				<div class="row" data-type="read-recently">
+					<i class="fa fa-clock-o"></i>
+					Read recently
 				</div>
 			{% endif %}
 

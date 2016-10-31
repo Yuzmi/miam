@@ -51,11 +51,11 @@ class ItemRepository extends \Doctrine\ORM\EntityRepository
 		$marker = isset($options['marker']) ? $options['marker'] : null;
 		if($marker) {
 			$qb->leftJoin('i.marks', 'im', 'with', 'im.user = :marker');
-			$qb->leftJoin('f.marks', 'fm', 'with', 'fm.user = :marker');
 			$qb->setParameter('marker', $marker);
 
 			$type = isset($options['type']) ? $options['type'] : 'all';
 			if($type == 'unread') {
+				$qb->leftJoin('f.marks', 'fm', 'with', 'fm.user = :marker');
 				$qb->andWhere('
 	            	((im.id IS NULL OR im.isRead = FALSE) AND (fm.id IS NULL OR fm.isRead = FALSE OR fm.dateRead < i.dateCreated))
             		OR (im.isRead = TRUE AND (fm.isRead = FALSE OR fm.dateRead < i.dateCreated) AND im.dateRead < fm.dateRead)
@@ -63,6 +63,9 @@ class ItemRepository extends \Doctrine\ORM\EntityRepository
 	            ');
 			} elseif($type == 'starred') {
 				$qb->andWhere('im.isStarred = TRUE');
+			} elseif($type == 'read-recently') {
+				$qb->andWhere('im.isRead = TRUE AND im.dateRead > :recently');
+				$qb->setParameter('recently', new \DateTime("now - 7 days"));
 			}
 		}
 
@@ -95,7 +98,11 @@ class ItemRepository extends \Doctrine\ORM\EntityRepository
 		$offset += $count * ($page - 1);
 		$qb->setFirstResult($offset);
 
-		$qb->orderBy('i.datePublished', 'DESC');
+		if($marker && $type == 'read-recently') {
+			$qb->orderBy('im.dateRead', 'DESC');
+		} else {
+			$qb->orderBy('i.datePublished', 'DESC');
+		}
 
 		return $qb->getQuery()->getResult();
 	}
