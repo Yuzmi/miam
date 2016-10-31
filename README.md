@@ -1,14 +1,15 @@
 # Miam
 
-RSS agregator using [Symfony 3](https://symfony.com/), [SimplePie](https://github.com/simplepie/simplepie).
-Potentially unstable as it's still on development and not restricted to stable versions.
+RSS agregator using [Symfony 3](https://symfony.com/), [SimplePie](https://github.com/simplepie/simplepie).  
+Potentially unstable as it's still on development and not restricted to stable versions.  
+Also, use a modern browser.  
 
 ### Features
 
 - Multi-user
-- Catalog & Admin (WIP)
+- Catalog & Admin
 - Categories
-- Read/Starred items
+- Item marking
 - User settings
 - Import/Export OPML
 
@@ -31,6 +32,12 @@ git clone https://github.com/Yuzmi/miam.git
 - Install dependencies
 ```shell
 composer install
+
+# If it fails, try:
+composer update
+
+# If it fails again, it's probably the memory limit
+
 ```
 
 - Check requirements
@@ -54,7 +61,6 @@ php bin/console assets:install --env=prod
 - Prepare the cache
 ```shell
 php bin/console cache:clear --env=prod
-php bin/console cache:warmup --env=prod
 ```
 
 - Grant write permissions to www-data on these directories : var/cache, var/logs, web/images
@@ -85,3 +91,4 @@ DocumentRoot /var/www/miam/web
 - filters => subscription_item
 - postgresql & sqlite
 - ico to png without imagick
+- improve admin
