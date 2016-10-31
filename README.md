@@ -1,7 +1,7 @@
 # Miam
 
 RSS agregator using [Symfony 3](https://symfony.com/), [SimplePie](https://github.com/simplepie/simplepie).  
-Potentially unstable as it's still on development and not restricted to stable versions.  
+Potentially unstable as it's still on development and not (yet) restricted to stable versions.  
 Also, use a modern browser.  
 
 ### Features
@@ -31,13 +31,7 @@ git clone https://github.com/Yuzmi/miam.git
 
 - Install dependencies
 ```shell
-composer install
-
-# If it fails, try:
-composer update
-
-# If it fails again, it's probably the memory limit
-
+composer install # If it fails, try: composer update
 ```
 
 - Check requirements
