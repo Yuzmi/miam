@@ -68,7 +68,7 @@ class DefaultController extends MainController
 		}
 		
 		$subscriptions = $qb->getQuery()->getResult();
-		if($subscriptions->count() > 0) {
+		if(count($subscriptions) > 0) {
 			return true;
 		}
 
