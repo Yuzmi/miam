@@ -21,7 +21,7 @@ class TextExtension extends \Twig_Extension
 	}
 
 	public function shorten($string, $maxLength) {
-        if(strlen($string) > $maxLength) {
+        if(mb_strlen($string) > $maxLength) {
         	$newMaxLength = $maxLength - 3; // '...'
 
         	$newString = '';
@@ -32,7 +32,7 @@ class TextExtension extends \Twig_Extension
                 $length = 0;
 
                 foreach($words as $word) {
-                    $length += strlen($word) + 1;
+                    $length += mb_strlen($word) + 1;
                     if($length <= $newMaxLength) {
                         $newString .= ' '.$word;
                     } else {
@@ -42,7 +42,7 @@ class TextExtension extends \Twig_Extension
             }
 
             if(empty($newString)) {
-            	$newString = substr($string, 0, $newMaxLength);
+            	$newString = mb_substr($string, 0, $newMaxLength);
             }
 
             return $newString.'...';

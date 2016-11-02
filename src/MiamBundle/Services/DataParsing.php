@@ -107,7 +107,7 @@ class DataParsing extends MainService {
 			}
 
 			// Data length
-			$dataLength = strlen($pie->get_raw_data());
+			$dataLength = mb_strlen($pie->get_raw_data());
 			if($dataLength > 0) {
 				$feed->setDataLength($dataLength);
 			}
@@ -381,7 +381,7 @@ class DataParsing extends MainService {
 		$text = html_entity_decode(trim($text), ENT_COMPAT | ENT_HTML5, 'utf-8');
 
 		if($maxLength > 0) {
-			$text = substr($text, 0, $maxLength);
+			$text = mb_substr($text, 0, $maxLength);
 		}
 
 		return $text;
@@ -609,7 +609,7 @@ class DataParsing extends MainService {
 			    }
 
 		    	$path = $parsedFav['path'] ?: "/favicon.ico";
-		    	if(substr($path, 0, 1) != "/") {
+		    	if(mb_substr($path, 0, 1) != "/") {
 		    		$path = "/".$path;
 		    	}
 		    	$favicon .= $path;
