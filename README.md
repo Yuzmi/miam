@@ -15,9 +15,9 @@ RSS agregator using [Symfony 3](https://symfony.com/) & [SimplePie](https://gith
 
 - Linux
 - Apache & Mod rewrite enabled
-- PHP 5.5.9+
+- PHP 5.5.9+  
 Extensions: curl, iconv, imagick, json, mbstring, tidy, xml
-- MySQL, PostgreSQL or SQLite
+- MySQL, PostgreSQL or SQLite  
 The default config is set for MySQL, see the bottom section for other engines.
 - [Sass](http://sass-lang.com/install)
 - [Composer](https://getcomposer.org/download/)
