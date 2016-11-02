@@ -538,6 +538,9 @@ class ManagerController extends MainController
             $theme = $request->get("THEME");
             $user->setSetting('THEME', $theme);
 
+            $date_format = $request->get("DATE_FORMAT");
+            $user->setSetting('DATE_FORMAT', $date_format);
+
             $em = $this->getEm();
             $em->persist($user);
             $em->flush();

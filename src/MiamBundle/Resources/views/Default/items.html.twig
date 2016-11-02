@@ -47,9 +47,19 @@
 					{% if item.datePublished|date('Y-m-d') == "now"|date('Y-m-d') %}
 						{{ item.datePublished|date('H:i') }}
 					{% elseif item.datePublished|date('Y') == "now"|date('Y') %}
-						{{ item.datePublished|date('m/d H:i') }}
+						{% if app.user and app.user.setting('DATE_FORMAT') in ['mdy', 'ymd'] %}
+							{{ item.datePublished|date('m/d H:i') }}
+						{% else %}
+							{{ item.datePublished|date('d/m H:i') }}
+						{% endif %}
 					{% else %}
-						{{ item.datePublished|date('y/m/d H:i') }}
+						{% if app.user and app.user.setting('DATE_FORMAT') == 'mdy' %}
+							{{ item.datePublished|date('m/d/y H:i') }}
+						{% elseif app.user and app.user.setting('DATE_FORMAT') == 'ymd' %}
+							{{ item.datePublished|date('y/m/d H:i') }}
+						{% else %}
+							{{ item.datePublished|date('d/m/y H:i') }}
+						{% endif %}
 					{% endif %}
 				</span>
 

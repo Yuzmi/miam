@@ -50,7 +50,7 @@
 		</div>
 		<div class="content">
 			<form method="POST" action="{{ path('manager_settings_update') }}">
-				Show item pictures :
+				Show item pictures:
 				<select name="SHOW_ITEM_PICTURES">
 					<option value="always" {{ app.user.setting('SHOW_ITEM_PICTURES') == 'always' ? 'selected' }}>Always</option>
 					<option value="onclick" {{ app.user.setting('SHOW_ITEM_PICTURES') == 'onclick' ? 'selected' }}>On click</option>
@@ -59,7 +59,7 @@
 
 				<br><br>
 
-				Show item details :
+				Show item details:
 				<select name="SHOW_ITEM_DETAILS">
 					<option value="always" {{ app.user.setting('SHOW_ITEM_DETAILS') == 'always' ? 'selected' }}>Always</option>
 					<option value="onclick" {{ app.user.setting('SHOW_ITEM_DETAILS') == 'onclick' ? 'selected' }}>On click</option>
@@ -67,18 +67,27 @@
 
 				<br><br>
 
-				Publish my feeds : <input type="checkbox" name="IS_PUBLIC" value="1" {{ app.user.isPublic ? 'checked' }}>
+				Publish my feeds: <input type="checkbox" name="IS_PUBLIC" value="1" {{ app.user.isPublic ? 'checked' }}>
 
 				<br><br>
 
-				Hide the sidebar : <input type="checkbox" name="HIDE_SIDEBAR" value="1" {{ app.user.setting('HIDE_SIDEBAR') ? 'checked' }}>
+				Hide the sidebar: <input type="checkbox" name="HIDE_SIDEBAR" value="1" {{ app.user.setting('HIDE_SIDEBAR') ? 'checked' }}>
 
 				<br><br>
 
-				Theme :
+				Theme:
 				<select name="THEME">
 					<option value="basic" {{ app.user.setting('THEME') == 'basic' ? 'selected' }}>Basic</option>
 					<option value="dark" {{ app.user.setting('THEME') == 'dark' ? 'selected' }}>Dark</option>
+				</select>
+
+				<br><br>
+
+				Date format:
+				<select name="DATE_FORMAT">
+					<option value="dmy" {{ app.user.setting('DATE_FORMAT') == 'dmy' ? 'selected' }}>dd/mm/yy</option>
+					<option value="mdy" {{ app.user.setting('DATE_FORMAT') == 'mdy' ? 'selected' }}>mm/dd/yy</option>
+					<option value="ymd" {{ app.user.setting('DATE_FORMAT') == 'ymd' ? 'selected' }}>yy/mm/dd</option>
 				</select>
 
 				<br><br>

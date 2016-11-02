@@ -99,7 +99,8 @@ class User implements UserInterface, \Serializable
         'SHOW_ITEM_PICTURES' => "always",
         'SHOW_ITEM_DETAILS' => "onclick",
         'HIDE_SIDEBAR' => false,
-        'THEME' => "basic"
+        'THEME' => "basic",
+        'DATE_FORMAT' => "dmy"
     );
 
     public function getSettings() {
