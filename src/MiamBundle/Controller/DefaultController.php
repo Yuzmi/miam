@@ -56,7 +56,7 @@ class DefaultController extends MainController
 		}
 
 		// User subscription
-		$qb = $this->createQueryBuilder("s")
+		$qb = $this->getRepo("Subscription")->createQueryBuilder("s")
 			->leftJoin('s.user', 'u')
 			->where('s.feed = :feed')->setParameter('feed', $item->getFeed());
 
