@@ -404,31 +404,21 @@ class DataParsing extends MainService {
     	// Get the icon
     	$iconUrl = $feed->getIconUrl();
     	if($iconUrl) {
-    		try {
-    			$content = file_get_contents($iconUrl);
-    			if($content !== false && $content !== "") {
-    				if(file_put_contents($tmpPath, $content) !== false) {
-	    				$iconData = getimagesize($tmpPath);
+    		if($this->getUrlContentTo($iconUrl, $tmpPath)) {
+	    		$iconData = getimagesize($tmpPath);
 
-	    				// Non-square icons are bad
-	    				if($iconData && abs($iconData[0] - $iconData[1]) <= 2) {
-	    					$tmpIcon = true;
-	    				}
-	    			}
-    			}
-    		} catch(\Exception $e) {}
+				// Non-square icons are bad (2px tolerance)
+				if($iconData && abs($iconData[0] - $iconData[1]) <= 2) {
+					$tmpIcon = true;
+				}
+			}
     	}
     	
     	// Get the favicon if no icon
     	if(!$tmpIcon) {
     		$faviconUrl = $this->getFaviconUrl($feed);
     		if($faviconUrl) {
-	    		try {
-	    			$content = file_get_contents($faviconUrl);
-	    			if($content !== false && $content !== "") {
-	    				file_put_contents($tmpPath, $content);
-	    			}
-	    		} catch(\Exception $e) {}
+    			$this->getUrlContentTo($faviconUrl, $tmpPath);
 	    	}
     	}
     	
@@ -529,6 +519,39 @@ class DataParsing extends MainService {
     	);
     }
 
+    private function getUrlContentTo($url, $dst) {
+    	$content = null;
+
+    	if(extension_loaded('curl')) {
+	    	$ch = curl_init();
+
+	    	curl_setopt_array($ch, array(
+	    		CURLOPT_URL => $url,
+	    		CURLOPT_RETURNTRANSFER => 1,
+	    		CURLOPT_CONNECTTIMEOUT => 5,
+	    		CURLOPT_TIMEOUT => 10
+	    	));
+
+	    	$content = curl_exec($ch);
+
+	    	curl_close($ch);
+	    } else {
+	    	try {
+	    		$content = file_get_contents($url);
+	    	} catch(\Exception $e) {
+	    		$content = null;
+	    	}
+	    }
+
+	    if(!is_null($content) && $content !== false && $content !== "") {
+			if(file_put_contents($dst, $content) !== false) {
+				return true;
+			}
+		}
+
+	    return false;
+    }
+
     // May need improvements
     private function getFaviconUrl(Feed $feed) {
     	$favicon = null;
@@ -588,7 +611,7 @@ class DataParsing extends MainService {
 		    	$favicon = "/favicon.ico";
 		    }
 		    
-		    // Fix if invalid url
+		    // Fix if relative url
 		    if(!filter_var($favicon, FILTER_VALIDATE_URL) !== false) {
 		    	$parsedFav = parse_url($favicon);
 
