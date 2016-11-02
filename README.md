@@ -1,8 +1,6 @@
 # Miam
 
-RSS agregator using [Symfony 3](https://symfony.com/), [SimplePie](https://github.com/simplepie/simplepie).  
-Potentially unstable as it's still on development and not (yet) restricted to stable versions.  
-Also, use a modern browser.  
+RSS agregator using [Symfony 3](https://symfony.com/) & [SimplePie](https://github.com/simplepie/simplepie).  
 
 ### Features
 
@@ -16,9 +14,11 @@ Also, use a modern browser.
 ### Requirements
 
 - Linux
-- Apache + Mod rewrite
-- PHP 5.5.9+ / Extensions: curl, iconv, imagick, json, mbstring, tidy, xml
-- MySQL
+- Apache & Mod rewrite enabled
+- PHP 5.5.9+
+Extensions: curl, iconv, imagick, json, mbstring, tidy, xml
+- MySQL, PostgreSQL or SQLite
+The default config is set for MySQL, see the bottom section for other engines.
 - [Sass](http://sass-lang.com/install)
 - [Composer](https://getcomposer.org/download/)
 
@@ -45,6 +45,7 @@ php bin/console miam:requirements:check
 php bin/console doctrine:database:create
 php bin/console doctrine:schema:create
 ```
+If you use SQLite, the app/data directory must be writable.
 
 - Install assets
 ```shell
@@ -57,13 +58,13 @@ php bin/console assets:install --env=prod
 php bin/console cache:clear --env=prod
 ```
 
-- Grant write permissions to www-data on these directories : var/cache, var/logs, web/images
+- Grant write permissions on app/data, var/cache, var/logs & web/images
 ```shell
 apt install acl
-setfacl -R -m u:www-data:rwX var/cache var/logs web/images
-setfacl -dR -m u:www-data:rwX var/cache var/logs web/images
+setfacl -R -m u:www-data:rwX app/data var/cache var/logs web/images
+setfacl -dR -m u:www-data:rwX app/data var/cache var/logs web/images
 # OR
-chmod -R 777 var/cache var/logs web/images
+chmod -R 777 app/data var/cache var/logs web/images # not recommended
 ```
 
 - Configure Apache
@@ -74,15 +75,33 @@ DocumentRoot /var/www/miam/web
 </Directory>
 ```
 
-### CRON
+- Add a cron job
 ```
 */30 * * * * php /var/www/miam/bin/console miam:parse:feeds used --env=prod --no-debug
 ```
 
-### TODO, MAY-DO
+### Other database engines
+
+If you use PostgreSQL or SQLite, you need to make a few changes.
+```
+# app/config/config.yml
+doctrine:
+	dbal:
+		driver:	pdo_mysql # Change to 'pdo_pgsql' or 'pdo_sqlite'
+		charset: utf8mb4 # Change to 'utf8' if you use PostgreSQL
+		path: "%kernel.root_dir%/data/data.db3" # Uncomment if you use SQLite
+```
+I didn't try other engines, it may or may not work with them.
+
+### Note about the stability
+
+It's potentially unstable as it's still on development and not (yet) restricted to stable versions.  
+I mainly use MySQL, unknown issues may occur with other database engines.  
+Also, use a modern browser.  
+
+### May-Do
 
 - order management for categories and feeds
 - filters => subscription_item
-- postgresql & sqlite
 - ico to png without imagick
 - improve admin
