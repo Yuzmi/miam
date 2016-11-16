@@ -24,9 +24,7 @@
 						{% set feedName = item.feed.url %}
 					{% endif %}
 					<span class="feed" title="{{ feedName }}">
-						<span class="name">
-							{{ feedName|shorten(50) }}
-						</span>
+						<span class="name">{{ feedName|shorten(50) }}</span>
 
 						{% if item.feed.hasIcon %}
 							<img class="icon" src="{{ asset(item.feed.icon) }}" alt="">
@@ -63,12 +61,10 @@
 					{% endif %}
 				</span>
 
-				<span class="title">{{ item.title ?: item.link }}</span>
+				<span class="title">{{ item.title ?: item.link ?: item.textContent|shorten(255) }}</span>
 
-				{% set summary = item.textContent|shorten(300) %}
-
-				{% if summary %}
-					<span class="summary">{{ summary }}</span>
+				{% if item.textContent and (item.title or item.link) %}
+					<span class="summary">{{ item.textContent|shorten(300) }}</span>
 				{% endif %}
 			{% if item.link %}
 				</a>
