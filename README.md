@@ -48,6 +48,8 @@ database_user: 		root
 database_password: 	~
 database_charset: 	utf8mb4 	# 'utf8' for PostgreSQL
 
+# Skip the mailer_* parameters
+
 # Localization
 locale: 	en 	# 'fr' for french
 
