@@ -1,5 +1,11 @@
 {% extends 'MiamBundle:Catalog:base.html.twig' %}
 
+{% if feed.name %}
+	{% block head_title %}
+		{{ parent() }} - {{ feed.name }}
+	{% endblock %}
+{% endif %}
+
 {% block content %}
 	<h1>{{ feed.name }}</h1>
 
