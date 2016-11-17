@@ -155,7 +155,7 @@ body.dark {
 	.tab {
 		border-color:#363636;
 
-		.header {
+		header {
 			background-color:#363636;
 			color:#a8a8a8;
 		}
@@ -170,7 +170,7 @@ body.dark {
 			}
 		}
 
-		&.settings {
+		&.settings, &.password {
 			.content {
 				form {
 					border-color:#363636;
