@@ -1,9 +1,9 @@
 {% extends 'MiamBundle:Catalog:base.html.twig' %}
 
 {% block content %}
-	<h1>Catalog - Items</h1>
+	<h1>{{ "Catalog"|trans }} - {{ "Articles"|trans }}</h1>
 
-	<p><a href="{{ path('catalog_feeds') }}">Show feeds</a></p>
+	<p><a href="{{ path('catalog_feeds') }}">{{ "Show feeds"|trans({}, 'catalog') }}</a></p>
 
 	<div class="items">
 		{% include 'MiamBundle:Default:items.html.twig' with {'itemOptions': itemOptions} %}

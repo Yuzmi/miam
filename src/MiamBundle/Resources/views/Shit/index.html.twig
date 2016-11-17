@@ -86,12 +86,12 @@
 
 	<aside class="topbar">
 		<select class="catsubs">
-			<option data-type="all">All Articles</option>
+			<option data-type="all">{{ "All articles"|trans({}, 'shit') }}</option>
 
 			{% if app.user and app.user.id == subscriber.id %}
-				<option data-type="unread">Unread</option>
-				<option data-type="starred">Starred</option>
-				<option data-type="read-recently">Read recently</option>
+				<option data-type="unread">{{ "Unread"|trans({}, 'shit') }}</option>
+				<option data-type="starred">{{ "Starred"|trans({}, 'shit') }}</option>
+				<option data-type="read-recently">{{ "Read recently"|trans({}, 'shit') }}</option>
 			{% endif %}
 
 			{{ macros.options(tree, unreadCounts) }}
@@ -102,25 +102,25 @@
 		<aside class="sidebar">
 			<div class="row selected" data-type="all">
 				<i class="fa fa-globe"></i>
-				All articles
+				{{ "All articles"|trans({}, 'shit') }}
 			</div>
 
 			{% if app.user and app.user.id == subscriber.id %}
 				<div class="row" data-type="unread">
 					<i class="fa fa-envelope"></i>
-					Unread
+					{{ "Unread"|trans({}, 'shit') }}
 					<span class="unreadCount">0</span>
 				</div>
 
 				<div class="row" data-type="starred">
 					<i class="fa fa-star"></i>
-					Starred
+					{{ "Starred"|trans({}, 'shit') }}
 					<span class="count">{{ starredCount is defined ? starredCount : 0 }}</span>
 				</div>
 
 				<div class="row" data-type="read-recently">
 					<i class="fa fa-clock-o"></i>
-					Read recently
+					{{ "Read recently"|trans({}, 'shit') }}
 				</div>
 			{% endif %}
 
@@ -130,6 +130,21 @@
 		<main class="items">
 			{% include 'MiamBundle:Default:items.html.twig' with {'itemOptions': itemOptions} %}
 		</main>
+	</div>
+
+	<div class="contextMenu sidebarRowMenu">
+		<div class="option" data-action="read">
+			{{ "Mark as read"|trans({}, 'shit') }}
+		</div>
+	</div>
+
+	<div class="contextMenu itemMenu">
+		<div class="option" data-action="unread">
+			{{ "Mark as unread"|trans({}, 'shit') }}
+		</div>
+		<div class="option" data-action="read">
+			{{ "Mark as read"|trans({}, 'shit') }}
+		</div>
 	</div>
 {% endblock %}
 

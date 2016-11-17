@@ -17,24 +17,24 @@
 	
 	<section class="tab catsubs">
 		<div class="header">
-			Categories & Subscriptions
+			{{ "Categories & Subscriptions"|trans({}, 'manager') }}
 		</div>
 		<div class="content">
 			<div class="buttons">
 				<button class="createCategory">
-					Create a category
+					{{ "Create a category"|trans({}, 'manager') }}
 				</button>
 
 				<button class="createSubscription">
-					Subscribe to a feed
+					{{ "Subscribe to a feed"|trans({}, 'manager') }}
 				</button>
 
 				<button class="exportOPML">
-					Export OPML
+					{{ "Export OPML"|trans({}, 'manager') }}
 				</button>
 
 				<button class="importOPML">
-					Import OPML
+					{{ "Import OPML"|trans({}, 'manager') }}
 				</button>
 			</div>
 
@@ -46,74 +46,84 @@
 
 	<section class="tab settings">
 		<div class="header">
-			Settings &amp; Password
+			{{ "Settings & Password"|trans({}, 'manager') }}
 		</div>
 		<div class="content">
 			<form method="POST" action="{{ path('manager_settings_update') }}">
-				Show item pictures:
+				{{ "Show pictures:"|trans({}, 'manager') }}
 				<select name="SHOW_ITEM_PICTURES">
-					<option value="always" {{ app.user.setting('SHOW_ITEM_PICTURES') == 'always' ? 'selected' }}>Always</option>
-					<option value="onclick" {{ app.user.setting('SHOW_ITEM_PICTURES') == 'onclick' ? 'selected' }}>On click</option>
-					<option value="never" {{ app.user.setting('SHOW_ITEM_PICTURES') == 'never' ? 'selected' }}>Never</option>
+					<option value="always" {{ app.user.setting('SHOW_ITEM_PICTURES') == 'always' ? 'selected' }}>
+						{{ "Always"|trans }}
+					</option>
+					<option value="onclick" {{ app.user.setting('SHOW_ITEM_PICTURES') == 'onclick' ? 'selected' }}>
+						{{ "On click"|trans }}
+					</option>
+					<option value="never" {{ app.user.setting('SHOW_ITEM_PICTURES') == 'never' ? 'selected' }}>
+						{{ "Never"|trans }}
+					</option>
 				</select>
 
 				<br><br>
 
-				Show item details:
+				{{ "Show details:"|trans({}, 'manager') }}
 				<select name="SHOW_ITEM_DETAILS">
-					<option value="always" {{ app.user.setting('SHOW_ITEM_DETAILS') == 'always' ? 'selected' }}>Always</option>
-					<option value="onclick" {{ app.user.setting('SHOW_ITEM_DETAILS') == 'onclick' ? 'selected' }}>On click</option>
+					<option value="always" {{ app.user.setting('SHOW_ITEM_DETAILS') == 'always' ? 'selected' }}>
+						{{ "Always"|trans }}
+					</option>
+					<option value="onclick" {{ app.user.setting('SHOW_ITEM_DETAILS') == 'onclick' ? 'selected' }}>
+						{{ "On click"|trans }}
+					</option>
 				</select>
 
 				<br><br>
 
-				Publish my feeds: <input type="checkbox" name="IS_PUBLIC" value="1" {{ app.user.isPublic ? 'checked' }}>
+				{{ "Publish my feeds:"|trans({}, 'manager') }} <input type="checkbox" name="IS_PUBLIC" value="1" {{ app.user.isPublic ? 'checked' }}>
 
 				<br><br>
 
-				Hide the sidebar: <input type="checkbox" name="HIDE_SIDEBAR" value="1" {{ app.user.setting('HIDE_SIDEBAR') ? 'checked' }}>
+				{{ "Hide the sidebar:"|trans({}, 'manager') }} <input type="checkbox" name="HIDE_SIDEBAR" value="1" {{ app.user.setting('HIDE_SIDEBAR') ? 'checked' }}>
 
 				<br><br>
 
-				Theme:
+				{{ "Theme:"|trans }}
 				<select name="THEME">
-					<option value="basic" {{ app.user.setting('THEME') == 'basic' ? 'selected' }}>Basic</option>
-					<option value="dark" {{ app.user.setting('THEME') == 'dark' ? 'selected' }}>Dark</option>
+					<option value="basic" {{ app.user.setting('THEME') == 'basic' ? 'selected' }}>{{ "Basic"|trans({}, 'manager') }}</option>
+					<option value="dark" {{ app.user.setting('THEME') == 'dark' ? 'selected' }}>{{ "Dark"|trans({}, 'manager') }}</option>
 				</select>
 
 				<br><br>
 
-				Date format:
+				{{ "Date format:"|trans({}, 'manager') }}
 				<select name="DATE_FORMAT">
-					<option value="dmy" {{ app.user.setting('DATE_FORMAT') == 'dmy' ? 'selected' }}>dd/mm/yy</option>
-					<option value="mdy" {{ app.user.setting('DATE_FORMAT') == 'mdy' ? 'selected' }}>mm/dd/yy</option>
-					<option value="ymd" {{ app.user.setting('DATE_FORMAT') == 'ymd' ? 'selected' }}>yy/mm/dd</option>
+					<option value="dmy" {{ app.user.setting('DATE_FORMAT') == 'dmy' ? 'selected' }}>{{ "dd/mm/yy"|trans({}, 'manager') }}</option>
+					<option value="mdy" {{ app.user.setting('DATE_FORMAT') == 'mdy' ? 'selected' }}>{{ "mm/dd/yy"|trans({}, 'manager') }}</option>
+					<option value="ymd" {{ app.user.setting('DATE_FORMAT') == 'ymd' ? 'selected' }}>{{ "yy/mm/dd"|trans({}, 'manager') }}</option>
 				</select>
 
 				<br><br>
 
-				<button type="submit">Update settings</button>
+				<button type="submit">{{ "Update settings"|trans({}, 'manager') }}</button>
 
 				<input type="hidden" name="csrf_token" value="{{ csrf_token('manager_settings_update') }}">
 			</form>
 
 			<form class="password-form" method="POST" action="{{ path('manager_password_update') }}">
-				<label for="current_password">Current password</label>
-				<input type="password" id="current_password" name="current_password" placeholder="Current password" required>
+				<label for="current_password">{{ "Current password"|trans({}, 'manager') }}</label>
+				<input type="password" id="current_password" name="current_password" placeholder="{{ "Current password"|trans({}, 'manager') }}" required>
 
 				<br><br>
 
-				<label for="new_password">New password</label>
-				<input type="password" id="new_password" name="new_password" placeholder="New password" required>
+				<label for="new_password">{{ "New password"|trans({}, 'manager') }}</label>
+				<input type="password" id="new_password" name="new_password" placeholder="{{ "New password"|trans({}, 'manager') }}" required>
 
 				<br><br>
 
-				<label for="new_password_again">New password (again)</label>
-				<input type="password" id="new_password_again" name="new_password_again" placeholder="New password (again)" required>
+				<label for="new_password_again">{{ "New password (again)"|trans({}, 'manager') }}</label>
+				<input type="password" id="new_password_again" name="new_password_again" placeholder="{{ "New password (again)"|trans({}, 'manager') }}" required>
 
 				<br><br>
 
-				<button type="submit">Update password</button>
+				<button type="submit">{{ "Update password"|trans({}, 'manager') }}</button>
 
 				<input type="hidden" name="csrf_token" value="{{ csrf_token('manager_password_update') }}">
 			</form>

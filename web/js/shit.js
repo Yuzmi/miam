@@ -7,7 +7,7 @@ app.shit = {
 		// Hide context menus
 		$(document).on("click", function(e) {
 			if(e.which != 3) {
-				$(".contextMenu").remove();
+				$(".contextMenu").hide();
 			}
 		});
 	},
@@ -58,39 +58,36 @@ app.shit = {
 				$(".sidebar .row").contextmenu(function(e) {
 					e.preventDefault();
 
-					$(".contextMenu").remove();
+					$(".contextMenu").hide();
+					$(".sidebarRowMenu .option").hide();
 
 					var type = $(this).data('type');
 					
-					var menu = $("<div>")
-						.addClass("contextMenu")
-						.addClass("sidebarRowMenu")
-						.css({
+					var menu = $(".sidebarRowMenu");
+					menu.css({
 							left: e.clientX, 
 							top: e.clientY + 10
 						})
 						.attr('data-type', type)
-					;
+						.removeAttr('data-id');
 
-					if(type == 'feed') {
-						menu.attr('data-id', $(this).data('id'));
-					} else if(type == 'category') {
+					if(type == 'feed' || type == 'category') {
 						menu.attr('data-id', $(this).data('id'));
 					}
 
 					var countOptions = 0;
 
+					// Read option
 					if(type == "feed" || type == "category" || type == "all" || type == "unread") {
-						var menuOption = $("<div>").addClass("option").text("Mark as read").attr('data-action', 'read');
-						menu.append(menuOption);
-
+						menu.children('.option[data-action="read"]').show();
 						countOptions++;
 					}
 
 					if(countOptions > 0) {
-						$("body").append(menu);
+						menu.show();
 
-						$(".sidebarRowMenu .option").click(function(e) {
+						$(".sidebarRowMenu .option").off("click");
+						$(".sidebarRowMenu .option").on("click", function(e) {
 							var action = $(this).data("action");
 							var type = $(this).closest(".sidebarRowMenu").data("type");
 
@@ -104,7 +101,7 @@ app.shit = {
 								}
 							}
 
-							$(".contextMenu").remove();
+							$(".contextMenu").hide();
 						});
 					}
 				});
@@ -326,29 +323,27 @@ app.shit = {
 				$(".item .header").contextmenu(function(e) {
 					e.preventDefault();
 
-					$(".contextMenu").remove();
+					$(".contextMenu").hide();
+					$(".itemMenu .option").hide();
 
 					var item = $(this).closest(".item");
 
-					var menu = $("<div>")
-						.addClass("contextMenu")
-						.addClass("itemMenu")
-						.css({
+					var menu = $(".itemMenu");
+					menu.css({
 							left: e.clientX,
 							top: e.clientY + 10
 						})
-						.data("item", item.data("item"))
-					;
+						.data("item", item.data("item"));
 
 					if(item.hasClass("read")) {
-						var menuOption = $("<div>").addClass("option").text("Mark as unread").attr("data-action", 'unread');
+						menu.children('.option[data-action="unread"]').show();
 					} else {
-						var menuOption = $("<div>").addClass("option").text("Mark as read").attr("data-action", 'read');
+						menu.children('.option[data-action="read"]').show();
 					}
-					menu.append(menuOption);
 
-					$("body").append(menu);
+					menu.show();
 
+					$(".itemMenu .option").off("click");
 					$(".itemMenu .option").on("click", function(e) {
 						var action = $(this).data("action");
 
@@ -360,7 +355,7 @@ app.shit = {
 							app.shit.items.unreadItem(item.data("item"));
 						}
 
-						$(".contextMenu").remove();
+						$(".contextMenu").hide();
 					});
 				});
 			}

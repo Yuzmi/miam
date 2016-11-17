@@ -11,9 +11,9 @@
 		{% if feed.hasIcon %}
 			<img class="icon" src="{{ asset(feed.icon) }}" alt="">
 		{% endif %}
-		<a href="{{ feed.url }}">Source</a>
+		<a href="{{ feed.url }}">{{ "Source"|trans }}</a>
 		{% if feed.website %}
-			- <a href="{{ feed.website }}">Website</a>
+			- <a href="{{ feed.website }}">{{ "Website"|trans }}</a>
 		{% endif %}
 	</p>
 

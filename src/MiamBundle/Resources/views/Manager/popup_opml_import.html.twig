@@ -1,6 +1,6 @@
 {% extends "MiamBundle:Default:popup.html.twig" %}
 
-{% block popupTitle %}Import OPML{% endblock %}
+{% block popupTitle %}{{ "OPML import"|trans({}, 'manager') }}{% endblock %}
 
 {% block popupContent %}
 	<form method="POST" action="{{ path('manager_opml_import') }}" enctype="multipart/form-data">
@@ -8,7 +8,7 @@
 
 		<br>
 
-		<button type="submit">Import</button>
+		<button type="submit">{{ "Import"|trans({}, 'manager') }}</button>
 
 		<input type="hidden" name="csrf_token" value="{{ csrf_token('manager_opml_import') }}">
 	</form>

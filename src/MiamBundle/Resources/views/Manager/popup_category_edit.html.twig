@@ -2,17 +2,17 @@
 
 {% block popupContainerClass %}editCategory{% endblock %}
 
-{% block popupTitle %}Edit "{{ category.name }}"{% endblock %}
+{% block popupTitle %}{{ "Edit"|trans }} "{{ category.name }}"{% endblock %}
 
 {% block popupContent %}
 	<form method="POST" action="{{ path('manager_category_update', {'id': category.id}) }}">
-		<label for="name">Name:</label>
+		<label for="name">{{ "Name:"|trans({}, 'manager') }}</label>
 		<input type="text" id="name" name="name" value="{{ category.name }}" required>
 
 		<br>
 
 		{% if categories|length > 0 %}
-			<label for="parent">Parent:</label>
+			<label for="parent">{{ "Parent:"|trans({}, 'manager') }}</label>
 			<select id="parent" name="parent">
 				<option></option>
 				{% for c in categories %}
@@ -26,7 +26,7 @@
 		{% endif %}
 
 		{% if subscriptions|length > 0 %}
-			<label>Subscriptions:</label>
+			<label>{{ "Subscriptions:"|trans({}, 'manager') }}</label>
 			<div class="subscriptions">
 				{% for s in subscriptions %}
 					<div class="subscription">
@@ -39,7 +39,7 @@
 			<br>
 		{% endif %}
 
-		<button type="submit">Update</button>
+		<button type="submit">{{ "Update"|trans }}</button>
 
 		<input type="hidden" name="csrf_token" value="{{ csrf_token('manager_category_save') }}">
 	</form>

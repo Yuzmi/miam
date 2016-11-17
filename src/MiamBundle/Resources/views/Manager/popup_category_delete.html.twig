@@ -1,15 +1,15 @@
 {% extends "MiamBundle:Default:popup.html.twig" %}
 
-{% block popupTitle %}Delete category{% endblock %}
+{% block popupTitle %}{{ "Delete"|trans }} "{{ category.name }}"{% endblock %}
 
 {% block popupContent %}
 	<form method="POST" action="{{ path('manager_category_delete', {'id': category.id}) }}">
-		Delete "{{ category.name }}" and all subcategories ?
+		{{ "Delete this category and all subcategories ?"|trans({}, 'manager') }}
 
 		<br><br>
 
-		<button type="submit">Yes</button>
-		<button class="closePopup" type="button">No</button>
+		<button type="submit">{{ "Yes"|trans }}</button>
+		<button class="closePopup" type="button">{{ "No"|trans }}</button>
 
 		<input type="hidden" name="csrf_token" value="{{ csrf_token('manager_category_delete') }}">
 	</form>

@@ -11,9 +11,9 @@
 	<table>
 		<tr>
 			<th></th>
-			<th class="name">Name</th>
+			<th class="name">{{ "Name"|trans }}</th>
 			<th class="url">URL</th>
-			<th>Catalog</th>
+			<th>{{ "Catalog"|trans }}</th>
 		</tr>
 		{% for feed in feeds %}
 			<tr class="feed {{ feed.isCatalog ? "catalog" }}" data-feed="{{ feed.id }}">
@@ -37,20 +37,20 @@
 					<a href="{{ feed.url }}">{{ feed.url|shorten(60) }}</a>
 				</td>
 				<td class="catalog">
-					<button class="addToCatalog" title="Add to catalog">
+					<button class="addToCatalog" title="{{ "Add to catalog"|trans({}, 'admin') }}">
 						<i class="fa fa-plus"></i>
 					</button>
-					<button class="removeFromCatalog" title="Remove from catalog">
+					<button class="removeFromCatalog" title="{{ "Remove from catalog"|trans({}, 'admin') }}">
 						<i class="fa fa-minus"></i>
 					</button>
 				</td>
 				<td class="parse">
-					<button title="Parse">
-						Parse
+					<button title="{{ "Parse"|trans({}, 'admin') }}">
+						{{ "Parse"|trans({}, 'admin') }}
 					</button>
 				</td>
 				<td class="delete">
-					<button title="Delete">
+					<button title="{{ "Delete"|trans }}">
 						<i class="fa fa-times"></i>
 					</button>
 				</td>

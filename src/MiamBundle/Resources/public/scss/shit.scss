@@ -133,17 +133,16 @@ body {
 .contextMenu {
 	background-color:white;
 	border:solid 1px black;
+	border-top:0;
+	display:none;
 	font-weight:700;
 	position:fixed;
 
 	.option {
 		border-top:solid 1px black;
 		cursor:pointer;
+		display:none;
 		padding:0.8rem 1.2rem;
-
-		&:first-of-type {
-			border-top:0;
-		}
 
 		&:hover {
 			background-color:black;

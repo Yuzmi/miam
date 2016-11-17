@@ -2,37 +2,37 @@
 	<header>
 		{% block preLink %}{% endblock %}
 		{% if app.user %}
-			<a href="{{ path('index') }}" title="Feeds">
+			<a href="{{ path('index') }}" title="{{ "My feeds"|trans({}, 'header') }}">
 				<i class="fa fa-list"></i>
-				<span class="label">Feeds</span>
+				<span class="label">{{ "My feeds"|trans({}, 'header') }}</span>
 			</a>
 		{% endif %}
-		<a href="{{ path('catalog') }}" title="Catalog">
+		<a href="{{ path('catalog') }}" title="{{ "Catalog"|trans({}, 'header') }}">
 			<i class="fa fa-book"></i>
-			<span class="label">Catalog</span>
+			<span class="label">{{ "Catalog"|trans({}, 'header') }}</span>
 		</a>
 		{% if app.user %}
-			<a href="{{ path('manager') }}" title="Manager">
+			<a href="{{ path('manager') }}" title="{{ "Manager"|trans({}, 'header') }}">
 				<i class="fa fa-cog"></i>
-				<span class="label">Manager</span>
+				<span class="label">{{ "Manager"|trans({}, 'header') }}</span>
 			</a>
 			{% if is_granted('ROLE_ADMIN') %}
-				<a href="{{ path('admin') }}" title="Admin">
+				<a href="{{ path('admin') }}" title="{{ "Admin"|trans({}, 'header') }}">
 					<i class="fa fa-lock"></i>
-					<span class="label">Admin</span>
+					<span class="label">{{ "Admin"|trans({}, 'header') }}</span>
 				</a>
 			{% endif %}
 		{% endif %}
 		<span class="rightSide">
 			{% if app.user %}
-				<a href="{{ path('logout') }}" title="Logout">
+				<a href="{{ path('logout') }}" title="{{ "Logout"|trans({}, 'header') }}">
 					<i class="fa fa-sign-out"></i>
-					<span class="label">Logout</span>
+					<span class="label">{{ "Logout"|trans({}, 'header') }}</span>
 				</a>
 			{% else %}
-				<a href="{{ path('login') }}" title="Login">
+				<a href="{{ path('login') }}" title="{{ "Login"|trans({}, 'header') }}">
 					<i class="fa fa-sign-in"></i>
-					<span class="label">Login</span>
+					<span class="label">{{ "Login"|trans({}, 'header') }}</span>
 				</a>
 			{% endif %}
 		</span>

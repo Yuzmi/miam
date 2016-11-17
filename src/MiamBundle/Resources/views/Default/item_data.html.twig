@@ -21,19 +21,23 @@
 		<div class="details">
 			{% if item.author %}
 				<div class="authors">
-					Author: {{ item.author }}
+					{{ "Author:"|trans({}, 'item') }} {{ item.author }}
 				</div>
 			{% endif %}
 
 			{% if item.contributor %}
 				<div class="contributors">
-					Contributor: {{ item.contributor }}
+					{{ "Contributor:"|trans({}, 'item') }} {{ item.contributor }}
 				</div>
 			{% endif %}
 
 			{% if dataItem.tags|length > 0 %}
 				<div class="tags">
-					Tag{{ dataItem.tags|length > 1 ? "s" }}:
+					{% if dataItem.tags|length > 1 %}
+						{{ "Tags:"|trans({}, 'item') }}
+					{% else %}
+						{{ "Tag:"|trans({}, 'item') }}
+					{% endif %}
 					{% for tag in dataItem.tags %}
 						{{ tag.name }}{{ loop.index < dataItem.tags|length ? "," }}
 					{% endfor %}
@@ -42,7 +46,11 @@
 
 			{% if dataItem.enclosures|length > 0 %}
 				<div class="enclosures">
-					Enclosure{{ dataItem.enclosures|length > 1 ? "s" }}:
+					{% if dataItem.enclosures|length > 1 %}
+						{{ "Enclosures:"|trans({}, 'item') }}
+					{% else %}
+						{{ "Enclosure:"|trans({}, 'item') }}
+					{% endif %}
 					{% for enclosure in dataItem.enclosures %}
 						{% if dataItem.enclosures|length > 1 %}
 							<br>
