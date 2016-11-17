@@ -3,7 +3,7 @@
 	margin:3rem 4rem;
 	text-align:center;
 
-	.header {
+	header {
 		background-color:black;
 		color:white;
 		cursor:pointer;
@@ -85,22 +85,19 @@
 		}
 	}
 
-	&.settings {
+	&.settings, &.password {
 		.content {
 			form {
-				border-top:2px solid black;
 				padding:2rem 1rem;
 			}
+		}
+	}
 
-			form:first-of-type {
-				border-top:0;
-			}
-
-			.password-form {
-				label {
-					display:block;
-					margin-bottom:1rem;
-				}
+	&.password {
+		.content {
+			label {
+				display:block;
+				margin-bottom:1rem;
 			}
 		}
 	}

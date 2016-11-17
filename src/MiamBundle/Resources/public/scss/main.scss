@@ -29,7 +29,7 @@ noscript {
 	z-index:10;
 }
 
-header {
+body > header {
 	border-bottom:solid 1px black;
 
 	a {
@@ -135,7 +135,7 @@ button {
 		position:relative;
 		text-align:center;
 
-		.popupTitle {
+		header {
 			background-color:black;
 			color:white;
 			font-size:2rem;

@@ -1,7 +1,7 @@
 {% extends 'MiamBundle::base.html.twig' %}
 
 {% block head_title %}
-	{{ parent() }} - Manager
+	{{ parent() }} - {{ "Manager"|trans({}, 'header') }}
 {% endblock %}
 
 {% block stylesheets %}
@@ -16,9 +16,7 @@
 	{% include 'MiamBundle:Default:header.html.twig' %}
 	
 	<section class="tab catsubs">
-		<div class="header">
-			{{ "Categories & Subscriptions"|trans({}, 'manager') }}
-		</div>
+		<header>{{ "Categories & Subscriptions"|trans({}, 'manager') }}</header>
 		<div class="content">
 			<div class="buttons">
 				<button class="createCategory">
@@ -45,9 +43,7 @@
 	</section>
 
 	<section class="tab settings">
-		<div class="header">
-			{{ "Settings & Password"|trans({}, 'manager') }}
-		</div>
+		<header>{{ "Settings"|trans({}, 'manager') }}</header>
 		<div class="content">
 			<form method="POST" action="{{ path('manager_settings_update') }}">
 				{{ "Show pictures:"|trans({}, 'manager') }}
@@ -129,8 +125,13 @@
 
 				<input type="hidden" name="csrf_token" value="{{ csrf_token('manager_settings_update') }}">
 			</form>
+		</div>
+	</section>
 
-			<form class="password-form" method="POST" action="{{ path('manager_password_update') }}">
+	<section class="tab password">
+		<header>{{ "Password"|trans }}</header>
+		<div class="content">
+			<form method="POST" action="{{ path('manager_password_update') }}">
 				<label for="current_password">{{ "Current password"|trans({}, 'manager') }}</label>
 				<input type="password" id="current_password" name="current_password" placeholder="{{ "Current password"|trans({}, 'manager') }}" required>
 
@@ -138,11 +139,7 @@
 
 				<label for="new_password">{{ "New password"|trans({}, 'manager') }}</label>
 				<input type="password" id="new_password" name="new_password" placeholder="{{ "New password"|trans({}, 'manager') }}" required>
-
-				<br><br>
-
-				<label for="new_password_again">{{ "New password (again)"|trans({}, 'manager') }}</label>
-				<input type="password" id="new_password_again" name="new_password_again" placeholder="{{ "New password (again)"|trans({}, 'manager') }}" required>
+				<input type="password" id="new_password_again" name="new_password_again" placeholder="{{ "Retype the password"|trans({}, 'manager') }}" required>
 
 				<br><br>
 

@@ -1,6 +1,6 @@
 app.manager = {
 	init: function() {
-		$(".tab .header").click(function() {
+		$(".tab header").click(function() {
 			$(this).siblings(".content").toggle();
 		});
 

@@ -4,6 +4,6 @@
 		'Catalog' => 'Catalogue',
 		'Manager' => 'Gestion',
 		'Admin' => 'Admin',
-		'Login' => 'Se connecter',
-		'Logout' => 'Se déconnecter'
+		'Log in' => 'Se connecter',
+		'Log out' => 'Se déconnecter'
 	);

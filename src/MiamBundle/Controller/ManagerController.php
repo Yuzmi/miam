@@ -590,6 +590,6 @@ class ManagerController extends MainController
             $this->addFm("Invalid token", "error");
         }
 
-        return $this->redirectToRoute("manager", array("tab" => "settings"));
+        return $this->redirectToRoute("manager", array("tab" => "password"));
     }
 }

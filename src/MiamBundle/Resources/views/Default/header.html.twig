@@ -25,14 +25,14 @@
 		{% endif %}
 		<span class="rightSide">
 			{% if app.user %}
-				<a href="{{ path('logout') }}" title="{{ "Logout"|trans({}, 'header') }}">
+				<a href="{{ path('logout') }}" title="{{ "Log out"|trans({}, 'header') }}">
 					<i class="fa fa-sign-out"></i>
-					<span class="label">{{ "Logout"|trans({}, 'header') }}</span>
+					<span class="label">{{ "Log out"|trans({}, 'header') }}</span>
 				</a>
 			{% else %}
-				<a href="{{ path('login') }}" title="{{ "Login"|trans({}, 'header') }}">
+				<a href="{{ path('login') }}" title="{{ "Log in"|trans({}, 'header') }}">
 					<i class="fa fa-sign-in"></i>
-					<span class="label">{{ "Login"|trans({}, 'header') }}</span>
+					<span class="label">{{ "Log in"|trans({}, 'header') }}</span>
 				</a>
 			{% endif %}
 		</span>

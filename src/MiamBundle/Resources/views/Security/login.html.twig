@@ -11,22 +11,22 @@
 	{% include 'MiamBundle:Default:header.html.twig' %}
 
 	<div class="authentication">
-		<div class="header">Login</div>
+		<div class="header">{{ "Log in"|trans }}</div>
 		<div class="content">
 			<form method="POST" action="{{ path('login_check') }}">
-			    <label for="username">Username</label>
-			    <input type="text" id="username" name="_username" value="{{ last_username }}" />
+			    <label for="username">{{ "Username"|trans }}</label>
+			    <input type="text" id="username" name="_username" value="{{ last_username }}" placeholder="{{ "Username"|trans }}">
 
 			    <br>
 
-			    <label for="password">Password</label>
-			    <input type="password" id="password" name="_password" />
+			    <label for="password">{{ "Password"|trans }}</label>
+			    <input type="password" id="password" name="_password" placeholder="{{ "Password"|trans }}">
 
 			    <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
 
 			    <br>
 
-			    <button type="submit">Login</button>
+			    <button type="submit">{{ "Log in"|trans }}</button>
 			</form>
 
 			{% if error %}
@@ -36,27 +36,27 @@
 	</div>
 
 	<div class="register">
-		<div class="header">Register</div>
+		<div class="header">{{ "Register"|trans }}</div>
 		<div class="content">
 			<form method="POST" action="{{ path('register_check') }}">
-				<label for="username">Choose a username:</label>
-				<input type="text" id="username" name="username" placeholder="Username">
+				<label for="username">{{ "Choose a username:"|trans({}, 'log-in') }}</label>
+				<input type="text" id="username" name="username" placeholder="{{ "Username"|trans }}">
 
 				<br>
 
-				<label for="password">Choose a password:</label>
-				<input type="password" id="password" name="password" placeholder="Password">
+				<label for="password">{{ "Choose a password:"|trans({}, 'log-in') }}</label>
+				<input type="password" id="password" name="password" placeholder="{{ "Password"|trans }}">
 
 				<br>
 
-				<label for="password_again">Retype the password:</label>
-				<input type="password" id="password_again" name="password_again" placeholder="Password (again)">
+				<label for="password_again">{{ "Retype the password:"|trans({}, 'log-in') }}</label>
+				<input type="password" id="password_again" name="password_again" placeholder="{{ "Password (again)"|trans({}, 'log-in') }}">
 
 				<input type="hidden" name="csrf_token" value="{{ csrf_token('register') }}">
 
 				<br>
 
-				<button type="submit">Register</button>
+				<button type="submit">{{ "Register"|trans }}</button>
 			</form>
 		</div>
 	</div>
