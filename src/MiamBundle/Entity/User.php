@@ -14,6 +14,7 @@ class User implements UserInterface, \Serializable
     private $dateLogin;
     private $isAdmin;
     private $isPublic;
+    private $locale;
     private $settings;
     private $subscriptions;
     private $categories;
@@ -38,6 +39,7 @@ class User implements UserInterface, \Serializable
     public function getSalt() { return $this->salt; }
     public function getIsAdmin() { return $this->isAdmin; }
     public function getIsPublic() { return $this->isPublic; }
+    public function getLocale() { return $this->locale; }
     public function getDateCreated() { return $this->dateCreated; }
     public function getDateLogin() { return $this->dateLogin; }
     public function getSubscriptions() { return $this->subscriptions; }
@@ -49,6 +51,7 @@ class User implements UserInterface, \Serializable
     public function setSalt($salt) { $this->salt = $salt; return $this; }
     public function setIsAdmin($isAdmin) { $this->isAdmin = $isAdmin; return $this; }
     public function setIsPublic($isPublic) { $this->isPublic = $isPublic; return $this; }
+    public function setLocale($locale) { $this->locale = $locale; return $this; }
     public function setDateCreated($dateCreated) { $this->dateCreated = $dateCreated; return $this; }
     public function setDateLogin($dateLogin) { $this->dateLogin = $dateLogin; return $this; }
 

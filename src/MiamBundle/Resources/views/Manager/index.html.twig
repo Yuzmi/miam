@@ -95,9 +95,32 @@
 
 				{{ "Date format:"|trans({}, 'manager') }}
 				<select name="DATE_FORMAT">
-					<option value="dmy" {{ app.user.setting('DATE_FORMAT') == 'dmy' ? 'selected' }}>{{ "dd/mm/yy"|trans({}, 'manager') }}</option>
-					<option value="mdy" {{ app.user.setting('DATE_FORMAT') == 'mdy' ? 'selected' }}>{{ "mm/dd/yy"|trans({}, 'manager') }}</option>
-					<option value="ymd" {{ app.user.setting('DATE_FORMAT') == 'ymd' ? 'selected' }}>{{ "yy/mm/dd"|trans({}, 'manager') }}</option>
+					<option value="dmy" {{ app.user.setting('DATE_FORMAT') == 'dmy' ? 'selected' }}>
+						{{ "dd/mm/yy"|trans({}, 'manager') }}
+					</option>
+					<option value="mdy" {{ app.user.setting('DATE_FORMAT') == 'mdy' ? 'selected' }}>
+						{{ "mm/dd/yy"|trans({}, 'manager') }}
+					</option>
+					<option value="ymd" {{ app.user.setting('DATE_FORMAT') == 'ymd' ? 'selected' }}>
+						{{ "yy/mm/dd"|trans({}, 'manager') }}
+					</option>
+				</select>
+
+				<br><br>
+
+				{{ "Language:"|trans({}, 'manager') }}
+				<select name="LOCALE">
+					{% if not app.user.locale %}
+						<option>
+							{{ "Default"|trans({}, 'manager') }}
+						</option>
+					{% endif %}
+					<option value="en" {{ app.user.locale == 'en' ? 'selected' }}>
+						{{ "English"|trans({}, 'manager') }}
+					</option>
+					<option value="fr" {{ app.user.locale == 'fr' ? 'selected' }}>
+						{{ "French"|trans({}, 'manager') }}
+					</option>
 				</select>
 
 				<br><br>

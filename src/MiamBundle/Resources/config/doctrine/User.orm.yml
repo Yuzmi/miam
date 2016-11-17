@@ -29,6 +29,10 @@ MiamBundle\Entity\User:
         isPublic:
             type: boolean
             column: is_public
+        locale:
+            type: string
+            length: 5
+            nullable: true
         settings:
             type: text
     oneToMany:

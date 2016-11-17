@@ -541,6 +541,14 @@ class ManagerController extends MainController
             $date_format = $request->get("DATE_FORMAT");
             $user->setSetting('DATE_FORMAT', $date_format);
 
+            $locale = $request->get("LOCALE");
+
+            $locales = array("en", "fr"); // Available locales
+            if(in_array($locale, $locales)) {
+                $user->setLocale($locale);
+                $this->get('session')->set('_locale', $locale);
+            }
+
             $em = $this->getEm();
             $em->persist($user);
             $em->flush();
