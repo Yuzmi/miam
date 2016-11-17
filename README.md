@@ -10,13 +10,13 @@ RSS agregator using [Symfony 3](https://symfony.com/) & [SimplePie](https://gith
 - Item marking
 - User settings
 - OPML import/export
-- Localization (english/french)
+- Localization (en/fr)
 
 ### Requirements
 
 - Linux
 - Apache & Mod rewrite enabled
-- PHP 5.5.9+ or PHP 7
+- PHP 5.5.9+ or PHP 7  
 Extensions: curl, iconv, imagick, json, mbstring, tidy, xml
 - MySQL, PostgreSQL or SQLite
 - [Sass](http://sass-lang.com/install)
@@ -51,7 +51,7 @@ database_charset: 	utf8mb4 	# 'utf8' for PostgreSQL
 # Skip the mailer_* parameters
 
 # Localization
-locale: 	en 	# 'fr' for french
+locale: 	en 					# 'fr' for french
 
 # Secret value for security
 secret: 	YourSecret
@@ -116,7 +116,9 @@ DocumentRoot /var/www/miam/web
 ### Note about the stability
 
 It's potentially unstable as it's still on development and not (yet) restricted to stable versions.  
-The default config is set for MySQL. PostgreSQL and SQLite should be fine if you set parameters correctly. Other engines may or may not work.  
+The default config is set for MySQL.  
+PostgreSQL and SQLite should be fine if you set parameters correctly.  
+Other engines may or may not work.  
 Also, use a modern browser.  
 
 ### May-Do
