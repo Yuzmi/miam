@@ -81,7 +81,7 @@
 
 				<br><br>
 
-				{{ "Theme:"|trans }}
+				{{ "Theme:"|trans({}, 'manager') }}
 				<select name="THEME">
 					<option value="basic" {{ app.user.setting('THEME') == 'basic' ? 'selected' }}>{{ "Basic"|trans({}, 'manager') }}</option>
 					<option value="dark" {{ app.user.setting('THEME') == 'dark' ? 'selected' }}>{{ "Dark"|trans({}, 'manager') }}</option>
