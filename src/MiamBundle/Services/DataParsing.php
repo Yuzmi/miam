@@ -60,12 +60,12 @@ class DataParsing extends MainService {
 			// Name
 			$feed_name = $this->sanitizeText($pie->get_title(), 255);
 			if($feed_name) {
-				$feed->setName($feed_name);
+				$feed->setOriginalName($feed_name);
 			}
 
 			$feed_description = $this->sanitizeText($pie->get_description());
 			if($feed_description) {
-				$feed->setDescription($feed_description);
+				$feed->setOriginalDescription($feed_description);
 			}
 
 			// Website

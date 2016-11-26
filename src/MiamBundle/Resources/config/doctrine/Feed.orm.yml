@@ -9,8 +9,9 @@ MiamBundle\Entity\Feed:
             generator:
                 strategy: AUTO
     fields:
-        name:
+        originalName:
             type: string
+            column: name_original
             length: 255
             nullable: true
         customName:
@@ -18,8 +19,9 @@ MiamBundle\Entity\Feed:
             column: name_custom
             length: 255
             nullable: true
-        description:
+        originalDescription:
             type: text
+            column: description_original
             nullable: true
         customDescription:
             type: text

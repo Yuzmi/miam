@@ -5,9 +5,9 @@ namespace MiamBundle\Entity;
 class Feed
 {
     private $id;
-    private $name;
+    private $originalName;
     private $customName;
-    private $description;
+    private $originalDescription;
     private $customDescription;
     private $url;
     private $hash;
@@ -45,16 +45,16 @@ class Feed
     }
 
     public function __toString() {
-        return $this->name ?: $this->url;
+        return $this->customName ?: $this->originalName ?: $this->url;
     }
 
     // Getters
     public function getId() { return $this->id; }
-    public function getName() { return $this->customName ?: $this->name; }
-    public function getOriginalName() { return $this->name; }
+    public function getName() { return $this->customName ?: $this->originalName; }
+    public function getOriginalName() { return $this->originalName; }
     public function getCustomName() { return $this->customName; }
-    public function getDescription() { return $this->customDescription ?: $this->description; }
-    public function getOriginalDescription() { return $this->description; }
+    public function getDescription() { return $this->customDescription ?: $this->originalDescription; }
+    public function getOriginalDescription() { return $this->originalDescription; }
     public function getCustomDescription() { return $this->customDescription; }
     public function getUrl() { return $this->url; }
     public function getHash() { return $this->hash; }
@@ -78,9 +78,9 @@ class Feed
     public function getMarks() { return $this->marks; }
 
     // Setters
-    public function setName($name) { $this->name = $name; return $this; }
+    public function setOriginalName($originalName) { $this->originalName = $originalName; return $this; }
     public function setCustomName($customName) { $this->customName = $customName; return $this; }
-    public function setDescription($description) { $this->description = $description; return $this; }
+    public function setOriginalDescription($originalDescription) { $this->originalDescription = $originalDescription; return $this; }
     public function setCustomDescription($customDescription) { $this->customDescription = $customDescription; return $this; }
     public function setUrl($url) { $this->url = $url; return $this; }
     public function setHash($hash) { $this->hash = $hash; return $this; }
