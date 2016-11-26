@@ -103,6 +103,7 @@ class User implements UserInterface, \Serializable
         'SHOW_ITEM_DETAILS' => "onclick",
         'HIDE_SIDEBAR' => false,
         'THEME' => "basic",
+        'FONT_SIZE' => 10,
         'DATE_FORMAT' => "dmy"
     );
 

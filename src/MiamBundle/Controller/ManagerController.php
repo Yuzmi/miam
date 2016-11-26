@@ -538,6 +538,11 @@ class ManagerController extends MainController
             $theme = $request->get("THEME");
             $user->setSetting('THEME', $theme);
 
+            $font_size = intval($request->get("FONT_SIZE"));
+            if($font_size >= 5 && $font_size <= 40) {
+                $user->setSetting('FONT_SIZE', $font_size);
+            }
+
             $date_format = $request->get("DATE_FORMAT");
             $user->setSetting('DATE_FORMAT', $date_format);
 

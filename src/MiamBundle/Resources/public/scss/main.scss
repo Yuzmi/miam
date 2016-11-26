@@ -1,5 +1,14 @@
 html {
 	font-size:10px;
+
+	&.fs6 { font-size:6px; }
+	&.fs7 { font-size:7px; }
+	&.fs8 { font-size:8px; }
+	&.fs9 { font-size:9px; }
+	&.fs12 { font-size:12px; }
+	&.fs14 { font-size:14px; }
+	&.fs18 { font-size:18px; }
+	&.fs36 { font-size:36px; }
 }
 
 body {
@@ -72,6 +81,7 @@ input, select, textarea, button {
 	background-color:white;
 	border:solid 1px black;
 	color:black;
+	font-size:1.4rem;
 	padding:0.4rem 0.8rem;
 }
 

@@ -83,8 +83,25 @@
 
 				{{ "Theme:"|trans({}, 'manager') }}
 				<select name="THEME">
-					<option value="basic" {{ app.user.setting('THEME') == 'basic' ? 'selected' }}>{{ "Basic"|trans({}, 'manager') }}</option>
-					<option value="dark" {{ app.user.setting('THEME') == 'dark' ? 'selected' }}>{{ "Dark"|trans({}, 'manager') }}</option>
+					<option value="basic" {{ app.user.setting('THEME') == 'basic' ? 'selected' }}>
+						{{ "Basic"|trans({}, 'manager') }}
+					</option>
+					<option value="dark" {{ app.user.setting('THEME') == 'dark' ? 'selected' }}>
+						{{ "Dark"|trans({}, 'manager') }}
+					</option>
+				</select>
+
+				<br><br>
+
+				{{ "Font size:"|trans({}, 'manager') }}
+				{% set sizes = { 'Tiny': 6, 'Very small': 7, 'Small': 8, 'Smaller': 9, 'Normal': 10, 'Bigger': 12, 'Big': 14, 'Very big': 18, 'Huge': 36 } %}
+				<select name="FONT_SIZE">
+					{% set userSize = app.user.setting('FONT_SIZE') %}
+					{% for key,value in sizes %}
+						<option value="{{ value }}" {{ userSize == value or (value == 10 and userSize not in sizes) ? 'selected' }}>
+							{{ key|trans({}, 'manager') }}
+						</option>
+					{% endfor %}
 				</select>
 
 				<br><br>

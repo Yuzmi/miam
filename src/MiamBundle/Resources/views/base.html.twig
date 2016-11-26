@@ -1,6 +1,6 @@
 {% set route = app.request.attributes.get('_route') %}
 <!DOCTYPE html>
-<html>
+<html class="{{ app.user and app.user.setting('FONT_SIZE') ? 'fs' ~ app.user.setting('FONT_SIZE') }}">
 	<head>
 		<meta charset="utf-8">
 		<meta name="viewport" content="width=device-width, initial-scale=1">
