@@ -11,7 +11,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 class CheckRequirementsCommand extends ContainerAwareCommand {
 	protected function configure() {
         $this
-            ->setName('miam:requirements:check')
+            ->setName('miam:requirements')
             ->setDescription("Check requirements")
         ;
     }
@@ -26,19 +26,41 @@ class CheckRequirementsCommand extends ContainerAwareCommand {
             $output->writeln("<error>PHP ".$php_version." installed - PHP 5.5.9 or newer required</error>");
         }
 
-        $extensions = array('curl', 'iconv', 'imagick', 'json', 'mbstring', 'pcre', 'PDO', 'tidy', 'xml', 'xmlreader', 'zlib');
-        $loaded_extensions = get_loaded_extensions();
-        
         $missing = false;
-        foreach($extensions as $ext) {
-            if(!in_array($ext, $loaded_extensions)) {
+
+        $extensions = array(
+            'ctype' => 'ctype',
+            'curl' => 'cURL',
+            'dom' => 'DOM',
+            'iconv' => 'Iconv',
+            'json' => 'JSON',
+            'imagick' => 'Imagick',
+            'libxml' => 'libxml',
+            'mbstring' => 'mbstring',
+            'pcre' => 'PCRE',
+            'PDO' => 'PDO',
+            'session' => 'session',
+            'SimpleXML' => 'SimpleXML',
+            'tidy' => 'Tidy',
+            'tokenizer' => 'Tokenizer',
+            'xml' => 'XML',
+            'zlib' => 'Zlib'
+        );
+
+        foreach($extensions as $key => $ext) {
+            if(extension_loaded($key)) {
+                $output->writeln("<info>".$ext." extension is loaded</info>");
+            } else {
                 $output->writeln("<error>".$ext." extension is not loaded</error>");
                 $missing = true;
             }
         }
 
-        if(!$missing) {
-            $output->writeln("<info>All required extensions are loaded</info>");
+        if($missing) {
+            $output->writeln("<bg=red;fg=white;options=bold>One or more required extensions are not loaded</>");
+            $output->writeln("<bg=red;fg=white;options=bold>You should install any missing extension or it may crash later</>");
+        } else {
+            $output->writeln("<bg=green;fg=white;options=bold>All required extensions are loaded</>");
         }
     }
 }

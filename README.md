@@ -1,26 +1,25 @@
 # Miam
 
-RSS agregator using [Symfony 3](https://symfony.com/) & [SimplePie](https://github.com/simplepie/simplepie).  
+RSS agregator using [Symfony 3](https://symfony.com/) and [SimplePie](https://github.com/simplepie/simplepie).  
 
 ### Features
 
-- Multi-user
-- Catalog & Admin
-- Categories
-- Item marking
-- User settings
-- OPML import/export
-- Localization (en/fr)
+* Multi-user
+* Catalog & Admin
+* Categories
+* Item marking
+* User settings
+* OPML import/export
+* Localization (en/fr)
 
 ### Requirements
 
-- Linux
-- Apache & Mod rewrite enabled
-- PHP 5.5.9+ or PHP 7  
-Extensions: curl, iconv, imagick, json, mbstring, tidy, xml
-- MySQL, PostgreSQL or SQLite
-- [Sass](http://sass-lang.com/install)
-- [Composer](https://getcomposer.org/download/)
+* Linux
+* Apache & Mod rewrite enabled
+* PHP 5.5.9+ or PHP 7  
+* MySQL, PostgreSQL or SQLite
+* [Sass](http://sass-lang.com/install)
+* [Composer](https://getcomposer.org/download/)
 
 ### Installation
 
@@ -63,8 +62,7 @@ scss_path: 	/usr/local/bin/scss
 #### Check requirements
 
 ```shell
-php bin/symfony_requirements
-php bin/console miam:requirements:check
+php bin/console miam:requirements
 ```
 
 #### Create the database
