@@ -125,6 +125,8 @@ class ShitController extends MainController
     public function ajaxGetItemsAction(Request $request) {
         $success = true;
         $htmlItems = null;
+        $items = null;
+        $page = null;
 
         $subscriber = $this->getRepo('User')->find($request->get('subscriber'));
         if(
