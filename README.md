@@ -29,10 +29,17 @@ RSS agregator using [Symfony 3](https://symfony.com/) and [SimplePie](https://gi
 git clone https://github.com/Yuzmi/miam.git
 ```
 
-#### Install dependencies
+#### Dependencies and requirements
 
 ```shell
-composer install # If it fails, try: composer update
+# Check Symfony requirements
+php bin/symfony_requirements
+
+# Install vendor libraries
+composer install # If it fails, you can try: composer update
+
+# Check Miam requirements
+php bin/console miam:requirements
 ```
 
 #### Set parameters
@@ -59,12 +66,6 @@ secret: 	YourSecret
 scss_path: 	/usr/local/bin/scss
 ```
 
-#### Check requirements
-
-```shell
-php bin/console miam:requirements
-```
-
 #### Create the database
 
 ```shell
@@ -86,7 +87,7 @@ php bin/console assets:install --env=prod
 php bin/console cache:clear --env=prod
 ```
 
-#### Grant write permissions on app/data, var/cache, var/logs & web/images
+#### Grant write permissions on app/data, var/cache, var/logs and web/images
 
 ```shell
 apt install acl
