@@ -33,7 +33,7 @@
         "sensio/distribution-bundle": "^5.0",
         "incenteev/composer-parameter-handler": "^2.0",
         "friendsofsymfony/jsrouting-bundle": "2.*@dev",
-        "simplepie/simplepie": "dev-master",
+        "simplepie/simplepie": "1.4.3",
         "symfony/assetic-bundle": "^2.7",
         "symfony/translation": "^3.1"
     },
