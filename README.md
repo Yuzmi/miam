@@ -5,7 +5,7 @@ RSS agregator using [Symfony 3](https://symfony.com/) and [SimplePie](https://gi
 ### Features
 
 * Multi-user
-* Catalog & Admin
+* Catalog & Admin (WIP)
 * Categories
 * Item marking
 * User settings
@@ -110,6 +110,11 @@ DocumentRoot /var/www/miam/web
 
 ```
 */30 * * * * php /var/www/miam/bin/console miam:parse:feeds used --env=prod --no-debug
+```
+
+#### Add an admin (optional)
+```
+php bin/console miam:admin:add YOUR_USERNAME
 ```
 
 ### Note about the stability
