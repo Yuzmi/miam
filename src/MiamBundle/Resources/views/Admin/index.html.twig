@@ -44,9 +44,12 @@
 						<i class="fa fa-minus"></i>
 					</button>
 				</td>
-				<td class="parse">
-					<button title="{{ "Parse"|trans({}, 'admin') }}">
+				<td class="parser">
+					<button class="parse" title="{{ "Parse"|trans({}, 'admin') }}">
 						{{ "Parse"|trans({}, 'admin') }}
+					</button>
+					<button class="parsing" title="{{ "Parsing"|trans({}, 'admin') }}">
+						{{ "Parsing"|trans({}, 'admin') }}
 					</button>
 				</td>
 				<td class="delete">
@@ -92,7 +95,11 @@
 			margin-right:2px;
 		}
 
-		.feed td.icon, .feed td.catalog, .feed td.parse, .feed td.delete {
+		.feed .parser .parsing {
+			display:none;
+		}
+
+		.feed td.icon, .feed td.catalog, .feed td.parser, .feed td.delete {
 			text-align:center;
 		}
 	</style>
@@ -132,10 +139,23 @@
 			});
 		});
 
-		$(".feed .parse button").click(function() {
+		$(".feed .parser .parse").click(function() {
 			var feedId = $(this).closest(".feed").data('feed');
 
-			if(!$(this).closest(".feed").hasClass("parsing")) {
+			$(this).hide();
+			$(this).siblings(".parsing").show();
+
+			$.ajax({
+				type: "POST",
+				url: Routing.generate('ajax_admin_feed_parse', {id: feedId}, true),
+				dataType: "json",
+				complete: function() {
+					$(".feed[data-feed="+feedId+"] .parser .parse").show();
+					$(".feed[data-feed="+feedId+"] .parser .parsing").hide();
+				}
+			});
+
+			/*if(!$(this).closest(".feed").hasClass("parsing")) {
 				$(this).closest(".feed").addClass("parsing");
 				$(this).text("...");
 
@@ -148,7 +168,7 @@
 						$(".feed[data-feed="+feedId+"] .parse").text("Parse");
 					}
 				});
-			}
+			}*/
 		});
 
 		$(".feed .delete button").on("click", function() {
