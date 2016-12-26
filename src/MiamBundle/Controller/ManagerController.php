@@ -389,7 +389,7 @@ class ManagerController extends MainController
 
         $response = new Response($opml);
         $response->headers->set('Content-Type', "application/xml+opml");
-        $response->headers->set('Content-Disposition', "attachment;filename=export.opml");
+        $response->headers->set('Content-Disposition', "attachment;filename=Miam_".date('Y-m-d').".opml");
 
         return $response;
     }
