@@ -380,7 +380,7 @@ class ManagerController extends MainController
 
         if($this->isTokenValid('manager_opml_import', $request->get('csrf_token'))) {
             $opml = false;
-            if(isset($_FILES["opml"]["tmp_name"])) {
+            if(extension_loaded('SimpleXML') && isset($_FILES["opml"]["tmp_name"])) {
                 try {
                     $opml = simplexml_load_file($_FILES["opml"]["tmp_name"]);
                 } catch(\Exception $e) {
