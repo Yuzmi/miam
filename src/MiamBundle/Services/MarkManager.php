@@ -56,14 +56,17 @@ class MarkManager extends MainService {
 		$db = $this->em->getConnection();
 
 		$stmt = $db->prepare('
-			UPDATE item_mark im
-			INNER JOIN item i ON i.id = im.item_id
-			INNER JOIN feed f ON f.id = i.feed_id
-			INNER JOIN subscription s ON s.feed_id = f.id
-			SET im.is_read = TRUE
-			WHERE s.id = :subscriptionId
-			AND im.user_id = :userId AND im.is_read = FALSE
-			;
+			UPDATE item_mark
+			SET is_read = TRUE
+			WHERE id IN (
+				SELECT im.id
+				FROM item_mark im
+				INNER JOIN item i ON i.id = im.item_id
+				INNER JOIN feed f ON f.id = i.feed_id
+				INNER JOIN subscription s ON s.feed_id = f.id
+				WHERE s.id = :subscriptionId
+				AND im.user_id = :userId AND im.is_read = FALSE
+			);
 		');
 		$stmt->execute(array(
 			'subscriptionId' => $subscription->getId(),
@@ -91,15 +94,18 @@ class MarkManager extends MainService {
 		$db = $this->em->getConnection();
 
 		$stmt = $db->prepare('
-			UPDATE item_mark im
-			INNER JOIN item i ON i.id = im.item_id
-			INNER JOIN feed f ON f.id = i.feed_id
-			INNER JOIN subscription s ON s.feed_id = f.id
-			INNER JOIN category c ON c.id = s.category_id
-			SET im.is_read = TRUE
-			WHERE c.left_position >= :catLeft AND c.right_position <= :catRight
-			AND im.user_id = :userId AND im.is_read = FALSE 
-			;
+			UPDATE item_mark
+			SET is_read = TRUE
+			WHERE id IN (
+				SELECT im.id
+				FROM item_mark im
+				INNER JOIN item i ON i.id = im.item_id
+				INNER JOIN feed f ON f.id = i.feed_id
+				INNER JOIN subscription s ON s.feed_id = f.id
+				INNER JOIN category c ON c.id = s.category_id
+				WHERE c.left_position >= :catLeft AND c.right_position <= :catRight
+				AND im.user_id = :userId AND im.is_read = FALSE
+			);
 		');
 		$stmt->execute(array(
 			'catLeft' => $category->getLeftPosition(),
@@ -130,14 +136,17 @@ class MarkManager extends MainService {
 		$db = $this->em->getConnection();
 
 		$stmt = $db->prepare('
-			UPDATE item_mark im
-			INNER JOIN item i ON i.id = im.item_id
-			INNER JOIN feed f ON f.id = i.feed_id
-			INNER JOIN subscription s ON s.feed_id = f.id
-			SET im.is_read = TRUE
-			WHERE s.user_id = :subscriberId
-			AND im.user_id = :userId AND im.is_read = FALSE 
-			;
+			UPDATE item_mark
+			SET is_read = TRUE
+			WHERE id IN (
+				SELECT im.id
+				FROM item_mark im
+				INNER JOIN item i ON i.id = im.item_id
+				INNER JOIN feed f ON f.id = i.feed_id
+				INNER JOIN subscription s ON s.feed_id = f.id
+				WHERE s.user_id = :subscriberId
+				AND im.user_id = :userId AND im.is_read = FALSE 
+			);
 		');
 		$stmt->execute(array(
 			'subscriberId' => $subscriber->getId(),
