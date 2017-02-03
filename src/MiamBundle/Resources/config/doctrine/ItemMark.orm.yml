@@ -7,7 +7,7 @@ MiamBundle\Entity\ItemMark:
             type: integer
             id: true
             generator:
-                strategy: AUTO
+                strategy: IDENTITY
     fields:
         isRead:
             type: boolean

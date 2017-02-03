@@ -60,9 +60,9 @@ class MarkManager extends MainService {
 			INNER JOIN item i ON i.id = im.item_id
 			INNER JOIN feed f ON f.id = i.feed_id
 			INNER JOIN subscription s ON s.feed_id = f.id
-			SET im.is_read = 1
+			SET im.is_read = TRUE
 			WHERE s.id = :subscriptionId
-			AND im.user_id = :userId AND im.is_read = 0
+			AND im.user_id = :userId AND im.is_read = FALSE
 			;
 		');
 		$stmt->execute(array(
@@ -72,7 +72,7 @@ class MarkManager extends MainService {
 
 		$stmt = $db->prepare('
 			INSERT INTO item_mark (item_id, user_id, is_read, is_starred)
-				SELECT i.id, :userId, 1, 0
+				SELECT i.id, :userId, TRUE, FALSE
 				FROM item i
 				LEFT JOIN item_mark im ON im.item_id = i.id AND im.user_id = :userId
 				INNER JOIN feed f ON f.id = i.feed_id
@@ -96,9 +96,9 @@ class MarkManager extends MainService {
 			INNER JOIN feed f ON f.id = i.feed_id
 			INNER JOIN subscription s ON s.feed_id = f.id
 			INNER JOIN category c ON c.id = s.category_id
-			SET im.is_read = 1
+			SET im.is_read = TRUE
 			WHERE c.left_position >= :catLeft AND c.right_position <= :catRight
-			AND im.user_id = :userId AND im.is_read = 0 
+			AND im.user_id = :userId AND im.is_read = FALSE 
 			;
 		');
 		$stmt->execute(array(
@@ -109,7 +109,7 @@ class MarkManager extends MainService {
 
 		$stmt = $db->prepare('
 			INSERT INTO item_mark (item_id, user_id, is_read, is_starred)
-				SELECT i.id, :userId, 1, 0
+				SELECT i.id, :userId, TRUE, FALSE
 				FROM item i
 				LEFT JOIN item_mark im ON im.item_id = i.id AND im.user_id = :userId
 				INNER JOIN feed f ON f.id = i.feed_id
@@ -134,9 +134,9 @@ class MarkManager extends MainService {
 			INNER JOIN item i ON i.id = im.item_id
 			INNER JOIN feed f ON f.id = i.feed_id
 			INNER JOIN subscription s ON s.feed_id = f.id
-			SET im.is_read = 1
+			SET im.is_read = TRUE
 			WHERE s.user_id = :subscriberId
-			AND im.user_id = :userId AND im.is_read = 0 
+			AND im.user_id = :userId AND im.is_read = FALSE 
 			;
 		');
 		$stmt->execute(array(
@@ -146,7 +146,7 @@ class MarkManager extends MainService {
 
 		$stmt = $db->prepare('
 			INSERT INTO item_mark (item_id, user_id, is_read, is_starred)
-				SELECT i.id, :userId, 1, 0
+				SELECT i.id, :userId, TRUE, FALSE
 				FROM item i
 				LEFT JOIN item_mark im ON im.item_id = i.id AND im.user_id = :userId
 				INNER JOIN feed f ON f.id = i.feed_id
