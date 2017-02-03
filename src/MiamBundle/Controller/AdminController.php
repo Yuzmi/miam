@@ -39,7 +39,7 @@ class AdminController extends MainController
     	$form = $this->createCreateFeedForm();
     	$form->handleRequest($request);
 
-    	if($form->isValid()) {
+    	if($form->isSubmitted() && $form->isValid()) {
             $this->get('feed_manager')->getFeedForUrl($form->get('url')->getData());
     	}
 
