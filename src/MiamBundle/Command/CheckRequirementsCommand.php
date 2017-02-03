@@ -29,10 +29,8 @@ class CheckRequirementsCommand extends ContainerAwareCommand {
         $missing = false;
 
         $extensions = array(
-            'ctype' => 'ctype',
             'curl' => 'cURL',
             'dom' => 'DOM',
-            'iconv' => 'Iconv',
             'json' => 'JSON',
             'imagick' => 'Imagick',
             'libxml' => 'libxml',
@@ -42,9 +40,7 @@ class CheckRequirementsCommand extends ContainerAwareCommand {
             'session' => 'session',
             'SimpleXML' => 'SimpleXML',
             'tidy' => 'Tidy',
-            'tokenizer' => 'Tokenizer',
-            'xml' => 'XML',
-            'zlib' => 'Zlib'
+            'xml' => 'XML'
         );
 
         foreach($extensions as $key => $ext) {
