@@ -2,37 +2,33 @@
 	<header>
 		{% block preLink %}{% endblock %}
 		{% if app.user %}
-			<a href="{{ path('index') }}" title="{{ "My feeds"|trans({}, 'header') }}">
+			<a class="menu" href="{{ path('index') }}" title="{{ "header.feeds"|trans({}, 'header') }}">
 				<i class="fa fa-list"></i>
-				<span class="label">{{ "My feeds"|trans({}, 'header') }}</span>
+				<span class="label">{{ "header.feeds"|trans({}, 'header') }}</span>
 			</a>
 		{% endif %}
-		<a href="{{ path('catalog') }}" title="{{ "Catalog"|trans({}, 'header') }}">
-			<i class="fa fa-book"></i>
-			<span class="label">{{ "Catalog"|trans({}, 'header') }}</span>
-		</a>
 		{% if app.user %}
-			<a href="{{ path('manager') }}" title="{{ "Manager"|trans({}, 'header') }}">
+			<a class="menu" href="{{ path('manager') }}" title="{{ "header.manager"|trans({}, 'header') }}">
 				<i class="fa fa-cog"></i>
-				<span class="label">{{ "Manager"|trans({}, 'header') }}</span>
+				<span class="label">{{ "header.manager"|trans({}, 'header') }}</span>
 			</a>
 			{% if is_granted('ROLE_ADMIN') %}
-				<a href="{{ path('admin') }}" title="{{ "Admin"|trans({}, 'header') }}">
+				<a class="menu" href="{{ path('admin') }}" title="{{ "header.admin"|trans({}, 'header') }}">
 					<i class="fa fa-lock"></i>
-					<span class="label">{{ "Admin"|trans({}, 'header') }}</span>
+					<span class="label">{{ "header.admin"|trans({}, 'header') }}</span>
 				</a>
 			{% endif %}
 		{% endif %}
 		<span class="rightSide">
 			{% if app.user %}
-				<a href="{{ path('logout') }}" title="{{ "Log out"|trans({}, 'header') }}">
+				<a class="menu" href="{{ path('logout') }}" title="{{ "header.logout"|trans({}, 'header') }}">
 					<i class="fa fa-sign-out"></i>
-					<span class="label">{{ "Log out"|trans({}, 'header') }}</span>
+					<span class="label">{{ "header.logout"|trans({}, 'header') }}</span>
 				</a>
 			{% else %}
-				<a href="{{ path('login') }}" title="{{ "Log in"|trans({}, 'header') }}">
+				<a class="menu" href="{{ path('login') }}" title="{{ "header.login"|trans({}, 'header') }}">
 					<i class="fa fa-sign-in"></i>
-					<span class="label">{{ "Log in"|trans({}, 'header') }}</span>
+					<span class="label">{{ "header.login"|trans({}, 'header') }}</span>
 				</a>
 			{% endif %}
 		</span>

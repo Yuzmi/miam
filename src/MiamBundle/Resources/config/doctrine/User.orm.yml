@@ -26,9 +26,6 @@ MiamBundle\Entity\User:
         isAdmin:
             type: boolean
             column: is_admin
-        isPublic:
-            type: boolean
-            column: is_public
         locale:
             type: string
             length: 5

@@ -16,11 +16,14 @@ MiamBundle\Entity\Subscription:
         dateCreated:
             type: datetime
             column: date_created
-    manyToMany:
-        categories:
-            targetEntity: Category
-            mappedBy: subscriptions
     manyToOne:
+        category:
+            targetEntity: Category
+            inversedBy: subscriptions
+            joinColumn:
+                name: category_id
+                referencedColumnName: id
+                nullable: true
         feed:
             targetEntity: Feed
             inversedBy: subscriptions

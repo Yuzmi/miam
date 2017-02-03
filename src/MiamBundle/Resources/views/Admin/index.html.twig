@@ -4,19 +4,18 @@
 	{% include 'MiamBundle:Default:header.html.twig' %}
 
 	{{ form_start(createFeedForm) }}
-	{{ form_widget(createFeedForm.url) }}
-	{{ form_widget(createFeedForm.submit) }}
+	{{ form_widget(createFeedForm.url, {'attr': {'placeholder': "URL"}}) }}
+	{{ form_widget(createFeedForm.submit, {'label': "admin.add"|trans({}, 'admin')}) }}
 	{{ form_end(createFeedForm) }}
 
 	<table>
 		<tr>
 			<th></th>
-			<th class="name">{{ "Name"|trans }}</th>
+			<th class="name">{{ "admin.name"|trans({}, 'admin') }}</th>
 			<th class="url">URL</th>
-			<th>{{ "Catalog"|trans }}</th>
 		</tr>
 		{% for feed in feeds %}
-			<tr class="feed {{ feed.isCatalog ? "catalog" }}" data-feed="{{ feed.id }}">
+			<tr class="feed" data-feed="{{ feed.id }}">
 				<td class="icon">
 					{% if feed.hasIcon %}
 						<img src="{{ asset(feed.icon) }}" alt="">
@@ -36,24 +35,16 @@
 				<td title="{{ feed.url }}">
 					<a href="{{ feed.url }}">{{ feed.url|shorten(60) }}</a>
 				</td>
-				<td class="catalog">
-					<button class="addToCatalog" title="{{ "Add to catalog"|trans({}, 'admin') }}">
-						<i class="fa fa-plus"></i>
-					</button>
-					<button class="removeFromCatalog" title="{{ "Remove from catalog"|trans({}, 'admin') }}">
-						<i class="fa fa-minus"></i>
-					</button>
-				</td>
 				<td class="parser">
-					<button class="parse" title="{{ "Parse"|trans({}, 'admin') }}">
-						{{ "Parse"|trans({}, 'admin') }}
+					<button class="parse" title="{{ "admin.parse"|trans({}, 'admin') }}">
+						{{ "admin.parse"|trans({}, 'admin') }}
 					</button>
-					<button class="parsing" title="{{ "Parsing"|trans({}, 'admin') }}">
-						{{ "Parsing"|trans({}, 'admin') }}
+					<button class="parsing" title="{{ "admin.parsing"|trans({}, 'admin') }}">
+						{{ "admin.parsing"|trans({}, 'admin') }}
 					</button>
 				</td>
 				<td class="delete">
-					<button title="{{ "Delete"|trans }}">
+					<button title="{{ "admin.delete"|trans({}, 'admin') }}">
 						<i class="fa fa-times"></i>
 					</button>
 				</td>
@@ -78,18 +69,6 @@
 			text-align:left;
 		}
 
-		.feed .removeFromCatalog {
-			display:none;
-		}
-
-		.feed.catalog .addToCatalog {
-			display:none;
-		}
-
-		.feed.catalog .removeFromCatalog {
-			display:inline-block;
-		}
-
 		.feed .name i.errors {
 			color:red;
 			margin-right:2px;
@@ -99,7 +78,7 @@
 			display:none;
 		}
 
-		.feed td.icon, .feed td.catalog, .feed td.parser, .feed td.delete {
+		.feed td.icon, .feed td.parser, .feed td.delete {
 			text-align:center;
 		}
 	</style>
@@ -109,36 +88,6 @@
 	{{ parent() }}
 
 	<script type="text/javascript">
-		$(".feed .addToCatalog").click(function() {
-			var feedId = $(this).closest(".feed").data('feed');
-
-			$.ajax({
-				type: "POST",
-				url: Routing.generate('ajax_admin_catalog_feed_add', {id: feedId}, true),
-				dataType: "json",
-				success: function(result) {
-					if(result.success) {
-						$(".feed[data-feed="+feedId+"]").addClass("catalog");
-					}
-				}
-			});
-		});
-
-		$(".feed .removeFromCatalog").click(function() {
-			var feedId = $(this).closest(".feed").data('feed');
-
-			$.ajax({
-				type: "POST",
-				url: Routing.generate('ajax_admin_catalog_feed_remove', {id: feedId}, true),
-				dataType: "json",
-				success: function(result) {
-					if(result.success) {
-						$(".feed[data-feed="+feedId+"]").removeClass("catalog");
-					}
-				}
-			});
-		});
-
 		$(".feed .parser .parse").click(function() {
 			var feedId = $(this).closest(".feed").data('feed');
 
@@ -154,21 +103,6 @@
 					$(".feed[data-feed="+feedId+"] .parser .parsing").hide();
 				}
 			});
-
-			/*if(!$(this).closest(".feed").hasClass("parsing")) {
-				$(this).closest(".feed").addClass("parsing");
-				$(this).text("...");
-
-				$.ajax({
-					type: "POST",
-					url: Routing.generate('ajax_admin_feed_parse', {id: feedId}, true),
-					dataType: "json",
-					complete: function() {
-						$(".feed[data-feed="+feedId+"]").removeClass("parsing");
-						$(".feed[data-feed="+feedId+"] .parse").text("Parse");
-					}
-				});
-			}*/
 		});
 
 		$(".feed .delete button").on("click", function() {

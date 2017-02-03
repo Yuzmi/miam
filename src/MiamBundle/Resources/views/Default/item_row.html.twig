@@ -1,0 +1,71 @@
+{% set dataItem = dataItems[item.id] is defined ? dataItems[item.id] : null %}
+{% set itemOptions = itemOptions is defined ? itemOptions : [] %}
+
+{% if dataItem and dataItem.subscriptionName %}
+	{% set feedName = dataItem.subscriptionName %}
+{% else %}
+	{% set feedName = item.feed.name %}
+{% endif %}
+
+{% if item.link %}
+<a href="{{ item.link }}" target="_blank"
+{% else %}
+<div
+{% endif %} 
+	class="itemRow
+		{{ dataItem and dataItem.isRead ? 'read' }} 
+		{{ dataItem and dataItem.isStarred ? 'starred' }}"
+	data-item="{{ item.id }}" 
+	{% if dataItem and dataItem.subscriptionId %}
+		data-subscription="{{ dataItem.subscriptionId }}"
+	{% endif %}
+>
+	{% if app.user and 'markable' in itemOptions %}
+		<span class="readIcon"></span>
+
+		<span class="starIcon">
+			<i class="icon-empty fa fa-star-o"></i>
+			<i class="icon-full fa fa-star"></i>
+		</span>
+	{% endif %}
+
+	<span class="datetime" title="{{ item.datePublished|date('Y-m-d H:i:s') }}">
+		{% if item.datePublished|date('Y-m-d') == "now"|date('Y-m-d') %}
+			{{ item.datePublished|date('H:i') }}
+		{% elseif item.datePublished|date('Y') == "now"|date('Y') %}
+			{% if app.user and app.user.setting('DATE_FORMAT') in ['mdy', 'ymd'] %}
+				{{ item.datePublished|date('m/d') }}
+			{% else %}
+				{{ item.datePublished|date('d/m') }}
+			{% endif %}
+		{% else %}
+			{% if app.user and app.user.setting('DATE_FORMAT') == 'mdy' %}
+				{{ item.datePublished|date('m/d/y') }}
+			{% elseif app.user and app.user.setting('DATE_FORMAT') == 'ymd' %}
+				{{ item.datePublished|date('y/m/d') }}
+			{% else %}
+				{{ item.datePublished|date('d/m/y') }}
+			{% endif %}
+		{% endif %}
+	</span>
+
+	<span class="titleSummary">
+		<span class="title">{{ item.title ?: item.link ?: item.textContent|shorten(255) }}</span>
+
+		{% if item.textContent and (item.title or item.link) %}
+			<span class="summary">{{ item.textContent|shorten(300) }}</span>
+		{% endif %}
+	</span>
+
+	{% if 'hideFeed' not in itemOptions and feedName %}
+		<span class="feed">
+			<span class="name" title="{{ feedName }}">{{ feedName }}</span>
+
+			<img class="icon" src="{{ asset(item.feed.icon) }}" alt="" title="{{ feedName }}">
+		</span>
+	{% endif %}
+{% if item.link %}
+</a>
+{% else %}
+</div>
+{% endif %}

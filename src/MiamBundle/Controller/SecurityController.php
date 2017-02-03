@@ -17,19 +17,41 @@ class SecurityController extends MainController
 	public function loginAction() {
         $authenticationUtils = $this->get('security.authentication_utils');
 
+        $error = $authenticationUtils->getLastAuthenticationError();
+        if($error) {
+            $this->addFm($error->getMessageKey(), "error", $error->getMessageData(), "security");
+        }
+
         return $this->render('MiamBundle:Security:login.html.twig', array(
-            'last_username' => $authenticationUtils->getLastUsername(),
-            'error' => $authenticationUtils->getLastAuthenticationError()
+            'last_username' => $authenticationUtils->getLastUsername()
         ));
 	}
 
     public function registerCheckAction(Request $request) {
-        $username = substr(trim($request->get('username')), 0, 255);
+        $error = false;
+
+        $username = trim($request->get('username'));
+        if(mb_strlen($username) > 255) {
+            $this->addFm("Username is too long", "error");
+            $error = true;
+        } else {
+            $username = mb_substr($username, 0, 255);
+        }
+
         $password = $request->get('password');
         $passwordAgain = $request->get('password_again');
+        if(!$error && $password !== $passwordAgain) {
+            $this->addFm("Passwords are different", "error");
+            $error = true;
+        }
 
         $user = $this->getRepo("User")->findOneByUsername($username);
-        if(!$user && $password == $passwordAgain) {
+        if(!$error && $user) {
+            $this->addFm("Username already exists", "error");
+            $error = true;
+        }
+
+        if(!$error) {
             $user = new User();
             $user->setUsername($username);
 
@@ -42,6 +64,8 @@ class SecurityController extends MainController
             $em->flush();
 
             $this->login($user);
+
+            $this->addFm("Welcome!", "success");
         }
 
         return $this->redirectToRoute('index');

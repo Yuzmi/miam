@@ -26,18 +26,6 @@ MiamBundle\Entity\Category:
         level:
             type: integer
             column: level
-    manyToMany:
-        subscriptions:
-            targetEntity: Subscription
-            inversedBy: categories
-            joinTable:
-                name: categories_subscriptions
-                joinColumns:
-                    category_id:
-                        referencedColumnName: id
-                inverseJoinColumns:
-                    subscription_id:
-                        referencedColumnName: id
     manyToOne:
         parent:
             targetEntity: Category
@@ -57,4 +45,7 @@ MiamBundle\Entity\Category:
             targetEntity: Category
             mappedBy: parent
             cascade: ["remove"]
+        subscriptions:
+            targetEntity: Subscription
+            mappedBy: category
     lifecycleCallbacks: {  }

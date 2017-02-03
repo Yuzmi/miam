@@ -4,9 +4,9 @@ namespace MiamBundle\Services;
 
 use MiamBundle\Entity\Category;
 use MiamBundle\Entity\Feed;
-use MiamBundle\Entity\FeedMark;
 use MiamBundle\Entity\Item;
 use MiamBundle\Entity\ItemMark;
+use MiamBundle\Entity\Subscription;
 use MiamBundle\Entity\User;
 
 class MarkManager extends MainService {
@@ -52,140 +52,113 @@ class MarkManager extends MainService {
     	$this->em->flush();
 	}
 
-	public function readFeedForUser(Feed $feed, User $user) {
-		$mark = $this->getRepo('FeedMark')->findOneBy(array(
-            'feed' => $feed,
-            'user' => $user
-        ));
-        if(!$mark) {
-            $mark = new FeedMark();
-            $mark->setFeed($feed);
-            $mark->setUser($user);
-        }
+	public function readSubscriptionForUser(Subscription $subscription, User $user) {
+		$db = $this->em->getConnection();
 
-        $mark->setIsRead(true);
-        $mark->setDateRead(new \DateTime("now"));
-        $this->em->persist($mark);
-        $this->em->flush();
-	}
+		$stmt = $db->prepare('
+			UPDATE item_mark im
+			INNER JOIN item i ON i.id = im.item_id
+			INNER JOIN feed f ON f.id = i.feed_id
+			INNER JOIN subscription s ON s.feed_id = f.id
+			SET im.is_read = 1
+			WHERE s.id = :subscriptionId
+			AND im.user_id = :userId AND im.is_read = 0
+			;
+		');
+		$stmt->execute(array(
+			'subscriptionId' => $subscription->getId(),
+			'userId' => $user->getId()
+		));
 
-	public function unreadFeedForUser(Feed $feed, User $user) {
-		$mark = $this->getRepo('FeedMark')->findOneBy(array(
-            'feed' => $feed,
-            'user' => $user
-        ));
-        if(!$mark) {
-            $mark = new FeedMark();
-            $mark->setFeed($feed);
-            $mark->setUser($user);
-        }
-
-        $mark->setIsRead(false);
-        $mark->setDateRead(new \DateTime("now"));
-        $this->em->persist($mark);
-        $this->em->flush();
+		$stmt = $db->prepare('
+			INSERT INTO item_mark (item_id, user_id, is_read, is_starred)
+				SELECT i.id, :userId, 1, 0
+				FROM item i
+				LEFT JOIN item_mark im ON im.item_id = i.id AND im.user_id = :userId
+				INNER JOIN feed f ON f.id = i.feed_id
+				INNER JOIN subscription s ON s.feed_id = f.id
+				WHERE s.id = :subscriptionId
+				AND im.id IS NULL
+			;
+		');
+		$stmt->execute(array(
+			'subscriptionId' => $subscription->getId(),
+			'userId' => $user->getId()
+		));
 	}
 
 	public function readCategoryForUser(Category $category, User $user) {
-		$subscriptions = $this->getRepo('Subscription')->findForCategory($category, true);
+		$db = $this->em->getConnection();
 
-		if(count($subscriptions) > 0) {
-			foreach($subscriptions as $s) {
-				$feed = $s->getFeed();
+		$stmt = $db->prepare('
+			UPDATE item_mark im
+			INNER JOIN item i ON i.id = im.item_id
+			INNER JOIN feed f ON f.id = i.feed_id
+			INNER JOIN subscription s ON s.feed_id = f.id
+			INNER JOIN category c ON c.id = s.category_id
+			SET im.is_read = 1
+			WHERE c.left_position >= :catLeft AND c.right_position <= :catRight
+			AND im.user_id = :userId AND im.is_read = 0 
+			;
+		');
+		$stmt->execute(array(
+			'catLeft' => $category->getLeftPosition(),
+			'catRight' => $category->getRightPosition(),
+			'userId' => $user->getId()
+		));
 
-				$mark = $this->getRepo('FeedMark')->findOneBy(array(
-					'feed' => $feed,
-					'user' => $user
-				));
-				if(!$mark) {
-					$mark = new FeedMark();
-					$mark->setFeed($feed);
-					$mark->setUser($user);
-				}
-
-				$mark->setIsRead(true);
-				$mark->setDateRead(new \DateTime("now"));
-				$this->em->persist($mark);
-			}
-
-			$this->em->flush();
-		}
-	}
-
-	public function unreadCategoryForUser(Category $category, User $user) {
-		$subscriptions = $this->getRepo('Subscription')->findForCategory($category, true);
-
-		if(count($subscriptions) > 0) {
-			foreach($subscriptions as $s) {
-				$feed = $s->getFeed();
-
-				$mark = $this->getRepo('FeedMark')->findOneBy(array(
-					'feed' => $feed,
-					'user' => $user
-				));
-				if(!$mark) {
-					$mark = new FeedMark();
-					$mark->setFeed($feed);
-					$mark->setUser($user);
-				}
-
-				$mark->setIsRead(false);
-				$mark->setDateRead(new \DateTime("now"));
-				$this->em->persist($mark);
-			}
-
-			$this->em->flush();
-		}
+		$stmt = $db->prepare('
+			INSERT INTO item_mark (item_id, user_id, is_read, is_starred)
+				SELECT i.id, :userId, 1, 0
+				FROM item i
+				LEFT JOIN item_mark im ON im.item_id = i.id AND im.user_id = :userId
+				INNER JOIN feed f ON f.id = i.feed_id
+				INNER JOIN subscription s ON s.feed_id = f.id
+				INNER JOIN category c ON c.id = s.category_id
+				WHERE c.left_position >= :catLeft AND c.right_position <= :catRight
+				AND im.id IS NULL
+			;
+		');
+		$stmt->execute(array(
+			'userId' => $user->getId(),
+			'catLeft' => $category->getLeftPosition(),
+			'catRight' => $category->getRightPosition()
+		));
 	}
 
 	public function readUserForUser(User $subscriber, User $reader) {
-		$subscriptions = $this->getRepo('Subscription')->findByUser($subscriber);
-		if(count($subscriptions) > 0) {
-			foreach($subscriptions as $s) {
-				$feed = $s->getFeed();
+		$db = $this->em->getConnection();
 
-				$mark = $this->getRepo('FeedMark')->findOneBy(array(
-					'feed' => $feed,
-					'user' => $reader
-				));
-				if(!$mark) {
-					$mark = new FeedMark();
-					$mark->setFeed($feed);
-					$mark->setUser($reader);
-				}
+		$stmt = $db->prepare('
+			UPDATE item_mark im
+			INNER JOIN item i ON i.id = im.item_id
+			INNER JOIN feed f ON f.id = i.feed_id
+			INNER JOIN subscription s ON s.feed_id = f.id
+			SET im.is_read = 1
+			WHERE s.user_id = :subscriberId
+			AND im.user_id = :userId AND im.is_read = 0 
+			;
+		');
+		$stmt->execute(array(
+			'subscriberId' => $subscriber->getId(),
+			'userId' => $reader->getId()
+		));
 
-				$mark->setIsRead(true);
-				$mark->setDateRead(new \DateTime("now"));
-				$this->em->persist($mark);
-			}
-
-			$this->em->flush();
-		}
-	}
-
-	public function unreadUserForUser(User $subscriber, User $reader) {
-		$subscriptions = $this->getRepo('Subscription')->findByUser($subscriber);
-		if(count($subscriptions) > 0) {
-			foreach($subscriptions as $s) {
-				$feed = $s->getFeed();
-
-				$mark = $this->getRepo('FeedMark')->findOneBy(array(
-					'feed' => $feed,
-					'user' => $reader
-				));
-				if(!$mark) {
-					$mark = new FeedMark();
-					$mark->setFeed($feed);
-					$mark->setUser($reader);
-				}
-
-				$mark->setIsRead(false);
-				$mark->setDateRead(new \DateTime("now"));
-				$this->em->persist($mark);
-			}
-
-			$this->em->flush();
-		}
+		$stmt = $db->prepare('
+			INSERT INTO item_mark (item_id, user_id, is_read, is_starred)
+				SELECT i.id, :userId, 1, 0
+				FROM item i
+				LEFT JOIN item_mark im ON im.item_id = i.id AND im.user_id = :userId
+				INNER JOIN feed f ON f.id = i.feed_id
+				INNER JOIN subscription s ON s.feed_id = f.id
+				WHERE s.user_id = :subscriberId
+				AND im.id IS NULL
+			;
+		');
+		$stmt->execute(array(
+			'subscriberId' => $subscriber->getId(),
+			'userId' => $reader->getId()
+		));
 	}
 
 	public function starItemForUser(Item $item, User $user) {
@@ -224,18 +197,13 @@ class MarkManager extends MainService {
 		$unreadCounts = array();
 
         $result = $this->getRepo('Item')->createQueryBuilder('i')
-            ->select('f.id AS feed_id, COUNT(i.id) AS unread_count')
+            ->select('s.id AS subscription_id, COUNT(i.id) AS unread_count')
             ->innerJoin('i.feed', 'f')
             ->innerJoin('f.subscriptions', 's')
             ->leftJoin('i.marks', 'im', 'with', 'im.user = :reader')
-            ->leftJoin('f.marks', 'fm', 'with', 'fm.user = :reader')
             ->where('s.user = :subscriber')
-            ->andWhere('
-            	((im.id IS NULL OR im.isRead = FALSE) AND (fm.id IS NULL OR fm.isRead = FALSE OR fm.dateRead < i.dateCreated))
-            	OR (im.isRead = TRUE AND (fm.isRead = FALSE OR fm.dateRead < i.dateCreated) AND im.dateRead < fm.dateRead)
-            	OR (im.isRead = FALSE AND (fm.isRead = TRUE AND fm.dateRead >= i.dateCreated) AND im.dateRead > fm.dateRead)
-            ')
-            ->groupBy('f.id')
+            ->andWhere('im.id IS NULL OR im.isRead = FALSE')
+            ->groupBy('s.id')
             ->setParameters(array(
             	'subscriber' => $subscriber,
             	'reader' => $reader
@@ -243,7 +211,7 @@ class MarkManager extends MainService {
             ->getQuery()->getResult();
 
         foreach($result as $r) {
-            $unreadCounts[$r['feed_id']] = $r['unread_count'];
+            $unreadCounts[$r['subscription_id']] = $r['unread_count'];
         }
         
         return $unreadCounts;

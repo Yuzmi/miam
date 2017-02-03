@@ -1,0 +1,109 @@
+{% set dataItem = dataItem is defined ? dataItem : null %}
+
+{% if dataItem and dataItem.subscriptionName %}
+	{% set feedName = dataItem.subscriptionName %}
+{% else %}
+	{% set feedName = item.feed.name %}
+{% endif %}
+
+{% if item.author or item.contributor or (dataItem and (dataItem.tags|length > 0 or dataItem.enclosures|length > 0)) %}
+	{% set details = true %}
+{% else %}
+	{% set details = false %}
+{% endif %}
+
+<div class="title">
+	{% if item.title %}
+		{{ item.title }}
+	{% else %}
+		{{ "item.no_title"|trans({}, 'item') }}
+	{% endif %}
+</div>
+
+<div class="infos">
+	<span class="feed" title="{{ feedName }}">
+		{% if item.feed.hasIcon %}
+			<img class="icon" src="{{ asset(item.feed.icon) }}" alt="">
+		{% endif %}
+
+		<span class="name">{{ feedName }}</span>
+	</span>
+	-
+	<span class="datetime" title="{{ item.datePublished|date('Y-m-d H:i:s') }}">
+		{% if app.user and app.user.setting('DATE_FORMAT') == 'mdy' %}
+			{{ item.datePublished|date('m/d/y H:i') }}
+		{% elseif app.user and app.user.setting('DATE_FORMAT') == 'ymd' %}
+			{{ item.datePublished|date('y/m/d H:i') }}
+		{% else %}
+			{{ item.datePublished|date('d/m/y H:i') }}
+		{% endif %}
+	</span>
+	-
+	<a class="link" href="{{ item.link }}" target="_blank">{{ "item.link"|trans({}, 'item') }}</a>
+	
+	{% if details and app.user and app.user.setting('SHOW_ITEM_DETAILS') == 'onclick' %}
+		<span class="showDetails">
+			-
+			<span class="link">{{ "item.show_details"|trans({}, 'item') }}</span>
+		</span>
+	{% endif %}
+</div>
+
+{% if details %}
+	<div class="details {{ app.user and app.user.setting('SHOW_ITEM_DETAILS') == 'always' ? 'expanded' }}">
+		{% if item.author %}
+			<div class="authors">
+				{{ "item.author"|trans({}, 'item') }} {{ item.author }}
+			</div>
+		{% endif %}
+
+		{% if item.contributor %}
+			<div class="contributors">
+				{{ "item.contributor"|trans({}, 'item') }} {{ item.contributor }}
+			</div>
+		{% endif %}
+
+		{% if dataItem and dataItem.tags|length > 0 %}
+			<div class="tags">
+				{% if dataItem.tags|length > 1 %}
+					{{ "item.tags"|trans({}, 'item') }}
+				{% else %}
+					{{ "item.tag"|trans({}, 'item') }}
+				{% endif %}
+				{{ dataItem.tags|join(', ') }}
+			</div>
+		{% endif %}
+
+		{% if dataItem and dataItem.enclosures|length > 0 %}
+			<div class="enclosures">
+				{% if dataItem.enclosures|length > 1 %}
+					{{ "item.enclosures"|trans({}, 'item') }}
+				{% else %}
+					{{ "item.enclosure"|trans({}, 'item') }}
+				{% endif %}
+				{% for enclosure in dataItem.enclosures %}
+					{% if dataItem.enclosures|length > 1 %}
+						<br>
+					{% endif %}
+					<a href="{{ enclosure.url }}" target="_blank">
+						{{ enclosure.title ?: enclosure.url }}
+					</a>
+				{% endfor %}
+			</div>
+		{% endif %}
+	</div>
+{% endif %}
+
+<div class="content">
+	{% if item.htmlContent %}
+		{% if app.user and app.user.setting('SHOW_ITEM_PICTURES') == 'never' %}
+			{{ item.htmlContent|removePictures }}
+		{% elseif app.user and app.user.setting('SHOW_ITEM_PICTURES') == 'onclick' %}
+			{{ item.htmlContent|clickForPictures }}
+		{% else %}
+			{{ item.htmlContent|raw }}
+		{% endif %}
+	{% elseif item.textContent %}
+		{{ item.textContent|nl2br }}
+	{% endif %}
+</div>

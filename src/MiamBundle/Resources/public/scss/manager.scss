@@ -103,54 +103,6 @@
 	}
 }
 
-.popupContainer {
-	&.editCategory {
-		.subscriptions {
-			border:solid 1px black;
-			margin:auto;
-			margin-top:1rem;
-			max-height:40rem;
-			max-width:100%;
-			overflow:auto;
-			padding:0.5rem 1rem;
-			text-align:left;
-
-			.subscription {
-				input {
-					vertical-align:middle;
-				}
-
-				label {
-					vertical-align:middle;
-				}
-			}
-		}
-	}
-
-	&.newSubscription, &.editSubscription {
-		.categories {
-			border:solid 1px black;
-			margin:auto;
-			margin-top:1rem;
-			max-height:40rem;
-			max-width:100%;
-			overflow:auto;
-			padding:0.5rem 1rem;
-			text-align:left;
-
-			.category {
-				input {
-					vertical-align:middle;
-				}
-
-				label {
-					vertical-align:middle;
-				}
-			}
-		}
-	}
-}
-
 body.dark {
 	.tab {
 		border-color:#363636;

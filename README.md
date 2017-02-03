@@ -5,7 +5,6 @@ RSS agregator using [Symfony 3](https://symfony.com/) and [SimplePie](https://gi
 ### Features
 
 * Multi-user
-* Catalog & Admin (WIP)
 * Categories
 * Item marking
 * User settings
@@ -17,7 +16,7 @@ RSS agregator using [Symfony 3](https://symfony.com/) and [SimplePie](https://gi
 * Linux
 * Apache & Mod rewrite enabled
 * PHP 5.5.9+ or PHP 7  
-* MySQL, PostgreSQL or SQLite
+* MySQL or PostgreSQL
 * [Sass](http://sass-lang.com/install)
 * [Composer](https://getcomposer.org/download/)
 
@@ -46,7 +45,7 @@ php bin/console miam:requirements
 
 ```
 # Database parameters
-database_driver: 	pdo_mysql 	# 'pdo_pgsql' for PostgreSQL, 'pdo_sqlite' for SQLite  
+database_driver: 	pdo_mysql 	# 'pdo_pgsql' for PostgreSQL 
 database_host: 		localhost
 database_port: 		null
 database_name: 		miam
@@ -72,7 +71,6 @@ scss_path: 	/usr/local/bin/scss
 php bin/console doctrine:database:create # if not already created
 php bin/console doctrine:schema:create
 ``` 
-If you use SQLite, the app/data directory must be writable.
 
 #### Install assets
 
@@ -87,14 +85,14 @@ php bin/console assets:install --env=prod
 php bin/console cache:clear --env=prod
 ```
 
-#### Grant write permissions on app/data, var/cache, var/logs and web/images
+#### Grant write permissions on var/cache, var/logs and web/images
 
 ```shell
 apt install acl
-setfacl -R -m u:www-data:rwX app/data var/cache var/logs web/images
-setfacl -dR -m u:www-data:rwX app/data var/cache var/logs web/images
+setfacl -R -m u:www-data:rwX var/cache var/logs web/images
+setfacl -dR -m u:www-data:rwX var/cache var/logs web/images
 # OR
-chmod -R 777 app/data var/cache var/logs web/images # not recommended
+chmod -R 777 var/cache var/logs web/images # not recommended
 ```
 
 #### Configure Apache
@@ -120,8 +118,7 @@ php bin/console miam:admin:add YOUR_USERNAME
 ### Note about the stability
 
 It's potentially unstable as it's still on development and not (yet) restricted to stable versions.  
-The default config is set for MySQL.  
-PostgreSQL and SQLite should be fine if you set parameters correctly.  
+The default config is set for MySQL. Change parameters for PostgreSQL.  
 Other engines may or may not work.  
 Also, use a modern browser.  
 

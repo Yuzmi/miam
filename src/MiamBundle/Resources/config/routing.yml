@@ -6,10 +6,6 @@ miam_admin:
     resource: "@MiamBundle/Resources/config/routing/admin.yml"
     prefix: /admin
 
-miam_catalog:
-    resource: "@MiamBundle/Resources/config/routing/catalog.yml"
-    prefix: /catalog
-
 miam_manager:
     resource: "@MiamBundle/Resources/config/routing/manager.yml"
     prefix: /manager
@@ -21,15 +17,6 @@ miam_shit:
     resource: "@MiamBundle/Resources/config/routing/shit.yml"
     prefix: /shit
 
-user:
-    path: /user/{userId}
-    defaults: { _controller: MiamBundle:Shit:index }
-    requirements: { userId: \d+ }
-
 pubsubhubbub:
     path: /pshb
     defaults: { _controller: MiamBundle:Default:pshb }
-
-ajax_get_item:
-    path: /ajax/item
-    defaults: { _controller: MiamBundle:Default:ajaxGetItem }

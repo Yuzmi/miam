@@ -111,27 +111,6 @@ class ManagerController extends MainController
                     $category->setParent(null);
                 }
 
-                $subscriptionIds = (array) $request->get("subscriptions");
-                $subscriptions = array();
-                if(!empty($subscriptionIds)) {
-                    $subscriptions = $this->getRepo("Subscription")->createQueryBuilder("s")
-                        ->where("s.user = :user")->setParameter("user", $this->getUser())
-                        ->andWhere("s.id IN (:ids)")->setParameter("ids", $subscriptionIds)
-                        ->getQuery()->getResult();
-                }
-
-                foreach($category->getSubscriptions() as $s) {
-                    if(!in_array($s->getId(), $subscriptionIds)) {
-                        $category->removeSubscription($s);
-                    }
-                }
-                
-                foreach($subscriptions as $s) {
-                    if(!$category->getSubscriptions()->contains($s)) {
-                        $category->addSubscription($s);
-                    }
-                }
-
                 $em->persist($category);
                 $em->flush();
 
@@ -272,27 +251,14 @@ class ManagerController extends MainController
                     $subscription->setName($feed->getName());
                 }
 
-                $categoryIds = (array) $request->get("categories");
-                $categories = array();
-                if(!empty($categoryIds)) {
-                    $categories = $this->getRepo("Category")->createQueryBuilder('c')
-                        ->where("c.user = :user")->setParameter("user", $this->getUser())
-                        ->andWhere("c.id IN (:ids)")->setParameter("ids", $categoryIds)
-                        ->getQuery()->getResult();
-                }
-
-                foreach($subscription->getCategories() as $c) {
-                    if(!in_array($c->getId(), $categoryIds)) {
-                        $c->removeSubscription($subscription);
-                        $em->persist($c);
-                    }
-                }
-
-                foreach($categories as $c) {
-                    if(!$subscription->getCategories()->contains($c)) {
-                        $c->addSubscription($subscription);
-                        $em->persist($c);
-                    }
+                $category = $this->getRepo("Category")->findOneBy(array(
+                    'id' => $request->get('category'),
+                    'user' => $this->getUser()
+                ));
+                if($category) {
+                    $subscription->setCategory($category);
+                } else {
+                    $subscription->setCategory(null);
                 }
 
                 $em->persist($subscription);
@@ -469,13 +435,11 @@ class ManagerController extends MainController
                     }
                 }
 
-                $em->persist($subscription);
-
-                if($parentCategory && !$parentCategory->getSubscriptions()->contains($subscription)) {
-                    $parentCategory->addSubscription($subscription);
-                    $em->persist($parentCategory);
+                if($parentCategory && !$subscription->getCategory()) {
+                    $subscription->setCategory($parentCategory);
                 }
 
+                $em->persist($subscription);
                 $em->flush();
             }
         } elseif($type == "setting") {
@@ -523,33 +487,15 @@ class ManagerController extends MainController
         if($this->isTokenValid('manager_settings_update', $request->get('csrf_token'))) {
             $user = $this->getUser();
             
-            $show_item_pictures = $request->get("SHOW_ITEM_PICTURES");
-            $user->setSetting('SHOW_ITEM_PICTURES', $show_item_pictures);
-
-            $show_item_details = $request->get("SHOW_ITEM_DETAILS");
-            $user->setSetting('SHOW_ITEM_DETAILS', $show_item_details);
-
-            $is_public = $request->get("IS_PUBLIC") ? true : false;
-            $user->setIsPublic($is_public);
-
-            $hide_sidebar = $request->get("HIDE_SIDEBAR");
-            $user->setSetting('HIDE_SIDEBAR', $hide_sidebar);
-
-            $theme = $request->get("THEME");
-            $user->setSetting('THEME', $theme);
-
-            $font_size = intval($request->get("FONT_SIZE"));
-            if($font_size >= 5 && $font_size <= 40) {
-                $user->setSetting('FONT_SIZE', $font_size);
-            }
-
-            $date_format = $request->get("DATE_FORMAT");
-            $user->setSetting('DATE_FORMAT', $date_format);
-
+            $user->setSetting('SHOW_ITEM_PICTURES', $request->get("SHOW_ITEM_PICTURES"));
+            $user->setSetting('SHOW_ITEM_DETAILS', $request->get("SHOW_ITEM_DETAILS"));
+            $user->setSetting('HIDE_SIDEBAR', $request->get("HIDE_SIDEBAR"));
+            $user->setSetting('THEME', $request->get("THEME"));
+            $user->setSetting('FONT_SIZE', $request->get("FONT_SIZE"));
+            $user->setSetting('DATE_FORMAT', $request->get("DATE_FORMAT"));
+            
             $locale = $request->get("LOCALE");
-
-            $locales = array("en", "fr"); // Available locales
-            if(in_array($locale, $locales)) {
+            if(in_array($locale, array("en", "fr"))) {
                 $user->setLocale($locale);
                 $this->get('session')->set('_locale', $locale);
             }

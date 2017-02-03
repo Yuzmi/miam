@@ -1,16 +1,18 @@
 {% extends "MiamBundle:Default:popup.html.twig" %}
 
-{% block popupTitle %}{{ "New category"|trans({}, 'manager') }}{% endblock %}
+{% block popupTitle %}{{ "manager.catsubs.new_category"|trans({}, 'manager') }}{% endblock %}
 
 {% block popupContent %}
 	<form method="POST" action="{{ path('manager_category_create') }}">
-		<label for="name">{{ "Name:"|trans({}, 'manager') }}</label>
-		<input type="text" id="name" name="name" required>
+		<label for="name">{{ "manager.catsubs.new_category.name.label"|trans({}, 'manager') }}</label>
+		<input type="text" id="name" name="name" placeholder="{{ "manager.catsubs.new_category.placeholder"|trans({}, 'manager') }}" required>
 
 		<br>
 
 		{% if categories|length > 0 %}
-			<label for="parent">{{ "Parent:"|trans({}, 'manager') }}</label>
+			<label for="parent">
+				{{ "manager.catsubs.new_category.parent.label"|trans({}, 'manager') }}
+			</label>
 			<select id="parent" name="parent">
 				<option></option>
 				{% for c in categories %}
@@ -21,7 +23,7 @@
 			<br>
 		{% endif %}
 
-		<button type="submit">{{ "Create"|trans }}</button>
+		<button type="submit">{{ "manager.catsubs.new_category.create"|trans({}, 'manager') }}</button>
 
 		<input type="hidden" name="csrf_token" value="{{ csrf_token('manager_category_save') }}">
 	</form>

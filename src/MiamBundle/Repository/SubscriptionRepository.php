@@ -24,7 +24,7 @@ class SubscriptionRepository extends \Doctrine\ORM\EntityRepository
 	public function findForCategory(Category $category, $recursive = false) {
 		if($recursive) {
 			return $this->createQueryBuilder('s')
-				->innerJoin('s.categories', 'c')
+				->innerJoin('s.category', 'c')
 				->where('c.leftPosition >= :leftPosition')
 				->andWhere('c.rightPosition <= :rightPosition')
 				->andWhere('c.user = :user')
@@ -36,7 +36,7 @@ class SubscriptionRepository extends \Doctrine\ORM\EntityRepository
 				->getQuery()->getResult();
 		} else {
 			return $this->createQueryBuilder('s')
-				->innerJoin('s.categories', 'c')
+				->innerJoin('s.category', 'c')
 				->where('c.id = :categoryId')
 				->setParameter('categoryId', $category->getId())
 				->getQuery()->getResult();
@@ -54,7 +54,7 @@ class SubscriptionRepository extends \Doctrine\ORM\EntityRepository
 	public function findForUserWithMore(User $user) {
 		return $this->createQueryBuilder('s')
 			->innerJoin('s.feed', 'f')->addSelect('f')
-			->leftJoin('s.categories', 'c')->addSelect('c')
+			->leftJoin('s.category', 'c')->addSelect('c')
 			->where('s.user = :user')->setParameter('user', $user)
 			->orderBy('s.name', 'ASC')
 			->addOrderBy('c.name', 'ASC')
@@ -64,7 +64,7 @@ class SubscriptionRepository extends \Doctrine\ORM\EntityRepository
 	public function findOneForUserWithMore($id, User $user) {
 		return $this->createQueryBuilder('s')
 			->innerJoin('s.feed', 'f')->addSelect('f')
-			->leftJoin('s.categories', 'c')->addSelect('c')
+			->leftJoin('s.category', 'c')->addSelect('c')
 			->where('s.user = :user')->setParameter('user', $user)
 			->andWhere('s.id = :id')->setParameter('id', $id)
 			->orderBy('s.name', 'ASC')

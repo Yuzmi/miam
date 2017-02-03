@@ -13,7 +13,6 @@ class User implements UserInterface, \Serializable
     private $dateCreated;
     private $dateLogin;
     private $isAdmin;
-    private $isPublic;
     private $locale;
     private $settings;
     private $subscriptions;
@@ -23,7 +22,6 @@ class User implements UserInterface, \Serializable
         $this->salt = uniqid(mt_rand(), true);
         $this->dateCreated = new \DateTime("now");
         $this->isAdmin = false;
-        $this->isPublic = false;
         $this->settings = serialize(array());
         $this->subscriptions = new \Doctrine\Common\Collections\ArrayCollection();
     }
@@ -38,7 +36,6 @@ class User implements UserInterface, \Serializable
     public function getPassword() { return $this->password; }
     public function getSalt() { return $this->salt; }
     public function getIsAdmin() { return $this->isAdmin; }
-    public function getIsPublic() { return $this->isPublic; }
     public function getLocale() { return $this->locale; }
     public function getDateCreated() { return $this->dateCreated; }
     public function getDateLogin() { return $this->dateLogin; }
@@ -50,7 +47,6 @@ class User implements UserInterface, \Serializable
     public function setPassword($password) { $this->password = $password; return $this; }
     public function setSalt($salt) { $this->salt = $salt; return $this; }
     public function setIsAdmin($isAdmin) { $this->isAdmin = $isAdmin; return $this; }
-    public function setIsPublic($isPublic) { $this->isPublic = $isPublic; return $this; }
     public function setLocale($locale) { $this->locale = $locale; return $this; }
     public function setDateCreated($dateCreated) { $this->dateCreated = $dateCreated; return $this; }
     public function setDateLogin($dateLogin) { $this->dateLogin = $dateLogin; return $this; }
@@ -135,6 +131,31 @@ class User implements UserInterface, \Serializable
 
     public function setSetting($key, $value) {
         $settings = $this->getSettings();
+
+        if($key == 'SHOW_ITEM_PICTURES') {
+            if(!in_array($value, array('always', 'onclick', 'never'))) {
+                return;
+            }
+        } elseif($key == 'SHOW_ITEM_DETAILS') {
+            if(!in_array($value, array('always', 'onclick'))) {
+                return;
+            }
+        } elseif($key == 'HIDE_SIDEBAR') {
+            $value = boolval($value);
+        } elseif($key == 'THEME') {
+            if(!in_array($value, array('basic', 'dark'))) {
+                return;
+            }
+        } elseif($key == 'FONT_SIZE') {
+            $font_size = intval($value);
+            if($font_size < 7 || $font_size > 18) {
+                return;
+            }
+        } elseif($key == 'DATE_FORMAT') {
+            if(!in_array($value, array('dmy', 'mdy', 'ymd'))) {
+                return;
+            }
+        }
 
         $settings[$key] = $value;
 

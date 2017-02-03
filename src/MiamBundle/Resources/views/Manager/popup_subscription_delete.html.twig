@@ -1,15 +1,15 @@
 {% extends "MiamBundle:Default:popup.html.twig" %}
 
-{% block popupTitle %}{{ "Unsubscribe"|trans }}{% endblock %}
+{% block popupTitle %}{{ "manager.catsubs.delete_sub"|trans({}, 'manager') }}{% endblock %}
 
 {% block popupContent %}
 	<form method="POST" action="{{ path('manager_subscription_delete', {'id': subscription.id}) }}">
-		{{ "Unsubscribe from"|trans({}, 'manager') }} "{{ subscription.name }}" ?
+		{{ "manager.catsubs.delete_sub.text"|trans({'%name%': subscription.name }, 'manager') }}
 
 		<br><br>
 
-		<button type="submit">{{ "Yes"|trans }}</button>
-		<button class="closePopup" type="button">{{ "No"|trans }}</button>
+		<button type="submit">{{ "manager.catsubs.delete_sub.yes"|trans({}, 'manager') }}</button>
+		<button class="closePopup" type="button">{{ "manager.catsubs.delete_sub.no"|trans({}, 'manager') }}</button>
 
 		<input type="hidden" name="csrf_token" value="{{ csrf_token('manager_subscription_delete') }}">
 	</form>

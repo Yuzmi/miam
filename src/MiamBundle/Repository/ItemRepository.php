@@ -25,27 +25,34 @@ class ItemRepository extends \Doctrine\ORM\EntityRepository
 			$qb->andWhere('i.feed = :feed')->setParameter('feed', $feed);
 		}
 
-		$subscriber = isset($options['subscriber']) ? $options['subscriber'] : null;
+		$subscription = isset($options['subscription']) ? $options['subscription'] : null;
 		$category = isset($options['category']) ? $options['category'] : null;
-		if($subscriber || $category) {
+		$subscriber = isset($options['subscriber']) ? $options['subscriber'] : null;
+
+		if($subscription || $category || $subscriber) {
 			$qb->innerJoin('f.subscriptions', 's');
+		}
+
+		if($subscription) {
+			$qb->andWhere('s.id = :subscriptionId');
+			$qb->setParameter('subscriptionId', $subscription->getId());
+		}
+
+		if($category) {
+			$qb->innerJoin('s.category', 'c');
+
+			$qb->andWhere('c.leftPosition >= :catLeft AND c.rightPosition <= :catRight');
+			$qb->setParameter('catLeft', $category->getLeftPosition());
+			$qb->setParameter('catRight', $category->getRightPosition());
 
 			if($subscriber) {
-				$qb->andWhere('s.user = :subscriber');
-				$qb->setParameter('subscriber', $subscriber);
+				$qb->andWhere('c.user = :subscriber');
 			}
+		}
 
-			if($category) {
-				$qb->innerJoin('s.categories', 'c');
-
-				$qb->andWhere('c.leftPosition >= :catLeft AND c.rightPosition <= :catRight');
-				$qb->setParameter('catLeft', $category->getLeftPosition());
-				$qb->setParameter('catRight', $category->getRightPosition());
-
-				if($subscriber) {
-					$qb->andWhere('c.user = :subscriber');
-				}
-			}
+		if($subscriber) {
+			$qb->andWhere('s.user = :subscriber');
+			$qb->setParameter('subscriber', $subscriber);
 		}
 
 		$marker = isset($options['marker']) ? $options['marker'] : null;
@@ -55,25 +62,16 @@ class ItemRepository extends \Doctrine\ORM\EntityRepository
 
 			$type = isset($options['type']) ? $options['type'] : 'all';
 			if($type == 'unread') {
-				$qb->leftJoin('f.marks', 'fm', 'with', 'fm.user = :marker');
-				$qb->andWhere('
-	            	((im.id IS NULL OR im.isRead = FALSE) AND (fm.id IS NULL OR fm.isRead = FALSE OR fm.dateRead < i.dateCreated))
-            		OR (im.isRead = TRUE AND (fm.isRead = FALSE OR fm.dateRead < i.dateCreated) AND im.dateRead < fm.dateRead)
-            		OR (im.isRead = FALSE AND (fm.isRead = TRUE AND fm.dateRead >= i.dateCreated) AND im.dateRead > fm.dateRead)
-	            ');
+				$qb->andWhere('im.id IS NULL OR im.isRead = FALSE');
+			} elseif($type == 'new') {
+				$duration_new_articles = (int) $marker->getSetting('DURATION_NEW_ARTICLES');
+				$qb->andWhere('i.dateCreated > :newAfter');
+				$qb->setParameter('newAfter', new \DateTime("now - ".$duration_new_articles." hours"));
 			} elseif($type == 'starred') {
 				$qb->andWhere('im.isStarred = TRUE');
-			} elseif($type == 'read-recently') {
-				$qb->andWhere('im.isRead = TRUE AND im.dateRead > :recently');
-				$qb->setParameter('recently', new \DateTime("now - 7 days"));
+			} elseif($type == 'last-read') {
+				$qb->andWhere('im.isRead = TRUE AND im.dateRead IS NOT NULL');
 			}
-		}
-
-		$catalog = isset($options['catalog']) ? $options['catalog'] : null;
-		if($catalog === true) {
-			$qb->andWhere('f.isCatalog = TRUE');
-		} elseif($catalog === false) {
-			$qb->andWhere('f.isCatalog = FALSE');
 		}
 
 		$createdAfter = isset($options['createdAfter']) ? $options['createdAfter'] : null;
@@ -82,23 +80,17 @@ class ItemRepository extends \Doctrine\ORM\EntityRepository
 			$qb->setParameter('createdAfter', $createdAfter);
 		}
 
-		$countDefaultItems = 40;
-		$countMaxItems = 100;
-
-		$count = isset($options['count']) ? intval($options['count']) : $countDefaultItems;
-		if($count > $countMaxItems) {
-			$count = $countMaxItems;
-		} elseif($count <= 0) {
-			$count = $countDefaultItems;
+		$count = isset($options['count']) ? intval($options['count']) : 0;
+		if($count > 0) {
+			$qb->setMaxResults($count);
 		}
-		$qb->setMaxResults($count);
 
 		$offset = isset($options['offset']) ? intval($options['offset']) : 0;
 		$page = isset($options['page']) ? $options['page'] : 1;
 		$offset += $count * ($page - 1);
 		$qb->setFirstResult($offset);
 
-		if($marker && $type == 'read-recently') {
+		if($marker && $type == 'last-read') {
 			$qb->orderBy('im.dateRead', 'DESC');
 		} else {
 			$qb->orderBy('i.datePublished', 'DESC');
@@ -119,9 +111,10 @@ class ItemRepository extends \Doctrine\ORM\EntityRepository
 		foreach($itemIds as $id) {
 			$data[$id] = array(
 				'enclosures' => array(),
-				'feedName' => '',
 				'isRead' => false,
 				'isStarred' => false,
+				'subscriptionId' => null,
+				'subscriptionName' => null,
 				'tags' => array()
 			);
 		}
@@ -141,40 +134,31 @@ class ItemRepository extends \Doctrine\ORM\EntityRepository
 		$marker = isset($options['marker']) ? $options['marker'] : null;
 		if($marker) {
 			$qb->leftJoin('i.marks', 'im', 'WITH', 'im.user = :marker')->addSelect('im');
-			$qb->leftJoin('f.marks', 'fm', 'WITH', 'fm.user = :marker')->addSelect('fm');
 			$qb->setParameter('marker', $marker);
 		}
 
 		$items = $qb->getQuery()->getResult();
 
-		foreach($items as $i) {
-			$data[$i->getId()]['enclosures'] = $i->getEnclosures();
-			$data[$i->getId()]['tags'] = $i->getTags();
+		foreach($items as $item) {
+			$data[$item->getId()]['enclosures'] = $item->getEnclosures();
+			$data[$item->getId()]['tags'] = $item->getTags();
 			
 			if($subscriber) {
-				foreach($i->getFeed()->getSubscriptions() as $s) {
-					$data[$i->getId()]['feedName'] = $s->getName();
+				if($subscription = $item->getFeed()->getSubscriptions()->first()) {
+					$data[$item->getId()]['subscriptionId'] = $subscription->getId();
+					$data[$item->getId()]['subscriptionName'] = $subscription->getName();
 				}
 			}
 
 			if($marker) {
-				$lastDateRead = $i->getDateCreated();
-
-				foreach($i->getMarks() as $m) {
-					if($m->getDateRead() && ($lastDateRead < $m->getDateRead())) {
-						$data[$i->getId()]['isRead'] = $m->getIsRead();
-						$lastDateRead = $m->getDateRead();
+				$mark = $item->getMarks()->first();
+				if($mark) {
+					if($mark->getIsRead()) {
+						$data[$item->getId()]['isRead'] = true;
 					}
 
-					if($m->getIsStarred()) {
-						$data[$i->getId()]['isStarred'] = true;
-					}
-				}
-
-				foreach($i->getFeed()->getMarks() as $m) {
-					if($m->getDateRead() && $lastDateRead < $m->getDateRead()) {
-						$data[$i->getId()]['isRead'] = $m->getIsRead();
-						$lastDateRead = $m->getDateRead();
+					if($mark->getIsStarred()) {
+						$data[$item->getId()]['isStarred'] = true;
 					}
 				}
 			}

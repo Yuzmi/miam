@@ -4,13 +4,6 @@ namespace MiamBundle\Repository;
 
 class FeedRepository extends \Doctrine\ORM\EntityRepository
 {
-	public function findCatalog() {
-		return $this->createQueryBuilder('f')
-			->where('f.isCatalog = TRUE')
-			->orderBy('f.customName', 'ASC')
-			->getQuery()->getResult();
-	}
-
 	public function findSubscribed() {
 		return $this->createQueryBuilder('f')
 			->innerJoin('f.subscriptions', 's')
@@ -31,7 +24,7 @@ class FeedRepository extends \Doctrine\ORM\EntityRepository
             ->select("f, COUNT(s.id)")
             ->leftJoin("f.subscriptions", "s")
             ->groupBy("f")
-            ->having("f.isCatalog = TRUE OR COUNT(s.id) > 0")
+            ->having("COUNT(s.id) > 0")
             ->getQuery()->getResult();
 
         $feeds = array();
@@ -47,7 +40,7 @@ class FeedRepository extends \Doctrine\ORM\EntityRepository
             ->select("f, COUNT(s.id)")
             ->leftJoin("f.subscriptions", "s")
             ->groupBy("f")
-            ->having("f.isCatalog = FALSE AND COUNT(s.id) = 0")
+            ->having("COUNT(s.id) = 0")
             ->getQuery()->getResult();
         
         $feeds = array();

@@ -23,7 +23,6 @@ class ParseIconsCommand extends ContainerAwareCommand {
         $time_start = time();
 
         $em = $this->getContainer()->get('doctrine')->getManager();
-        $feeds = array();
 
         $arg = trim($input->getArgument('feeds'));
         $feeds = $this->getContainer()->get('feed_manager')->getFeeds($arg);
@@ -49,6 +48,7 @@ class ParseIconsCommand extends ContainerAwareCommand {
             $output->writeln('Parsing... ');
 
             $count = 0;
+            $countSuccess = 0;
             foreach($feeds as $f) {
                 $feed = $em->getRepository('MiamBundle:Feed')->find($f->getId());
                 if(!$feed) {
@@ -66,6 +66,9 @@ class ParseIconsCommand extends ContainerAwareCommand {
                 }
 
                 $count++;
+                if($result["success"]) {
+                    $countSuccess++;
+                }
 
                 if($count%50 == 0) {
                     $em->clear();
@@ -77,7 +80,8 @@ class ParseIconsCommand extends ContainerAwareCommand {
             }
 
             $duration = time() - $time_start;
-            $output->writeln('Done. Duration: '.$duration.'s');
+
+            $output->writeln('Done. Icons: '.$countSuccess.'/'.$count.'. Duration: '.$duration.'s');
         } else {
             $output->writeln('Nothing happened');
         }

@@ -1,19 +1,27 @@
 {% extends "MiamBundle:Default:popup.html.twig" %}
 
-{% block popupTitle %}{{ "OPML export"|trans({}, 'manager') }}{% endblock %}
+{% block popupTitle %}{{ "manager.catsubs.export_opml"|trans({}, 'manager') }}{% endblock %}
 
 {% block popupContent %}
 	<form method="POST" action="{{ path('manager_opml_export') }}">
-		<label for="what">{{ "What do you want to export ?"|trans({}, 'manager') }}</label>
+		<label for="what">{{ "manager.catsubs.export_opml.what"|trans({}, 'manager') }}</label>
 		<select name="what">
-			<option value="all">{{ "Everything"|trans }}</option>
-			<option value="catsubs">{{ "Categories & Feeds"|trans({}, 'manager') }}</option>
-			<option value="subscriptions">{{ "Feeds"|trans }}</option>
-			<option value="settings">{{ "Settings"|trans({}, 'manager') }}</option>
+			<option value="all">
+				{{ "manager.catsubs.export_opml.what.everything"|trans({}, 'manager') }}
+			</option>
+			<option value="catsubs">
+				{{ "manager.catsubs.export_opml.what.catsubs"|trans({}, 'manager') }}
+			</option>
+			<option value="subscriptions">
+				{{ "manager.catsubs.export_opml.what.subs"|trans({}, 'manager') }}
+			</option>
+			<option value="settings">
+				{{ "manager.catsubs.export_opml.what.settings"|trans({}, 'manager') }}
+			</option>
 		</select>
 
 		<br>
 
-		<button type="submit">{{ "Export"|trans({}, 'manager') }}</button>
+		<button type="submit">{{ "manager.catsubs.export_opml.submit"|trans({}, 'manager') }}</button>
 	</form>
 {% endblock %}

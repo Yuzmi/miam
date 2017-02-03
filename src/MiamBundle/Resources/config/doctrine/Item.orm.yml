@@ -46,6 +46,9 @@ MiamBundle\Entity\Item:
         dateModified:
             type: datetime
             column: date_modified
+        dateLastSeen:
+            type: datetime
+            column: date_last_seen
     manyToMany:
         tags:
             targetEntity: Tag

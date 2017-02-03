@@ -18,6 +18,10 @@ class Enclosure
         $this->dateCreated = new \DateTime("now");
     }
 
+    public function __toString() {
+        return $this->url;
+    }
+
     // Getters
     public function getId() { return $this->id; }
     public function getTitle() { return $this->title; }

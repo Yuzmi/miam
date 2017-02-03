@@ -1,39 +1,43 @@
 ajax_shit_get_items:
-    path: /ajax/items
+    path: /ajax/getItems
     defaults: { _controller: MiamBundle:Shit:ajaxGetItems }
 
-ajax_shit_read_user_items:
-    path: /ajax/items/user/{id}/read
-    defaults: { _controller: MiamBundle:Shit:ajaxReadUserItems }
+ajax_shit_get_item:
+    path: /ajax/getItem
+    defaults: { _controller: MiamBundle:Shit:ajaxGetItem }
 
-ajax_shit_read_category_items:
-    path: /ajax/items/category/{id}/read
-    defaults: { _controller: MiamBundle:Shit:ajaxReadCategoryItems }
+ajax_shit_read_all:
+    path: /ajax/readAll
+    defaults: { _controller: MiamBundle:Shit:ajaxReadAll }
 
-ajax_shit_read_feed_items:
-    path: /ajax/items/feed/{id}/read
-    defaults: { _controller: MiamBundle:Shit:ajaxReadFeedItems }
+ajax_shit_read_category:
+    path: /ajax/readCategory
+    defaults: { _controller: MiamBundle:Shit:ajaxReadCategory }
+
+ajax_shit_read_subscription:
+    path: /ajax/readSubscription
+    defaults: { _controller: MiamBundle:Shit:ajaxReadSubscription }
 
 ajax_shit_read_item:
-    path: /ajax/item/{id}/read
+    path: /ajax/readItem
     defaults: { _controller: MiamBundle:Shit:ajaxReadItem }
 
 ajax_shit_unread_item:
-    path: /ajax/item/{id}/unread
+    path: /ajax/unreadItem
     defaults: { _controller: MiamBundle:Shit:ajaxUnreadItem }
 
 ajax_shit_star_item:
-    path: /ajax/item/{id}/star
+    path: /ajax/starItem
     defaults: { _controller: MiamBundle:Shit:ajaxStarItem }
 
 ajax_shit_unstar_item:
-    path: /ajax/item/{id}/unstar
+    path: /ajax/unstarItem
     defaults: { _controller: MiamBundle:Shit:ajaxUnstarItem }
 
 ajax_shit_get_tree:
-    path: /ajax/tree
+    path: /ajax/getTree
     defaults: { _controller: MiamBundle:Shit:ajaxGetTree }
 
 ajax_shit_get_unread_counts:
-    path: /ajax/unreadCounts
+    path: /ajax/getUnreadCounts
     defaults: { _controller: MiamBundle:Shit:ajaxGetUnreadCounts }

@@ -1,9 +1,12 @@
 <?php
 	return array(
-		'Author:' => 'Auteur :',
-		'Contributor:' => 'Contributeur :',
-		'Tag:' => 'Tag :',
-		'Tags:' => 'Tags :',
-		'Enclosure:' => 'Pièce jointe :',
-		'Enclosures:' => 'Pièces jointes :'
+		'item.no_title' => '[Aucun titre]',
+		'item.link' => 'Lien',
+		'item.show_details' => 'Afficher les détails',
+		'item.author' => 'Auteur :',
+		'item.contributor' => 'Contributeur :',
+		'item.tag' => 'Tag :',
+		'item.tags' => 'Tags :',
+		'item.enclosure' => 'Pièce jointe :',
+		'item.enclosures' => 'Pièces jointes :'
 	);

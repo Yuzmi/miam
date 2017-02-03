@@ -59,9 +59,6 @@ MiamBundle\Entity\Feed:
             type: text
             column: error_message
             nullable: true
-        isCatalog:
-            type: boolean
-            column: is_catalog
         hasIcon:
             type: boolean
             column: has_icon
@@ -87,10 +84,6 @@ MiamBundle\Entity\Feed:
     oneToMany:
         items:
             targetEntity: Item
-            mappedBy: feed
-            cascade: ["remove"]
-        marks:
-            targetEntity: FeedMark
             mappedBy: feed
             cascade: ["remove"]
         pshbSubscriptions:

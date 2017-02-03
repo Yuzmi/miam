@@ -12,38 +12,28 @@ use MiamBundle\Entity\User;
 
 class ShitController extends MainController
 {
-	public function indexAction($userId) {
-        $subscriber = $this->getRepo("User")->find($userId);
-        if(!$subscriber || (!$subscriber->getIsPublic() && (!$this->isLogged() || $subscriber->getId() != $this->getUser()->getId()))) 
-        {
+	public function indexAction() {
+        if(!$this->isLogged()) {
             return $this->redirectToRoute("index");
         }
 
-        $tree = $this->getTreeForUser($subscriber);
+        $tree = $this->getTreeForUser($this->getUser());
 
-        $marker = null;
-        $unreadCounts = null;
-        $starredCount = 0;
-
-        if($this->isLogged() && $subscriber->getId() == $this->getUser()->getId()) {
-            $marker = $this->getUser();
-            $unreadCounts = $this->get('mark_manager')->getUnreadCounts($subscriber, $marker);
-            $starredCount = $this->getRepo("ItemMark")->countStarredAndSubscribedForUser($this->getUser());
-        }
+        $unreadCounts = $this->get('mark_manager')->getUnreadCounts($this->getUser(), $this->getUser());
+        $starredCount = $this->getRepo("ItemMark")->countStarredAndSubscribedForUser($this->getUser());
 
         $items = $this->getRepo("Item")->getItems(array(
-            'marker' => $marker,
-            'subscriber' => $subscriber,
+            'marker' => $this->getUser(),
+            'subscriber' => $this->getUser(),
             'count' => 40
         ));
 
         $dataItems = $this->getRepo("Item")->getDataForItems($items, array(
-            'marker' => $marker,
-            'subscriber' => $subscriber
+            'marker' => $this->getUser(),
+            'subscriber' => $this->getUser()
         ));
 
-        $itemOptions = array('loadMore');
-        if($marker) $itemOptions[] = 'markable';
+        $itemOptions = array('loadMore', 'markable');
 
     	return $this->render('MiamBundle:Shit:index.html.twig', array(
             'items' => $items,
@@ -52,8 +42,7 @@ class ShitController extends MainController
             'countMaxItems' => 40,
             'tree' => $tree,
             'unreadCounts' => $unreadCounts,
-            'starredCount' => $starredCount,
-            'subscriber' => $subscriber
+            'starredCount' => $starredCount
         ));
 	}
 
@@ -71,7 +60,7 @@ class ShitController extends MainController
 
         $subscriptions = $this->getRepo('Subscription')->createQueryBuilder('s')
             ->innerJoin('s.feed', 'f')->addSelect('f')
-            ->leftJoin('s.categories', 'c')->addSelect('c')
+            ->leftJoin('s.category', 'c')->addSelect('c')
             ->where('s.user = :user')->setParameter('user', $user)
             ->orderBy('s.name', 'ASC')
             ->getQuery()->getResult();
@@ -88,8 +77,7 @@ class ShitController extends MainController
         }
 
         foreach($subscriptions as $s) {
-            $categories = $s->getCategories();
-            if(count($categories) == 0) {
+            if(!$s->getCategory()) {
                 $tree['subscriptions'][] = $s;
             }
         }
@@ -111,11 +99,8 @@ class ShitController extends MainController
         }
 
         foreach($data['subscriptions'] as $s) {
-            foreach($s->getCategories() as $c) {
-                if($c->getId() == $category->getId()) {
-                    $tree['subscriptions'][] = $s;
-                    break;
-                }
+            if($s->getCategory() && $s->getCategory()->getId() == $category->getId()) {
+                $tree['subscriptions'][] = $s;
             }
         }
 
@@ -123,40 +108,24 @@ class ShitController extends MainController
     }
 
     public function ajaxGetItemsAction(Request $request) {
-        $success = true;
+        $success = false;
+        $countMaxItems = 40;
         $htmlItems = null;
         $items = null;
         $page = null;
 
-        $subscriber = $this->getRepo('User')->find($request->get('subscriber'));
-        if(
-            !$subscriber || (
-                !$subscriber->getIsPublic() && (
-                    !$this->isLogged() || $subscriber->getId() != $this->getUser()->getId()
-                )
-            ) 
-        ) {
-            $subscriber = null;
-            $success = false;
-        }
-
-        if($request->isXmlHttpRequest() && $success) {
+        if($request->isXmlHttpRequest()) {
             $options = array(
-                'subscriber' => $subscriber,
-                'count' => 40
+                'subscriber' => $this->getUser(),
+                'marker' => $this->getUser(),
+                'count' => $countMaxItems
             );
 
-            $marker = null;
-            if($this->isLogged() && $subscriber->getId() == $this->getUser()->getId()) {
-                $marker = $this->getUser();
-                $options['marker'] = $marker;
-            }
-
             $type = $request->get('type');
-            if($type == 'feed') {
-                $feed = $this->getRepo('Feed')->find($request->get('feed'));
-                if($feed) {
-                    $options['feed'] = $feed;
+            if($type == 'subscription') {
+                $subscription = $this->getRepo('Subscription')->find($request->get('subscription'));
+                if($subscription) {
+                    $options['subscription'] = $subscription;
                 }
             } elseif($type == 'category') {
                 $category = $this->getRepo('Category')->find($request->get('category'));
@@ -167,11 +136,11 @@ class ShitController extends MainController
                 $options['type'] = $type;
             }
             
-            $createdAfter = \DateTime::createFromFormat("Y-m-d H:i:s", $request->get("createdAfter"));
+            $createdAfter = date_create_from_format(DATE_ATOM, $request->get("created_after"));
             if($createdAfter !== false) {
                 $options['createdAfter'] = $createdAfter;
             }
-
+            
             $page = intval($request->get('page'));
             if($page < 1) {
                 $page = 1;
@@ -186,36 +155,61 @@ class ShitController extends MainController
             $items = $this->getRepo("Item")->getItems($options);
 
             $dataItems = $this->getRepo("Item")->getDataForItems($items, array(
-                'subscriber' => $subscriber,
-                'marker' => $marker
+                'subscriber' => $this->getUser(),
+                'marker' => $this->getUser()
             ));
 
-            $itemOptions = array();
-            if($marker) $itemOptions[] = 'markable';
-            if($request->get("loadMore")) $itemOptions[] = 'loadMore';
+            $itemOptions = array('markable');
+            if($request->get("load_more")) $itemOptions[] = 'loadMore';
 
-            $htmlItems = $this->renderView('MiamBundle:Default:items.html.twig', array(
+            $htmlItems = $this->renderView('MiamBundle:Default:item_list.html.twig', array(
                 'items' => $items,
                 'dataItems' => $dataItems,
                 'itemOptions' => $itemOptions,
-                'countMaxItems' => 40
+                'countMaxItems' => $countMaxItems
             ));
+
+            $success = true;
         }
 
         return new JsonResponse(array(
             'success' => $success,
-            'items' => $htmlItems,
-            'page' => $page,
             'count' => count($items),
-            'dateRefresh' => date_format(new \DateTime("now"), "Y-m-d H:i:s")
+            'page' => $page,
+            'dateRefresh' => date_format(new \DateTime(), DATE_ATOM),
+            'html' => $htmlItems
         ));
     }
 
-    public function ajaxReadItemAction(Request $request, $id) {
+    public function ajaxGetItemAction(Request $request) {
+        $success = false;
+        $html = null;
+
+        if($request->isXmlHttpRequest() && $this->isLogged()) {
+            $item = $this->getRepo("Item")->find($request->get("item"));
+            if($item) {
+                $dataItem = $this->getRepo("Item")->getDataForItem($item);
+
+                $html = $this->renderView('MiamBundle:Default:item_full.html.twig', array(
+                    'item' => $item,
+                    'dataItem' => $dataItem
+                ));
+
+                $success = true;
+            }
+        }
+
+        return new JsonResponse(array(
+            'success' => $success,
+            'html' => $html
+        ));
+    }
+
+    public function ajaxReadItemAction(Request $request) {
         $success = false;
 
         if($request->isXmlHttpRequest() && $this->isLogged()) {
-            $item = $this->getRepo("Item")->find($id);
+            $item = $this->getRepo("Item")->find($request->get("item"));
             if($item) {
                 $this->get("mark_manager")->readItemForUser($item, $this->getUser());
                 $success = true;
@@ -224,16 +218,15 @@ class ShitController extends MainController
 
         return new JsonResponse(array(
             'success' => $success,
-            'item' => isset($item) ? $item->getId() : null,
-            'feed' => isset($item) ? $item->getFeed()->getId() : null
+            'item' => isset($item) ? $item->getId() : null
         ));
     }
 
-    public function ajaxUnreadItemAction(Request $request, $id) {
+    public function ajaxUnreadItemAction(Request $request) {
         $success = false;
 
         if($request->isXmlHttpRequest() && $this->isLogged()) {
-            $item = $this->getRepo("Item")->find($id);
+            $item = $this->getRepo("Item")->find($request->get("item"));
             if($item) {
                 $this->get("mark_manager")->unreadItemForUser($item, $this->getUser());
                 $success = true;
@@ -242,18 +235,17 @@ class ShitController extends MainController
 
         return new JsonResponse(array(
             'success' => $success,
-            'item' => isset($item) ? $item->getId() : null,
-            'feed' => isset($item) ? $item->getFeed()->getId() : null
+            'item' => isset($item) ? $item->getId() : null
         ));
     }
 
-    public function ajaxReadFeedItemsAction(Request $request, $id) {
+    public function ajaxReadSubscriptionAction(Request $request) {
         $success = false;
 
         if($request->isXmlHttpRequest() && $this->isLogged()) {
-            $feed = $this->getRepo('Feed')->find($id);
-            if($feed) {
-                $this->get('mark_manager')->readFeedForUser($feed, $this->getUser());
+            $subscription = $this->getRepo('Subscription')->find($request->get("subscription"));
+            if($subscription) {
+                $this->get('mark_manager')->readSubscriptionForUser($subscription, $this->getUser());
                 $success = true;
             }
         }
@@ -263,12 +255,12 @@ class ShitController extends MainController
         ));
     }
 
-    public function ajaxReadCategoryItemsAction(Request $request, $id) {
+    public function ajaxReadCategoryAction(Request $request) {
         $success = false;
 
         if($request->isXmlHttpRequest() && $this->isLogged()) {
             $category = $this->getRepo('Category')->findOneBy(array(
-                'id' => $id,
+                'id' => $request->get("category"),
                 'user' => $this->getUser()
             ));
             if($category) {
@@ -282,15 +274,12 @@ class ShitController extends MainController
         ));
     }
 
-    public function ajaxReadUserItemsAction(Request $request, $id) {
+    public function ajaxReadAllAction(Request $request) {
         $success = false;
 
         if($request->isXmlHttpRequest() && $this->isLogged()) {
-            $user = $this->getRepo("User")->find($id);
-            if($user && ($user->getIsPublic() || $user->getId() == $this->getUser()->getId())) {
-                $this->get('mark_manager')->readUserForUser($user, $this->getUser());
-                $success = true;
-            }
+            $this->get('mark_manager')->readUserForUser($this->getUser(), $this->getUser());
+            $success = true;
         }
 
         return new JsonResponse(array(
@@ -298,11 +287,11 @@ class ShitController extends MainController
         ));
     }
 
-    public function ajaxStarItemAction(Request $request, $id) {
+    public function ajaxStarItemAction(Request $request) {
         $success = false;
 
         if($request->isXmlHttpRequest() && $this->isLogged()) {
-            $item = $this->getRepo("Item")->find($id);
+            $item = $this->getRepo("Item")->find($request->get("item"));
             if($item) {
                 $this->get("mark_manager")->starItemForUser($item, $this->getUser());
 
@@ -315,11 +304,11 @@ class ShitController extends MainController
         ));
     }
 
-    public function ajaxUnstarItemAction(Request $request, $id) {
+    public function ajaxUnstarItemAction(Request $request) {
         $success = false;
 
         if($request->isXmlHttpRequest() && $this->isLogged()) {
-            $item = $this->getRepo("Item")->find($id);
+            $item = $this->getRepo("Item")->find($request->get("item"));
             if($item) {
                 $this->get("mark_manager")->unstarItemForUser($item, $this->getUser());
 
@@ -341,7 +330,7 @@ class ShitController extends MainController
 
             foreach($uc as $key => $value) {
                 $unreadCounts[] = array(
-                    'feedId' => $key,
+                    'subscriptionId' => $key,
                     'count' => $value
                 );
             }

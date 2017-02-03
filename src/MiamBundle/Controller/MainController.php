@@ -19,8 +19,15 @@ class MainController extends Controller
     	return $this->get('security.authorization_checker')->isGranted('ROLE_USER');
     }
 
-    public function addFm($message, $type = "notice") {
-    	$this->get('session')->getFlashBag()->add($type, $message);
+    public function addFm($message, $type = "notice", $transParameters = array(), $transDomain = "flashmessage") {
+    	$this->get('session')->getFlashBag()->add(
+            $type, 
+            $this->get('translator')->trans(
+                $message,
+                $transParameters,
+                $transDomain
+            )
+        );
     }
 
     public function isTokenValid($id, $value) {

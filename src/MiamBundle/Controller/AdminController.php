@@ -31,7 +31,7 @@ class AdminController extends MainController
     		->setAction($this->generateUrl('admin_feed_create'))
     		->setMethod('POST')
     		->add('url', TextType::class)
-    		->add('submit', SubmitType::class, array('label' => "Add"))
+    		->add('submit', SubmitType::class)
     		->getForm();
     }
 
@@ -44,44 +44,6 @@ class AdminController extends MainController
     	}
 
     	return $this->redirectToRoute('admin');
-    }
-
-    public function ajaxAddFeedToCatalogAction($id) {
-        $success = false;
-
-        $feed = $this->getRepo("Feed")->find($id);
-        if($feed) {
-            $feed->setIsCatalog(true);
-
-            $em = $this->getEm();
-            $em->persist($feed);
-            $em->flush();
-
-            $success = true;
-        }
-
-        return new JsonResponse(array(
-            'success' => $success
-        ));
-    }
-
-    public function ajaxRemoveFeedFromCatalogAction($id) {
-        $success = false;
-
-        $feed = $this->getRepo("Feed")->find($id);
-        if($feed) {
-            $feed->setIsCatalog(false);
-
-            $em = $this->getEm();
-            $em->persist($feed);
-            $em->flush();
-
-            $success = true;
-        }
-
-        return new JsonResponse(array(
-            'success' => $success
-        ));
     }
 
     public function ajaxParseFeedAction($id) {

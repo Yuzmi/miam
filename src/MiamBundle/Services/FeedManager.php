@@ -89,8 +89,6 @@ class FeedManager extends MainService {
 	public function getFeeds($arg = null) {
         if($arg == 'all' || is_null($arg) || $arg == '') {
             return $this->getRepo("Feed")->findAll();
-        } elseif($arg == 'catalog') {
-            return $this->getRepo("Feed")->findCatalog();
         } elseif($arg == 'subscribed') {
             return $this->getRepo("Feed")->findSubscribed();
         } elseif($arg == 'used') {

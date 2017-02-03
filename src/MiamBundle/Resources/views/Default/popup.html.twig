@@ -1,9 +1,9 @@
 <div class="popupContainer {% block popupContainerClass %}{% endblock %}">
 	<div class="popup {% block popupClass %}{% endblock %}">
 		{% if block('popupTitle') %}
-			<header>
+			<div class="popupTitle">
 				{% block popupTitle %}{% endblock %}
-			</header>
+			</div>
 		{% endif %}
 
 		<div class="popupContent">

@@ -8,56 +8,78 @@
 {% endblock %}
 
 {% block body %}
-	{% include 'MiamBundle:Default:header.html.twig' %}
-
-	<div class="authentication">
-		<div class="header">{{ "Log in"|trans }}</div>
+	<h1>Miam</h1>
+	
+	<div class="auth login">
 		<div class="content">
 			<form method="POST" action="{{ path('login_check') }}">
-			    <label for="username">{{ "Username"|trans }}</label>
-			    <input type="text" id="username" name="_username" value="{{ last_username }}" placeholder="{{ "Username"|trans }}">
+			    <label for="username">{{ "login.enter_username"|trans({}, 'login') }}</label>
+			    <input type="text" id="username" name="_username" value="{{ last_username }}" placeholder="{{ "login.username"|trans({}, 'login') }}">
 
 			    <br>
 
-			    <label for="password">{{ "Password"|trans }}</label>
-			    <input type="password" id="password" name="_password" placeholder="{{ "Password"|trans }}">
+			    <label for="password">{{ "login.enter_password"|trans({}, 'login') }}</label>
+			    <input type="password" id="password" name="_password" placeholder="{{ "login.password"|trans({}, 'login') }}">
 
 			    <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
 
 			    <br>
 
-			    <button type="submit">{{ "Log in"|trans }}</button>
+			    <button type="submit">{{ "login.login"|trans({}, 'login') }}</button>
 			</form>
-
-			{% if error %}
-			    <div>{{ error.messageKey|trans(error.messageData, 'security') }}</div>
-			{% endif %}
+		</div>
+		<div class="footer">
+			<span class="noAccount">
+				{{ "login.no_account"|trans({}, 'login') }}
+			</span>
 		</div>
 	</div>
 
-	<div class="register">
-		<div class="header">{{ "Register"|trans }}</div>
+	<div class="auth register">
 		<div class="content">
 			<form method="POST" action="{{ path('register_check') }}">
-				<label for="username">{{ "Choose a username:"|trans({}, 'log-in') }}</label>
-				<input type="text" id="username" name="username" placeholder="{{ "Username"|trans }}">
+				<label for="username">{{ "login.choose_username"|trans({}, 'login') }}</label>
+				<input type="text" id="username" name="username" placeholder="{{ "login.username"|trans({}, 'login') }}">
 
 				<br>
 
-				<label for="password">{{ "Choose a password:"|trans({}, 'log-in') }}</label>
-				<input type="password" id="password" name="password" placeholder="{{ "Password"|trans }}">
+				<label for="password">{{ "login.choose_password"|trans({}, 'login') }}</label>
+				<input type="password" id="password" name="password" placeholder="{{ "login.password"|trans({}, 'login') }}">
 
 				<br>
 
-				<label for="password_again">{{ "Retype the password:"|trans({}, 'log-in') }}</label>
-				<input type="password" id="password_again" name="password_again" placeholder="{{ "Password (again)"|trans({}, 'log-in') }}">
+				<label for="password_again">{{ "login.retype_password"|trans({}, 'login') }}</label>
+				<input type="password" id="password_again" name="password_again" placeholder="{{ "login.password_again"|trans({}, 'login') }}">
 
 				<input type="hidden" name="csrf_token" value="{{ csrf_token('register') }}">
 
 				<br>
 
-				<button type="submit">{{ "Register"|trans }}</button>
+				<button type="submit">{{ "login.register"|trans({}, 'login') }}</button>
 			</form>
 		</div>
+		<div class="footer">
+			<span class="haveAccount">
+				{{ "login.have_account"|trans({}, 'login') }}
+			</span>
+		</div>
 	</div>
+{% endblock %}
+
+{% block javascripts %}
+	{{ parent() }}
+
+	<script type="text/javascript">
+		$(document).ready(function() {
+			$(".noAccount").on("click", function() {
+				$(".auth.login").hide();
+				$(".auth.register").show();
+			});
+
+			$(".haveAccount").on("click", function() {
+				$(".auth.login").show();
+				$(".auth.register").hide();
+			});
+		});
+	</script>
 {% endblock %}

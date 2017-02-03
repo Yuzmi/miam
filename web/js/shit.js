@@ -50,68 +50,67 @@ app.shit = {
 			// Sidebar toggle
 			$(".sidebar_toggle").off("click");
 			$(".sidebar_toggle").on("click", function() {
-				$("body").toggleClass("hide_sidebar");
+				$(".sidebar").toggleClass("hidden");
+				$(".topbar").toggleClass("hidden");
 			});
 
-			if(app.user && app.shit.items.subscriber && app.user.id == app.shit.items.subscriber) {
-				// Context menu for feeds and categories
-				$(".sidebar .row").contextmenu(function(e) {
-					e.preventDefault();
+			// Context menu for sidebar
+			$(".sidebar .row").contextmenu(function(e) {
+				e.preventDefault();
 
-					$(".contextMenu").hide();
-					$(".sidebarRowMenu .option").hide();
+				$(".contextMenu").hide();
+				$(".sidebarRowMenu .option").hide();
 
-					var type = $(this).attr('data-type');
-					
-					var menu = $(".sidebarRowMenu");
-					menu.css({
-							left: e.clientX, 
-							top: e.clientY + 10
-						})
-						.attr('data-type', type)
-						.removeAttr('data-id');
-					
-					if(type == 'feed' || type == 'category') {
-						menu.attr('data-id', $(this).attr('data-id'));
-					}
+				var type = $(this).attr('data-type');
+				
+				var menu = $(".sidebarRowMenu");
+				menu.css({
+						left: e.clientX, 
+						top: e.clientY + 10
+					})
+					.attr('data-type', type)
+					.removeAttr('data-id');
+				
+				if(type == 'subscription' || type == 'category') {
+					menu.attr('data-id', $(this).attr('data-id'));
+				}
 
-					var countOptions = 0;
+				var countOptions = 0;
 
-					// Read option
-					if(type == "feed" || type == "category" || type == "all" || type == "unread") {
-						menu.children('.option[data-action="read"]').show();
-						countOptions++;
-					}
+				// Read option
+				if(type == "subscription" || type == "category" || type == "all" || type == "unread") {
+					menu.children('.option[data-action="read"]').show();
+					countOptions++;
+				}
 
-					if(countOptions > 0) {
-						menu.show();
+				if(countOptions > 0) {
+					menu.show();
 
-						$(".sidebarRowMenu .option").off("click");
-						$(".sidebarRowMenu .option").on("click", function(e) {
-							var action = $(this).attr("data-action");
-							var type = $(this).closest(".sidebarRowMenu").attr("data-type");
+					$(".sidebarRowMenu .option").off("click");
+					$(".sidebarRowMenu .option").on("click", function(e) {
+						var action = $(this).attr("data-action");
+						var type = $(this).closest(".sidebarRowMenu").attr("data-type");
 
-							if(action == 'read') {
-								if(type == "feed") {
-									app.shit.items.readFeed($(this).closest(".sidebarRowMenu").attr("data-id"));
-								} else if(type == "category") {
-									app.shit.items.readCategory($(this).closest(".sidebarRowMenu").attr("data-id"));
-								} else if(type == "all" || type == "unread") {
-									app.shit.items.readAll();
-								}
+						if(action == 'read') {
+							if(type == "subscription") {
+								app.shit.items.readSubscription($(this).closest(".sidebarRowMenu").attr("data-id"));
+							} else if(type == "category") {
+								app.shit.items.readCategory($(this).closest(".sidebarRowMenu").attr("data-id"));
+							} else if(type == "all" || type == "unread") {
+								app.shit.items.readAll();
 							}
+						}
 
-							$(".contextMenu").hide();
-						});
-					}
-				});
+						$(".contextMenu").hide();
+					});
+				}
+			});
 
-				// Refresh unread counts every minute
-				clearInterval(app.shit.sidebar.intervalRefreshUnreadCounts);
-				this.intervalRefreshUnreadCounts = setInterval(function() {
-					app.shit.sidebar.refreshUnreadCounts();
-				}, 60000);
-			}
+			// Refresh unread counts every minute
+			clearInterval(app.shit.sidebar.intervalRefreshUnreadCounts);
+			this.intervalRefreshUnreadCounts = setInterval(function() {
+				app.shit.sidebar.refreshUnreadCounts();
+			}, 60000);
 
 			this.countUnread();
 			this.toggleUnreadCounts();
@@ -124,7 +123,7 @@ app.shit = {
 				var id = $(this).attr("data-id");
 				var unreadCount = 0;
 
-				$(".sidebar .rowChildren[data-parent="+id+"] .row[data-type='feed'] .unreadCount").each(function() {
+				$(".sidebar .rowChildren[data-parent="+id+"] .row[data-type='subscription'] .unreadCount").each(function() {
 					var count = parseInt($(this).text());
 					if(!isNaN(count)) {
 						unreadCount += count;
@@ -136,17 +135,17 @@ app.shit = {
 
 			// Calculate total unread counts
 			var totalCount = 0;
-			var feeds = [];
+			var subscriptions = [];
 			
-			$(".sidebar .row[data-type='feed'] .unreadCount").each(function() {
-				var feed = $(this).closest(".row[data-type='feed']").attr("data-id");
-				if($.inArray(feed, feeds) == -1) {
+			$(".sidebar .row[data-type='subscription'] .unreadCount").each(function() {
+				var subscription = $(this).closest(".row[data-type='subscription']").attr("data-id");
+				if($.inArray(subscription, subscriptions) == -1) {
 					var count = parseInt($(this).text());
 					if(!isNaN(count)) {
 						totalCount += count;
 					}
 
-					feeds.push(feed);
+					subscriptions.push(subscription);
 				}
 			});
 
@@ -175,10 +174,10 @@ app.shit = {
 					$(".sidebar .row .unreadCount").each(function() {
 						$(this).text(0);
 
-						var feedId = $(this).closest(".row[data-type='feed']").attr("data-id");
-						if(feedId && result.unreadCounts) {
+						var subscriptionId = $(this).closest(".row[data-type='subscription']").attr("data-id");
+						if(subscriptionId && result.unreadCounts) {
 							for(var i=0; i<result.unreadCounts.length; i++) {
-								if(result.unreadCounts[i].feedId == feedId) {
+								if(result.unreadCounts[i].subscriptionId == subscriptionId) {
 									$(this).text(result.unreadCounts[i].count);
 									break;
 								}
@@ -192,8 +191,8 @@ app.shit = {
 			});
 		},
 
-		decrementUnreadCountForFeed: function(feedId) {
-			$(".sidebar .row[data-type='feed'][data-id="+feedId+"] .unreadCount").each(function() {
+		decrementUnreadCountForSubscription: function(subscriptionId) {
+			$(".sidebar .row[data-type='subscription'][data-id="+subscriptionId+"] .unreadCount").each(function() {
 				var count = parseInt($(this).text());
 				if(!isNaN(count)) {
 					$(this).text(count - 1);
@@ -204,8 +203,8 @@ app.shit = {
 			this.toggleUnreadCounts();
 		},
 
-		incrementUnreadCountForFeed: function(feedId) {
-			$(".sidebar .row[data-type='feed'][data-id="+feedId+"] .unreadCount").each(function() {
+		incrementUnreadCountForSubscription: function(subscriptionId) {
+			$(".sidebar .row[data-type='subscription'][data-id="+subscriptionId+"] .unreadCount").each(function() {
 				var count = parseInt($(this).text());
 				if(!isNaN(count)) {
 					$(this).text(count + 1);
@@ -261,10 +260,10 @@ app.shit = {
 		$(".sidebar .row").removeClass("selected");
 		$(".topbar .catsubs option").prop('selected', false);
 
-		if(type == 'feed') {
-			app.shit.items.feed = id;
-			$(".sidebar .row[data-type='feed'][data-id="+id+"]").addClass("selected");
-			$(".topbar .catsubs option[data-type='feed'][data-id="+id+"]").prop('selected', true);
+		if(type == 'subscription') {
+			app.shit.items.subscription = id;
+			$(".sidebar .row[data-type='subscription'][data-id="+id+"]").addClass("selected");
+			$(".topbar .catsubs option[data-type='subscription'][data-id="+id+"]").prop('selected', true);
 		} else if(type == 'category') {
 			app.shit.items.category = id;
 			$(".sidebar .row[data-type='category'][data-id="+id+"]").addClass("selected");
@@ -281,29 +280,51 @@ app.shit = {
 		category: null,
 		countNewAdded: 0,
 		dateRefresh: null,
-		feed: null,
+		subscription: null,
 		page: 1,
-		subscriber: null,
 		type: null,
 
 		intervalLoadNew: null,
 
 		init: function() {
-			app.items.onExpand = function(item) {
-				if(!item.hasClass("read")) {
-					app.shit.items.readItem(item.attr("data-item"));
+			$(".itemRow").off("click");
+			$(".itemRow").on("click", function(e) {
+				e.preventDefault();
+
+				var itemId = $(this).attr("data-item");
+				app.shit.items.showItem(itemId);
+
+				if(!$(this).hasClass("read")) {
+					app.shit.items.readItem(itemId);
 				}
-			}
+
+				e.stopPropagation();
+			});
 
 			if(app.shit.items.dateRefresh == null) {
 				app.shit.items.dateRefresh = app.dateLoaded;
 			}
 
-			$(".item .star").off("click");
-			$(".item .star").on("click", function(e) {
+			$(".itemRow .readIcon").off("click");
+			$(".itemRow .readIcon").on("click", function(e) {
 				e.preventDefault();
 
-				var item = $(this).closest(".item");
+				var item = $(this).closest(".itemRow");
+
+				if(item.hasClass("read")) {
+					app.shit.items.unreadItem(item.attr("data-item"));
+				} else {
+					app.shit.items.readItem(item.attr("data-item"));
+				}
+
+				e.stopPropagation();
+			});
+
+			$(".itemRow .starIcon").off("click");
+			$(".itemRow .starIcon").on("click", function(e) {
+				e.preventDefault();
+
+				var item = $(this).closest(".itemRow");
 				
 				if(item.hasClass("starred")) {
 					app.shit.items.unstarItem(item.attr("data-item"));
@@ -314,51 +335,59 @@ app.shit = {
 				e.stopPropagation();
 			});
 
-			$(".items .loadMore").off("click");
-			$(".items .loadMore").on("click", function() {
+			$(".itemRowMore").off("click");
+			$(".itemRowMore").on("click", function() {
 				app.shit.items.loadMore();
 			});
 
-			if(app.user && app.shit.items.subscriber && app.user.id == app.shit.items.subscriber) {
-				$(".item .header").contextmenu(function(e) {
-					e.preventDefault();
+			$(".itemContentContainer .toggle-hide").off("click");
+			$(".itemContentContainer .toggle-hide").on("click", function() {
+				app.shit.items.hideItem();
+			});
 
-					$(".contextMenu").hide();
-					$(".itemMenu .option").hide();
+			$(".itemContentContainer .toggle-expand").off("click");
+			$(".itemContentContainer .toggle-expand").on("click", function() {
+				app.shit.items.expandItem();
+			});
 
-					var item = $(this).closest(".item");
+			$(".itemRow").contextmenu(function(e) {
+				e.preventDefault();
 
-					var menu = $(".itemMenu");
-					menu.css({
-							left: e.clientX,
-							top: e.clientY + 10
-						})
-						.attr("data-item", item.attr("data-item"));
+				$(".contextMenu").hide();
+				$(".itemMenu .option").hide();
 
-					if(item.hasClass("read")) {
-						menu.children('.option[data-action="unread"]').show();
-					} else {
-						menu.children('.option[data-action="read"]').show();
+				var item = $(this);
+
+				var menu = $(".itemMenu");
+				menu.css({
+						left: e.clientX,
+						top: e.clientY + 10
+					})
+					.attr("data-item", item.attr("data-item"));
+
+				if(item.hasClass("read")) {
+					menu.children('.option[data-action="unread"]').show();
+				} else {
+					menu.children('.option[data-action="read"]').show();
+				}
+
+				menu.show();
+
+				$(".itemMenu .option").off("click");
+				$(".itemMenu .option").on("click", function(e) {
+					var action = $(this).attr("data-action");
+
+					var item = $(".itemRow[data-item="+$(this).closest(".itemMenu").attr("data-item")+"]");
+
+					if(action == 'read') {
+						app.shit.items.readItem(item.attr("data-item"));
+					} else if(action == 'unread') {
+						app.shit.items.unreadItem(item.attr("data-item"));
 					}
 
-					menu.show();
-
-					$(".itemMenu .option").off("click");
-					$(".itemMenu .option").on("click", function(e) {
-						var action = $(this).attr("data-action");
-
-						var item = $(".item[data-item="+$(this).closest(".itemMenu").attr("data-item")+"]");
-
-						if(action == 'read') {
-							app.shit.items.readItem(item.attr("data-item"));
-						} else if(action == 'unread') {
-							app.shit.items.unreadItem(item.attr("data-item"));
-						}
-
-						$(".contextMenu").hide();
-					});
+					$(".contextMenu").hide();
 				});
-			}
+			});
 
 			// Get last items every minute
 			clearInterval(app.shit.items.intervalLoadNew);
@@ -367,7 +396,7 @@ app.shit = {
 			}, 60000);
 		},
 
-		get: function(data, callback) {
+		getItems: function(data, callback) {
 			$.ajax({
 				type: "POST",
 				url: Routing.generate('ajax_shit_get_items'),
@@ -379,15 +408,14 @@ app.shit = {
 		},
 
 		refresh: function() {
-			this.get({
+			this.getItems({
 				category: app.shit.items.category,
-				feed: app.shit.items.feed,
-				loadMore: true,
-				subscriber: app.shit.items.subscriber,
+				subscription: app.shit.items.subscription,
+				load_more: true,
 				type: app.shit.items.type
 			}, function(result) {
 				if(result.success) {
-					$(".items").html(result.items);
+					$(".items").html(result.html);
 
 					app.items.init();
 					app.shit.items.init();
@@ -400,15 +428,14 @@ app.shit = {
 		},
 
 		loadNew: function() {
-			this.get({
-				createdAfter: app.shit.items.dateRefresh,
+			this.getItems({
+				created_after: app.shit.items.dateRefresh,
 				category: app.shit.items.category,
-				feed: app.shit.items.feed,
-				subscriber: app.shit.items.subscriber,
+				subscription: app.shit.items.subscription,
 				type: app.shit.items.type
 			}, function(result) {
 				if(result.success) {
-					$(".items").prepend(result.items);
+					$(".items").prepend(result.html);
 
 					app.items.init();
 					app.shit.items.init();
@@ -420,18 +447,17 @@ app.shit = {
 		},
 
 		loadMore: function() {
-			$(".items .loadMore").addClass("loading");
-			this.get({
+			$(".itemRowMore").addClass("loading");
+			this.getItems({
 				category: app.shit.items.category,
-				feed: app.shit.items.feed,
-				loadMore: true,
+				subscription: app.shit.items.subscription,
+				load_more: true,
 				offset: app.shit.items.countNewAdded,
 				page: app.shit.items.page + 1,
-				subscriber: app.shit.items.subscriber,
 				type: app.shit.items.type
 			}, function(result) {
 				if(result.success && result.page == app.shit.items.page + 1) {
-					$(".items .loadMore").replaceWith(result.items);
+					$(".itemRowMore").replaceWith(result.html);
 
 					app.items.init();
 					app.shit.items.init();
@@ -444,12 +470,13 @@ app.shit = {
 		readItem: function(itemId) {
 			$.ajax({
 				type: "POST",
-				url: Routing.generate('ajax_shit_read_item', {id: itemId}),
-				dataType: "json"
+				url: Routing.generate('ajax_shit_read_item'),
+				dataType: "json",
+				data: { item: itemId }
 			}).done(function(result) {
 				if(result.success) {
-					$(".item[data-item="+itemId+"]").addClass("read");
-					app.shit.sidebar.decrementUnreadCountForFeed(result.feed);
+					$(".itemRow[data-item="+itemId+"]").addClass("read");
+					app.shit.sidebar.decrementUnreadCountForSubscription($(".itemRow[data-item="+itemId+"]").attr('data-subscription'));
 				}
 			});
 		},
@@ -457,24 +484,26 @@ app.shit = {
 		unreadItem: function(itemId) {
 			$.ajax({
 				type: "POST",
-				url: Routing.generate('ajax_shit_unread_item', {id: itemId}),
-				dataType: "json"
+				url: Routing.generate('ajax_shit_unread_item'),
+				dataType: "json",
+				data: { item: itemId }
 			}).done(function(result) {
 				if(result.success) {
-					$(".item[data-item="+itemId+"]").removeClass("read");
-					app.shit.sidebar.incrementUnreadCountForFeed(result.feed);
+					$(".itemRow[data-item="+itemId+"]").removeClass("read");
+					app.shit.sidebar.incrementUnreadCountForSubscription($(".itemRow[data-item="+itemId+"]").attr('data-subscription'));
 				}
 			});
 		},
 
-		readFeed: function(feedId) {
+		readSubscription: function(subscriptionId) {
 			$.ajax({
 				type: "POST",
-				url: Routing.generate('ajax_shit_read_feed_items', {id: feedId}),
-				dataType: "json"
+				url: Routing.generate('ajax_shit_read_subscription'),
+				dataType: "json",
+				data: { subscription: subscriptionId }
 			}).done(function(result) {
 				if(result.success) {
-					$(".item[data-feed="+feedId+"]").addClass("read");
+					$(".itemRow[data-subscription="+subscriptionId+"]").addClass("read");
 					app.shit.sidebar.refreshUnreadCounts();
 				}
 			});
@@ -483,12 +512,13 @@ app.shit = {
 		readCategory: function(categoryId) {
 			$.ajax({
 				type: "POST",
-				url: Routing.generate('ajax_shit_read_category_items', {id: categoryId}),
-				dataType: "json"
+				url: Routing.generate('ajax_shit_read_category'),
+				dataType: "json",
+				data: { category: categoryId }
 			}).done(function(result) {
 				if(result.success) {
-					$(".sidebar .rowChildren[data-parent="+categoryId+"] .row[data-type='feed']").each(function() {
-						$(".item[data-feed="+$(this).attr("data-feed")+"]").addClass("read");
+					$(".sidebar .rowChildren[data-parent="+categoryId+"] .row[data-type='subscription']").each(function() {
+						$(".itemRow[data-subscription="+$(this).attr("data-id")+"]").addClass("read");
 					});
 					app.shit.sidebar.refreshUnreadCounts();
 				}
@@ -496,29 +526,27 @@ app.shit = {
 		},
 
 		readAll: function() {
-			var userId = app.shit.items.subscriber;
-			if(userId) {
-				$.ajax({
-					type: "POST",
-					url: Routing.generate('ajax_shit_read_user_items', {id: userId}),
-					dataType: "json"
-				}).done(function(result) {
-					if(result.success) {
-						$(".item").addClass("read");
-						app.shit.sidebar.refreshUnreadCounts();
-					}
-				});
-			}
+			$.ajax({
+				type: "POST",
+				url: Routing.generate('ajax_shit_read_all'),
+				dataType: "json"
+			}).done(function(result) {
+				if(result.success) {
+					$(".itemRow").addClass("read");
+					app.shit.sidebar.refreshUnreadCounts();
+				}
+			});
 		},
 
 		starItem: function(itemId) {
 			$.ajax({
 				type: "POST",
-				url: Routing.generate('ajax_shit_star_item', {'id': itemId}),
-				dataType: "json"
+				url: Routing.generate('ajax_shit_star_item'),
+				dataType: "json",
+				data: { item: itemId }
 			}).done(function(result) {
 				if(result.success) {
-					$(".item[data-item="+itemId+"]").addClass("starred");
+					$(".itemRow[data-item="+itemId+"]").addClass("starred");
 					app.shit.sidebar.incrementStarredCount();
 				}
 			});
@@ -527,14 +555,50 @@ app.shit = {
 		unstarItem: function(itemId) {
 			$.ajax({
 				type: "POST",
-				url: Routing.generate('ajax_shit_unstar_item', {'id': itemId}),
-				dataType: "json"
+				url: Routing.generate('ajax_shit_unstar_item'),
+				dataType: "json",
+				data: { item: itemId }
 			}).done(function(result) {
 				if(result.success) {
-					$(".item[data-item="+itemId+"]").removeClass("starred");
+					$(".itemRow[data-item="+itemId+"]").removeClass("starred");
 					app.shit.sidebar.decrementStarredCount();
 				}
 			});
+		},
+
+		showItem: function(itemId) {
+			$(".itemContentContainer").removeClass("hidden");
+
+			var currentItemId = $(".itemContent").attr("data-item");
+			if(currentItemId != itemId) {
+				$(".itemContent").html('<span class="loading"><i class="fa fa-spinner fa-spin"></i></span>');
+				
+				$.ajax({
+					type: "POST",
+					url: Routing.generate('ajax_shit_get_item'),
+					data: {
+						item: itemId
+					},
+					dataType: "json"
+				}).done(function(result) {
+					var currentItemId = $(".itemContent").attr("data-item");
+					if(currentItemId != itemId) {
+						$(".itemContent")
+							.attr("data-item", itemId)
+							.html(result.html);
+						app.items.init();
+					}
+				});
+			}
+		},
+
+		expandItem: function() {
+			$(".itemContentContainer").addClass("expanded");
+		},
+
+		hideItem: function() {
+			$(".itemContentContainer").addClass("hidden");
+			$(".itemContentContainer").removeClass("expanded");
 		}
 	}
 }

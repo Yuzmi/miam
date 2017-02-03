@@ -17,6 +17,7 @@ class Item
     private $datePublished;
     private $dateUpdated;
     private $dateModified;
+    private $dateLastSeen;
     private $feed;
     private $tags;
     private $enclosures;
@@ -27,6 +28,7 @@ class Item
         $this->datePublished = new \DateTime("now");
         $this->dateUpdated = new \DateTime("now");
         $this->dateModified = new \DateTime("now");
+        $this->dateLastSeen = new \DateTime("now");
         $this->tags = new \Doctrine\Common\Collections\ArrayCollection();
         $this->enclosures = new \Doctrine\Common\Collections\ArrayCollection();
         $this->marks = new \Doctrine\Common\Collections\ArrayCollection();
@@ -46,6 +48,7 @@ class Item
     public function getDatePublished() { return $this->datePublished; }
     public function getDateUpdated() { return $this->dateUpdated; }
     public function getDateModified() { return $this->dateModified; }
+    public function getDateLastSeen() { return $this->dateLastSeen; }
     public function getFeed() { return $this->feed; }
     public function getTags() { return $this->tags; }
     public function getEnclosures() { return $this->enclosures; }
@@ -64,6 +67,7 @@ class Item
     public function setDatePublished($datePublished) { $this->datePublished = $datePublished; return $this; }
     public function setDateUpdated($dateUpdated) { $this->dateUpdated = $dateUpdated; return $this; }
     public function setDateModified($dateModified) { $this->dateModified = $dateModified; return $this; }
+    public function setDateLastSeen($dateLastSeen) { $this->dateLastSeen = $dateLastSeen; return $this; }
     public function setFeed(\MiamBundle\Entity\Feed $feed = null) { $this->feed = $feed; return $this; }
     
     // Add to collection

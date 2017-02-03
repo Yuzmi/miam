@@ -50,10 +50,9 @@ doctrine:
         user:     "%database_user%"
         password: "%database_password%"
         charset:  "%database_charset%"
-        default_table_options: # For MySQL, should be ignored by PostgreSQL and SQLite
+        default_table_options: # MySQL only
             charset: utf8mb4
             collate: utf8mb4_unicode_ci
-        path: "%kernel.root_dir%/data/data.db3" # Only for SQLite
 
     orm:
         auto_generate_proxy_classes: "%kernel.debug%"

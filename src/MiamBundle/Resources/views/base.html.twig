@@ -27,17 +27,22 @@
 	<body class="{{ app.user and app.user.setting('THEME') ? app.user.setting('THEME') }} {% block bodyClasses %}{% endblock %}">
 		{% block body %}{% endblock %}
 		
-		<div class="flashMessages">
-			{% set fmTypes = ["success", "notice", "warning", "error"] %}
-
-			{% for type in fmTypes %}
-				{% for fm in app.session.flashbag.get(type) %}
-					<div class="flashMessageContainer">
-						<div class="flashMessage {{ type }}">{{ fm }}</div>
-					</div>
+		{% if app.session.flashbag.peekAll|length > 0 %}
+			<div class="flashMessages">
+				{% for fType, fMessages in app.session.flashbag.all %}
+					{% for fMessage in fMessages %}
+						<div class="flashMessageContainer">
+							<div class="flashMessage {{ fType }}">
+								{{ fMessage }}
+								<span class="flashMessageClose">
+									<i class="fa fa-times"></i>
+								</span>
+							</div>
+						</div>
+					{% endfor %}
 				{% endfor %}
-			{% endfor %}
-		</div>
+			</div>
+		{% endif %}
 
 		{% block javascripts %}
 			<script type="text/javascript" src="{{ asset('js/jquery.js') }}"></script>
@@ -48,13 +53,7 @@
 
 			<script type="text/javascript">
 				app.preInit = function() {
-					app.dateLoaded = '{{ "now"|date("Y-m-d H:i:s") }}';
-
-					{% if app.user %}
-						app.user = { 'id': {{ app.user.id }} };
-					{% else %}
-						app.user = false;
-					{% endif %}
+					app.dateLoaded = '{{ "now"|date("Y-m-d\\TH:i:sP") }}';
 				}
 			</script>
 		{% endblock %}

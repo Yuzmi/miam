@@ -2,35 +2,35 @@
 
 {% block popupContainerClass %}editSubscription{% endblock %}
 
-{% block popupTitle %}{{ "Edit"|trans }} "{{ subscription.name }}"{% endblock %}
+{% block popupTitle %}{{ "manager.catsubs.edit_sub"|trans({}, 'manager') }} "{{ subscription.name }}"{% endblock %}
 
 {% block popupContent %}
 	<form method="POST" action="{{ path('manager_subscription_update', {'id': subscription.id}) }}">
-		<label for="name">{{ "Name:"|trans({}, 'manager') }}</label>
-		<input type="text" name="name" value="{{ subscription.name }}">
+		<label for="name">{{ "manager.catsubs.edit_sub.name.label"|trans({}, 'manager') }}</label>
+		<input type="text" name="name" value="{{ subscription.name }}" placeholder="{{ "manager.catsubs.edit_sub.name.placeholder"|trans({}, 'manager') }}">
 
 		<br>
 
-		<label for="url">{{ "URL:"|trans({}, 'manager') }}</label>
-		<input type="url" id="url" name="url" value="{{ subscription.feed.url }}" required>
+		<label for="url">{{ "manager.catsubs.edit_sub.url.label"|trans({}, 'manager') }}</label>
+		<input type="url" id="url" name="url" value="{{ subscription.feed.url }}" placeholder="{{ "manager.catsubs.edit_sub.url.placeholder"|trans({}, 'manager') }}" required>
 
 		<br>
 
 		{% if categories|length > 0 %}
-			<label>{{ "Categories:"|trans({}, 'manager') }}</label>
-			<div class="categories">
+			<label>{{ "manager.catsubs.edit_sub.category.label"|trans({}, 'manager') }}</label>
+			<select name="category">
+				<option></option>
 				{% for c in categories %}
-					<div class="category">
-						<input id="editSubCat{{ c.id }}" type="checkbox" name="categories[]" value="{{ c.id }}" {{ c in subscription.categories ? "checked" }}>
-						<label for="editSubCat{{ c.id }}">{{ c.path }}</label>
-					</div>
+					<option value="{{ c.id }}" {{ subscription.category and c.id == subscription.category.id ? 'selected' }}>
+						{{ c.path }}
+					</option>
 				{% endfor %}
-			</div>
+			</select>
 
 			<br>
 		{% endif %}
 
-		<button type="submit">{{ "Update"|trans }}</button>
+		<button type="submit">{{ "manager.catsubs.edit_sub.update"|trans({}, 'manager') }}</button>
 
 		<input type="hidden" name="csrf_token" value="{{ csrf_token('manager_subscription_save') }}">
 	</form>

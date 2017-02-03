@@ -1,6 +1,7 @@
 var app = {
 	init: function() {
 		app.popup.init();
+		app.flashMessage.init();
 	},
 
 	// http://jquery-howto.blogspot.fr/2009/09/get-url-parameters-values-with-jquery.html
@@ -38,6 +39,18 @@ var app = {
 			$(".popupContainer").each(function() {
 				$(this).remove();
 			});
+		}
+	},
+
+	flashMessage: {
+		init: function() {
+			$(".flashMessageContainer .flashMessageClose").on("click", function(e) {
+				$(this).closest(".flashMessageContainer").fadeOut();
+			});
+		},
+
+		closeAll: function() {
+			$(".flashMessages").fadeOut("slow");
 		}
 	}
 };

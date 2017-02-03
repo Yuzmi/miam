@@ -19,7 +19,6 @@ class Feed
     private $nbItems;
     private $errorCount;
     private $errorMessage;
-    private $isCatalog;
     private $hasIcon;
     private $dateCreated;
     private $dateParsed;
@@ -29,19 +28,16 @@ class Feed
     private $items;
     private $pshbSubscriptions;
     private $subscriptions;
-    private $marks;
 
     public function __construct() {
         $this->dataLength = 0;
         $this->nbItems = 0;
         $this->errorCount = 0;
-        $this->isCatalog = false;
         $this->hasIcon = false;
         $this->dateCreated = new \DateTime("now");
         $this->items = new \Doctrine\Common\Collections\ArrayCollection();
         $this->pshbSubscriptions = new \Doctrine\Common\Collections\ArrayCollection();
         $this->subscriptions = new \Doctrine\Common\Collections\ArrayCollection();
-        $this->marks = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
     public function __toString() {
@@ -66,7 +62,6 @@ class Feed
     public function getNbItems() { return $this->nbItems; }
     public function getErrorCount() { return $this->errorCount; }
     public function getErrorMessage() { return $this->errorMessage; }
-    public function getIsCatalog() { return $this->isCatalog; }
     public function getHasIcon() { return $this->hasIcon; }
     public function getDateCreated() { return $this->dateCreated; }
     public function getDateParsed() { return $this->dateParsed; }
@@ -75,7 +70,6 @@ class Feed
     public function getDateIcon() { return $this->dateIcon; }
     public function getItems() { return $this->items; }
     public function getSubscriptions() { return $this->subscriptions; }
-    public function getMarks() { return $this->marks; }
 
     // Setters
     public function setOriginalName($originalName) { $this->originalName = $originalName; return $this; }
@@ -92,7 +86,6 @@ class Feed
     public function setNbItems($nbItems) { $this->nbItems = $nbItems; return $this; }
     public function setErrorCount($errorCount) { $this->errorCount = $errorCount; return $this; }
     public function setErrorMessage($errorMessage) { $this->errorMessage = $errorMessage; return $this; }
-    public function setIsCatalog($isCatalog) { $this->isCatalog = $isCatalog; return $this; }
     public function setHasIcon($hasIcon) { $this->hasIcon = $hasIcon; return $this; }
     public function setDateCreated($dateCreated) { $this->dateCreated = $dateCreated; return $this; }
     public function setDateParsed($dateParsed) { $this->dateParsed = $dateParsed; return $this; }
@@ -104,29 +97,26 @@ class Feed
     public function addItem(\MiamBundle\Entity\Item $item) { $this->items[] = $item; return $this; }
     public function addPshbSubscription(\MiamBundle\Entity\PshbSubscription $pshbSubscription) { $this->pshbSubscriptions[] = $pshbSubscription; return $this; }
     public function addSubscription(\MiamBundle\Entity\Subscription $subscription) { $this->subscriptions[] = $subscription; return $this; }
-    public function addMark(\MiamBundle\Entity\FeedMark $mark) { $this->marks[] = $mark; return $this; }
 
     // Remove from collection
     public function removeItem(\MiamBundle\Entity\Item $item) { $this->items->removeElement($item); }
     public function removePshbSubscription(\MiamBundle\Entity\PshbSubscription $pshbSubscription) { $this->pshbSubscriptions->removeElement($pshbSubscription); }
     public function removeSubscription(\MiamBundle\Entity\Subscription $subscription) { $this->subscriptions->removeElement($subscription); }
-    public function removeMark(\MiamBundle\Entity\FeedMark $mark) { $this->marks->removeElement($mark); }
-
 
     // Icon-related methods
 
     public function getIcon() {
-        return $this->hasIcon ? $this->getIconPath() : 'images/no-icon.png';
+        return $this->hasIcon ? $this->getIconRelativePath() : 'images/no-icon.png';
     }
 
-    private function getIconPath() {
+    public function getIconRelativePath() {
         return 'images/feeds/icon-'.$this->id.'.png';
     }
 
     private $iconPathForRemoval;
 
     public function prepareIconRemoval() {
-        $this->iconPathForRemoval = __DIR__.'/../../../web/'.$this->getIconPath();
+        $this->iconPathForRemoval = __DIR__.'/../../../web/'.$this->getIconRelativePath();
     }
 
     public function removeIcon() {

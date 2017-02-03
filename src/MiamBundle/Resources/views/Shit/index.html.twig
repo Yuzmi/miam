@@ -33,12 +33,12 @@
 	{% endfor %}
 
 	{% for s in tree.subscriptions %}
-		<div class="row" data-type="feed" data-id="{{ s.feed.id }}" title="{{ s.name }}">
+		<div class="row" data-type="subscription" data-id="{{ s.id }}" title="{{ s.name }}">
 			<span class="name">
 				<img class="icon" src="{{ asset(s.feed.icon) }}" alt="">
 				{{ s.name ?: "[NO TITLE]" }}
 			</span>
-			<span class="unreadCount">{{ unreadCounts[s.feed.id] is defined ? unreadCounts[s.feed.id] : 0 }}</span>
+			<span class="unreadCount">{{ unreadCounts[s.id] is defined ? unreadCounts[s.id] : 0 }}</span>
 		</div>
 	{% endfor %}
 
@@ -69,81 +69,92 @@
 
 {% import _self as macros %}
 
-{% block bodyClasses %}
-	{% if app.user and app.user.setting('HIDE_SIDEBAR') %}
-		hide_sidebar
-	{% endif %}
-{% endblock %}
-
 {% block body %}
 	{% embed 'MiamBundle:Default:header.html.twig' %}
 		{% block preLink %}
-			<a href="#" class="sidebar_toggle">
+			<span class="menu sidebar_toggle">
 				<i class="fa fa-bars"></i>
-			</a>
+			</span>
 		{% endblock %}
 	{% endembed %}
 
-	<aside class="topbar">
+	<aside class="topbar {{ app.user and app.user.setting('HIDE_SIDEBAR') ? 'hidden' }}">
 		<select class="catsubs">
-			<option data-type="all">{{ "All articles"|trans({}, 'shit') }}</option>
-
-			{% if app.user and app.user.id == subscriber.id %}
-				<option data-type="unread">{{ "Unread"|trans({}, 'shit') }}</option>
-				<option data-type="starred">{{ "Starred"|trans({}, 'shit') }}</option>
-				<option data-type="read-recently">{{ "Read recently"|trans({}, 'shit') }}</option>
-			{% endif %}
+			<option data-type="all">
+				{{ "shit.sidebar.all"|trans({}, 'shit') }}
+			</option>
+			<option data-type="unread">
+				{{ "shit.sidebar.unread"|trans({}, 'shit') }}
+			</option>
+			<option data-type="starred">
+				{{ "shit.sidebar.starred"|trans({}, 'shit') }}
+			</option>
+			<option data-type="last-read">
+				{{ "shit.sidebar.lastread"|trans({}, 'shit') }}
+			</option>
 
 			{{ macros.options(tree, unreadCounts) }}
 		</select>
 	</aside>
 
 	<div class="itemsContainer">
-		<aside class="sidebar">
+		<aside class="sidebar {{ app.user and app.user.setting('HIDE_SIDEBAR') ? 'hidden' }}">
 			<div class="row selected" data-type="all">
 				<i class="fa fa-globe"></i>
-				{{ "All articles"|trans({}, 'shit') }}
+				{{ "shit.sidebar.all"|trans({}, 'shit') }}
 			</div>
 
-			{% if app.user and app.user.id == subscriber.id %}
-				<div class="row" data-type="unread">
-					<i class="fa fa-envelope"></i>
-					{{ "Unread"|trans({}, 'shit') }}
-					<span class="unreadCount">0</span>
-				</div>
+			<div class="row" data-type="unread">
+				<i class="fa fa-envelope"></i>
+				{{ "shit.sidebar.unread"|trans({}, 'shit') }}
+				<span class="unreadCount">0</span>
+			</div>
 
-				<div class="row" data-type="starred">
-					<i class="fa fa-star"></i>
-					{{ "Starred"|trans({}, 'shit') }}
-					<span class="count">{{ starredCount is defined ? starredCount : 0 }}</span>
-				</div>
+			<div class="row" data-type="starred">
+				<i class="fa fa-star"></i>
+				{{ "shit.sidebar.starred"|trans({}, 'shit') }}
+				<span class="count">{{ starredCount is defined ? starredCount : 0 }}</span>
+			</div>
 
-				<div class="row" data-type="read-recently">
-					<i class="fa fa-clock-o"></i>
-					{{ "Read recently"|trans({}, 'shit') }}
-				</div>
-			{% endif %}
+			<div class="row" data-type="last-read">
+				<i class="fa fa-clock-o"></i>
+				{{ "shit.sidebar.lastread"|trans({}, 'shit') }}
+			</div>
+
+			<div class="rowDelimiter"></div>
 
 			{{ macros.rows(tree, unreadCounts) }}
 		</aside>
 
 		<main class="items">
-			{% include 'MiamBundle:Default:items.html.twig' with {'itemOptions': itemOptions} %}
+			{% include 'MiamBundle:Default:item_list.html.twig' with {'itemOptions': itemOptions} %}
 		</main>
+	</div>
+
+	<div class="itemContentContainer hidden">
+		<div class="toggles">
+			<div class="toggle toggle-hide" title="{{ "shit.itemcontent.hide"|trans({}, 'shit') }}">
+				<i class="fa fa-minus"></i>
+			</div>
+			<div class="toggle toggle-expand" title="{{ "shit.itemcontent.expand"|trans({}, 'shit') }}">
+				<i class="fa fa-plus"></i>
+			</div>
+		</div>
+		<div class="itemContent"></div>
 	</div>
 
 	<div class="contextMenu sidebarRowMenu">
 		<div class="option" data-action="read">
-			{{ "Mark as read"|trans({}, 'shit') }}
+			{{ "shit.menu.mark_read"|trans({}, 'shit') }}
 		</div>
 	</div>
 
 	<div class="contextMenu itemMenu">
 		<div class="option" data-action="unread">
-			{{ "Mark as unread"|trans({}, 'shit') }}
+			{{ "shit.menu.mark_unread"|trans({}, 'shit') }}
 		</div>
 		<div class="option" data-action="read">
-			{{ "Mark as read"|trans({}, 'shit') }}
+			{{ "shit.menu.mark_read"|trans({}, 'shit') }}
 		</div>
 	</div>
 {% endblock %}
@@ -153,11 +164,8 @@
 
 	<script type="text/javascript" src="{{ asset('js/items.js') }}"></script>
 	<script type="text/javascript" src="{{ asset('js/shit.js') }}"></script>
-
 	<script type="text/javascript">
 		$(document).ready(function() {
-			app.shit.items.subscriber = {{ subscriber.id }};
-
 			app.items.init();
 			app.shit.init();
 		});

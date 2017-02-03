@@ -23,17 +23,19 @@ class DataParsing extends MainService {
 
 		if(isset($options['data']) && !empty($options['data'])) {
 			$pie->set_raw_data($options['data']);
+			$pie->force_feed(true);
 		} else {
 			$pie->set_feed_url($feed->getUrl());
-			$pie->force_feed(true);
 			$pie->set_autodiscovery_level(SIMPLEPIE_LOCATOR_NONE);
 
-			$timeout = isset($options['timeout']) ? intval($options['timeout']) : 10;
-			if($timeout > 0) {
-				$pie->set_timeout($timeout);
-			} else {
-				$pie->set_timeout(10);
+			$timeout = 10;
+			if(isset($options['timeout'])) {
+				$t = intval($options['timeout']);
+				if($t > 0) {
+					$timeout = $t;
+				}
 			}
+			$pie->set_timeout($timeout);
 
 			if(isset($options['cache']) && !$options['cache']) {
 				$pie->enable_cache(false);
@@ -72,6 +74,21 @@ class DataParsing extends MainService {
 			$feed_website = $this->sanitizeUrl($pie->get_link());
 			if(filter_var($feed_website, FILTER_VALIDATE_URL) !== false) {
 				$feed->setWebsite($feed_website);
+			}
+
+			// Identifier (may be used as website in some cases)
+			if(!$feed->getWebsite()) {
+				$feed_identifier = null;
+
+				if($fi = $pie->get_channel_tags(SIMPLEPIE_NAMESPACE_ATOM_10, 'id')) {
+					$feed_identifier = $fi[0]["data"];
+				} elseif($fi = $pie->get_channel_tags(SIMPLEPIE_NAMESPACE_ATOM_03, 'id')) {
+					$feed_identifier = $fi[0]["data"];
+				}
+
+				if(filter_var($feed_identifier, FILTER_VALIDATE_URL) !== false) {
+					$feed->setWebsite($feed_identifier);
+				}
 			}
 
 			// Icon Url
@@ -158,11 +175,17 @@ class DataParsing extends MainService {
 
 				$is_new_item = false;
 				
-				// Check if item exists
-				$item = $this->getRepo('Item')->findOneBy(array(
-					'feed' => $feed,
-					'identifier' => $item_identifier
-				));
+				// Get item if exists
+				$item = $this->getRepo("Item")->createQueryBuilder('i')
+					->leftJoin('i.enclosures', 'e')->addSelect('e')
+					->leftJoin('i.tags', 't')->addSelect('t')
+					->where('i.feed = :feed')
+					->andWhere('i.identifier = :identifier')
+					->setParameters(array(
+						'feed' => $feed,
+						'identifier' => $item_identifier
+					))
+					->getQuery()->getOneOrNullResult();
 				
 				// Creation if new item
 				if(!$item) {
@@ -199,15 +222,9 @@ class DataParsing extends MainService {
 					if(extension_loaded('tidy')) {
 						// To avoid unclosed tags
 						$htmlContent = tidy_repair_string($htmlContent, array(
-			                "output-html" => true
+			                "output-html" => true,
+			                "show-body-only" => true
 			            ), "utf8");
-			            
-			            // Seriously, Tidy, why do you add html and body tags...
-			            if(preg_match('#<body>(.*)</body>#is', $htmlContent, $matches)) {
-			                $htmlContent = $matches[1];
-			            } else {
-			                $htmlContent = "";
-			            }
 					}
 					$item->setHtmlContent($htmlContent);
 
@@ -344,9 +361,11 @@ class DataParsing extends MainService {
 							}
 						}
 					}
-
-					$this->em->persist($item);
 				}
+
+				$item->setDateLastSeen($now);
+
+				$this->em->persist($item);
 			}
 			
 			$feed->setErrorCount(0);
@@ -394,12 +413,7 @@ class DataParsing extends MainService {
     public function parseIcon(Feed $feed) {
     	$success = false;
 
-    	$feedDir = $this->rootDir.'/web/images/feeds';
-
-    	$tmpPath = $feedDir.'/icon-'.$feed->getId().'.tmp';
-    	$iconPath = $feedDir.'/icon-'.$feed->getId().'.png';
-
-    	$tmpIcon = false;
+    	$tmpPath = $this->rootDir.'/web/images/feeds/icon-'.$feed->getId().'.tmp';
 
     	// Get the icon
     	$iconUrl = $feed->getIconUrl();
@@ -407,102 +421,18 @@ class DataParsing extends MainService {
     		if($this->getUrlContentTo($iconUrl, $tmpPath)) {
 	    		$iconData = getimagesize($tmpPath);
 
-				// Non-square icons are bad (2px tolerance)
+				// Won't use non-square icons (2px tolerance)
 				if($iconData && abs($iconData[0] - $iconData[1]) <= 2) {
-					$tmpIcon = true;
+					if($this->saveIcon($feed, $tmpPath)) {
+						$success = true;
+					}
 				}
 			}
     	}
     	
     	// Get the favicon if no icon
-    	if(!$tmpIcon) {
-    		$faviconUrl = $this->getFaviconUrl($feed);
-    		if($faviconUrl) {
-    			$this->getUrlContentTo($faviconUrl, $tmpPath);
-	    	}
-    	}
-    	
-    	$iconSize = 16;
-    	
-    	// Convert and store
-    	if(is_file($tmpPath)) {
-    		try {
-    			$iconData = getimagesize($tmpPath);
-    		} catch(\Exception $e) {
-    			$iconData = false;
-    		}
-    		
-    		if($iconData) {
-	    		$iconSrcWidth = $iconData[0];
-	    		$iconSrcHeight = $iconData[1];
-	    		$iconSrcType = $iconData[2];
-
-	    		if(extension_loaded('imagick')) {
-	    			if($iconSrcType == IMAGETYPE_ICO) {
-		    			// Must edit the extension for ICO icons or it fails
-						$icoPath = $feedDir.'/icon-'.$feed->getId().'.ico';
-						rename($tmpPath, $icoPath);
-						$tmpPath = $icoPath;
-					}
-
-					try {
-	    				$icon = new \Imagick($tmpPath);
-						$icon->thumbnailImage($iconSize, $iconSize);
-						$icon->setImageFormat('png');
-						$icon->writeImage($iconPath);
-						$icon->clear();
-						$icon->destroy();
-
-		    			$success = true;
-	    			} catch(\Exception $e) {
-	    				$success = false;
-	    			}
-	    		}
-
-	    		if(!$success && extension_loaded('gd')) {
-	    			if($iconSrcType == IMAGETYPE_GIF) {
-		    			$iconDst = imagecreatetruecolor($iconSize, $iconSize);
-						
-						$blackBg = imagecolorallocate($iconDst, 0, 0, 0);
-		    			imagecolortransparent($iconDst, $blackBg);
-
-						$iconSrc = imagecreatefromgif($tmpPath);
-						imagecopyresampled($iconDst, $iconSrc, 0, 0, 0, 0, $iconSize, $iconSize, $iconSrcWidth, $iconSrcHeight);
-						
-						imagepng($iconDst, $iconPath);
-		            	imagedestroy($iconDst);
-
-		            	$success = true;
-		    		} elseif($iconSrcType == IMAGETYPE_JPEG) {
-		    			$iconDst = imagecreatetruecolor($iconSize, $iconSize);
-
-						$iconSrc = imagecreatefromjpeg($tmpPath);
-						imagecopyresampled($iconDst, $iconSrc, 0, 0, 0, 0, $iconSize, $iconSize, $iconSrcWidth, $iconSrcHeight);
-						
-						imagepng($iconDst, $iconPath);
-		            	imagedestroy($iconDst);
-
-		            	$success = true;
-		    		} elseif($iconSrcType == IMAGETYPE_PNG) {
-		    			$iconDst = imagecreatetruecolor($iconSize, $iconSize);
-
-		    			$blackBg = imagecolorallocate($iconDst, 0, 0, 0);
-		    			imagecolortransparent($iconDst, $blackBg);
-		            	imagealphablending($iconDst, false);
-		            	imagesavealpha($iconDst, true);
-
-		            	$iconSrc = imagecreatefrompng($tmpPath);
-		            	imagecopyresampled($iconDst, $iconSrc, 0, 0, 0, 0, $iconSize, $iconSize, $iconSrcWidth, $iconSrcHeight);
-
-		            	imagepng($iconDst, $iconPath);
-		            	imagedestroy($iconDst);
-
-		            	$success = true;
-		    		}
-	    		}
-	    	}
-
-    		@unlink($tmpPath);
+    	if(!$success) {
+    		$success = $this->getFaviconAsIcon($feed);
     	}
 
     	// Feed update
@@ -519,7 +449,43 @@ class DataParsing extends MainService {
     	);
     }
 
+    private function getRootUrlFromUrl($url) {
+    	$rootUrl = null;
+
+    	if(filter_var($url, FILTER_VALIDATE_URL) !== false) {
+    		$parsed = parse_url($url);
+
+    		if($parsed !== false) {
+	    		$rootUrl = $parsed["scheme"]."://";
+
+	    		if(isset($parsed["user"]) && isset($parsed["pass"])) {
+	    			$rootUrl .= $parsed["user"].":".$parsed["pass"]."@";
+	    		}
+
+	    		$rootUrl .= $parsed["host"];
+
+	    		if(isset($parsed["port"])) {
+	    			$rootUrl .= ":".$parsed["port"];
+	    		}
+	    	}
+    	}
+
+    	return $rootUrl;
+    }
+
     private function getUrlContentTo($url, $dst) {
+    	$content = $this->getUrlContent($url);
+
+	    if(!is_null($content) && $content !== false && $content !== "") {
+			if(file_put_contents($dst, $content) !== false) {
+				return true;
+			}
+		}
+
+	    return false;
+    }
+
+    private function getUrlContent($url) {
     	$content = null;
 
     	if(extension_loaded('curl')) {
@@ -529,7 +495,8 @@ class DataParsing extends MainService {
 	    		CURLOPT_URL => $url,
 	    		CURLOPT_RETURNTRANSFER => 1,
 	    		CURLOPT_CONNECTTIMEOUT => 5,
-	    		CURLOPT_TIMEOUT => 10
+	    		CURLOPT_TIMEOUT => 10,
+	    		CURLOPT_FOLLOWLOCATION => true
 	    	));
 
 	    	$content = curl_exec($ch);
@@ -543,106 +510,233 @@ class DataParsing extends MainService {
 	    	}
 	    }
 
-	    if(!is_null($content) && $content !== false && $content !== "") {
-			if(file_put_contents($dst, $content) !== false) {
-				return true;
-			}
-		}
-
-	    return false;
+	    return $content;
     }
 
-    // May need improvements
-    private function getFaviconUrl(Feed $feed) {
-    	$favicon = null;
+    private function getFaviconAsIcon(Feed $feed) {
+    	$success = false;
+
+    	$tmpPath = $this->rootDir.'/web/images/feeds/icon-'.$feed->getId().'.tmp';
+
+    	$urls = array();
+
+    	if($feed->getWebsite()) {
+    		$urls[] = $feed->getWebsite();
+
+    		$rootUrl = $this->getRootUrlFromUrl($feed->getWebsite());
+    		if($rootUrl) {
+    			$urls[] = $rootUrl;
+    		}
+    	}
+
+    	$item = $this->getRepo('Item')->findLastOneForFeed($feed);
+    	if($item && $item->getLink()) {
+    		$urls[] = $item->getLink();
+
+    		$rootUrl = $this->getRootUrlFromUrl($item->getLink());
+    		if($rootUrl) {
+    			$urls[] = $rootUrl;
+    		}
+    	}
+
+    	$checkedFaviconUrls = array();
+
+    	$urls = array_unique($urls);
+    	foreach($urls as $url) {
+    		$faviconUrls = $this->getFaviconUrlsFromUrl($url);
+    		if(count($faviconUrls) > 0) {
+				foreach($faviconUrls as $faviconUrl) {
+					if(!in_array($faviconUrl, $checkedFaviconUrls)) {
+						if(
+							$this->getUrlContentTo($faviconUrl, $tmpPath) 
+							&& $this->saveIcon($feed, $tmpPath)
+						) {
+							$success = true;
+							break 2;
+						}
+
+						$checkedFaviconUrls[] = $faviconUrl;
+					}
+				}
+			}
+    	}
     	
-    	$url = $feed->getWebsite();
-    	if(empty($url)) {
-    		$item = $this->getRepo('Item')->findLastOneForFeed($feed);
-    		if($item) {
-    			$url = $item->getLink();
-    		}
-    	}
+    	return $success;
+    }
 
-    	$rootUrl = null;
-    	if(filter_var($url, FILTER_VALIDATE_URL) !== false) {
-    		$parsed = parse_url($url);
+    private function getFaviconUrlsFromUrl($url) {
+    	$faviconUrls = array();
 
-    		$rootUrl = $parsed["scheme"]."://";
-
-    		if(isset($parsed["user"]) && isset($parsed["pass"])) {
-    			$rootUrl .= $parsed["user"].":".$parsed["pass"]."@";
-    		}
-
-    		$rootUrl .= $parsed["host"];
-
-    		if(isset($parsed["port"])) {
-    			$rootUrl .= ":".$parsed["port"];
-    		}
-    	}
-
-    	if($rootUrl) {
-    		// https://stackoverflow.com/questions/5701593
-    		$doc = new \DOMDocument();
+    	$favicons = array();
+    	
+    	// https://stackoverflow.com/questions/5701593
+    	libxml_use_internal_errors(true);
+		try {
+			$doc = new \DOMDocument();
     		$doc->strictErrorChecking = false;
 
-    		// Get favicon path
-    		libxml_use_internal_errors(true);
-    		try {
-	    		$html = file_get_contents($rootUrl);
-	    		if($html && $doc->loadHTML($html) !== false) {
-		    		$xml = simplexml_import_dom($doc);
-		    		if($xml instanceof \SimpleXmlElement) {
-		    			$rels = array("shortcut icon", "icon", "SHORTCUT ICON", "ICON");
-		    			foreach($rels as $rel) {
-		    				$arr = $xml->xpath('//link[@rel="'.$rel.'"]');
-		    				if(isset($arr[0]['href'])) {
-					    		$favicon = $arr[0]['href'];
-					    		break;
-					    	}
+    		$html = $this->getUrlContent($url);
+    		if($html && $doc->loadHTML($html) !== false) {
+	    		$xml = simplexml_import_dom($doc);
+	    		if($xml instanceof \SimpleXmlElement) {
+	    			$rels = array("shortcut icon", "icon", "SHORTCUT ICON", "ICON");
+	    			foreach($rels as $rel) {
+	    				$arr = $xml->xpath('//link[@rel="'.$rel.'"]');
+	    				if(isset($arr[0]['href'])) {
+				    		$favicon = $arr[0]['href'];
+				    		if(!in_array($favicon, $favicons)) {
+				    			$favicons[] = $favicon;
+				    		}
+				    	}
+	    			}
+		    	}
+		    }
+		} catch(\Exception $e) {}
+		libxml_clear_errors();
+
+		if(!in_array('favicon.ico', $favicons)) {
+			$favicons[] = 'favicon.ico';
+		}
+		
+		$parsedUrl = parse_url($url);
+		
+	    foreach($favicons as $favicon) {
+		    if(filter_var($favicon, FILTER_VALIDATE_URL) !== false) {
+		    	$faviconUrls[] = $favicon;
+		    } else { // Fix if relative url
+		    	$parsedFav = parse_url($favicon);
+		    	
+		    	if($parsedFav !== false) {
+		    		$newFavicon = '';
+
+		    		if(isset($parsedFav["scheme"])) {
+		    			$newFavicon .= $parsedUrl["scheme"]."://";
+		    		} else {
+		    			$newFavicon .= "http://";
+		    		}
+
+		    		if(isset($parsedUrl["user"]) && isset($parsedUrl["pass"])) {
+			    		$newFavicon .= $parsedUrl["user"].":".$parsedUrl["pass"]."@";
+			    	}
+
+		    		$newFavicon .= $parsedUrl["host"];
+
+		    		if(isset($parsedUrl["port"])) {
+		    			$newFavicon .= ":".$parsedUrl["port"];
+		    		}
+
+		    		if(isset($parsedUrl["path"]) && mb_substr($favicon, 0, 1) != '/') {
+		    			if(mb_substr($parsedUrl["path"], 0, 1) != '/') {
+		    				$newFavicon .= "/";
 		    			}
+		    			$newFavicon .= $parsedUrl["path"];
+		    		}
+
+		    		if(isset($parsedFav["path"])) {
+				    	if(mb_substr($newFavicon, -1) != "/" && mb_substr($parsedFav['path'], 0, 1) != "/") {
+				    		$newFavicon .= "/";
+				    	}
+				    	$newFavicon .= $parsedFav['path'];
+				    }
+
+			    	if(isset($parsedFav["query"])) {
+			    		$newFavicon .= "?".$parsedFav["query"];
+			    	}
+			    	
+			    	if(filter_var($newFavicon, FILTER_VALIDATE_URL) !== false) {
+			    		$faviconUrls[] = $newFavicon;
 			    	}
 			    }
-			} catch(\Exception $e) {}
-			libxml_clear_errors();
-
-		    // Default otherwise
-		    if(!$favicon) {
-		    	$favicon = "/favicon.ico";
 		    }
-		    
-		    // Fix if relative url
-		    if(!filter_var($favicon, FILTER_VALIDATE_URL) !== false) {
-		    	$parsedFav = parse_url($favicon);
+		}
+	    
+	    return array_unique($faviconUrls);
+    }
 
-		    	if(!isset($parsedFav["host"])) {
-			    	$favicon = $rootUrl;
-			    } elseif(!isset($parsedFav["scheme"])) {
-			    	$favicon = $parsedFav["host"];
+    private function saveIcon(Feed $feed, $tmpPath) {
+    	$iconSize = 16;
+    	$success = false;
 
-			    	if(isset($parsedFav["port"])) {
-		    			$favicon .= ":".$parsedFav["port"];
-		    		}
+    	try {
+			$iconData = getimagesize($tmpPath);
+		} catch(\Exception $e) {
+			$iconData = false;
+		}
 
-		    		if(isset($parsedFav["user"]) && isset($parsedFav["pass"])) {
-		    			$favicon = $parsedFav["user"].":".$parsedFav["pass"]."@".$favicon;
-		    		}
+		if($iconData) {
+			$iconSrcWidth = $iconData[0];
+    		$iconSrcHeight = $iconData[1];
+    		$iconSrcType = $iconData[2];
 
-		    		$favicon = "http://".$favicon;
-			    }
+    		$iconPath = $this->rootDir.'/web/'.$feed->getIconRelativePath();
 
-		    	$path = $parsedFav['path'] ?: "/favicon.ico";
-		    	if(mb_substr($path, 0, 1) != "/") {
-		    		$path = "/".$path;
-		    	}
-		    	$favicon .= $path;
+    		if(extension_loaded('imagick')) {
+    			// Must edit the extension for ICO icons or it fails
+    			if($iconSrcType == IMAGETYPE_ICO) {
+					$icoPath = $this->rootDir.'/web/images/feeds/icon-'.$feed->getId().'.ico';
+					rename($tmpPath, $icoPath);
+					$tmpPath = $icoPath;
+				}
 
-		    	if(isset($parsedFav["query"])) {
-		    		$favicon .= "?".$parsedFav["query"];
-		    	}
-		    }
-    	}
-    	
-    	return $favicon;
+				try {
+    				$icon = new \Imagick($tmpPath);
+					$icon->thumbnailImage($iconSize, $iconSize);
+					$icon->setImageFormat('png');
+					$icon->writeImage($iconPath);
+					$icon->clear();
+					$icon->destroy();
+
+	    			$success = true;
+    			} catch(\Exception $e) {
+    				$success = false;
+    			}
+    		}
+
+    		if(!$success && extension_loaded('gd')) {
+    			if($iconSrcType == IMAGETYPE_GIF) {
+	    			$iconDst = imagecreatetruecolor($iconSize, $iconSize);
+					
+					$blackBg = imagecolorallocate($iconDst, 0, 0, 0);
+	    			imagecolortransparent($iconDst, $blackBg);
+
+					$iconSrc = imagecreatefromgif($tmpPath);
+					imagecopyresampled($iconDst, $iconSrc, 0, 0, 0, 0, $iconSize, $iconSize, $iconSrcWidth, $iconSrcHeight);
+					
+					imagepng($iconDst, $iconPath);
+	            	imagedestroy($iconDst);
+
+	            	$success = true;
+	    		} elseif($iconSrcType == IMAGETYPE_JPEG) {
+	    			$iconDst = imagecreatetruecolor($iconSize, $iconSize);
+
+					$iconSrc = imagecreatefromjpeg($tmpPath);
+					imagecopyresampled($iconDst, $iconSrc, 0, 0, 0, 0, $iconSize, $iconSize, $iconSrcWidth, $iconSrcHeight);
+					
+					imagepng($iconDst, $iconPath);
+	            	imagedestroy($iconDst);
+
+	            	$success = true;
+	    		} elseif($iconSrcType == IMAGETYPE_PNG) {
+	    			$iconDst = imagecreatetruecolor($iconSize, $iconSize);
+
+	    			$blackBg = imagecolorallocate($iconDst, 0, 0, 0);
+	    			imagecolortransparent($iconDst, $blackBg);
+	            	imagealphablending($iconDst, false);
+	            	imagesavealpha($iconDst, true);
+
+	            	$iconSrc = imagecreatefrompng($tmpPath);
+	            	imagecopyresampled($iconDst, $iconSrc, 0, 0, 0, 0, $iconSize, $iconSize, $iconSrcWidth, $iconSrcHeight);
+
+	            	imagepng($iconDst, $iconPath);
+	            	imagedestroy($iconDst);
+
+	            	$success = true;
+	    		}
+    		}
+		}
+
+		@unlink($tmpPath);
+
+		return $success;
     }
 }
