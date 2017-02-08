@@ -117,8 +117,7 @@ class ShitController extends MainController
         if($request->isXmlHttpRequest()) {
             $options = array(
                 'subscriber' => $this->getUser(),
-                'marker' => $this->getUser(),
-                'count' => $countMaxItems
+                'marker' => $this->getUser()
             );
 
             $type = $request->get('type');
@@ -139,7 +138,10 @@ class ShitController extends MainController
             $createdAfter = date_create_from_format(DATE_ATOM, $request->get("created_after"));
             if($createdAfter !== false) {
                 $options['createdAfter'] = $createdAfter;
+                $countMaxItems = 100;
             }
+
+            $options['count'] = $countMaxItems;
             
             $page = intval($request->get('page'));
             if($page < 1) {
