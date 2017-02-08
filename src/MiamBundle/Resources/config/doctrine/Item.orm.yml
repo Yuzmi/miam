@@ -83,5 +83,5 @@ MiamBundle\Entity\Item:
             cascade: ["remove"]
     uniqueConstraints:
         item_feed_identifier_idx:
-            columns: [ feed_id, identifier ]
+            columns: [ feed_id, identifier_hash ]
     lifecycleCallbacks: {  }

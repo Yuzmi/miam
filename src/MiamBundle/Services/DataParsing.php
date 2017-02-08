@@ -181,7 +181,7 @@ class DataParsing extends MainService {
 					->leftJoin('i.enclosures', 'e')->addSelect('e')
 					->leftJoin('i.tags', 't')->addSelect('t')
 					->where('i.feed = :feed')
-					->andWhere('i.identifier = :hashIdentifier')
+					->andWhere('i.hashIdentifier = :hashIdentifier')
 					->setParameters(array(
 						'feed' => $feed,
 						'hashIdentifier' => $item_identifier_hash
