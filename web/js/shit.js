@@ -569,6 +569,9 @@ app.shit = {
 		showItem: function(itemId) {
 			$(".itemContentContainer").removeClass("hidden");
 
+			$(".itemRow").removeClass("selected");
+			$(".itemRow[data-item="+itemId+"]").addClass("selected");
+
 			var currentItemId = $(".itemContent").attr("data-item");
 			if(currentItemId != itemId) {
 				$(".itemContent").html('<span class="loading"><i class="fa fa-spinner fa-spin"></i></span>');
@@ -599,6 +602,8 @@ app.shit = {
 		hideItem: function() {
 			$(".itemContentContainer").addClass("hidden");
 			$(".itemContentContainer").removeClass("expanded");
+
+			$(".itemRow").removeClass("selected");
 		}
 	}
 }
