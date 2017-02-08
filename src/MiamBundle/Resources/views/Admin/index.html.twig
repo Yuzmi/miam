@@ -13,6 +13,8 @@
 			<th></th>
 			<th class="name">{{ "admin.name"|trans({}, 'admin') }}</th>
 			<th class="url">URL</th>
+			<th>{{ "admin.count_items"|trans({}, 'admin') }}</th>
+			<th>{{ "admin.count_subscriptions"|trans({}, 'admin') }}</th>
 		</tr>
 		{% for feed in feeds %}
 			<tr class="feed" data-feed="{{ feed.id }}">
@@ -35,6 +37,8 @@
 				<td title="{{ feed.url }}">
 					<a href="{{ feed.url }}">{{ feed.url|shorten(60) }}</a>
 				</td>
+				<td class="items">{{ itemsPerFeed[feed.id] }}</td>
+				<td class="subscriptions">{{ subscriptionsPerFeed[feed.id] }}</td>
 				<td class="parser">
 					<button class="parse" title="{{ "admin.parse"|trans({}, 'admin') }}">
 						{{ "admin.parse"|trans({}, 'admin') }}
@@ -78,7 +82,7 @@
 			display:none;
 		}
 
-		.feed td.icon, .feed td.parser, .feed td.delete {
+		.feed td.icon, .feed td.items, .feed td.subscriptions, .feed td.parser, .feed td.delete {
 			text-align:center;
 		}
 	</style>

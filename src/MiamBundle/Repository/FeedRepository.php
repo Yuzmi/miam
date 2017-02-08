@@ -51,11 +51,35 @@ class FeedRepository extends \Doctrine\ORM\EntityRepository
         return $feeds;
 	}
 
-	public function findCountItems() {
-		return $this->createQueryBuilder('f')
-			->addSelect('COUNT(i) as nb_items')
-			->leftJoin('f.items', 'i')
-			->groupBy('f')
-			->getQuery()->getResult();
-	}
+    public function countItemsPerFeed() {
+        $result = $this->createQueryBuilder('f')
+            ->select('f.id, COUNT(i.id) AS countItems')
+            ->leftJoin('f.items', 'i')
+            ->groupBy('f.id')
+            ->getQuery()->getResult();
+
+        $ipf = array();
+
+        foreach($result as $r) {
+            $ipf[$r['id']] = $r['countItems'];
+        }
+
+        return $ipf;
+    }
+
+    public function countSubscriptionsPerFeed() {
+        $result = $this->createQueryBuilder('f')
+            ->select('f.id, COUNT(s.id) AS countSubs')
+            ->leftJoin('f.subscriptions', 's')
+            ->groupBy('f.id')
+            ->getQuery()->getResult();
+
+        $ipf = array();
+
+        foreach($result as $r) {
+            $ipf[$r['id']] = $r['countSubs'];
+        }
+
+        return $ipf;
+    }
 }

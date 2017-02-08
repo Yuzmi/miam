@@ -18,10 +18,15 @@ class AdminController extends MainController
             ->orderBy('f.dateCreated', 'DESC')
             ->getQuery()->getResult();
 
+        $itemsPerFeed = $this->getRepo('Feed')->countItemsPerFeed();
+        $subscriptionsPerFeed = $this->getRepo('Feed')->countSubscriptionsPerFeed();
+
         $createFeedForm = $this->createCreateFeedForm();
 
         return $this->render('MiamBundle:Admin:index.html.twig', array(
             'feeds' => $feeds,
+            'itemsPerFeed' => $itemsPerFeed,
+            'subscriptionsPerFeed' => $subscriptionsPerFeed,
             'createFeedForm' => $createFeedForm->createView()
         ));
 	}
