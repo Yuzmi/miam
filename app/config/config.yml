@@ -75,6 +75,8 @@ assetic:
         cssrewrite: ~
         scss:
             bin: "%scss_path%"
+    bundles:
+        - MiamBundle
 
 # FOS Js Routing
 fos_js_routing:
