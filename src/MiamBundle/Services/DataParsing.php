@@ -161,16 +161,17 @@ class DataParsing extends MainService {
 			}
 			$this->em->flush();
 			
-			$identifiers = array();
+			$identifier_hashes = array();
 			foreach($items as $i) {
-				$item_identifier = hash('sha1', $i->get_id());
-				$item_hash = $i->get_id(true); // md5(serialize($this->data))
+				$item_identifier = mb_substr($i->get_id(), 0, 255);
+				$item_identifier_hash = hash('sha1', $i->get_id());
+				$item_hash = $i->get_id(true, 'sha1');
 				
-				// Ignore duplicates (Not happy? Deal with it!)
-				if(in_array($item_identifier, $identifiers)) {
+				// Ignore duplicates
+				if(in_array($item_identifier_hash, $identifier_hashes)) {
 					continue;
 				} else {
-					$identifiers[] = $item_identifier;
+					$identifier_hashes[] = $item_identifier_hash;
 				}
 
 				$is_new_item = false;
@@ -180,10 +181,10 @@ class DataParsing extends MainService {
 					->leftJoin('i.enclosures', 'e')->addSelect('e')
 					->leftJoin('i.tags', 't')->addSelect('t')
 					->where('i.feed = :feed')
-					->andWhere('i.identifier = :identifier')
+					->andWhere('i.identifier = :hashIdentifier')
 					->setParameters(array(
 						'feed' => $feed,
-						'identifier' => $item_identifier
+						'hashIdentifier' => $item_identifier_hash
 					))
 					->getQuery()->getOneOrNullResult();
 				
@@ -192,6 +193,7 @@ class DataParsing extends MainService {
 					$item = new Item();
 					$item->setFeed($feed);
 					$item->setIdentifier($item_identifier);
+					$item->setHashIdentifier($item_identifier_hash);
 
 					// Published date
 					$date_published = $i->get_date(DATE_ATOM);

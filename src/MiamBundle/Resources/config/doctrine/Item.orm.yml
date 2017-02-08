@@ -18,7 +18,11 @@ MiamBundle\Entity\Item:
             nullable: true
         identifier:
             type: string
+            length: 255
+        hashIdentifier:
+            type: string
             length: 40
+            column: identifier_hash
         hash:
             type: string
             length: 40

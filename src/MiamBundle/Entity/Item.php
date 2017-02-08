@@ -8,6 +8,7 @@ class Item
     private $title;
     private $link;
     private $identifier;
+    private $hashIdentifier;
     private $hash;
     private $htmlContent;
     private $textContent;
@@ -39,6 +40,7 @@ class Item
     public function getTitle() { return $this->title; }
     public function getLink() { return $this->link; }
     public function getIdentifier() { return $this->identifier; }
+    public function getHashIdentifier() { return $this->hashIdentifier; }
     public function getHash() { return $this->hash; }
     public function getHtmlContent() { return $this->htmlContent; }
     public function getTextContent() { return $this->textContent; }
@@ -58,6 +60,7 @@ class Item
     public function setTitle($title) { $this->title = $title; return $this; }
     public function setLink($link) { $this->link = $link; return $this; }
     public function setIdentifier($identifier) { $this->identifier = $identifier; return $this; }
+    public function setHashIdentifier($hashIdentifier) { $this->hashIdentifier = $hashIdentifier; return $this; }
     public function setHash($hash) { $this->hash = $hash; return $this; }
     public function setHtmlContent($htmlContent) { $this->htmlContent = $htmlContent; return $this; }
     public function setTextContent($textContent) { $this->textContent = $textContent; return $this; }
