@@ -20,8 +20,6 @@ parameters:
     # A secret key that's used to generate certain security-related tokens
     secret:            AreYouFeedingMeRightNow?
     
-    scss_path:         /usr/local/bin/scss
-    
     # PubSubHubBub parameters
     #pshb_enabled:      false
     #pshb_hub:          http://pubsubhubbub.appspot.com

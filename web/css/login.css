@@ -1,0 +1,47 @@
+body {
+  text-align: center; }
+  body h1 {
+    font-size: 6rem; }
+  body .auth.register {
+    display: none; }
+  body .auth .content label {
+    display: block;
+    font-size: 1.4em;
+    margin: 3rem 0 1rem; }
+  body .auth .content input, body .auth .content button {
+    box-shadow: 0 0 10px #ddd;
+    font-size: 2em;
+    line-height: 2em;
+    padding: 0.5em; }
+  body .auth .content input {
+    display: block;
+    margin: auto;
+    text-align: center;
+    width: 80%; }
+  body .auth .content button {
+    margin-top: 3rem;
+    min-width: 40%; }
+  body .auth .footer {
+    margin: 3rem 0; }
+    body .auth .footer .noAccount, body .auth .footer .haveAccount {
+      cursor: pointer;
+      text-decoration: underline; }
+
+@media (max-width: 600px) {
+  body h1 {
+    font-size: 2em;
+    margin: 2rem 0; }
+  body .auth .content label {
+    font-size: 1em;
+    margin-top: 1rem; }
+  body .auth .content input, body .auth .content button {
+    font-size: 1.4em;
+    line-height: 1.4em;
+    padding: 0.4em; }
+  body .auth .content button {
+    margin-top: 1.5rem; }
+  body .auth .footer {
+    font-size: 0.9em;
+    margin-top: 2rem; } }
+
+/*# sourceMappingURL=login.css.map */

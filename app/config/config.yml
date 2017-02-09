@@ -73,8 +73,8 @@ assetic:
     use_controller: "%kernel.debug%"
     filters:
         cssrewrite: ~
-        scss:
-            bin: "%scss_path%"
+        #scss:
+        #    bin: /usr/local/bin/scss
     bundles:
         - MiamBundle
 

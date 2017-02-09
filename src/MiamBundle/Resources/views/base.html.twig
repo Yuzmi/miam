@@ -24,9 +24,7 @@
 				<link href="{{ asset('css/fonts/open-sans.css') }}" type="text/css" rel="stylesheet">
 			{% endif %}
 
-			{% stylesheets "@MiamBundle/Resources/public/scss/main.scss" filter='scss' output='css/main.css' %}
-				<link href="{{ asset_url }}" type="text/css" rel="stylesheet">
-			{% endstylesheets %}
+			<link href="{{ asset('css/main.css') }}" type="text/css" rel="stylesheet">
 		{% endblock %}
 	</head>
 	<body class="

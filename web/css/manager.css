@@ -1,0 +1,67 @@
+.tab {
+  border: solid 2px black;
+  margin: 3rem 4rem;
+  text-align: center; }
+  .tab header {
+    background-color: black;
+    color: white;
+    cursor: pointer;
+    font-weight: 700;
+    padding: 1rem; }
+  .tab .content {
+    display: none; }
+  .tab.catsubs .content .buttons {
+    padding: 1rem; }
+  .tab.catsubs .content .tree {
+    text-align: left; }
+    .tab.catsubs .content .tree .row {
+      border-top: solid 1px black;
+      height: 2.6em;
+      line-height: 2.6em;
+      overflow: hidden;
+      padding: 0 1em; }
+      .tab.catsubs .content .tree .row.errors .name {
+        color: red; }
+      .tab.catsubs .content .tree .row .icon {
+        margin-right: 0.5em;
+        vertical-align: middle; }
+      .tab.catsubs .content .tree .row .actions {
+        float: right; }
+        .tab.catsubs .content .tree .row .actions i {
+          cursor: pointer;
+          padding: 0 0.3em; }
+    .tab.catsubs .content .tree .category .toggle {
+      cursor: pointer;
+      display: inline-block;
+      width: 1rem; }
+      .tab.catsubs .content .tree .category .toggle .open {
+        display: none; }
+    .tab.catsubs .content .tree .category.expanded .toggle .open {
+      display: inline-block; }
+    .tab.catsubs .content .tree .category.expanded .toggle .closed {
+      display: none; }
+    .tab.catsubs .content .tree .rowChildren {
+      display: none; }
+      .tab.catsubs .content .tree .rowChildren.expanded {
+        display: block; }
+  .tab.settings .content form, .tab.password .content form {
+    padding: 2rem 1rem; }
+  .tab.password .content label {
+    display: block;
+    margin-bottom: 1rem; }
+
+body.theme-dark .tab {
+  border-color: #363636; }
+  body.theme-dark .tab header {
+    background-color: #363636;
+    color: #a8a8a8; }
+  body.theme-dark .tab.catsubs .content .tree .row {
+    border-color: #363636; }
+  body.theme-dark .tab.settings .content form, body.theme-dark .tab.password .content form {
+    border-color: #363636; }
+body.theme-dark .popupContainer.editCategory .subscriptions {
+  border-color: #363636; }
+body.theme-dark .popupContainer.newSubscription .categories, body.theme-dark .popupContainer.editSubscription .categories {
+  border-color: #363636; }
+
+/*# sourceMappingURL=manager.css.map */

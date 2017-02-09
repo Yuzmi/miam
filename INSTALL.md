@@ -6,6 +6,7 @@ They may change depending on your own system.
 ### Requirements  
 
 #### Apache
+
 ```shell
 apt install -y apache2
 a2enmod rewrite
@@ -13,11 +14,13 @@ service apache2 restart
 ```
 
 #### PHP
+
 ```shell
 apt install -y php libapache2-mod-php7.0 php7.0-curl php-imagick php7.0-mbstring php7.0-tidy php7.0-xml
 ```
 
 #### MySQL or PostgreSQL
+
 ```shell
 # MySQL
 apt install -y mysql-server php7.0-mysql
@@ -26,13 +29,8 @@ apt install -y mysql-server php7.0-mysql
 apt install -y postgresql php7.0-pgsql
 ```
 
-#### [Sass](http://sass-lang.com/install)
-```shell
-apt install -y ruby
-gem install sass
-```
-
 #### [Composer](https://getcomposer.org/download/)
+
 ```shell
 curl -sS https://getcomposer.org/installer | php
 mv composer.phar /usr/local/bin/composer
@@ -46,6 +44,7 @@ apt install -y git
 ### Miam
 
 #### Clone the project (or [download it manually](https://github.com/Yuzmi/miam/archive/master.zip))
+
 ```shell
 cd /var/www
 git clone https://github.com/Yuzmi/miam.git
@@ -60,8 +59,8 @@ The PHP-DOM extension must be enabled.
 composer install
 ``` 
 
-During this part, you'll be asked to valid or edit some parameters.
-Change them depending on your own installation.
+During this part, you'll be asked to valid or edit some parameters.  
+Change them depending on your own installation.  
 
 ```
 # Database parameters
@@ -80,18 +79,16 @@ locale: 	en 					# 'fr' for french
 
 # Secret value for security
 secret: 	YourSecret
-
-# Path to the SCSS binary
-scss_path: 	/usr/local/bin/scss
 ```
 
 #### PHP requirements
+
 ```shell
 php bin/symfony_requirements
 php bin/console miam:requirements
 ```
 
-#### Database user (PostgreSQL only)  
+#### Database user (PostgreSQL only)
 
 Here is an example to create a PostgreSQL user if you don't have one.  
 
@@ -114,13 +111,6 @@ ALTER ROLE miam WITH CREATEDB;
 ```shell
 php bin/console doctrine:database:create
 php bin/console doctrine:schema:create
-``` 
-
-#### Assets
-
-```shell
-php bin/console assetic:dump --env=prod
-php bin/console assets:install --env=prod
 ```
 
 #### Cache
@@ -163,12 +153,12 @@ crontab -e
 And add this line:  
 
 ```
-*/30 * * * * php /var/www/miam/bin/console miam:parse:feeds used --env=prod --no-debug
+*/30 * * * * php /var/www/miam/bin/console miam:parse:feeds subscribed --env=prod --no-debug
 ```
 
 It will parse your feeds automatically every 30 minutes.  
-The "used" argument will only parse the feeds you're subscribed to.  
-Don't forget the options, your logs will explode otherwise.  
+The "subscribed" argument will only parse the feeds you're subscribed to.  
+Don't forget the options or your logs will explode.  
 
 #### Add an admin (optional)
 ```

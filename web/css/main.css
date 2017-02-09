@@ -1,0 +1,321 @@
+html {
+  font-size: 10px; }
+  html.fs7 {
+    font-size: 7px; }
+  html.fs8 {
+    font-size: 8px; }
+  html.fs9 {
+    font-size: 9px; }
+  html.fs12 {
+    font-size: 12px; }
+  html.fs14 {
+    font-size: 14px; }
+  html.fs18 {
+    font-size: 18px; }
+
+body {
+  background-color: white;
+  color: black;
+  font-family: 'Open Sans', sans-serif;
+  font-size: 1.4rem;
+  margin: 0;
+  padding: 0; }
+  body.ff-arial {
+    font-family: 'Arial', 'Helvetica', sans-serif; }
+  body.ff-courier-new {
+    font-family: 'Courier New', monospace; }
+  body.ff-fira-sans {
+    font-family: 'Fira Sans', sans-serif; }
+  body.ff-georgia {
+    font-family: 'Georgia', serif; }
+  body.ff-lato {
+    font-family: 'Lato', sans-serif; }
+  body.ff-open-sans {
+    font-family: 'Open Sans', sans-serif; }
+  body.ff-times-new-roman {
+    font-family: 'Times New Roman', serif; }
+  body.ff-ubuntu {
+    font-family: 'Ubuntu', sans-serif; }
+  body.ff-verdana {
+    font-family: 'Verdana', sans-serif; }
+
+a {
+  color: black; }
+
+.hidden {
+  display: none !important;
+  visibility: hidden !important; }
+
+noscript {
+  background-color: #fcc;
+  border-top: solid 1px red;
+  bottom: 0px;
+  color: red;
+  font-size: 1rem;
+  margin: auto;
+  padding: 0.8em;
+  position: fixed;
+  text-align: center;
+  width: 100%;
+  z-index: 10; }
+
+body > header {
+  border-bottom: solid 1px black; }
+  body > header .menu {
+    border-right: solid 1px black;
+    cursor: pointer;
+    display: inline-block;
+    line-height: 2em;
+    padding: 0.4em 1em;
+    text-decoration: none; }
+    body > header .menu .label {
+      display: inline-block;
+      margin-left: 0.75em; }
+    body > header .menu:hover {
+      background-color: black;
+      color: white; }
+  body > header .rightSide {
+    float: right; }
+    body > header .rightSide > .menu {
+      border-left: solid 1px black;
+      border-right: 0; }
+  @media (max-width: 600px) {
+    body > header .menu .label {
+      display: none; } }
+
+input, select, textarea, button {
+  background-color: white;
+  border: solid 1px black;
+  color: black;
+  font-family: inherit;
+  font-size: 1.4rem;
+  padding: 0.4rem 0.8rem; }
+
+input[type=file] {
+  background-color: transparent;
+  border-color: transparent; }
+
+button {
+  cursor: pointer; }
+  button:hover {
+    background-color: black;
+    color: white; }
+
+.flashMessages {
+  bottom: 25px;
+  position: fixed;
+  width: 100%; }
+  .flashMessages .flashMessageContainer {
+    display: block;
+    margin-top: 20px;
+    text-align: center; }
+    .flashMessages .flashMessageContainer .flashMessage {
+      background-color: lightgrey;
+      border: solid 1px darkgrey;
+      display: inline-block;
+      font-size: 1.6rem;
+      line-height: 1.6rem;
+      padding: 8px 12px; }
+      .flashMessages .flashMessageContainer .flashMessage.success {
+        background-color: #9f9 !important;
+        border: solid 1px green !important;
+        color: green !important; }
+      .flashMessages .flashMessageContainer .flashMessage.warning {
+        background-color: #feb !important;
+        border: solid 1px orange !important;
+        color: orange !important; }
+      .flashMessages .flashMessageContainer .flashMessage.error {
+        background-color: #f99 !important;
+        border: solid 1px red !important;
+        color: red !important; }
+      .flashMessages .flashMessageContainer .flashMessage .flashMessageClose {
+        cursor: pointer;
+        font-size: 0.8em;
+        margin-left: 0.5em; }
+  .flashMessages .flashMessageContainer:first-of-type {
+    margin-top: 0px; }
+
+.popupContainer {
+  align-items: center;
+  background-color: rgba(0, 0, 0, 0.5);
+  bottom: 0px;
+  display: flex;
+  justify-content: center;
+  left: 0px;
+  position: fixed;
+  right: 0px;
+  top: 0px;
+  z-index: 10; }
+  .popupContainer .popup {
+    background-color: white;
+    border: solid 2px black;
+    display: inline-block;
+    max-height: 90%;
+    max-width: 90%;
+    min-width: 30%;
+    position: relative;
+    text-align: center; }
+    .popupContainer .popup .popupTitle {
+      background-color: black;
+      color: white;
+      font-size: 2rem;
+      font-weight: 700;
+      padding: 1rem 2rem; }
+    .popupContainer .popup .popupContent {
+      padding: 1rem 2rem; }
+      .popupContainer .popup .popupContent form > label {
+        display: block; }
+      .popupContainer .popup .popupContent form > input, .popupContainer .popup .popupContent form > select {
+        display: block;
+        margin: auto;
+        margin-top: 1rem; }
+      .popupContainer .popup .popupContent form > select {
+        margin-left: auto;
+        margin-right: auto;
+        min-width: 60%; }
+    .popupContainer .popup .popupClose {
+      color: white;
+      cursor: pointer;
+      font-size: 1.4rem;
+      height: 1.6rem;
+      line-height: 1.6rem;
+      position: absolute;
+      right: 0.4rem;
+      text-align: center;
+      top: 0.4rem;
+      width: 1.6rem; }
+
+.itemRow, .itemRowMore {
+  cursor: pointer;
+  height: 2em;
+  line-height: 2em;
+  overflow: hidden;
+  padding: 0.4em 0.6em 0.4em 0.8em;
+  text-decoration: none; }
+
+.itemRow {
+  border-bottom: solid 1px black;
+  display: flex;
+  flex-direction: row; }
+  .itemRow:focus {
+    outline: none; }
+  .itemRow > * {
+    align-self: center;
+    height: 100%; }
+  .itemRow .readIcon {
+    background-color: black;
+    flex-shrink: 0;
+    height: 100%;
+    margin-right: 0.6em;
+    width: 0.3em; }
+  .itemRow.read .readIcon, .itemRow .readIcon:hover {
+    opacity: 0.2; }
+  .itemRow.read .readIcon:hover {
+    opacity: 1; }
+  .itemRow .starIcon {
+    flex-shrink: 0;
+    margin-right: 0.6em; }
+    .itemRow .starIcon .icon-full {
+      display: none; }
+    .itemRow .starIcon:hover .icon-empty {
+      display: none; }
+    .itemRow .starIcon:hover .icon-full {
+      display: inline-block; }
+  .itemRow.starred .starIcon .icon-empty {
+    display: none; }
+  .itemRow.starred .starIcon .icon-full {
+    display: inline-block; }
+  .itemRow .datetime {
+    flex-shrink: 0;
+    font-size: 0.8em;
+    margin-right: 0.6em; }
+  .itemRow .titleSummary {
+    flex-grow: 1; }
+    .itemRow .titleSummary .title {
+      font-weight: 700; }
+    .itemRow .titleSummary .summary {
+      font-size: 0.8em;
+      margin-left: 1em; }
+  .itemRow:hover .title, .itemRow.selected .title {
+    text-decoration: underline; }
+  .itemRow .feed {
+    display: flex;
+    flex-shrink: 0;
+    margin-left: 0.5em; }
+    .itemRow .feed .name {
+      font-size: 0.9em;
+      font-weight: 700;
+      margin-right: 0.5em;
+      max-width: 250px;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap; }
+    @media (max-width: 600px) {
+      .itemRow .feed .name {
+        display: none; } }
+    @media (min-width: 1200px) {
+      .itemRow .feed .name {
+        max-width: none; } }
+    .itemRow .feed .icon {
+      align-self: center;
+      height: 1em;
+      vertical-align: middle;
+      width: 1em; }
+
+.itemRowMore {
+  display: block;
+  padding-bottom: 0.4em;
+  text-align: center; }
+  .itemRowMore i.icon-more {
+    font-size: 2em; }
+  .itemRowMore i.icon-loading {
+    display: none;
+    font-size: 1.2em; }
+  .itemRowMore.loading {
+    padding-top: 0.4em; }
+    .itemRowMore.loading i.icon-more {
+      display: none; }
+    .itemRowMore.loading i.icon-loading {
+      display: inline-block; }
+
+body.theme-dark {
+  background-color: #161616;
+  color: #a8a8a8; }
+  body.theme-dark a {
+    color: #a8a8a8; }
+  body.theme-dark > header {
+    border-bottom-color: #363636; }
+    body.theme-dark > header > .menu, body.theme-dark > header .rightSide > .menu {
+      border-right-color: #363636; }
+      body.theme-dark > header > .menu:hover, body.theme-dark > header .rightSide > .menu:hover {
+        background-color: inherit;
+        color: #cfcfcf; }
+    body.theme-dark > header .rightSide > a {
+      border-left-color: #363636; }
+  body.theme-dark input, body.theme-dark select, body.theme-dark textarea, body.theme-dark button {
+    background-color: #363636;
+    border-color: #363636;
+    color: #a8a8a8; }
+  body.theme-dark input[type=file] {
+    background-color: transparent;
+    border-color: transparent; }
+  body.theme-dark button:hover {
+    background-color: #363636;
+    color: #cfcfcf; }
+  body.theme-dark .flashMessages .flashMessageContainer .flashMessage {
+    background-color: #363636;
+    border-color: #363636; }
+  body.theme-dark .popupContainer .popup {
+    background-color: #161616;
+    border-color: #262626; }
+    body.theme-dark .popupContainer .popup .popupTitle {
+      background-color: #262626;
+      color: inherit; }
+    body.theme-dark .popupContainer .popup .popupClose {
+      color: inherit; }
+  body.theme-dark .itemRow {
+    border-color: #363636; }
+    body.theme-dark .itemRow .readIcon {
+      background-color: #a8a8a8; }
+
+/*# sourceMappingURL=main.css.map */
