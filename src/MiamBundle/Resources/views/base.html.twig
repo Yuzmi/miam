@@ -32,8 +32,8 @@
 	<body class="
 		{{ app.user and app.user.setting('THEME') ? 'theme-' ~ app.user.setting('THEME') }}
 		{{ app.user and app.user.setting('FONT_FAMILY') ? 'ff-' ~ app.user.setting('FONT_FAMILY') }}
-		{% block bodyClasses %}{% endblock %}"
-	>
+		{% block bodyClasses %}{% endblock %}
+	">
 		{% block body %}{% endblock %}
 		
 		{% if app.session.flashbag.peekAll|length > 0 %}
