@@ -53,7 +53,7 @@
 
 			<script type="text/javascript">
 				app.preInit = function() {
-					app.dateLoaded = '{{ "now"|date("Y-m-d\\TH:i:sP") }}';
+					app.dateLoaded = '{{ "now"|date(constant("DATE_ATOM")) }}';
 				}
 			</script>
 		{% endblock %}
