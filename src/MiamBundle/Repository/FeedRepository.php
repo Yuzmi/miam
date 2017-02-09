@@ -5,21 +5,6 @@ namespace MiamBundle\Repository;
 class FeedRepository extends \Doctrine\ORM\EntityRepository
 {
 	public function findSubscribed() {
-		return $this->createQueryBuilder('f')
-			->innerJoin('f.subscriptions', 's')
-			->getQuery()->getResult();
-
-		/*
-        return $this->createQueryBuilder('f')
-            ->select('f, COUNT(s.id)')
-            ->leftJoin('f.subscriptions', 's')
-            ->groupBy('f')
-            ->having('COUNT(s.id) > 0')
-            ->getQuery()->getResult();
-        */
-	}
-
-	public function findUsed() {
 		$fs = $this->createQueryBuilder("f")
             ->select("f, COUNT(s.id)")
             ->leftJoin("f.subscriptions", "s")
@@ -29,10 +14,15 @@ class FeedRepository extends \Doctrine\ORM\EntityRepository
 
         $feeds = array();
         foreach($fs as $f) {
-        	$feeds[] = $f[0];
+            $feeds[] = $f[0];
         }
 
         return $feeds;
+	}
+
+    // Identical to findSubscribed() but may change in the future
+	public function findUsed() {
+		return $this->findSubscribed();
 	}
 
 	public function findUnused() {
