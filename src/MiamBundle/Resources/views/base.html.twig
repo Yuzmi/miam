@@ -24,7 +24,10 @@
 			{% endstylesheets %}
 		{% endblock %}
 	</head>
-	<body class="{{ app.user and app.user.setting('THEME') ? app.user.setting('THEME') }} {% block bodyClasses %}{% endblock %}">
+	<body class="
+		{{ app.user and app.user.setting('THEME') ? 'theme-' ~ app.user.setting('THEME') }}
+		{% block bodyClasses %}{% endblock %}"
+	>
 		{% block body %}{% endblock %}
 		
 		{% if app.session.flashbag.peekAll|length > 0 %}
