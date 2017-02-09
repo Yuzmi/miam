@@ -67,17 +67,6 @@ swiftmailer:
     password:  "%mailer_password%"
     spool:     { type: memory }
 
-# Assetic Configuration
-assetic:
-    debug:  "%kernel.debug%"
-    use_controller: "%kernel.debug%"
-    filters:
-        cssrewrite: ~
-        #scss:
-        #    bin: /usr/local/bin/scss
-    bundles:
-        - MiamBundle
-
 # FOS Js Routing
 fos_js_routing:
     routes_to_expose: [ ajax_.* ]
