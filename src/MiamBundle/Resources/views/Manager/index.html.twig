@@ -111,6 +111,28 @@
 
 				<br><br>
 
+				{{ "manager.settings.font_family"|trans({}, 'manager') }}
+				{% set families = {
+					'arial': "Arial",
+					'courier-new': "Courier New",
+					'fira-sans': "Fira Sans",
+					'georgia': "Georgia",
+					'lato': "Lato",
+					'open-sans': "Open Sans",
+					'times-new-roman': "Times New Roman",
+					'ubuntu': "Ubuntu",
+					'verdana': "Verdana"
+				} %}
+				<select name="FONT_FAMILY">
+					{% for key,value in families %}
+						<option value="{{ key }}" {{ app.user.setting('FONT_FAMILY') == key ? 'selected' }}>
+							{{ value }}
+						</option>
+					{% endfor %}
+				</select>
+				
+				<br><br>
+
 				{{ "manager.settings.date_format"|trans({}, 'manager') }}
 				<select name="DATE_FORMAT">
 					<option value="dmy" {{ app.user.setting('DATE_FORMAT') == 'dmy' ? 'selected' }}>

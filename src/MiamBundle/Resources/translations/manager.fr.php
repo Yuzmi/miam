@@ -26,6 +26,7 @@
 		'manager.settings.font_size.bigger' => 'Plus gros',
 		'manager.settings.font_size.big' => 'Grosse',
 		'manager.settings.font_size.very_big' => 'Très gros',
+		'manager.settings.font_family' => 'Police de caractère :',
 		'manager.settings.date_format' => 'Format des dates :',
 		'manager.settings.date_format.dmy' => 'jj/mm/aa',
 		'manager.settings.date_format.mdy' => 'mm/jj/aa',

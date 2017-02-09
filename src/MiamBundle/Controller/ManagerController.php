@@ -487,12 +487,13 @@ class ManagerController extends MainController
         if($this->isTokenValid('manager_settings_update', $request->get('csrf_token'))) {
             $user = $this->getUser();
             
-            $user->setSetting('SHOW_ITEM_PICTURES', $request->get("SHOW_ITEM_PICTURES"));
-            $user->setSetting('SHOW_ITEM_DETAILS', $request->get("SHOW_ITEM_DETAILS"));
-            $user->setSetting('HIDE_SIDEBAR', $request->get("HIDE_SIDEBAR"));
-            $user->setSetting('THEME', $request->get("THEME"));
-            $user->setSetting('FONT_SIZE', $request->get("FONT_SIZE"));
             $user->setSetting('DATE_FORMAT', $request->get("DATE_FORMAT"));
+            $user->setSetting('FONT_FAMILY', $request->get("FONT_FAMILY"));
+            $user->setSetting('FONT_SIZE', $request->get("FONT_SIZE"));
+            $user->setSetting('HIDE_SIDEBAR', $request->get("HIDE_SIDEBAR"));
+            $user->setSetting('SHOW_ITEM_DETAILS', $request->get("SHOW_ITEM_DETAILS"));
+            $user->setSetting('SHOW_ITEM_PICTURES', $request->get("SHOW_ITEM_PICTURES"));
+            $user->setSetting('THEME', $request->get("THEME"));
             
             $locale = $request->get("LOCALE");
             if(in_array($locale, array("en", "fr"))) {

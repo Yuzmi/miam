@@ -16,8 +16,13 @@
 		<link rel="shortcut icon" href="{{ asset('favicon.png') }}" type="image/png">
 		
 		{% block stylesheets %}
-			<link href="{{ asset('css/font-awesome.min.css') }}" type="text/css" rel="stylesheet">
-			<link href="{{ asset('css/open-sans.css') }}" type="text/css" rel="stylesheet">
+			<link href="{{ asset('css/fonts/font-awesome.css') }}" type="text/css" rel="stylesheet">
+
+			{% if app.user and app.user.setting('FONT_FAMILY') in ['fire-sans', 'lato', 'open-sans', 'ubuntu'] %}
+				<link href="{{ asset('css/fonts/' ~ app.user.setting('FONT_FAMILY') ~ '.css') }}" type="text/css" rel="stylesheet">
+			{% elseif not app.user %}
+				<link href="{{ asset('css/fonts/open-sans.css') }}" type="text/css" rel="stylesheet">
+			{% endif %}
 
 			{% stylesheets "@MiamBundle/Resources/public/scss/main.scss" filter='scss' output='css/main.css' %}
 				<link href="{{ asset_url }}" type="text/css" rel="stylesheet">
@@ -26,6 +31,7 @@
 	</head>
 	<body class="
 		{{ app.user and app.user.setting('THEME') ? 'theme-' ~ app.user.setting('THEME') }}
+		{{ app.user and app.user.setting('FONT_FAMILY') ? 'ff-' ~ app.user.setting('FONT_FAMILY') }}
 		{% block bodyClasses %}{% endblock %}"
 	>
 		{% block body %}{% endblock %}

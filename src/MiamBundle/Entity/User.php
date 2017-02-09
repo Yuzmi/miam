@@ -95,12 +95,13 @@ class User implements UserInterface, \Serializable
 
     // All settings and their default values
     private $allSettings = array(
-        'SHOW_ITEM_PICTURES' => "always",
-        'SHOW_ITEM_DETAILS' => "onclick",
-        'HIDE_SIDEBAR' => false,
-        'THEME' => "basic",
+        'DATE_FORMAT' => "dmy",
+        'FONT_FAMILY' => "open-sans",
         'FONT_SIZE' => 10,
-        'DATE_FORMAT' => "dmy"
+        'HIDE_SIDEBAR' => false,
+        'SHOW_ITEM_DETAILS' => "onclick",
+        'SHOW_ITEM_PICTURES' => "always",
+        'THEME' => "basic"
     );
 
     public function getSettings() {
@@ -110,7 +111,9 @@ class User implements UserInterface, \Serializable
             $settings = array();
         }
 
-        return array_intersect_key($settings, $this->allSettings);
+        $settings = array_merge($this->allSettings, array_intersect_key($settings, $this->allSettings));
+
+        return $settings;
     }
 
     public function setSettings(array $settings) {
@@ -153,6 +156,14 @@ class User implements UserInterface, \Serializable
             }
         } elseif($key == 'DATE_FORMAT') {
             if(!in_array($value, array('dmy', 'mdy', 'ymd'))) {
+                return;
+            }
+        } elseif($key == 'FONT_FAMILY') {
+            $families = array(
+                'arial', 'courier-new', 'fira-sans', 'georgia',
+                'lato', 'open-sans', 'times-new-roman', 'ubuntu', 'verdana'
+            );
+            if(!in_array($value, $families)) {
                 return;
             }
         }
