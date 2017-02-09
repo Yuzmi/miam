@@ -34,7 +34,7 @@ class Feed
         $this->nbItems = 0;
         $this->errorCount = 0;
         $this->hasIcon = false;
-        $this->dateCreated = new \DateTime("now");
+        $this->dateCreated = new \DateTime();
         $this->items = new \Doctrine\Common\Collections\ArrayCollection();
         $this->pshbSubscriptions = new \Doctrine\Common\Collections\ArrayCollection();
         $this->subscriptions = new \Doctrine\Common\Collections\ArrayCollection();

@@ -28,7 +28,7 @@ class MarkManager extends MainService {
         }
 
         $mark->setIsRead(true);
-        $mark->setDateRead(new \DateTime("now"));
+        $mark->setDateRead(new \DateTime());
 
         $this->em->persist($mark);
     	$this->em->flush();
@@ -46,7 +46,7 @@ class MarkManager extends MainService {
         }
 
         $mark->setIsRead(false);
-        $mark->setDateRead(new \DateTime("now"));
+        $mark->setDateRead(new \DateTime());
 
         $this->em->persist($mark);
     	$this->em->flush();

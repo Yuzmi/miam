@@ -19,7 +19,7 @@ class DataParsing extends MainService {
 
 	public function parseFeed(Feed $feed, $options = array()) {
 		$pie = new \SimplePie();
-		$now = new \DateTime("now");
+		$now = new \DateTime();
 
 		if(isset($options['data']) && !empty($options['data'])) {
 			$pie->set_raw_data($options['data']);
@@ -387,7 +387,7 @@ class DataParsing extends MainService {
 		$this->em->flush();
 
 		// Get icon every 7 days
-		if(!$feed->getDateIcon() || $feed->getDateIcon() < new \DateTime("now - 7 days")) {
+		if(!$feed->getDateIcon() || $feed->getDateIcon() < new \DateTime("-7 days")) {
 			$this->parseIcon($feed);
 		}
 
@@ -441,7 +441,7 @@ class DataParsing extends MainService {
     	if($success) {
     		$feed->setHasIcon(true);
     	}
-    	$feed->setDateIcon(new \DateTime("now"));
+    	$feed->setDateIcon(new \DateTime());
 
     	$this->em->persist($feed);
     	$this->em->flush();

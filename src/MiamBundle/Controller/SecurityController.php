@@ -76,7 +76,7 @@ class SecurityController extends MainController
         $this->get('security.token_storage')->setToken($token);
         $this->get('session')->set('_security_main', serialize($token));
 
-        $user->setDateLogin(new \DateTime("now"));
+        $user->setDateLogin(new \DateTime());
 
         $em = $this->getEm();
         $em->persist($user);

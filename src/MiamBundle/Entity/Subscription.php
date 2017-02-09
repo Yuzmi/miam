@@ -12,7 +12,7 @@ class Subscription
     private $category;
 
     public function __construct() {
-        $this->dateCreated = new \DateTime("now");
+        $this->dateCreated = new \DateTime();
     }
 
     public function getPath() {

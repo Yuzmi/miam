@@ -25,11 +25,11 @@ class Item
     private $marks;
 
     public function __construct() {
-        $this->dateCreated = new \DateTime("now");
-        $this->datePublished = new \DateTime("now");
-        $this->dateUpdated = new \DateTime("now");
-        $this->dateModified = new \DateTime("now");
-        $this->dateLastSeen = new \DateTime("now");
+        $this->dateCreated = new \DateTime();
+        $this->datePublished = new \DateTime();
+        $this->dateUpdated = new \DateTime();
+        $this->dateModified = new \DateTime();
+        $this->dateLastSeen = new \DateTime();
         $this->tags = new \Doctrine\Common\Collections\ArrayCollection();
         $this->enclosures = new \Doctrine\Common\Collections\ArrayCollection();
         $this->marks = new \Doctrine\Common\Collections\ArrayCollection();

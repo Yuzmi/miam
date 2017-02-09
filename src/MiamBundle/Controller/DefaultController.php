@@ -23,7 +23,7 @@ class DefaultController extends MainController
 	// https://pubsubhubbub.github.io/PubSubHubbub/pubsubhubbub-core-0.4.html
 	public function pshbAction(Request $request) {
 		$em = $this->getEm();
-		$now = new \DateTime("now");
+		$now = new \DateTime();
 
 		if($request->getMethod() == "GET") {
 			$mode = $request->query->get('hub_mode');

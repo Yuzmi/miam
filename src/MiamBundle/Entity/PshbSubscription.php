@@ -15,7 +15,7 @@ class PshbSubscription
 
     public function __construct() {
         $this->leaseSeconds = 0;
-        $this->dateCreated = new \DateTime("now");
+        $this->dateCreated = new \DateTime();
     }
 
     // Getters

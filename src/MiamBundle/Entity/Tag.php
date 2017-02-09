@@ -11,7 +11,7 @@ class Tag
     private $items;
 
     public function __construct() {
-        $this->dateCreated = new \DateTime("now");
+        $this->dateCreated = new \DateTime();
         $this->items = new \Doctrine\Common\Collections\ArrayCollection();
     }
 

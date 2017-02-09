@@ -16,7 +16,7 @@ class Category
     private $subscriptions;
     
     public function __construct() {
-        $this->dateCreated = new \DateTime("now");
+        $this->dateCreated = new \DateTime();
         $this->level = 0;
         $this->subcategories = new \Doctrine\Common\Collections\ArrayCollection();
         $this->subscriptions = new \Doctrine\Common\Collections\ArrayCollection();

@@ -20,7 +20,7 @@ class User implements UserInterface, \Serializable
 
     public function __construct() {
         $this->salt = uniqid(mt_rand(), true);
-        $this->dateCreated = new \DateTime("now");
+        $this->dateCreated = new \DateTime();
         $this->isAdmin = false;
         $this->settings = serialize(array());
         $this->subscriptions = new \Doctrine\Common\Collections\ArrayCollection();

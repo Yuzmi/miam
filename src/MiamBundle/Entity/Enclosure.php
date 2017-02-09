@@ -15,7 +15,7 @@ class Enclosure
     private $item;
 
     public function __construct() {
-        $this->dateCreated = new \DateTime("now");
+        $this->dateCreated = new \DateTime();
     }
 
     public function __toString() {

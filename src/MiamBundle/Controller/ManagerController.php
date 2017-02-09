@@ -350,7 +350,7 @@ class ManagerController extends MainController
             'subscriptions' => $subscriptions,
             'settings' => $settings,
             'user' => $this->getUser(),
-            'dateCreated' => date_format(new \DateTime("now"), DATE_ATOM)
+            'dateCreated' => date_format(new \DateTime(), DATE_ATOM)
         ));
 
         $response = new Response($opml);
