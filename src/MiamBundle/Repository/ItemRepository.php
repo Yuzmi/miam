@@ -80,6 +80,12 @@ class ItemRepository extends \Doctrine\ORM\EntityRepository
 			$qb->setParameter('createdAfter', $createdAfter);
 		}
 
+		$ids = isset($options['ids']) ? $options['ids'] : array();
+		if(count($ids) > 0) {
+			$qb->andWhere('i.id IN (:ids)');
+			$qb->setParameter('ids', $ids);
+		}
+
 		$count = isset($options['count']) ? intval($options['count']) : 0;
 		if($count > 0) {
 			$qb->setMaxResults($count);
@@ -97,6 +103,19 @@ class ItemRepository extends \Doctrine\ORM\EntityRepository
 		}
 
 		return $qb->getQuery()->getResult();
+	}
+
+	public function getItem($id, $options = array()) {
+		$item = null;
+
+		$options['ids'] = array($id);
+
+		$items = $this->getItems($options);
+		if(count($items) > 0) {
+			$item = $items[0];
+		}
+
+		return $item;
 	}
 
 	public function getDataForItems($items, $options = array()) {

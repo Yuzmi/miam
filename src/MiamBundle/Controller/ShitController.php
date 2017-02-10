@@ -188,7 +188,11 @@ class ShitController extends MainController
         $html = null;
 
         if($request->isXmlHttpRequest() && $this->isLogged()) {
-            $item = $this->getRepo("Item")->find($request->get("item"));
+            //$item = $this->getRepo("Item")->find($request->get("item"));
+            $item = $this->getRepo("Item")->getItem(
+                $request->get("item"),
+                array("subscriber" => $this->getUser())
+            );
             if($item) {
                 $dataItem = $this->getRepo("Item")->getDataForItem($item);
 
