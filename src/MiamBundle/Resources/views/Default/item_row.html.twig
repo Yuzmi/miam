@@ -29,22 +29,23 @@
 		</span>
 	{% endif %}
 
-	<span class="datetime" title="{{ item.datePublished|date('Y-m-d H:i:s') }}">
+	{% set timezone = app.user ? app.user.setting('TIMEZONE') : null %}
+	<span class="datetime" title="{{ item.datePublished|date(constant('DATE_ATOM')) }}">
 		{% if item.datePublished|date('Y-m-d') == "now"|date('Y-m-d') %}
-			{{ item.datePublished|date('H:i') }}
+			{{ item.datePublished|date('H:i', timezone) }}
 		{% elseif item.datePublished|date('Y') == "now"|date('Y') %}
 			{% if app.user and app.user.setting('DATE_FORMAT') in ['mdy', 'ymd'] %}
-				{{ item.datePublished|date('m/d') }}
+				{{ item.datePublished|date('m/d', timezone) }}
 			{% else %}
-				{{ item.datePublished|date('d/m') }}
+				{{ item.datePublished|date('d/m', timezone) }}
 			{% endif %}
 		{% else %}
 			{% if app.user and app.user.setting('DATE_FORMAT') == 'mdy' %}
-				{{ item.datePublished|date('m/d/y') }}
+				{{ item.datePublished|date('m/d/y', timezone) }}
 			{% elseif app.user and app.user.setting('DATE_FORMAT') == 'ymd' %}
-				{{ item.datePublished|date('y/m/d') }}
+				{{ item.datePublished|date('y/m/d', timezone) }}
 			{% else %}
-				{{ item.datePublished|date('d/m/y') }}
+				{{ item.datePublished|date('d/m/y', timezone) }}
 			{% endif %}
 		{% endif %}
 	</span>

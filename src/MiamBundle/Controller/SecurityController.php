@@ -59,6 +59,8 @@ class SecurityController extends MainController
             $password = $encoder->encodePassword($user, $password);
             $user->setPassword($password);
 
+            $this->get('setting_manager')->setDefaultUserSettings($user);
+
             $em = $this->getEm();
             $em->persist($user);
             $em->flush();

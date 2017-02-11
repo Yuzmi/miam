@@ -19,9 +19,12 @@ class ManagerController extends MainController
         $categories = $this->getRepo('Category')->findForUserWithMore($this->getUser());
         $subscriptions = $this->getRepo('Subscription')->findForUserWithMore($this->getUser());
 
+        $timezones = \DateTimeZone::listIdentifiers();
+
 		return $this->render('MiamBundle:Manager:index.html.twig', array(
             'categories' => $categories,
-            'subscriptions' => $subscriptions
+            'subscriptions' => $subscriptions,
+            'timezones' => \DateTimeZone::listIdentifiers()
         ));
 	}
 
@@ -446,7 +449,7 @@ class ManagerController extends MainController
             $name = isset($outline['name']) ? (string) $outline['name'] : null;
             $value = isset($outline['value']) ? (string) $outline['value'] : null;
             if($name && $value !== null) {
-                $user->setSetting($name, $value);
+                $this->get('setting_manager')->setUserSetting($user, $name, $value);
 
                 $em->persist($user);
                 $em->flush();
@@ -485,15 +488,17 @@ class ManagerController extends MainController
 
     public function updateSettingsAction(Request $request) {
         if($this->isTokenValid('manager_settings_update', $request->get('csrf_token'))) {
+            $sm = $this->get('setting_manager');
             $user = $this->getUser();
             
-            $user->setSetting('DATE_FORMAT', $request->get("DATE_FORMAT"));
-            $user->setSetting('FONT_FAMILY', $request->get("FONT_FAMILY"));
-            $user->setSetting('FONT_SIZE', $request->get("FONT_SIZE"));
-            $user->setSetting('HIDE_SIDEBAR', $request->get("HIDE_SIDEBAR"));
-            $user->setSetting('SHOW_ITEM_DETAILS', $request->get("SHOW_ITEM_DETAILS"));
-            $user->setSetting('SHOW_ITEM_PICTURES', $request->get("SHOW_ITEM_PICTURES"));
-            $user->setSetting('THEME', $request->get("THEME"));
+            $sm->setUserSetting($user, 'DATE_FORMAT', $request->get("DATE_FORMAT"));
+            $sm->setUserSetting($user, 'FONT_FAMILY', $request->get("FONT_FAMILY"));
+            $sm->setUserSetting($user, 'FONT_SIZE', $request->get("FONT_SIZE"));
+            $sm->setUserSetting($user, 'HIDE_SIDEBAR', $request->get("HIDE_SIDEBAR"));
+            $sm->setUserSetting($user, 'SHOW_ITEM_DETAILS', $request->get("SHOW_ITEM_DETAILS"));
+            $sm->setUserSetting($user, 'SHOW_ITEM_PICTURES', $request->get("SHOW_ITEM_PICTURES"));
+            $sm->setUserSetting($user, 'THEME', $request->get("THEME"));
+            $sm->setUserSetting($user, 'TIMEZONE', $request->get('TIMEZONE'));
             
             $locale = $request->get("LOCALE");
             if(in_array($locale, array("en", "fr"))) {

@@ -93,25 +93,12 @@ class User implements UserInterface, \Serializable
 
     // Settings-related methods
 
-    // All settings and their default values
-    private $allSettings = array(
-        'DATE_FORMAT' => "dmy",
-        'FONT_FAMILY' => "open-sans",
-        'FONT_SIZE' => 10,
-        'HIDE_SIDEBAR' => false,
-        'SHOW_ITEM_DETAILS' => "onclick",
-        'SHOW_ITEM_PICTURES' => "always",
-        'THEME' => "basic"
-    );
-
     public function getSettings() {
         try {
             $settings = (array) unserialize($this->settings);
         } catch(\Exception $e) {
             $settings = array();
         }
-
-        $settings = array_merge($this->allSettings, array_intersect_key($settings, $this->allSettings));
 
         return $settings;
     }
@@ -125,8 +112,6 @@ class User implements UserInterface, \Serializable
 
         if(array_key_exists($key, $settings)) {
             return $settings[$key];
-        } elseif(array_key_exists($key, $this->allSettings)) {
-            return $this->allSettings[$key];
         }
 
         return null;
@@ -134,39 +119,6 @@ class User implements UserInterface, \Serializable
 
     public function setSetting($key, $value) {
         $settings = $this->getSettings();
-
-        if($key == 'SHOW_ITEM_PICTURES') {
-            if(!in_array($value, array('always', 'onclick', 'never'))) {
-                return;
-            }
-        } elseif($key == 'SHOW_ITEM_DETAILS') {
-            if(!in_array($value, array('always', 'onclick'))) {
-                return;
-            }
-        } elseif($key == 'HIDE_SIDEBAR') {
-            $value = boolval($value);
-        } elseif($key == 'THEME') {
-            if(!in_array($value, array('basic', 'dark'))) {
-                return;
-            }
-        } elseif($key == 'FONT_SIZE') {
-            $font_size = intval($value);
-            if($font_size < 7 || $font_size > 18) {
-                return;
-            }
-        } elseif($key == 'DATE_FORMAT') {
-            if(!in_array($value, array('dmy', 'mdy', 'ymd'))) {
-                return;
-            }
-        } elseif($key == 'FONT_FAMILY') {
-            $families = array(
-                'arial', 'courier-new', 'fira-sans', 'georgia',
-                'lato', 'open-sans', 'times-new-roman', 'ubuntu', 'verdana'
-            );
-            if(!in_array($value, $families)) {
-                return;
-            }
-        }
 
         $settings[$key] = $value;
 

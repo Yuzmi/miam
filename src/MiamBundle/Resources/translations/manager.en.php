@@ -34,6 +34,7 @@
 		'manager.settings.language.default' => 'Default',
 		'manager.settings.language.en' => 'English',
 		'manager.settings.language.fr' => 'French',
+		'manager.settings.timezone' => 'Timezone:',
 		'manager.settings.update' => 'Update settings',
 
 		'manager.password' => 'Password',

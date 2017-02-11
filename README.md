@@ -43,4 +43,3 @@ Also, use a modern browser.
 - ICO to PNG without imagick
 - Improve admin
 - PubSubHubBub
-- Timezone setting

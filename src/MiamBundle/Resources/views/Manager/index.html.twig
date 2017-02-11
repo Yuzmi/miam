@@ -162,6 +162,17 @@
 
 				<br><br>
 
+				{{ "manager.settings.timezone"|trans({}, 'manager') }}
+				<select name="TIMEZONE">
+					{% for timezone in timezones %}
+						<option value="{{ timezone }}" {{ timezone == app.user.setting('TIMEZONE') ? 'selected' }}>
+							{{ timezone }}
+						</option>
+					{% endfor %}
+				</select>
+
+				<br><br>
+
 				<button type="submit">{{ "manager.settings.update"|trans({}, 'manager') }}</button>
 
 				<input type="hidden" name="csrf_token" value="{{ csrf_token('manager_settings_update') }}">

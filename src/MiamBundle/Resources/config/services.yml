@@ -19,6 +19,9 @@ services:
     pubsubhubbub:
         class: MiamBundle\Services\PubSubHubBub
         arguments: ["@doctrine.orm.default_entity_manager", "@service_container"]
+    setting_manager:
+        class: MiamBundle\Services\SettingManager
+        arguments: []
     text_extension:
         class: MiamBundle\Twig\TextExtension
         public: false

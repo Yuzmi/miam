@@ -29,13 +29,14 @@
 		<span class="name">{{ feedName }}</span>
 	</span>
 	-
-	<span class="datetime" title="{{ item.datePublished|date('Y-m-d H:i:s') }}">
+	{% set timezone = app.user ? app.user.setting('TIMEZONE') : null %}
+	<span class="datetime" title="{{ item.datePublished|date(constant('DATE_ATOM')) }}">
 		{% if app.user and app.user.setting('DATE_FORMAT') == 'mdy' %}
-			{{ item.datePublished|date('m/d/y H:i') }}
+			{{ item.datePublished|date('m/d/y H:i', timezone) }}
 		{% elseif app.user and app.user.setting('DATE_FORMAT') == 'ymd' %}
-			{{ item.datePublished|date('y/m/d H:i') }}
+			{{ item.datePublished|date('y/m/d H:i', timezone) }}
 		{% else %}
-			{{ item.datePublished|date('d/m/y H:i') }}
+			{{ item.datePublished|date('d/m/y H:i', timezone) }}
 		{% endif %}
 	</span>
 	-
