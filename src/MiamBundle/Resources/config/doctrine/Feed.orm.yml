@@ -29,8 +29,9 @@ MiamBundle\Entity\Feed:
             nullable: true
         url:
             type: text
-        hash:
+        urlHash:
             type: string
+            column: url_hash
             length: 40
         iconUrl:
             type: text
@@ -95,8 +96,8 @@ MiamBundle\Entity\Feed:
             mappedBy: feed
             cascade: ["remove"]
     uniqueConstraints:
-        feed_hash_idx:
-            columns: [ hash ]
+        feed_url_hash_idx:
+            columns: [ url_hash ]
     lifecycleCallbacks:
         preRemove: [ prepareIconRemoval ]
         postRemove: [ removeIcon ]

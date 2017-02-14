@@ -3,10 +3,18 @@
 {% block body %}
 	{% include 'MiamBundle:Default:header.html.twig' %}
 
-	{{ form_start(createFeedForm) }}
-	{{ form_widget(createFeedForm.url, {'attr': {'placeholder': "URL"}}) }}
-	{{ form_widget(createFeedForm.submit, {'label': "admin.add"|trans({}, 'admin')}) }}
-	{{ form_end(createFeedForm) }}
+	<div class="forms">
+		{{ form_start(createFeedForm) }}
+		{{ form_widget(createFeedForm.url, {'attr': {'placeholder': "URL"}}) }}
+		{{ form_widget(createFeedForm.submit, {'label': "admin.add"|trans({}, 'admin')}) }}
+		{{ form_end(createFeedForm) }}
+
+		<br>
+
+		<a href="{{ path('admin_feeds_export') }}"><button>{{ "admin.export_feeds"|trans({}, 'admin') }}</button></a>
+	
+		<button class="importFeeds">{{ "admin.import_feeds"|trans({}, 'admin') }}</button>
+	</div>
 
 	<table>
 		<tr>
@@ -61,7 +69,7 @@
 	{{ parent() }}
 
 	<style>
-		form {
+		.forms {
 			padding:10px 15px;
 		}
 
@@ -92,6 +100,19 @@
 	{{ parent() }}
 
 	<script type="text/javascript">
+		$(".importFeeds").on("click", function() {
+			$.ajax({
+				type: "POST",
+				url: Routing.generate("ajax_admin_popup_feeds_import"),
+				dataType: "json"
+			}).done(function(result) {console.log(42);
+				if(result.success) {
+					$("body").append(result.html);
+					app.popup.init();
+				}
+			});
+		});
+
 		$(".feed .parser .parse").click(function() {
 			var feedId = $(this).closest(".feed").data('feed');
 

@@ -243,7 +243,7 @@ class ManagerController extends MainController
                 $new_subscription = true;
             }
 
-            $feed = $this->get('feed_manager')->getFeedForUrl($request->get('url'));
+            $feed = $this->get('feed_manager')->getFeedForUrl($request->get('url'), true);
             if($feed) {
                 $subscription->setFeed($feed);
 
@@ -347,13 +347,12 @@ class ManagerController extends MainController
         $subscriptions = $this->getRepo("Subscription")->findForUserWithMore($this->getUser());
         $settings = $this->getUser()->getSettings();
 
-        $opml = $this->renderView("MiamBundle:Manager:export.opml.twig", array(
+        $opml = $this->renderView("MiamBundle:Default:export.opml.twig", array(
             'what' => $what,
             'categories' => $categories,
             'subscriptions' => $subscriptions,
             'settings' => $settings,
-            'user' => $this->getUser(),
-            'dateCreated' => date_format(new \DateTime(), DATE_ATOM)
+            'ownerName' => $this->getUser()->getUsername()
         ));
 
         $response = new Response($opml);
@@ -417,7 +416,7 @@ class ManagerController extends MainController
         if(isset($outline["xmlUrl"])) {
             $subscription = null;
 
-            $feed = $this->get("feed_manager")->getFeedForUrl($outline["xmlUrl"], true);
+            $feed = $this->get("feed_manager")->getFeedForUrl($outline["xmlUrl"]);
             if($feed) {
                 $subscription = $this->getRepo('Subscription')->findOneBy(array(
                     'user' => $user,

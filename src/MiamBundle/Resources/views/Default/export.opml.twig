@@ -2,14 +2,20 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <opml version="2.0">
 	<head>
-		<title>OPML</title>
-		<dateCreated>{{ dateCreated }}</dateCreated>
-		<ownerName>{{ user.username }}</ownerName>
+		<title>{{ title is defined ? title : "OPML" }}</title>
+		<dateCreated>{{ "now"|date(constant('DATE_ATOM')) }}</dateCreated>
+		{% if ownerName is defined %}
+			<ownerName>{{ ownerName }}</ownerName>
+		{% endif %}
 	</head>
 	<body>
 		{% if what == "settings" %}
 			{% for s, val in settings %}
 				{{ macros.setting(s, val) }}
+			{% endfor %}
+		{% elseif what == "feeds" %}
+			{% for f in feeds %}
+				{{ macros.feed(f) }}
 			{% endfor %}
 		{% elseif what == "subscriptions" %}
 			{% for s in subscriptions %}
@@ -23,7 +29,7 @@
 			{% for s in subscriptions if not s.category %}
 				{{ macros.subscription(s) }}
 			{% endfor %}
-		{% else %}
+		{% elseif what == "user" %}
 			{% for c in categories if c.parent is null %}
 				{{ macros.category(c, categories) }}
 			{% endfor %}
@@ -54,6 +60,10 @@
 
 {% macro subscription(s) %}
 	<outline type="rss" text="{{ s.name }}" title="{{ s.name }}" xmlUrl="{{ s.feed.url }}" />
+{% endmacro %}
+
+{% macro feed(f) %}
+	<outline type="rss" text="{{ f.name }}" title="{{ f.name }}" xmlUrl="{{ f.url }}" />
 {% endmacro %}
 
 {% macro setting(name, value) %}

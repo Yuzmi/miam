@@ -1,0 +1,17 @@
+{% extends "MiamBundle:Default:popup.html.twig" %}
+
+{% block popupTitle %}
+	{{ "admin.popup.import_feeds.title"|trans({}, 'admin') }}
+{% endblock %}
+
+{% block popupContent %}
+	<form method="POST" action="{{ path('admin_feeds_import') }}" enctype="multipart/form-data">
+		<input type="file" id="opml" name="opml">
+
+		<br>
+
+		<button type="submit">{{ "admin.popup.import_feeds.submit"|trans({}, 'admin') }}</button>
+
+		<input type="hidden" name="csrf_token" value="{{ csrf_token('admin_feeds_import') }}">
+	</form>
+{% endblock %}

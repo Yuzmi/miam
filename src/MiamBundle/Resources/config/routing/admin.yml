@@ -16,6 +16,14 @@ ajax_admin_feed_delete:
     defaults: { _controller: MiamBundle:Admin:ajaxDeleteFeed }
     requirements: { id: \d+ }
 
-admin_parse_all:
-    path: /parse/all
-    defaults: { _controller: MiamBundle:Admin:parseAll }
+admin_feeds_export:
+    path: /feeds/export
+    defaults: { _controller: MiamBundle:Admin:exportFeeds }
+
+ajax_admin_popup_feeds_import:
+    path: /ajax/popup/feeds/import
+    defaults: { _controller: MiamBundle:Admin:ajaxPopupImportFeeds }
+
+admin_feeds_import:
+    path: /feeds/import
+    defaults: { _controller: MiamBundle:Admin:importFeeds }

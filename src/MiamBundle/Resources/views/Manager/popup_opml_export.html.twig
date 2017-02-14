@@ -6,7 +6,7 @@
 	<form method="POST" action="{{ path('manager_opml_export') }}">
 		<label for="what">{{ "manager.catsubs.export_opml.what"|trans({}, 'manager') }}</label>
 		<select name="what">
-			<option value="all">
+			<option value="user">
 				{{ "manager.catsubs.export_opml.what.everything"|trans({}, 'manager') }}
 			</option>
 			<option value="catsubs">

@@ -46,25 +46,16 @@ class FeedManager extends MainService {
 	}
 
 	// Find a feed, create if not exists
-	public function getFeedForUrl($url, $fast = false) {
+	public function getFeedForUrl($url, $parsing = false) {
 		$feed = null;
 
 		if(filter_var($url, FILTER_VALIDATE_URL) !== false) {
 			$url = $this->formatUrl($url);
-			$hash = $this->hashUrl($url);
+			$urlHash = $this->hashUrl($url);
 
-			$feed = $this->getRepo("Feed")->findOneByHash($hash);
+			$feed = $this->getRepo("Feed")->findOneByUrlHash($urlHash);
 			if(!$feed) {
-				$feed = new Feed();
-				$feed->setUrl($url);
-				$feed->setHash($hash);
-
-				$this->em->persist($feed);
-				$this->em->flush();
-
-				if(!$fast) {
-					$this->container->get('data_parsing')->parseFeed($feed);
-				}
+				$feed = $this->createFeedForUrl($url, $parsing);
 			}
 		}
 
@@ -77,9 +68,28 @@ class FeedManager extends MainService {
 
 		if(filter_var($url, FILTER_VALIDATE_URL) !== false) {
 			$url = $this->formatUrl($url);
-			$hash = $this->hashUrl($url);
+			$urlHash = $this->hashUrl($url);
 
-			$feed = $this->getRepo("Feed")->findOneByHash($hash);
+			$feed = $this->getRepo("Feed")->findOneByUrlHash($urlHash);
+		}
+
+		return $feed;
+	}
+
+	// Create a feed
+	public function createFeedForUrl($url, $parsing = false) {
+		$url = $this->formatUrl($url);
+		$urlHash = $this->hashUrl($url);
+
+		$feed = new Feed();
+		$feed->setUrl($url);
+		$feed->setUrlHash($urlHash);
+
+		$this->em->persist($feed);
+		$this->em->flush();
+
+		if($parsing) {
+			$this->container->get('data_parsing')->parseFeed($feed);
 		}
 
 		return $feed;

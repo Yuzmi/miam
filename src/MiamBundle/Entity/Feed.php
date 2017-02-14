@@ -10,7 +10,7 @@ class Feed
     private $originalDescription;
     private $customDescription;
     private $url;
-    private $hash;
+    private $urlHash;
     private $iconUrl;
     private $website;
     private $author;
@@ -53,7 +53,7 @@ class Feed
     public function getOriginalDescription() { return $this->originalDescription; }
     public function getCustomDescription() { return $this->customDescription; }
     public function getUrl() { return $this->url; }
-    public function getHash() { return $this->hash; }
+    public function getUrlHash() { return $this->urlHash; }
     public function getIconUrl() { return $this->iconUrl; }
     public function getWebsite() { return $this->website; }
     public function getAuthor() { return $this->author; }
@@ -77,7 +77,7 @@ class Feed
     public function setOriginalDescription($originalDescription) { $this->originalDescription = $originalDescription; return $this; }
     public function setCustomDescription($customDescription) { $this->customDescription = $customDescription; return $this; }
     public function setUrl($url) { $this->url = $url; return $this; }
-    public function setHash($hash) { $this->hash = $hash; return $this; }
+    public function setUrlHash($urlHash) { $this->urlHash = $urlHash; return $this; }
     public function setIconUrl($iconUrl) { $this->iconUrl = $iconUrl; return $this; }
     public function setWebsite($website) { $this->website = $website; return $this; }
     public function setAuthor($author) { $this->author = $author; return $this; }
