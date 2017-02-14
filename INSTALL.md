@@ -88,6 +88,8 @@ php bin/symfony_requirements
 php bin/console miam:requirements
 ```
 
+Make sure all required extensions are installed.  
+
 #### Database user (PostgreSQL only)
 
 Here is an example to create a PostgreSQL user if you don't have one.  
@@ -104,6 +106,9 @@ ALTER USER miam WITH ENCRYPTED PASSWORD 'your_password';
 
 # Grant permission to create databases
 ALTER ROLE miam WITH CREATEDB;
+
+\q
+exit
 ```
 
 #### Database
