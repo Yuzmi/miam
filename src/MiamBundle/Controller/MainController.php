@@ -19,6 +19,10 @@ class MainController extends Controller
     	return $this->get('security.authorization_checker')->isGranted('ROLE_USER');
     }
 
+    public function isLoggedAdmin() {
+        return $this->get('security.authorization_checker')->isGranted('ROLE_ADMIN');
+    }
+
     public function addFm($message, $type = "notice", $transParameters = array(), $transDomain = "flashmessage") {
     	$this->get('session')->getFlashBag()->add(
             $type, 
