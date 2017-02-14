@@ -21,7 +21,7 @@ RSS agregator using [Symfony 3](https://symfony.com/) and [SimplePie](https://gi
 
 ### Installation
 
-Read instructions in INSTALL.md.
+Read instructions in [INSTALL.md](https://github.com/Yuzmi/miam/blob/master/INSTALL.md).
 
 ### Notes
 
