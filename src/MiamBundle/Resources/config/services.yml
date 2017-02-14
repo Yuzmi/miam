@@ -19,6 +19,11 @@ services:
     pubsubhubbub:
         class: MiamBundle\Services\PubSubHubBub
         arguments: ["@doctrine.orm.default_entity_manager", "@service_container"]
+    redirect_listener:
+        class: MiamBundle\EventListener\RedirectListener
+        arguments: ["@router", "@security.token_storage"]
+        tags:
+            - { name: kernel.event_listener, event: kernel.request, method: onKernelRequest }
     setting_manager:
         class: MiamBundle\Services\SettingManager
         arguments: []
