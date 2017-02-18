@@ -37,8 +37,23 @@ mv composer.phar /usr/local/bin/composer
 ```
 
 #### Git (Only if you clone the project)
+
 ```shell
 apt install -y git
+```
+
+#### Timezones
+
+Make sure your server timezone and your PHP timezone are identical.  
+
+```shell
+# Server
+cat /etc/timezone # Show
+dpkg-reconfigure tzdata # Edit
+
+# PHP
+nano /etc/php/7.0/apache2/php.ini
+# Check the 'date.timezone' setting in the "Date" section
 ```
 
 ### Miam
@@ -145,6 +160,12 @@ DocumentRoot /var/www/miam/web
 <Directory /var/www/miam/web>
 	AllowOverride All
 </Directory>
+```
+
+Reload the Apache configuration  
+
+```shell
+service apache2 reload
 ```
 
 #### Cron job
