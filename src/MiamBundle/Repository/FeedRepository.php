@@ -4,7 +4,14 @@ namespace MiamBundle\Repository;
 
 class FeedRepository extends \Doctrine\ORM\EntityRepository
 {
-	public function findSubscribed() {
+	public function findAll() {
+        return $this->createQuerybuilder('f')
+            ->orderBy('f.id', 'ASC')
+            ->getQuery()
+            ->getResult();
+    }
+
+    public function findSubscribed() {
 		$fs = $this->createQueryBuilder("f")
             ->select("f, COUNT(s.id)")
             ->leftJoin("f.subscriptions", "s")
