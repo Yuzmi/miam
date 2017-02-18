@@ -124,4 +124,10 @@ class Feed
             @unlink($this->iconPathForRemoval);
         }
     }
+
+    // Other methods
+
+    public function getIsInvalid() {
+        return $this->errorCount > 5 ? true : false;
+    }
 }
