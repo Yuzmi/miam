@@ -10,6 +10,7 @@ class FeedRepository extends \Doctrine\ORM\EntityRepository
             ->leftJoin("f.subscriptions", "s")
             ->groupBy("f")
             ->having("COUNT(s.id) > 0")
+            ->orderBy('f.id', 'ASC')
             ->getQuery()->getResult();
 
         $feeds = array();
@@ -31,6 +32,7 @@ class FeedRepository extends \Doctrine\ORM\EntityRepository
             ->leftJoin("f.subscriptions", "s")
             ->groupBy("f")
             ->having("COUNT(s.id) = 0")
+            ->orderBy('f.id', 'ASC')
             ->getQuery()->getResult();
         
         $feeds = array();
