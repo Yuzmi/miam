@@ -20,7 +20,7 @@ class ParseIconsCommand extends ContainerAwareCommand {
     protected function execute(InputInterface $input, OutputInterface $output) {
         error_reporting(0);
 
-        $time_start = time();
+        $time_start = microtime(true);
 
         $em = $this->getContainer()->get('doctrine')->getManager();
 
@@ -45,8 +45,6 @@ class ParseIconsCommand extends ContainerAwareCommand {
         }
 
         if($countFeeds > 0) {
-            $output->writeln('Parsing... ');
-
             $count = 0;
             $countSuccess = 0;
             foreach($feeds as $f) {
@@ -79,7 +77,7 @@ class ParseIconsCommand extends ContainerAwareCommand {
                 $output->writeln('');
             }
 
-            $duration = time() - $time_start;
+            $duration = round(microtime(true) - $time_start, 3);
 
             $output->writeln('Done. Icons: '.$countSuccess.'/'.$count.'. Duration: '.$duration.'s');
         } else {

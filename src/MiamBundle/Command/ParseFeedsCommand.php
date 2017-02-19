@@ -14,17 +14,17 @@ class ParseFeedsCommand extends ContainerAwareCommand {
             ->setName('miam:parse:feeds')
             ->setDescription('Parse feeds')
             ->addArgument('feeds', InputArgument::OPTIONAL, "Which feeds will you parse ?")
+            ->addOption('ignore-invalid', null, InputOption::VALUE_NONE, "Ignore invalid feeds")
             ->addOption('list-errors', null, InputOption::VALUE_NONE, "List errors at the end")
             ->addOption('no-cache', null, InputOption::VALUE_NONE, "Disable the cache")
             ->addOption('timeout', null, InputOption::VALUE_REQUIRED, "Set the timeout to fetch a feed (seconds)")
-            ->addOption('ignore-invalid', null, InputOption::VALUE_NONE, "Ignore invalid feeds")
         ;
     }
 
     protected function execute(InputInterface $input, OutputInterface $output) {
         error_reporting(0);
 
-        $time_start = time();
+        $time_start = microtime(true);
 
         $em = $this->getContainer()->get('doctrine')->getManager();
         $feeds = array();
@@ -63,8 +63,6 @@ class ParseFeedsCommand extends ContainerAwareCommand {
         }
 
         if($countFeeds > 0) {
-            $output->writeln('Fetching and parsing...');
-
             foreach($feeds as $f) {
                 $feed = $em->getRepository('MiamBundle:Feed')->find($f->getId());
                 if(!$feed) {
@@ -121,7 +119,7 @@ class ParseFeedsCommand extends ContainerAwareCommand {
                 $output->write('New item(s): '.$countNewItems.' - ');
             }
 
-            $duration = time() - $time_start;
+            $duration = round(microtime(true) - $time_start, 3);
             $output->writeln('Duration: '.$duration.'s');
 
             if($input->getOption('list-errors')) {
