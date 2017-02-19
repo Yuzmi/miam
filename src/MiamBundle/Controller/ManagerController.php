@@ -243,7 +243,7 @@ class ManagerController extends MainController
                 $new_subscription = true;
             }
 
-            $feed = $this->get('feed_manager')->getFeedForUrl($request->get('url'), true);
+            $feed = $this->get('feed_manager')->getFeedForUrl(trim($request->get('url')), true);
             if($feed) {
                 $subscription->setFeed($feed);
 
@@ -254,15 +254,16 @@ class ManagerController extends MainController
                     $subscription->setName($feed->getName());
                 }
 
-                $category = $this->getRepo("Category")->findOneBy(array(
-                    'id' => $request->get('category'),
-                    'user' => $this->getUser()
-                ));
-                if($category) {
-                    $subscription->setCategory($category);
+                $categoryId = intval($request->get('category'));
+                if($categoryId > 0) {
+                    $category = $this->getRepo("Category")->findOneBy(array(
+                        'id' => $categoryId,
+                        'user' => $this->getUser()
+                    ));
                 } else {
-                    $subscription->setCategory(null);
+                    $category = null;
                 }
+                $subscription->setCategory($category ?: null);
 
                 $em->persist($subscription);
                 $em->flush();
