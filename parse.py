@@ -17,7 +17,7 @@ def getFeeds(args=[]):
 	return result.stdout.splitlines()
 
 
-def parseFeed(feed, args=[]):
+def parseFeed(feed, args=[], verbose=False):
 	feed = feed.split()
 	feedId = int(feed[0])
 
@@ -26,19 +26,21 @@ def parseFeed(feed, args=[]):
 		stdout = subprocess.PIPE,
 		universal_newlines = True
 	)
-
-	print(str(feedId)+" : "+str(result.stdout.rstrip('\n'))+" - "+feed[1])
+	
+	if verbose:
+		print(str(feedId)+" : "+str(result.stdout.rstrip('\n'))+" - "+feed[1])
 
 	return result.returncode
 
 
-def parseFeedAfterFeed(feeds, args=[]):
+def parseFeedAfterFeed(feeds, args=[], verbose=False):
 	while feeds:
 		feed = feeds.pop(0)
-		parseFeed(feed, args)
+		parseFeed(feed, args, verbose)
 
-# Threads
-countThreads = 8
+# Init
+countThreads = 4
+verbose = False
 
 # Available arguments
 parser = argparse.ArgumentParser()
@@ -49,6 +51,7 @@ parser.add_argument("--no-cache", action="store_true")
 parser.add_argument("--no-debug", action="store_true")
 parser.add_argument("--threads")
 parser.add_argument("--timeout")
+parser.add_argument("--verbose", action="store_true")
 
 # Parse arguments
 args = parser.parse_args()
@@ -85,6 +88,9 @@ if args.timeout:
 	if timeout > 0:
 		newParseArgs.append("--timeout="+str(timeout))
 
+if args.verbose:
+	verbose = True
+
 # Get feeds
 feeds = getFeeds(newGetArgs)
 
@@ -92,7 +98,6 @@ feeds = getFeeds(newGetArgs)
 for i in range(0, countThreads):
 	t = threading.Thread(
 		target = parseFeedAfterFeed,
-		args = [feeds, newParseArgs]
+		args = [feeds, newParseArgs, verbose]
 	)
-	#t.daemon = True
 	t.start()
