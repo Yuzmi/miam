@@ -9,7 +9,7 @@ They may change depending on your own system.
 
 ```shell
 apt install -y apache2
-a2enmod rewrite
+a2enmod rewrite # Enable the mod_rewrite module
 service apache2 restart
 ```
 

@@ -14,7 +14,7 @@ RSS agregator using [Symfony 3](https://symfony.com/) and [SimplePie](https://gi
 ### Requirements
 
 * Linux
-* Apache & Mod rewrite enabled
+* Apache
 * PHP 5.5.9+ or PHP 7  
 * MySQL or PostgreSQL
 * [Composer](https://getcomposer.org/download/)
