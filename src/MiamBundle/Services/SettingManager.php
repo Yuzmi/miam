@@ -42,6 +42,7 @@ class SettingManager extends MainService {
             }
         } elseif($key == 'HIDE_SIDEBAR') {
             $value = boolval($value);
+            $user->setSetting('HIDE_SIDEBAR', $value);
         } elseif($key == 'SHOW_ITEM_DETAILS') {
             if(in_array($value, array('always', 'onclick'))) {
                 $user->setSetting('SHOW_ITEM_DETAILS', $value);
