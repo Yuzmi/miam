@@ -176,15 +176,19 @@ Open the crontab.
 crontab -e
 ```
 
-And add this line:  
+And add one of these lines (not both):  
 
 ```
+# Normal
 */30 * * * * php /var/www/miam/bin/console miam:parse:feeds subscribed --env=prod --no-debug
+
+# Faster, require Python 3
+*/15 * * * * python3 /var/www/miam/parse.py --feeds subscribed --env prod --no-debug --threads 8 --timeout 30
 ```
 
-It will parse your feeds automatically every 30 minutes.  
+It will parse your feeds automatically every 15/30 minutes.  
 The "subscribed" argument will only parse the feeds you're subscribed to.  
-Don't forget the options or your logs will explode.  
+Don't forget the "--no-debug" option or your logs will explode.  
 
 #### Add an admin (optional)
 ```
