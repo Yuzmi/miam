@@ -17,6 +17,7 @@ class AdminController extends MainController
         $feeds = $this->getRepo('Feed')
             ->createQueryBuilder('f')
             ->orderBy('f.dateCreated', 'DESC')
+            ->addOrderBy('f.id', 'DESC')
             ->getQuery()->getResult();
 
         $itemsPerFeed = $this->getRepo('Feed')->countItemsPerFeed();
