@@ -1,45 +1,26 @@
-# https://docs.python.org/3/howto/argparse.html
-import argparse;
+import argparse; # https://docs.python.org/3/howto/argparse.html
+import os;
+import subprocess; # https://docs.python.org/3/library/subprocess.html
+import threading; # https://docs.python.org/3/library/threading.html
 
-# https://docs.python.org/3/library/subprocess.html
-import subprocess;
-
-# https://docs.python.org/3/library/threading.html
-import threading;
-
-def getFeeds(args=[]):
-	result = subprocess.run(
-		args = ['php', 'bin/console', 'miam:get:feeds'] + args,
-		stdout = subprocess.PIPE,
-		universal_newlines = True
-	)
-	
-	return result.stdout.splitlines()
-
-
-def parseFeed(feed, args=[], verbose=False):
-	feed = feed.split()
-	feedId = int(feed[0])
-
-	result = subprocess.run(
-		args = ['php', 'bin/console', 'miam:parse:feeds', str(feedId)] + args,
-		stdout = subprocess.PIPE,
-		universal_newlines = True
-	)
-	
-	if verbose:
-		print(str(feedId)+" : "+str(result.stdout.rstrip('\n'))+" - "+feed[1])
-
-	return result.returncode
-
-
-def parseFeedAfterFeed(feeds, args=[], verbose=False):
+def parseFeedAfterFeed(feeds, scriptDir, args=[], verbose=False):
 	while feeds:
-		feed = feeds.pop(0)
-		parseFeed(feed, args, verbose)
+		feed = feeds.pop(0).split()
+		feedId = int(feed[0])
+
+		result = subprocess.run(
+			args = ['php', scriptDir+'/bin/console', 'miam:parse:feeds', str(feedId)] + args,
+			stdout = subprocess.PIPE,
+			universal_newlines = True
+		)
+		
+		if verbose:
+			print(str(feedId)+" : "+str(result.stdout.rstrip('\n'))+" - "+feed[1])
+
 
 # Init
 countThreads = 4
+scriptDir = os.path.dirname(os.path.abspath(__file__))
 verbose = False
 
 # Available arguments
@@ -92,12 +73,17 @@ if args.verbose:
 	verbose = True
 
 # Get feeds
-feeds = getFeeds(newGetArgs)
+getFeeds = subprocess.run(
+	args = ['php', scriptDir+'/bin/console', 'miam:get:feeds'] + args,
+	stdout = subprocess.PIPE,
+	universal_newlines = True
+)
+feeds = getFeeds.stdout.splitlines()
 
 # Parse feeds in threads
 for i in range(0, countThreads):
 	t = threading.Thread(
 		target = parseFeedAfterFeed,
-		args = [feeds, newParseArgs, verbose]
+		args = [feeds, scriptDir, newParseArgs, verbose]
 	)
 	t.start()
