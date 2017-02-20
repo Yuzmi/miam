@@ -74,7 +74,7 @@ if args.verbose:
 
 # Get feeds
 getFeeds = subprocess.run(
-	args = ['php', scriptDir+'/bin/console', 'miam:get:feeds'] + args,
+	args = ['php', scriptDir+'/bin/console', 'miam:get:feeds'] + newGetArgs,
 	stdout = subprocess.PIPE,
 	universal_newlines = True
 )
