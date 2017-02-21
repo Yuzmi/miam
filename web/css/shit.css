@@ -101,7 +101,7 @@ body {
         padding: 0.5em;
         flex-grow: 1; }
       body .itemContentContainer .toggles .toggle-expand {
-        border-left: solid 1px white; }
+        border-right: solid 1px white; }
     body .itemContentContainer.expanded {
       height: 100%; }
       body .itemContentContainer.expanded .toggle-expand {
