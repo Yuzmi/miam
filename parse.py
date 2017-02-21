@@ -36,28 +36,28 @@ parser.add_argument("--verbose", action="store_true")
 
 # Parse arguments
 args = parser.parse_args()
-newGetArgs = []
-newParseArgs = []
+getArgs = []
+parseArgs = []
 
 if args.env == 'prod':
-	newGetArgs.append("--env=prod")
-	newParseArgs.append("--env=prod")
+	getArgs.append("--env=prod")
+	parseArgs.append("--env=prod")
 else:
-	newGetArgs.append("--env=dev")
-	newParseArgs.append("--env=dev")
+	getArgs.append("--env=dev")
+	parseArgs.append("--env=dev")
 
 if args.feeds:
-	newGetArgs.append(args.feeds)
+	getArgs.append(args.feeds)
 
 if args.ignore_invalid:
-	newParseArgs.append("--ignore-invalid")
+	parseArgs.append("--ignore-invalid")
 
 if args.no_cache:
-	newParseArgs.append("--no-cache")
+	parseArgs.append("--no-cache")
 
 if args.no_debug:
-	newGetArgs.append("--no-debug")
-	newParseArgs.append("--no-debug")
+	getArgs.append("--no-debug")
+	parseArgs.append("--no-debug")
 
 if args.threads:
 	threads = int(args.threads)
@@ -67,14 +67,14 @@ if args.threads:
 if args.timeout:
 	timeout = int(args.timeout)
 	if timeout > 0:
-		newParseArgs.append("--timeout="+str(timeout))
+		parseArgs.append("--timeout="+str(timeout))
 
 if args.verbose:
 	verbose = True
 
 # Get feeds
 getFeeds = subprocess.run(
-	args = ['php', scriptDir+'/bin/console', 'miam:get:feeds'] + newGetArgs,
+	args = ['php', scriptDir+'/bin/console', 'miam:get:feeds'] + getArgs,
 	stdout = subprocess.PIPE,
 	universal_newlines = True
 )
@@ -84,6 +84,6 @@ feeds = getFeeds.stdout.splitlines()
 for i in range(0, countThreads):
 	t = threading.Thread(
 		target = parseFeedAfterFeed,
-		args = [feeds, scriptDir, newParseArgs, verbose]
+		args = [feeds, scriptDir, parseArgs, verbose]
 	)
 	t.start()
