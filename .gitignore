@@ -23,3 +23,5 @@
 /web/css/*.css.map
 /web/images/feeds/*
 !web/images/feeds/.gitkeep
+
+.sass-cache
