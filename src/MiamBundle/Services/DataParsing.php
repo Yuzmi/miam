@@ -21,9 +21,10 @@ class DataParsing extends MainService {
 		$pie = new \SimplePie();
 		$now = new \DateTime();
 
+		$pie->force_feed(true);
+
 		if(isset($options['data']) && !empty($options['data'])) {
 			$pie->set_raw_data($options['data']);
-			$pie->force_feed(true);
 		} else {
 			$pie->set_feed_url($feed->getUrl());
 			$pie->set_autodiscovery_level(SIMPLEPIE_LOCATOR_NONE);
