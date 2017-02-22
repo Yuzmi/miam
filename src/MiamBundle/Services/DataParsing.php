@@ -124,9 +124,12 @@ class DataParsing extends MainService {
 			}
 
 			// Data length
-			$dataLength = mb_strlen($pie->get_raw_data());
-			if($dataLength > 0) {
-				$feed->setDataLength($dataLength);
+			$rawData = $pie->get_raw_data();
+			if($rawData !== false) {
+				$dataLength = mb_strlen($rawData);
+				if($dataLength > 0) {
+					$feed->setDataLength($dataLength);
+				}
 			}
 
 			$items = $pie->get_items();
