@@ -118,13 +118,21 @@
 				{{ "shit.sidebar.lastread"|trans({}, 'shit') }}
 			</div>
 
-			<div class="rowDelimiter"></div>
+			{% if tree.categories|length > 0 or tree.subscriptions|length > 0 %}
+				<div class="rowDelimiter"></div>
+			{% endif %}
 
 			{{ macros.rows(tree, unreadCounts) }}
 		</aside>
 
 		<main class="items">
-			{% include 'MiamBundle:Default:item_list.html.twig' with {'itemOptions': itemOptions} %}
+			{% if items|length > 0 %}
+				{% include 'MiamBundle:Default:item_list.html.twig' with {'itemOptions': itemOptions} %}
+			{% elseif tree.subscriptions|length == 0 %}
+				<div class="noSubscription">
+					{{ "shit.no_subscription_yet"|trans({}, 'shit') }}
+				</div>
+			{% endif %}
 		</main>
 	</div>
 

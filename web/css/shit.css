@@ -85,6 +85,9 @@ body {
       background-color: inherit;
       flex-grow: 1;
       overflow-y: auto; }
+      body .itemsContainer .items .noSubscription {
+        margin-top: 2em;
+        text-align: center; }
   body .itemContentContainer {
     display: flex;
     flex-direction: column;
