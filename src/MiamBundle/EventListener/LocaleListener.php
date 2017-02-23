@@ -21,8 +21,12 @@
 
 			if($locale = $request->attributes->get('_locale')) {
 				$request->getSession()->set('_locale', $locale);
+			} elseif($locale = $request->getSession()->get('_locale')) {
+				$request->setLocale($locale);
+			} elseif(isset($_COOKIE['_locale'])) {
+				$request->setLocale($_COOKIE['_locale']);
 			} else {
-				$request->setLocale($request->getSession()->get('_locale', $this->defaultLocale));
+				$request->setLocale($this->defaultLocale);
 			}
 		}
 

@@ -19,6 +19,7 @@
 
 			if($user->getLocale() !== null) {
 				$this->session->set('_locale', $user->getLocale());
+				setcookie('_locale', $user->getLocale(), time() + 31536000); // 1 year
 			}
 		}
 	}
