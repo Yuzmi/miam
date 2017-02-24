@@ -205,13 +205,21 @@ class MarkManager extends MainService {
 	public function getUnreadCounts(User $subscriber, User $reader) {
 		$unreadCounts = array();
 
-        $result = $this->getRepo('Item')->createQueryBuilder('i')
-            ->select('s.id AS subscription_id, COUNT(i.id) AS unread_count')
+		$qb = $this->getRepo('Item')->createQueryBuilder('i');
+
+        $result = $qb->select('s.id AS subscription_id, COUNT(i.id) AS unread_count')
             ->innerJoin('i.feed', 'f')
             ->innerJoin('f.subscriptions', 's')
             ->leftJoin('i.marks', 'im', 'with', 'im.user = :reader')
             ->where('s.user = :subscriber')
-            ->andWhere('im.id IS NULL OR im.isRead = FALSE')
+            ->andWhere($qb->expr()->notIn(
+            	'i.id',
+            	$this->getRepo("ItemMark")->createQueryBuilder('im2')
+            		->select('i2.id')
+            		->innerJoin('im2.item', 'i2')
+            		->where('im2.user = :reader AND im2.isRead = TRUE')
+            		->getQuery()->getDQL()
+            ))
             ->groupBy('s.id')
             ->setParameters(array(
             	'subscriber' => $subscriber,

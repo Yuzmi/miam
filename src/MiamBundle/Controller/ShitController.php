@@ -22,13 +22,13 @@ class ShitController extends MainController
         $unreadCounts = $this->get('mark_manager')->getUnreadCounts($this->getUser(), $this->getUser());
         $starredCount = $this->getRepo("ItemMark")->countStarredAndSubscribedForUser($this->getUser());
 
-        $items = $this->getRepo("Item")->getItems(array(
+        $items = $this->get('item_manager')->getItems(array(
             'marker' => $this->getUser(),
             'subscriber' => $this->getUser(),
             'count' => 40
         ));
 
-        $dataItems = $this->getRepo("Item")->getDataForItems($items, array(
+        $dataItems = $this->get('item_manager')->getDataForItems($items, array(
             'marker' => $this->getUser(),
             'subscriber' => $this->getUser()
         ));
@@ -154,9 +154,9 @@ class ShitController extends MainController
                 $options['offset'] = $offset;
             }
 
-            $items = $this->getRepo("Item")->getItems($options);
+            $items = $this->get('item_manager')->getItems($options);
 
-            $dataItems = $this->getRepo("Item")->getDataForItems($items, array(
+            $dataItems = $this->get('item_manager')->getDataForItems($items, array(
                 'subscriber' => $this->getUser(),
                 'marker' => $this->getUser()
             ));
@@ -188,13 +188,12 @@ class ShitController extends MainController
         $html = null;
 
         if($request->isXmlHttpRequest() && $this->isLogged()) {
-            //$item = $this->getRepo("Item")->find($request->get("item"));
-            $item = $this->getRepo("Item")->getItem(
+            $item = $this->get('item_manager')->getItem(
                 $request->get("item"),
                 array("subscriber" => $this->getUser())
             );
             if($item) {
-                $dataItem = $this->getRepo("Item")->getDataForItem($item);
+                $dataItem = $this->get('item_manager')->getDataForItem($item);
 
                 $html = $this->renderView('MiamBundle:Default:item_full.html.twig', array(
                     'item' => $item,
