@@ -188,5 +188,4 @@ class ItemManager extends MainService {
 		$dataItems = $this->getDataForItems(array($item), $options);
 		return $dataItems[$item->getId()];
 	}
-
 }
