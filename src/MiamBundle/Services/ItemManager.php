@@ -2,6 +2,8 @@
 
 namespace MiamBundle\Services;
 
+use MiamBundle\Entity\Item;
+
 class ItemManager extends MainService {
 	protected $em;
 
