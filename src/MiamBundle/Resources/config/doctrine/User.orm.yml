@@ -36,7 +36,9 @@ MiamBundle\Entity\User:
         categories:
             targetEntity: Category
             mappedBy: user
+            cascade: ["remove"]
         subscriptions:
             targetEntity: Subscription
             mappedBy: user
+            cascade: ["remove"]
     lifecycleCallbacks: {  }
