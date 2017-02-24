@@ -289,16 +289,21 @@ app.shit = {
 		init: function() {
 			$(".itemRow").off("click");
 			$(".itemRow").on("click", function(e) {
-				e.preventDefault();
+				if(!$(this).hasClass("selected")) {
+					e.preventDefault();
 
-				var itemId = $(this).attr("data-item");
-				app.shit.items.showItem(itemId);
+					$(".itemRow").removeClass("selected");
+					$(this).addClass("selected");
 
-				if(!$(this).hasClass("read")) {
-					app.shit.items.readItem(itemId);
+					var itemId = $(this).attr("data-item");
+					app.shit.items.showItem(itemId);
+
+					if(!$(this).hasClass("read")) {
+						app.shit.items.readItem(itemId);
+					}
+
+					e.stopPropagation();
 				}
-
-				e.stopPropagation();
 			});
 
 			if(app.shit.items.dateRefresh == null) {
@@ -568,9 +573,6 @@ app.shit = {
 
 		showItem: function(itemId) {
 			$(".itemContentContainer").removeClass("hidden");
-
-			$(".itemRow").removeClass("selected");
-			$(".itemRow[data-item="+itemId+"]").addClass("selected");
 
 			var currentItemId = $(".itemContent").attr("data-item");
 			if(currentItemId != itemId) {
