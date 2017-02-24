@@ -63,10 +63,6 @@ class ItemManager extends MainService {
 						->where('im2.user = :marker AND im2.isRead = TRUE')
 						->getQuery()->getDQL()
 				));
-			} elseif($type == 'new') {
-				$duration_new_articles = (int) $marker->getSetting('DURATION_NEW_ARTICLES');
-				$qb->andWhere('i.dateCreated > :newAfter');
-				$qb->setParameter('newAfter', new \DateTime("-".$duration_new_articles." hours"));
 			} elseif($type == 'starred') {
 				$qb->andWhere('im.isStarred = TRUE');
 			} elseif($type == 'last-read') {
