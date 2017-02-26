@@ -29,7 +29,7 @@
 		</span>
 	{% endif %}
 
-	{% set timezone = app.user ? app.user.setting('TIMEZONE') : null %}
+	{% set timezone = app.user ? app.user.setting('TIMEZONE') : false %}
 	<span class="datetime" title="{{ item.datePublished|date(constant('DATE_ATOM')) }}">
 		{% if item.datePublished|date('Y-m-d') == "now"|date('Y-m-d') %}
 			{{ item.datePublished|date('H:i', timezone) }}
