@@ -24,8 +24,9 @@ body {
   body .auth .footer {
     margin: 3rem 0; }
     body .auth .footer .noAccount, body .auth .footer .haveAccount {
-      cursor: pointer;
-      text-decoration: underline; }
+      cursor: pointer; }
+      body .auth .footer .noAccount:hover, body .auth .footer .haveAccount:hover {
+        text-decoration: underline; }
 
 @media (max-width: 600px) {
   body h1 {

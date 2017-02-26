@@ -42,7 +42,10 @@ body {
 
 			.noAccount, .haveAccount {
 				cursor:pointer;
-				text-decoration:underline;
+
+				&:hover {
+					text-decoration:underline;
+				}
 			}
 		}
 	}
