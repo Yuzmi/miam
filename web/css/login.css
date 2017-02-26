@@ -1,13 +1,13 @@
 body {
   text-align: center; }
   body h1 {
-    font-size: 6rem; }
+    font-size: 5em; }
   body .auth.register {
     display: none; }
   body .auth .content label {
     display: block;
     font-size: 1.4em;
-    margin: 3rem 0 1rem; }
+    margin: 2em 0 1em; }
   body .auth .content input, body .auth .content button {
     box-shadow: 0 0 10px #ddd;
     font-size: 2em;
@@ -19,19 +19,22 @@ body {
     text-align: center;
     width: 80%; }
   body .auth .content button {
-    margin-top: 3rem;
+    margin-top: 1.5em;
     min-width: 40%; }
   body .auth .footer {
-    margin: 3rem 0; }
+    margin-top: 2em; }
     body .auth .footer .noAccount, body .auth .footer .haveAccount {
       cursor: pointer; }
       body .auth .footer .noAccount:hover, body .auth .footer .haveAccount:hover {
         text-decoration: underline; }
+  body .githubLink {
+    display: inline-block;
+    margin: 3em 0; }
 
 @media (max-width: 600px) {
   body h1 {
-    font-size: 2em;
-    margin: 2rem 0; }
+    font-size: 2.4em;
+    margin: 0.8em 0; }
   body .auth .content label {
     font-size: 1em;
     margin-top: 1rem; }
@@ -40,9 +43,8 @@ body {
     line-height: 1.4em;
     padding: 0.4em; }
   body .auth .content button {
-    margin-top: 1.5rem; }
+    margin-top: 1em; }
   body .auth .footer {
-    font-size: 0.9em;
-    margin-top: 2rem; } }
+    font-size: 0.9em; } }
 
 /*# sourceMappingURL=login.css.map */
