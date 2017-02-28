@@ -388,8 +388,7 @@ class DataParsing extends MainService {
 		}
 
 		// Count items per day
-		$intervalSinceCreated = date_diff($feed->getDateCreated(), new \DateTime(), true);
-		$daysSinceCreated = max(1, $intervalSinceCreated->format("%a"));
+		$daysSinceCreated = max(1, $now->getTimestamp() - $feed->getDateCreated()->getTimestamp()) / 86400;
 		$countDailyItems = round(($feed->getCountTotalItems() - $feed->getCountParsingItems()) / $daysSinceCreated, 2);
 		$feed->setCountDailyItems($countDailyItems);
 
