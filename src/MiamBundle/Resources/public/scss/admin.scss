@@ -3,13 +3,13 @@
 		text-align:center;
 	}
 
-	.feedBlocks {
+	.blocks {
 		display:flex;
 		flex-wrap:wrap;
 		justify-content:space-around;
 		width:100%;
 
-		.feedBlock {
+		.block {
 			border:solid 1px black;
 			border-collapse:collapse;
 			margin:1em 0;
@@ -38,10 +38,10 @@
 
 @media (max-width:768px) {
 	.adminIndex {
-		.feedBlocks {
+		.blocks {
 			flex-direction:column;
 
-			.feedBlock {
+			.block {
 				border-left:none;
 				border-right:none;
 				margin:1em 0;
@@ -177,6 +177,14 @@
 }
 
 body.theme-dark {
+	&.adminIndex {
+		.blocks {
+			.block {
+				border-color:#363636;
+			}
+		}
+	}
+
 	&.adminFeeds {
 		.pagination {
 			.page {

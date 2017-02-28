@@ -18,9 +18,9 @@
 		<a href="{{ path('admin_feeds') }}">Manage feeds</a>
 	</p>
 
-	<div class="feedBlocks">
+	<div class="blocks">
 		{% if lastFeeds|length > 0 %}
-			<table class="feedBlock lastFeeds">
+			<table class="block lastFeeds">
 				<tr>
 					<th>Recent feed</th>
 					<th>Date added</th>
@@ -41,7 +41,7 @@
 		{% endif %}
 
 		{% if mostActiveFeeds|length > 0 %}
-			<table class="feedBlock activeFeeds">
+			<table class="block activeFeeds">
 				<tr>
 					<th>Active feed</th>
 					<th>Items/Day</th>
@@ -60,7 +60,7 @@
 		{% endif %}
 
 		{% if mostSubscribedFeeds|length > 0 %}
-			<table class="feedBlock subscribedFeeds">
+			<table class="block subscribedFeeds">
 				<tr>
 					<th>Subscribed feed</th>
 					<th>Subscribers</th>
@@ -80,7 +80,7 @@
 		{% endif %}
 
 		{% if errorFeeds|length > 0 %}
-			<table class="feedBlock errorFeeds">
+			<table class="block errorFeeds">
 				<tr>
 					<th>Feed with errors</th>
 					<th>Errors</th>
@@ -93,6 +93,24 @@
 							</a>
 						</td>
 						<td title="{{ feed.errorMessage }}">{{ feed.errorCount }}</td>
+					</tr>
+				{% endfor %}
+			</table>
+		{% endif %}
+
+		{% if mostPopularTags|length > 0 %}
+			<table class="block popularTags">
+				<tr>
+					<th>Popular tag</th>
+					<th>Items</th>
+				</tr>
+				{% for t in mostPopularTags %}
+					{% set tag = t[0] %}
+					<tr>
+						<td title="{{ tag.name }}">
+							{{ tag.name|shorten(60) }}
+						</td>
+						<td>{{ t.countItems }}</td>
 					</tr>
 				{% endfor %}
 			</table>

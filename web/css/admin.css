@@ -1,28 +1,28 @@
 .adminIndex .header {
   text-align: center; }
-.adminIndex .feedBlocks {
+.adminIndex .blocks {
   display: flex;
   flex-wrap: wrap;
   justify-content: space-around;
   width: 100%; }
-  .adminIndex .feedBlocks .feedBlock {
+  .adminIndex .blocks .block {
     border: solid 1px black;
     border-collapse: collapse;
     margin: 1em 0;
     width: 48%; }
-    .adminIndex .feedBlocks .feedBlock tr:nth-of-type(even) {
+    .adminIndex .blocks .block tr:nth-of-type(even) {
       background-color: rgba(0, 0, 0, 0.2); }
-    .adminIndex .feedBlocks .feedBlock tr th, .adminIndex .feedBlocks .feedBlock tr td {
+    .adminIndex .blocks .block tr th, .adminIndex .blocks .block tr td {
       padding: 2px 4px; }
-    .adminIndex .feedBlocks .feedBlock tr th:first-of-type {
+    .adminIndex .blocks .block tr th:first-of-type {
       text-align: left; }
-    .adminIndex .feedBlocks .feedBlock tr td:nth-of-type(2) {
+    .adminIndex .blocks .block tr td:nth-of-type(2) {
       text-align: center; }
 
 @media (max-width: 768px) {
-  .adminIndex .feedBlocks {
+  .adminIndex .blocks {
     flex-direction: column; }
-    .adminIndex .feedBlocks .feedBlock {
+    .adminIndex .blocks .block {
       border-left: none;
       border-right: none;
       margin: 1em 0;
@@ -92,6 +92,8 @@
       border: none;
       color: white; }
 
+body.theme-dark.adminIndex .blocks .block {
+  border-color: #363636; }
 body.theme-dark.adminFeeds .pagination .page {
   background-color: #363636;
   color: #a8a8a8; }
