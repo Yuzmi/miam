@@ -30,7 +30,7 @@
 	</span>
 	-
 	{% set timezone = app.user ? app.user.setting('TIMEZONE') : null %}
-	<span class="datetime" title="{{ item.datePublished|date(constant('DATE_ATOM')) }}">
+	<span class="datetime" title="{{ item.datePublished|date('Y-m-d H:i:s', timezone) }}">
 		{% if app.user and app.user.setting('DATE_FORMAT') == 'mdy' %}
 			{{ item.datePublished|date('m/d/y H:i', timezone) }}
 		{% elseif app.user and app.user.setting('DATE_FORMAT') == 'ymd' %}
