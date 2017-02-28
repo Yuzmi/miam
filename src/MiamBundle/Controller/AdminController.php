@@ -16,6 +16,7 @@ class AdminController extends MainController
 	public function indexAction() {
         $countFeeds = $this->getRepo("Feed")->countAll();
         $countItems = $this->getRepo("Item")->countAll();
+        $countTags = $this->getRepo("Tag")->countAll();
 
         $lastFeeds = $this->getRepo('Feed')
             ->createQueryBuilder('f')
@@ -59,6 +60,7 @@ class AdminController extends MainController
         return $this->render('MiamBundle:Admin:index.html.twig', array(
             'countFeeds' => $countFeeds,
             'countItems' => $countItems,
+            'countTags' => $countTags,
             'lastFeeds' => $lastFeeds,
             'mostActiveFeeds' => $mostActiveFeeds,
             'mostSubscribedFeeds' => $mostSubscribedFeeds,

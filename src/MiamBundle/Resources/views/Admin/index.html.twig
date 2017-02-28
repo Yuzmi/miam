@@ -11,9 +11,11 @@
 	{% include 'MiamBundle:Default:header.html.twig' %}
 
 	<p class="header">
-		Number of feeds: {{ countFeeds }}
+		Feeds: {{ countFeeds }}
 		-
-		Number of items: {{ countItems }}
+		Items: {{ countItems }}
+		-
+		Tags: {{ countTags }}
 		<br>
 		<a href="{{ path('admin_feeds') }}">Manage feeds</a>
 	</p>
