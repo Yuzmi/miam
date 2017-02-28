@@ -26,6 +26,7 @@ ajax_admin_feed_parse:
 admin_feed:
     path: /feed/{id}
     defaults: { _controller: MiamBundle:Admin:showFeed }
+    requirements: { id: \d+ }
 
 admin_feed_create:
     path: /feed/create
