@@ -8,6 +8,6 @@
 		'Yes' => 'Yes',
 		'No' => 'No',
 
-		'Save' => 'Enregistrer',
-		'Update' => 'Mettre à jour'
+		'Save' => 'Save',
+		'Update' => 'Update'
 	);
