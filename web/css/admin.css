@@ -75,8 +75,8 @@
   text-align: center; }
 .adminFeed .lastItems {
   margin-top: 2em; }
-.adminFeed .items > *:first-of-type {
-  border-top: solid 1px; }
+.adminFeed .items > *:first-child {
+  border-top: solid 1px black; }
 .adminFeed .delete {
   margin-top: 5em;
   text-align: center; }
@@ -91,5 +91,11 @@
       background-color: red;
       border: none;
       color: white; }
+
+body.theme-dark.adminFeeds .pagination .page {
+  background-color: #363636;
+  color: #a8a8a8; }
+body.theme-dark.adminFeed .items > *:first-child {
+  border-color: #363636; }
 
 /*# sourceMappingURL=admin.css.map */

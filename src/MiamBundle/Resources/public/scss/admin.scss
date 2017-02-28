@@ -146,8 +146,8 @@
 	}
 
 	.items {
-		& > *:first-of-type {
-			border-top:solid 1px;
+		& > *:first-child {
+			border-top:solid 1px black;
 		}
 	}
 
@@ -162,7 +162,7 @@
 
 		.deleteForm {
 			display:none;
-			
+
 			button {
 				margin:0 1em;
 			}
@@ -171,6 +171,25 @@
 				background-color:red;
 				border:none;
 				color:white;
+			}
+		}
+	}
+}
+
+body.theme-dark {
+	&.adminFeeds {
+		.pagination {
+			.page {
+				background-color:#363636;
+				color:#a8a8a8;
+			}
+		}
+	}
+
+	&.adminFeed {
+		.items {
+			& > *:first-child {
+				border-color:#363636;
 			}
 		}
 	}
