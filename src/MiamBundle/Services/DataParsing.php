@@ -137,7 +137,7 @@ class DataParsing extends MainService {
 
 			$countItems = count($items);
 			if($countItems > 0) {
-				$feed->setNbItems($countItems);
+				$feed->setCountParsingItems($countItems);
 			}
 
 			// Find and create new tags
@@ -377,14 +377,21 @@ class DataParsing extends MainService {
 			$feed->setErrorCount(0);
 		} else {
 			$error = $pie->error();
-
+			
 			$feed->setErrorCount($feed->getErrorCount() + 1);
 			$feed->setErrorMessage($error);
 		}
 
 		if($countNewItems > 0) {
+			$feed->setCountTotalItems($feed->getCountTotalItems() + $countNewItems);
 			$feed->setDateNewItem($now);
 		}
+
+		// Count items per day
+		$intervalSinceCreated = date_diff($feed->getDateCreated(), new \DateTime(), true);
+		$daysSinceCreated = max(1, $intervalSinceCreated->format("%a"));
+		$countDailyItems = round(($feed->getCountTotalItems() - $feed->getCountParsingItems()) / $daysSinceCreated, 2);
+		$feed->setCountDailyItems($countDailyItems);
 
 		$this->em->persist($feed);
 		

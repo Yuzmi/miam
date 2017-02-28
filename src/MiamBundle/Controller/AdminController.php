@@ -14,24 +14,79 @@ use MiamBundle\Entity\Feed;
 class AdminController extends MainController
 {
 	public function indexAction() {
-        $feeds = $this->getRepo('Feed')
+        $countFeeds = $this->getRepo("Feed")->countAll();
+        $countItems = $this->getRepo("Item")->countAll();
+
+        $lastFeeds = $this->getRepo('Feed')
             ->createQueryBuilder('f')
-            ->orderBy('f.dateCreated', 'DESC')
-            ->addOrderBy('f.id', 'DESC')
+            ->orderBy('f.id', 'DESC')
+            ->setMaxResults(10)
             ->getQuery()->getResult();
 
-        $itemsPerFeed = $this->getRepo('Feed')->countItemsPerFeed();
-        $subscriptionsPerFeed = $this->getRepo('Feed')->countSubscriptionsPerFeed();
+        $mostActiveFeeds = $this->getRepo('Feed')
+            ->createQueryBuilder('f')
+            ->orderBy('f.countDailyItems', 'DESC')
+            ->addOrderBy('f.originalName', 'ASC')
+            ->setMaxResults(10)
+            ->getQuery()->getResult();
 
-        $createFeedForm = $this->createCreateFeedForm();
+        $mostSubscribedFeeds = $this->getRepo('Feed')
+            ->createQueryBuilder('f')
+            ->select('f, COUNT(s.id) AS countSubscriptions')
+            ->leftJoin('f.subscriptions', 's')
+            ->groupBy('f')
+            ->orderBy('countSubscriptions', 'DESC')
+            ->addOrderBy('f.originalName', 'ASC')
+            ->setMaxResults(10)
+            ->getQuery()->getResult();
+
+        $errorFeeds = $this->getRepo('Feed')
+            ->createQueryBuilder('f')
+            ->where('f.errorCount > 0')
+            ->orderBy('f.errorCount', 'ASC')
+            ->setMaxResults(10)
+            ->getQuery()->getResult();
 
         return $this->render('MiamBundle:Admin:index.html.twig', array(
-            'feeds' => $feeds,
-            'itemsPerFeed' => $itemsPerFeed,
-            'subscriptionsPerFeed' => $subscriptionsPerFeed,
-            'createFeedForm' => $createFeedForm->createView()
+            'countFeeds' => $countFeeds,
+            'countItems' => $countItems,
+            'lastFeeds' => $lastFeeds,
+            'mostActiveFeeds' => $mostActiveFeeds,
+            'mostSubscribedFeeds' => $mostSubscribedFeeds,
+            'errorFeeds' => $errorFeeds
         ));
 	}
+
+    public function showFeedsAction(Request $request) {
+        $countTotalFeeds = $this->getRepo("Feed")->countAll();
+
+        $countFeedsPerPage = 50;
+
+        $countPages = ceil($countTotalFeeds / $countFeedsPerPage);
+        $page = intval($request->query->get('page'));
+        if($page <= 0 || $page > $countPages) {
+            $page = 1;
+        }
+
+        $qb = $this->getRepo("Feed")
+            ->createQueryBuilder('f')
+            ->setMaxResults($countFeedsPerPage)
+            ->setFirstResult($countFeedsPerPage * ($page - 1));
+
+        $qb->orderBy('f.id', 'DESC');
+
+        $feeds = $qb->getQuery()->getResult();
+
+        return $this->render('MiamBundle:Admin:feeds.html.twig', array(
+            'countTotalFeeds' => $countTotalFeeds,
+            'countPages' => $countPages,
+            'feeds' => $feeds,
+            'page' => $page,
+            'itemsPerFeed' => $this->getRepo('Feed')->countItemsPerFeed(),
+            'subscriptionsPerFeed' => $this->getRepo('Feed')->countSubscriptionsPerFeed(),
+            'createFeedForm' => $this->createCreateFeedForm()->createView()
+        ));
+    }
 
     private function createCreateFeedForm() {
     	return $this->createFormBuilder()
@@ -50,7 +105,7 @@ class AdminController extends MainController
             $this->get('feed_manager')->getFeedForUrl($form->get('url')->getData(), true);
     	}
 
-    	return $this->redirectToRoute('admin');
+    	return $this->redirectToRoute('admin_feeds');
     }
 
     public function ajaxParseFeedAction(Request $request, $id) {
@@ -60,23 +115,6 @@ class AdminController extends MainController
             $feed = $this->getRepo("Feed")->find($id);
             if($feed) {
                 $this->get('data_parsing')->parseFeed($feed);
-
-                $success = true;
-            }
-        }
-
-        return new JsonResponse(array(
-            'success' => $success
-        ));
-    }
-
-    public function ajaxDeleteFeedAction(Request $request, $id) {
-        $success = false;
-
-        if($request->isXmlHttpRequest() && $this->isLoggedAdmin()) {
-            $feed = $this->getRepo("Feed")->find($id);
-            if($feed) {
-                $this->get('feed_manager')->deleteFeed($feed);
 
                 $success = true;
             }
@@ -99,7 +137,6 @@ class AdminController extends MainController
         $response->headers->set('Content-Disposition', "attachment;filename=Miam_Admin_".date('Y-m-d').".opml");
 
         return $response;
-
     }
 
     public function ajaxPopupImportFeedsAction(Request $request) {
@@ -152,6 +189,67 @@ class AdminController extends MainController
             $this->addFm("Invalid token", "error");
         }
 
-        return $this->redirectToRoute("admin");
+        return $this->redirectToRoute("admin_feeds");
+    }
+
+    public function showFeedAction($id) {
+        $feed = $this->getRepo('Feed')->find($id);
+        if(!$feed) {
+            return $this->redirectToRoute('admin');
+        }
+
+        return $this->render('MiamBundle:Admin:feed.html.twig', array(
+            'feed' => $feed,
+            'countItems' => $this->getRepo('Item')->countForFeed($feed),
+            'countSubscriptions' => $this->getRepo('Subscription')->countForFeed($feed),
+            'lastItems' => $this->getRepo('Item')->findLastPublishedForFeed($feed, 10),
+            'parseFeedForm' => $this->createParseFeedForm($feed)->createView(),
+            'deleteFeedForm' => $this->createDeleteFeedForm($feed)->createView()
+        ));
+    }
+
+    private function createParseFeedForm(Feed $feed) {
+        return $this->createFormBuilder()
+            ->setAction($this->generateUrl('admin_feed_parse', array('id' => $feed->getId())))
+            ->setMethod('POST')
+            ->getForm();
+    }
+
+    public function parseFeedAction(Request $request, $id) {
+        $feed = $this->getRepo("Feed")->find($id);
+        if(!$feed) {
+            return $this->redirectToRoute('admin_feeds');
+        }
+
+        $form = $this->createParseFeedForm($feed);
+        $form->handleRequest($request);
+
+        if($form->isSubmitted() && $form->isValid()) {
+            $this->get('data_parsing')->parseFeed($feed);
+        }
+
+        return $this->redirectToRoute('admin_feed', array('id' => $feed->getId()));
+    }
+
+    private function createDeleteFeedForm(Feed $feed) {
+        return $this->createFormBuilder()
+            ->setAction($this->generateUrl('admin_feed_delete', array('id' => $feed->getId())))
+            ->setMethod('POST')
+            ->add('submit', SubmitType::class)
+            ->getForm();
+    }
+
+    public function deleteFeedAction(Request $request, $id) {
+        $feed = $this->getRepo("Feed")->find($id);
+        if($feed) {
+            $form = $this->createDeleteFeedForm($feed);
+            $form->handleRequest($request);
+
+            if($form->isSubmitted() && $form->isValid()) {
+                $this->get('feed_manager')->deleteFeed($feed);
+            }
+        }
+
+        return $this->redirectToRoute('admin_feeds');
     }
 }

@@ -50,6 +50,12 @@ class FeedRepository extends \Doctrine\ORM\EntityRepository
         return $feeds;
 	}
 
+    public function countAll() {
+        return $this->createQueryBuilder('f')
+            ->select('COUNT(f.id)')
+            ->getQuery()->getSingleScalarResult();
+    }
+
     public function countItemsPerFeed() {
         $result = $this->createQueryBuilder('f')
             ->select('f.id, COUNT(i.id) AS countItems')

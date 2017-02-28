@@ -1,0 +1,95 @@
+.adminIndex .header {
+  text-align: center; }
+.adminIndex .feedBlocks {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-around;
+  width: 100%; }
+  .adminIndex .feedBlocks .feedBlock {
+    border: solid 1px black;
+    border-collapse: collapse;
+    margin: 1em 0;
+    width: 48%; }
+    .adminIndex .feedBlocks .feedBlock tr:nth-of-type(even) {
+      background-color: rgba(0, 0, 0, 0.2); }
+    .adminIndex .feedBlocks .feedBlock tr th, .adminIndex .feedBlocks .feedBlock tr td {
+      padding: 2px 4px; }
+    .adminIndex .feedBlocks .feedBlock tr th:first-of-type {
+      text-align: left; }
+    .adminIndex .feedBlocks .feedBlock tr td:nth-of-type(2) {
+      text-align: center; }
+
+@media (max-width: 768px) {
+  .adminIndex .feedBlocks {
+    flex-direction: column; }
+    .adminIndex .feedBlocks .feedBlock {
+      border-left: none;
+      border-right: none;
+      margin: 1em 0;
+      width: 100%; } }
+.adminFeeds h1 {
+  text-align: center; }
+.adminFeeds .forms {
+  padding: 10px 15px;
+  text-align: center; }
+.adminFeeds .pagination {
+  margin: 2em 0;
+  text-align: center; }
+  .adminFeeds .pagination .page {
+    background-color: black;
+    color: white;
+    display: inline-block;
+    margin: 0 0.2em;
+    padding: 0.4em 0.6em;
+    text-decoration: none; }
+    .adminFeeds .pagination .page.current {
+      font-weight: bold; }
+.adminFeeds table {
+  margin: auto;
+  max-width: 100%; }
+  .adminFeeds table th.name, .adminFeeds table th.url {
+    text-align: left; }
+  .adminFeeds table tr.feed .name i.errors {
+    color: red;
+    margin-right: 2px; }
+  .adminFeeds table tr.feed .parser .parsing {
+    display: none; }
+  .adminFeeds table tr.feed td.icon, .adminFeeds table tr.feed td.items, .adminFeeds table tr.feed td.subscriptions, .adminFeeds table tr.feed td.parser, .adminFeeds table tr.feed td.delete {
+    text-align: center; }
+
+.adminFeed h1 {
+  text-align: center; }
+.adminFeed p {
+  text-align: center; }
+.adminFeed table.infos {
+  border: solid 1px black;
+  border-collapse: collapse;
+  margin: 2em auto; }
+  .adminFeed table.infos tr:nth-of-type(even) {
+    background-color: rgba(0, 0, 0, 0.2); }
+  .adminFeed table.infos tr th, .adminFeed table.infos tr td {
+    padding: 0.4em 0.6em; }
+  .adminFeed table.infos tr th {
+    text-align: right; }
+.adminFeed .parseForm {
+  text-align: center; }
+.adminFeed .lastItems {
+  margin-top: 2em; }
+.adminFeed .items > *:first-of-type {
+  border-top: solid 1px; }
+.adminFeed .delete {
+  margin-top: 5em;
+  text-align: center; }
+  .adminFeed .delete .deleteLink {
+    cursor: pointer;
+    text-decoration: underline; }
+  .adminFeed .delete .deleteForm {
+    display: none; }
+    .adminFeed .delete .deleteForm button {
+      margin: 0 1em; }
+    .adminFeed .delete .deleteForm .deleteButton {
+      background-color: red;
+      border: none;
+      color: white; }
+
+/*# sourceMappingURL=admin.css.map */

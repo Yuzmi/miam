@@ -1,150 +1,101 @@
 {% extends 'MiamBundle::base.html.twig' %}
 
+{% block stylesheets %}
+	{{ parent() }}
+	<link href="{{ asset('css/admin.css') }}" type="text/css" rel="stylesheet">
+{% endblock %}
+
+{% block bodyClasses %}adminIndex{% endblock %}
+
 {% block body %}
 	{% include 'MiamBundle:Default:header.html.twig' %}
 
-	<div class="forms">
-		{{ form_start(createFeedForm) }}
-		{{ form_widget(createFeedForm.url, {'attr': {'placeholder': "URL"}}) }}
-		{{ form_widget(createFeedForm.submit, {'label': "admin.add"|trans({}, 'admin')}) }}
-		{{ form_end(createFeedForm) }}
-
+	<p class="header">
+		Number of feeds: {{ countFeeds }}
+		-
+		Number of items: {{ countItems }}
 		<br>
+		<a href="{{ path('admin_feeds') }}">Manage feeds</a>
+	</p>
 
-		<a href="{{ path('admin_feeds_export') }}"><button>{{ "admin.export_feeds"|trans({}, 'admin') }}</button></a>
-	
-		<button class="importFeeds">{{ "admin.import_feeds"|trans({}, 'admin') }}</button>
+	<div class="feedBlocks">
+		{% if lastFeeds|length > 0 %}
+			<table class="feedBlock lastFeeds">
+				<tr>
+					<th>Recent feed</th>
+					<th>Date added</th>
+				</tr>
+				{% for feed in lastFeeds %}
+					<tr>
+						<td title="{{ feed.name ?: feed.url }}">
+							<a href="{{ path('admin_feed', {'id': feed.id}) }}">
+								{{ feed.name ? feed.name|shorten(60) : feed.url|shorten(80) }}
+							</a>
+						</td>
+						<td title="{{ feed.dateCreated|date(constant('DATE_ATOM')) }}">
+							{{ feed.dateCreated|date('Y-m-d') }}
+						</td>
+					</tr>
+				{% endfor %}
+			</table>
+		{% endif %}
+
+		{% if mostActiveFeeds|length > 0 %}
+			<table class="feedBlock activeFeeds">
+				<tr>
+					<th>Active feed</th>
+					<th>Items/Day</th>
+				</tr>
+				{% for feed in mostActiveFeeds %}
+					<tr>
+						<td title="{{ feed.name ?: feed.url }}">
+							<a href="{{ path('admin_feed', {'id': feed.id}) }}">
+								{{ feed.name ? feed.name|shorten(60) : feed.url|shorten(80) }}
+							</a>
+						</td>
+						<td>{{ feed.countDailyItems }}</td>
+					</tr>
+				{% endfor %}
+			</table>
+		{% endif %}
+
+		{% if mostSubscribedFeeds|length > 0 %}
+			<table class="feedBlock subscribedFeeds">
+				<tr>
+					<th>Subscribed feed</th>
+					<th>Subscribers</th>
+				</tr>
+				{% for f in mostSubscribedFeeds %}
+					{% set feed = f[0] %}
+					<tr>
+						<td title="{{ feed.name ?: feed.url }}">
+							<a href="{{ path('admin_feed', {'id': feed.id}) }}">
+								{{ feed.name ? feed.name|shorten(60) : feed.url|shorten(80) }}
+							</a>
+						</td>
+						<td>{{ f['countSubscriptions'] }}</td>
+					</tr>
+				{% endfor %}
+			</table>
+		{% endif %}
+
+		{% if errorFeeds|length > 0 %}
+			<table class="feedBlock errorFeeds">
+				<tr>
+					<th>Feed with errors</th>
+					<th>Errors</th>
+				</tr>
+				{% for feed in errorFeeds %}
+					<tr>
+						<td title="{{ feed.name ?: feed.url }}">
+							<a href="{{ path('admin_feed', {'id': feed.id}) }}">
+								{{ feed.name ? feed.name|shorten(60) : feed.url|shorten(80) }}
+							</a>
+						</td>
+						<td title="{{ feed.errorMessage }}">{{ feed.errorCount }}</td>
+					</tr>
+				{% endfor %}
+			</table>
+		{% endif %}
 	</div>
-
-	<table>
-		<tr>
-			<th></th>
-			<th class="name">{{ "admin.name"|trans({}, 'admin') }}</th>
-			<th class="url">URL</th>
-			<th>{{ "admin.count_items"|trans({}, 'admin') }}</th>
-			<th>{{ "admin.count_subscriptions"|trans({}, 'admin') }}</th>
-		</tr>
-		{% for feed in feeds %}
-			<tr class="feed" data-feed="{{ feed.id }}">
-				<td class="icon">
-					{% if feed.hasIcon %}
-						<img src="{{ asset(feed.icon) }}" alt="">
-					{% endif %}
-				</td>
-				<td class="name" title="{{ feed.name }}">
-					{% if feed.errorCount > 0 %}
-						<i class="errors fa fa-warning" title="{{ feed.errorMessage }}"></i>
-					{% endif %}
-
-					{% if feed.website %}
-						<a href="{{ feed.website }}">{{ feed.name|shorten(40) }}</a>
-					{% else %}
-						{{ feed.name|shorten(40) }}
-					{% endif %}
-				</td>
-				<td title="{{ feed.url }}">
-					<a href="{{ feed.url }}">{{ feed.url|shorten(80) }}</a>
-				</td>
-				<td class="items">{{ itemsPerFeed[feed.id] }}</td>
-				<td class="subscriptions">{{ subscriptionsPerFeed[feed.id] }}</td>
-				<td class="parser">
-					<button class="parse" title="{{ "admin.parse"|trans({}, 'admin') }}">
-						<i class="fa fa-refresh"></i>
-					</button>
-					<button class="parsing" title="{{ "admin.parsing"|trans({}, 'admin') }}">
-						<i class="fa fa-refresh fa-spin"></i>
-					</button>
-				</td>
-				<td class="delete">
-					<button title="{{ "admin.delete"|trans({}, 'admin') }}">
-						<i class="fa fa-times"></i>
-					</button>
-				</td>
-			</tr>
-		{% endfor %}
-	</table>
-{% endblock %}
-
-{% block stylesheets %}
-	{{ parent() }}
-
-	<style>
-		.forms {
-			padding:10px 15px;
-		}
-
-		table {
-			width:100%;
-		}
-
-		table th.name, table th.url {
-			text-align:left;
-		}
-
-		.feed .name i.errors {
-			color:red;
-			margin-right:2px;
-		}
-
-		.feed .parser .parsing {
-			display:none;
-		}
-
-		.feed td.icon, .feed td.items, .feed td.subscriptions, .feed td.parser, .feed td.delete {
-			text-align:center;
-		}
-	</style>
-{% endblock %}
-
-{% block javascripts %}
-	{{ parent() }}
-
-	<script type="text/javascript">
-		$(".importFeeds").on("click", function() {
-			$.ajax({
-				type: "POST",
-				url: Routing.generate("ajax_admin_popup_feeds_import"),
-				dataType: "json"
-			}).done(function(result) {console.log(42);
-				if(result.success) {
-					$("body").append(result.html);
-					app.popup.init();
-				}
-			});
-		});
-
-		$(".feed .parser .parse").click(function() {
-			var feedId = $(this).closest(".feed").data('feed');
-
-			$(this).hide();
-			$(this).siblings(".parsing").show();
-
-			$.ajax({
-				type: "POST",
-				url: Routing.generate('ajax_admin_feed_parse', {id: feedId}, true),
-				dataType: "json",
-				complete: function() {
-					$(".feed[data-feed="+feedId+"] .parser .parse").show();
-					$(".feed[data-feed="+feedId+"] .parser .parsing").hide();
-				}
-			});
-		});
-
-		$(".feed .delete button").on("click", function() {
-			var feedId = $(this).closest(".feed").data('feed');
-			
-			if(confirm("Delete the feed and everything related ?")) {
-				$.ajax({
-					type: "POST",
-					url: Routing.generate('ajax_admin_feed_delete', {id: feedId}, true),
-					dataType: "json",
-					success: function(result) {
-						if(result.success) {
-							$(".feed[data-feed="+feedId+"]").remove();
-						}
-					}
-				});
-			}
-		});
-	</script>
 {% endblock %}

@@ -3,6 +3,7 @@
 namespace MiamBundle\Repository;
 
 use MiamBundle\Entity\Category;
+use MiamBundle\Entity\Feed;
 use MiamBundle\Entity\User;
 
 class SubscriptionRepository extends \Doctrine\ORM\EntityRepository
@@ -70,5 +71,12 @@ class SubscriptionRepository extends \Doctrine\ORM\EntityRepository
 			->orderBy('s.name', 'ASC')
 			->addorderBy('c.name', 'ASC')
 			->getQuery()->getOneOrNullResult();
+	}
+
+	public function countForFeed(Feed $feed) {
+		return $this->createQueryBuilder('s')
+			->select('COUNT(s)')
+			->where('s.feed = :feed')->setParameter('feed', $feed)
+			->getQuery()->getSingleScalarResult();
 	}
 }

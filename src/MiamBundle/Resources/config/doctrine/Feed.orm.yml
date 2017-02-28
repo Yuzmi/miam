@@ -50,9 +50,15 @@ MiamBundle\Entity\Feed:
         dataLength:
             type: integer
             column: data_length
-        nbItems:
+        countParsingItems:
             type: integer
-            column: nb_items_on_parsing
+            column: count_items_parsing
+        countTotalItems:
+            type: integer
+            column: count_items_total
+        countDailyItems:
+            type: float
+            column: count_items_daily
         errorCount:
             type: integer
             column: error_count

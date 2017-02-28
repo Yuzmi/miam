@@ -2,19 +2,9 @@ admin:
     path: /
     defaults: { _controller: MiamBundle:Admin:index }
 
-admin_feed_create:
-    path: /feed/create
-    defaults: { _controller: MiamBundle:Admin:createFeed }
-
-ajax_admin_feed_parse:
-    path: /ajax/feed/{id}/parse
-    defaults: { _controller: MiamBundle:Admin:ajaxParseFeed }
-    requirements: { id: \d+ }
-
-ajax_admin_feed_delete:
-    path: /ajax/feed/{id}/delete
-    defaults: { _controller: MiamBundle:Admin:ajaxDeleteFeed }
-    requirements: { id: \d+ }
+admin_feeds:
+    path: /feeds
+    defaults: { _controller: MiamBundle:Admin:showFeeds }
 
 admin_feeds_export:
     path: /feeds/export
@@ -27,3 +17,26 @@ ajax_admin_popup_feeds_import:
 admin_feeds_import:
     path: /feeds/import
     defaults: { _controller: MiamBundle:Admin:importFeeds }
+
+ajax_admin_feed_parse:
+    path: /ajax/feed/{id}/parse
+    defaults: { _controller: MiamBundle:Admin:ajaxParseFeed }
+    requirements: { id: \d+ }
+
+admin_feed:
+    path: /feed/{id}
+    defaults: { _controller: MiamBundle:Admin:showFeed }
+
+admin_feed_create:
+    path: /feed/create
+    defaults: { _controller: MiamBundle:Admin:createFeed }
+
+admin_feed_parse:
+    path: /feed/{id}/parse
+    defaults: { _controller: MiamBundle:Admin:parseFeed }
+    requirements: { id: \d+ }
+
+admin_feed_delete:
+    path: /feed/{id}/delete
+    defaults: { _controller: MiamBundle:Admin:deleteFeed }
+    requirements: { id: \d+ }

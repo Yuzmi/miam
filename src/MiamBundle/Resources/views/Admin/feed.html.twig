@@ -1,0 +1,115 @@
+{% extends 'MiamBundle::base.html.twig' %}
+
+{% block stylesheets %}
+	{{ parent() }}
+	<link href="{{ asset('css/admin.css') }}" type="text/css" rel="stylesheet">
+{% endblock %}
+
+{% block bodyClasses %}adminFeed{% endblock %}
+
+{% block body %}
+	{% include 'MiamBundle:Default:header.html.twig' %}
+
+	<h1>{{ feed.name }}</h1>
+
+	{% if feed.hasIcon %}
+		<p><img src="{{ asset(feed.icon) }}" alt=""></p>
+	{% endif %}
+
+	{% if feed.description %}
+		<p>{{ feed.description }}</p>
+	{% endif %}
+
+	<p>
+		{% if feed.website %}
+			<a href="{{ feed.website }}">Website</a> -
+		{% endif %}
+		<a href="{{ feed.url }}">Source</a>
+	</p>
+
+	<table class="infos">
+		{% if feed.author %}
+			<tr>
+				<th>Author:</th>
+				<td>{{ feed.author }}</td>
+			</tr>
+		{% endif %}
+		<tr>
+			<th>Creation</th>
+			<td>{{ feed.dateCreated|date() }}</td>
+		</tr>
+		<tr>
+			<th>Total items</th>
+			<td>
+				{{ countItems }}
+				{% if countItems != feed.countTotalItems %}
+					({{ feed.countTotalItems }})
+				{% endif %}
+			</td>
+		</tr>
+		<tr>
+			<th>Items/Day</th>
+			<td>{{ feed.countDailyItems }}</td>
+		</tr>
+		<tr>
+			<th>Total subscribers</th>
+			<td>{{ countSubscriptions }}</td>
+		</tr>
+	</table>
+
+	<div class="parseForm">
+		{{ form_start(parseFeedForm) }}
+			<button type="submit" title="Parse">
+				<i class="fa fa-refresh"></i>
+			</button>
+		{{ form_end(parseFeedForm) }}
+	</div>
+
+	{% if feed.errorCount > 0 %}
+		<p>
+			<i class="fa fa-warning"></i>
+			<br>
+			{{ feed.errorMessage }}
+		</p>
+	{% endif %}
+
+	{% if lastItems|length > 0 %}
+		<p class="lastItems">Last items:</p>
+		<div class="items">
+			{% include 'MiamBundle:Default:item_list.html.twig' with {'items': lastItems, 'itemOptions': ['hideFeed']} %}
+		</div>
+	{% else %}
+		<p>No item yet</p>
+	{% endif %}
+
+	<p><a href="{{ path('admin_feeds') }}">Back to feeds</a></p>
+
+	<div class="delete">
+		<div class="deleteLink">
+			Delete the feed
+		</div>
+		<div class="deleteForm">
+			<p>Are you sure ?</p>
+			{{ form_start(deleteFeedForm) }}
+			{{ form_widget(deleteFeedForm.submit, {'label': "Yes", 'attr': {'class': "deleteButton"}}) }}
+			<button class="noButton" type="button">{{ "No"|trans }}</button>
+			{{ form_end(deleteFeedForm) }}
+		</div>
+	</div>
+{% endblock %}
+
+{% block javascripts %}
+	{{ parent() }}
+
+	<script type="text/javascript">
+		$(".deleteLink").on("click", function() {
+			$(this).hide();
+			$(".deleteForm").show();
+		});
+
+		$(".deleteForm .noButton").on('click', function() {
+			$(".deleteForm").hide();
+			$(".deleteLink").show();
+		});
+	</script>
+{% endblock %}

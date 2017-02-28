@@ -6,7 +6,7 @@ RSS agregator using [Symfony 3](https://symfony.com/) and [SimplePie](https://gi
 
 * Multi-user
 * Categories
-* Item marking
+* Read/Starred items
 * User settings
 * OPML import/export
 * Localization (en/fr)
@@ -34,12 +34,13 @@ Other engines may work but i don't support them at the moment.
 CSS files are generated using [Sass](http://sass-lang.com).  
 Originals files are found in the src/MiamBundle/Resources/public/scss folder.  
 
-Also, use a modern browser.  
+The admin section is not polished, don't be surprised.  
+
+Use a modern browser.  
 
 ### May-Do (or not)
 
 - Order management for categories and feeds
 - Filters => subscription_item
 - ICO to PNG without imagick
-- Improve admin
 - PubSubHubBub
