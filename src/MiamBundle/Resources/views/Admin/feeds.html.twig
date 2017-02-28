@@ -9,9 +9,35 @@
 
 {% macro pagination(countPages, page) %}
 	<div class="pagination">
-		{% for p in 1..countPages %}
-			<a class="page {{ p == page ? 'current' }}" href="{{ path('admin_feeds', {'page': p}) }}">{{ p }}</a>
-		{% endfor %}
+		{% if countPages <= 10 %}
+			{% for p in 1..countPages %}
+				<a class="page {{ p == page ? 'current' }}" href="{{ path('admin_feeds', {'page': p}) }}">{{ p }}</a>
+			{% endfor %}
+		{% else %}
+			<form method="GET">
+				<p>
+					{% if page > 1 %}
+						<a class="page" href="{{ path('admin_feeds', {'page': 1}) }}">&lt;&lt;</a>
+						<a class="page" href="{{ path('admin_feeds', {'page': page - 1}) }}">&lt;</a>
+					{% endif %}
+
+					<select name="page">
+						{% for p in 1..countPages %}
+							<option value="{{ p }}" {{ p == page ? 'selected' }}>
+								{{ p }}
+							</option>
+						{% endfor %}
+					</select>
+
+					{% if page < countPages %}
+						<a class="page" href="{{ path('admin_feeds', {'page': page + 1}) }}">&gt;</a>
+						<a class="page" href="{{ path('admin_feeds', {'page': countPages}) }}">&gt;&gt;</a>
+					{% endif %}
+				</p>
+
+				<p><button type="submit">Go</button></p>
+			</form>
+		{% endif %}
 	</div>
 {% endmacro %}
 
