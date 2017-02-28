@@ -21,30 +21,30 @@ def parseFeedAfterFeed(feeds, scriptDir, args=[], verbose=False):
 # Init
 countThreads = 4
 scriptDir = os.path.dirname(os.path.abspath(__file__))
+timeout = 30
 verbose = False
 
 # Available arguments
 parser = argparse.ArgumentParser()
-parser.add_argument("--env")
+parser.add_argument("-e", "--env")
 parser.add_argument("--feeds")
 parser.add_argument("--ignore-invalid", action="store_true")
 parser.add_argument("--no-cache", action="store_true")
-parser.add_argument("--no-debug", action="store_true")
 parser.add_argument("--threads")
 parser.add_argument("--timeout")
-parser.add_argument("--verbose", action="store_true")
+parser.add_argument("-v", "--verbose", action="store_true")
 
 # Parse arguments
 args = parser.parse_args()
-getArgs = []
-parseArgs = []
+getArgs = ["--no-debug"]
+parseArgs = ["--no-debug"]
 
-if args.env == 'prod':
-	getArgs.append("--env=prod")
-	parseArgs.append("--env=prod")
+if args.env == 'dev':
+	getArgs.append("-e=dev")
+	parseArgs.append("-e=dev")
 else:
-	getArgs.append("--env=dev")
-	parseArgs.append("--env=dev")
+	getArgs.append("-e=prod")
+	parseArgs.append("-e=prod")
 
 if args.feeds:
 	getArgs.append(args.feeds)
@@ -55,19 +55,16 @@ if args.ignore_invalid:
 if args.no_cache:
 	parseArgs.append("--no-cache")
 
-if args.no_debug:
-	getArgs.append("--no-debug")
-	parseArgs.append("--no-debug")
-
 if args.threads:
 	threads = int(args.threads)
 	if threads > 0:
 		countThreads = threads
 
 if args.timeout:
-	timeout = int(args.timeout)
-	if timeout > 0:
-		parseArgs.append("--timeout="+str(timeout))
+	newTimeout = int(args.timeout)
+	if newTimeout > 0:
+		timeout = newTimeout
+parseArgs.append("--timeout="+str(timeout))
 
 if args.verbose:
 	verbose = True

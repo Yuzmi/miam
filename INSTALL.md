@@ -180,15 +180,15 @@ And add one of these lines (not both):
 
 ```
 # Normal
-*/30 * * * * php /var/www/miam/bin/console miam:parse:feeds subscribed --env=prod --no-debug
+*/30 * * * * php /var/www/miam/bin/console miam:parse:feeds subscribed -e=prod --no-debug
 
 # Faster, require Python 3
-*/15 * * * * python3 /var/www/miam/parse.py --feeds subscribed --env prod --no-debug --timeout 30
+*/20 * * * * python3 /var/www/miam/parse.py --feeds subscribed
 ```
 
-It will parse your feeds automatically every 15/30 minutes.  
+It will parse your feeds automatically every 20/30 minutes.  
 The "subscribed" argument will only parse the feeds you're subscribed to.  
-Don't forget the "--no-debug" option or your logs will explode.  
+Do not forget the "-e=prod --no-debug" flags !  
 
 #### Add an admin (optional)
 ```
