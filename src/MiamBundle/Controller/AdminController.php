@@ -126,7 +126,7 @@ class AdminController extends MainController
         if($request->isXmlHttpRequest() && $this->isLoggedAdmin()) {
             $feed = $this->getRepo("Feed")->find($id);
             if($feed) {
-                $this->get('data_parsing')->parseFeed($feed);
+                $this->get('data_parsing')->parseFeed($feed, array('cache' => false));
 
                 $success = true;
             }
@@ -237,7 +237,7 @@ class AdminController extends MainController
         $form->handleRequest($request);
 
         if($form->isSubmitted() && $form->isValid()) {
-            $this->get('data_parsing')->parseFeed($feed);
+            $this->get('data_parsing')->parseFeed($feed, array('cache' => false));
         }
 
         return $this->redirectToRoute('admin_feed', array('id' => $feed->getId()));
