@@ -47,10 +47,6 @@ class DataParsing extends MainService {
 			}
 		}
 
-		$firstParsing = false;
-		if(!$feed->getDateParsed()) {
-			$firstParsing = true;
-		}
 		$feed->setDateParsed($now);
 
 		$countNewItems = 0;
@@ -58,7 +54,12 @@ class DataParsing extends MainService {
 
 		$pie_init = $pie->init();
 		if($pie_init) {
-			$feed->setDateSuccess($now);
+			$firstSuccess = false;
+			if(!$feed->getDateFirstSuccess()) {
+				$feed->setDateFirstSuccess($now);
+				$firstSuccess = true;
+			}
+			$feed->setDateLastSuccess($now);
 			
 			// Name
 			$feed_name = $this->sanitizeText($pie->get_title(), 255);
@@ -137,7 +138,11 @@ class DataParsing extends MainService {
 
 			$countItems = count($items);
 			if($countItems > 0) {
-				$feed->setCountParsingItems($countItems);
+				$feed->setCountLastParsedItems($countItems);
+			}
+
+			if($firstSuccess) {
+				$feed->setCountFirstParsedItems($countItems);
 			}
 
 			// Find and create new tags
@@ -388,8 +393,8 @@ class DataParsing extends MainService {
 		}
 
 		// Count items per day
-		$daysSinceCreated = max(1, $now->getTimestamp() - $feed->getDateCreated()->getTimestamp()) / 86400;
-		$countDailyItems = round(($feed->getCountTotalItems() - $feed->getCountParsingItems()) / $daysSinceCreated, 2);
+		$totalDays = max(1, $now->getTimestamp() - $feed->getDateFirstSuccess()->getTimestamp()) / 86400;
+		$countDailyItems = round(($feed->getCountTotalItems() - $feed->getCountFirstParsedItems()) / $totalDays, 2);
 		$feed->setCountDailyItems($countDailyItems);
 
 		$this->em->persist($feed);

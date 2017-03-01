@@ -16,7 +16,8 @@ class Feed
     private $author;
     private $language;
     private $dataLength;
-    private $countParsingItems;
+    private $countFirstParsedItems;
+    private $countLastParsedItems;
     private $countTotalItems;
     private $countDailyItems;
     private $errorCount;
@@ -24,7 +25,8 @@ class Feed
     private $hasIcon;
     private $dateCreated;
     private $dateParsed;
-    private $dateSuccess;
+    private $dateFirstSuccess;
+    private $dateLastSuccess;
     private $dateNewItem;
     private $dateIcon;
     private $items;
@@ -33,7 +35,8 @@ class Feed
 
     public function __construct() {
         $this->dataLength = 0;
-        $this->countParsingItems = 0;
+        $this->countFirstParsedItems = 0;
+        $this->countLastParsedItems = 0;
         $this->countTotalItems = 0;
         $this->countDailyItems = 0;
         $this->errorCount = 0;
@@ -63,7 +66,8 @@ class Feed
     public function getAuthor() { return $this->author; }
     public function getLanguage() { return $this->language; }
     public function getDataLength() { return $this->dataLength; }
-    public function getCountParsingItems() { return $this->countParsingItems; }
+    public function getCountFirstParsedItems() { return $this->countFirstParsedItems; }
+    public function getCountLastParsedItems() { return $this->countLastParsedItems; }
     public function getCountTotalItems() { return $this->countTotalItems; }
     public function getCountDailyItems() { return $this->countDailyItems; }
     public function getErrorCount() { return $this->errorCount; }
@@ -71,7 +75,8 @@ class Feed
     public function getHasIcon() { return $this->hasIcon; }
     public function getDateCreated() { return $this->dateCreated; }
     public function getDateParsed() { return $this->dateParsed; }
-    public function getDateSuccess() { return $this->dateSuccess; }
+    public function getDateFirstSuccess() { return $this->dateFirstSuccess; }
+    public function getDateLastSuccess() { return $this->dateLastSuccess; }
     public function getDateNewItem() { return $this->dateNewItem; }
     public function getDateIcon() { return $this->dateIcon; }
     public function getItems() { return $this->items; }
@@ -89,7 +94,8 @@ class Feed
     public function setAuthor($author) { $this->author = $author; return $this; }
     public function setLanguage($language) { $this->language = $language; return $this; }
     public function setDataLength($dataLength) { $this->dataLength = $dataLength; return $this; }
-    public function setCountParsingItems($countParsingItems) { $this->countParsingItems = $countParsingItems; return $this; }
+    public function setCountFirstParsedItems($countFirstParsedItems) { $this->countFirstParsedItems = $countFirstParsedItems; return $this; }
+    public function setCountLastParsedItems($countLastParsedItems) { $this->countLastParsedItems = $countLastParsedItems; return $this; }
     public function setCountTotalItems($countTotalItems) { $this->countTotalItems = $countTotalItems; return $this; }
     public function setCountDailyItems($countDailyItems) { $this->countDailyItems = $countDailyItems; return $this; }
     public function setErrorCount($errorCount) { $this->errorCount = $errorCount; return $this; }
@@ -97,7 +103,8 @@ class Feed
     public function setHasIcon($hasIcon) { $this->hasIcon = $hasIcon; return $this; }
     public function setDateCreated($dateCreated) { $this->dateCreated = $dateCreated; return $this; }
     public function setDateParsed($dateParsed) { $this->dateParsed = $dateParsed; return $this; }
-    public function setDateSuccess($dateSuccess) { $this->dateSuccess = $dateSuccess; return $this; }
+    public function setDateFirstSuccess($dateFirstSuccess) { $this->dateFirstSuccess = $dateFirstSuccess; return $this; }
+    public function setDateLastSuccess($dateLastSuccess) { $this->dateLastSuccess = $dateLastSuccess; return $this; }
     public function setDateNewItem($dateNewItem) { $this->dateNewItem = $dateNewItem; return $this; }
     public function setDateIcon($dateIcon) { $this->dateIcon = $dateIcon; return $this; }
 

@@ -50,9 +50,12 @@ MiamBundle\Entity\Feed:
         dataLength:
             type: integer
             column: data_length
-        countParsingItems:
+        countFirstParsedItems:
             type: integer
-            column: count_items_parsing
+            column: count_items_parsed_first
+        countLastParsedItems:
+            type: integer
+            column: count_items_parsed_last
         countTotalItems:
             type: integer
             column: count_items_total
@@ -76,9 +79,13 @@ MiamBundle\Entity\Feed:
             type: datetime
             column: date_parsed
             nullable: true
-        dateSuccess:
+        dateFirstSuccess:
             type: datetime
-            column: date_success
+            column: date_success_first
+            nullable: true
+        dateLastSuccess:
+            type: datetime
+            column: date_success_last
             nullable: true
         dateNewItem:
             type: datetime
