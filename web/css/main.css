@@ -168,7 +168,7 @@ button {
       padding: 1rem 2rem; }
     .popupContainer .popup .popupContent {
       overflow: auto;
-      padding: 1rem 2rem; }
+      padding: 2rem; }
       .popupContainer .popup .popupContent form > label {
         display: block; }
       .popupContainer .popup .popupContent form > input, .popupContainer .popup .popupContent form > select {
