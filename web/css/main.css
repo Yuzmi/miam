@@ -153,7 +153,8 @@ button {
   .popupContainer .popup {
     background-color: white;
     border: solid 2px black;
-    display: inline-block;
+    display: flex;
+    flex-direction: column;
     max-height: 90%;
     max-width: 90%;
     min-width: 30%;
@@ -166,6 +167,7 @@ button {
       font-weight: 700;
       padding: 1rem 2rem; }
     .popupContainer .popup .popupContent {
+      overflow: auto;
       padding: 1rem 2rem; }
       .popupContainer .popup .popupContent form > label {
         display: block; }

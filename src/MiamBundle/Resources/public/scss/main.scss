@@ -180,7 +180,8 @@ button {
 	.popup {
 		background-color:white;
 		border:solid 2px black;
-		display:inline-block;
+		display:flex;
+		flex-direction:column;
 		max-height:90%;
 		max-width:90%;
 		min-width:30%;
@@ -196,6 +197,7 @@ button {
 		}
 
 		.popupContent {
+			overflow:auto;
 			padding:1rem 2rem;
 
 			form {
