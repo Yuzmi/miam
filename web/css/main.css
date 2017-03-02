@@ -74,11 +74,15 @@ body > header {
     body > header .menu:hover {
       background-color: black;
       color: white; }
+    body > header .menu:focus {
+      outline: none; }
   body > header .rightSide {
     float: right; }
     body > header .rightSide > .menu {
       border-left: solid 1px black;
       border-right: 0; }
+      body > header .rightSide > .menu:focus {
+        outline: none; }
   @media (max-width: 600px) {
     body > header .menu .label {
       display: none; } }

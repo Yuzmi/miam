@@ -71,6 +71,8 @@ body > header {
 			background-color:black;
 			color:white;
 		}
+
+		&:focus { outline:none; }
 	}
 
 	.rightSide {
@@ -79,6 +81,8 @@ body > header {
 		& > .menu {
 			border-left:solid 1px black;
 			border-right:0;
+
+			&:focus { outline:none; }
 		}
 	}
 
