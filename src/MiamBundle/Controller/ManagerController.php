@@ -409,7 +409,6 @@ class ManagerController extends MainController
         return $this->redirectToRoute("manager", array("tab" => "catsubs"));
     }
 
-    // Fucking SimpleXMLElement
     private function importOPMLOutlineForUser($outline, User $user, Category $parentCategory = null) {
         $em = $this->getEm();
         
