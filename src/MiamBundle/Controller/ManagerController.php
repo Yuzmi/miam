@@ -134,6 +134,82 @@ class ManagerController extends MainController
         return $this->redirectToRoute("manager", array("tab" => "catsubs"));
     }
 
+    public function ajaxPopupEditCategorySubscriptionsAction(Request $request, $id) {
+        $response = array(
+            "success" => false
+        );
+
+        if($request->isXmlHttpRequest() && $this->isLogged()) {
+            $category = $this->getRepo("Category")->findOneBy(array(
+                'id' => $id, 
+                'user' => $this->getUser()
+            ));
+            if($category) {
+                $subscriptions = $this->getRepo("Subscription")
+                    ->createQueryBuilder('s')
+                    ->innerJoin('s.feed', 'f')->addSelect('f')
+                    ->leftJoin('s.category', 'c')->addSelect('c')
+                    ->where('s.user = :user')->setParameter('user', $this->getUser())
+                    ->orderBy('c.leftPosition', 'ASC')
+                    ->addOrderBy('s.name', 'ASC')
+                    ->getQuery()->getResult();
+
+                $html = $this->renderView("MiamBundle:Manager:popup_category_edit_subscriptions.html.twig", array(
+                    'category' => $category,
+                    'subscriptions' => $subscriptions
+                ));
+
+                $response["success"] = true;
+                $response["html"] = $html;
+            }
+        }
+
+        return new JsonResponse($response);
+    }
+
+    public function updateCategorySubscriptionsAction(Request $request, $id) {
+        if($this->isTokenValid('manager_category_update_subscriptions', $request->get('csrf_token'))) {
+            $category = $this->getRepo("Category")->findOneBy(array(
+                'id' => $id,
+                'user' => $this->getUser()
+            ));
+            if($category) {
+                $postSubscriptions = (array) $request->request->get('subscriptions');
+                
+                $subIds = array();
+                foreach($postSubscriptions as $s) {
+                    $subId = intval($s);
+                    if($s > 0 && !in_array($subId, $subIds)) {
+                        $subIds[] = $subId;
+                    }
+                }
+
+                $em = $this->getEm();
+
+                $subscriptions = $this->getRepo("Subscription")->findByUser($this->getUser());
+                foreach($subscriptions as $s) {
+                    if($s->getCategory() && $s->getCategory()->getId() == $category->getId() && !in_array($s->getId(), $subIds)) {
+                        $s->setCategory(null);
+                        $em->persist($s);
+                    } elseif((!$s->getCategory() || $s->getCategory()->getId() != $category->getId()) && in_array($s->getId(), $subIds)) {
+                        $s->setCategory($category);
+                        $em->persist($s);
+                    }
+                }
+
+                $em->flush();
+
+                $this->addFm('Subscriptions updated for "'.$category->getName().'"', "success");
+            } else {
+                $this->addFm("Error", "error");
+            }
+        } else {
+            $this->addFm("Invalid token", "error");
+        }
+        
+        return $this->redirectToRoute("manager", array("tab" => "catsubs"));
+    }
+
     public function ajaxPopupDeleteCategoryAction(Request $request, $id) {
         $response = array(
             "success" => false

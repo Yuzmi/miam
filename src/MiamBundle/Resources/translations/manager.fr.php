@@ -54,7 +54,12 @@
 		'manager.catsubs.edit_category.name.label' => 'Nom :',
 		'manager.catsubs.edit_category.name.placeholder' => 'Nom',
 		'manager.catsubs.edit_category.parent.label' => 'Parent :',
-		'manager.catsubs.edit_category.update' => 'Mettre à jour',
+		'manager.catsubs.edit_category.update' => 'Enregistrer',
+
+		'manager.catsubs.edit_category_subs.title' => 'Abonnements de "%category%"',
+		'manager.catsubs.edit_category_subs.no_category' => 'Sans catégorie',
+		'manager.catsubs.edit_category_subs.update' => 'Enregistrer',
+		'manager.catsubs.edit_category_subs.no_subscription' => "Vous n'avez aucun abonnement",
 
 		'manager.catsubs.delete_category.text' => 'Supprimer cette catégorie et toutes ses sous-catégories ?',
 		'manager.catsubs.delete_category.yes' => 'Oui',

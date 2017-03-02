@@ -94,10 +94,10 @@ app.manager = {
 				});
 			});
 
-			$(".catsubs .subscription .edit").click(function() {
+			$(".catsubs .category .editSubscriptions").click(function() {
 				$.ajax({
 					type: "POST",
-					url: Routing.generate("ajax_manager_popup_subscription_edit", {id: $(this).closest(".subscription").data("subscription")}),
+					url: Routing.generate("ajax_manager_popup_category_edit_subscriptions", {id: $(this).closest(".category").data("category")}),
 					dataType: "json"
 				}).done(function(result) {
 					if(result.success) {
@@ -111,6 +111,19 @@ app.manager = {
 				$.ajax({
 					type: "POST",
 					url: Routing.generate("ajax_manager_popup_category_delete", {id: $(this).closest(".category").data("category")}),
+					dataType: "json"
+				}).done(function(result) {
+					if(result.success) {
+						$("body").append(result.html);
+						app.popup.init();
+					}
+				});
+			});
+
+			$(".catsubs .subscription .edit").click(function() {
+				$.ajax({
+					type: "POST",
+					url: Routing.generate("ajax_manager_popup_subscription_edit", {id: $(this).closest(".subscription").data("subscription")}),
 					dataType: "json"
 				}).done(function(result) {
 					if(result.success) {

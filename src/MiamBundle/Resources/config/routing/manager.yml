@@ -15,10 +15,21 @@ manager_category_create:
 ajax_manager_popup_category_edit:
     path: /ajax/popup/category/{id}/edit
     defaults: { _controller: MiamBundle:Manager:ajaxPopupEditCategory }
+    requirements: { id: \d+ }
 
 manager_category_update:
     path: /category/{id}/update
     defaults: { _controller: MiamBundle:Manager:saveCategory }
+    requirements: { id: \d+ }
+
+ajax_manager_popup_category_edit_subscriptions:
+    path: /ajax/popup/category/{id}/edit/subscriptions
+    defaults: { _controller: MiamBundle:Manager:ajaxPopupEditCategorySubscriptions }
+    requirements: { id: \d+ }
+
+manager_category_update_subscriptions:
+    path: /category/{id}/update/subscriptions
+    defaults: { _controller: MiamBundle:Manager:updateCategorySubscriptions }
     requirements: { id: \d+ }
 
 ajax_manager_popup_category_delete:

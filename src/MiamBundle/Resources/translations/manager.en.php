@@ -55,6 +55,11 @@
 		'manager.catsubs.edit_category.parent.label' => 'Parent:',
 		'manager.catsubs.edit_category.update' => 'Update',
 
+		'manager.catsubs.edit_category_subs.title' => 'Subscriptions in "%category%"',
+		'manager.catsubs.edit_category_subs.no_category' => 'Uncategorized',
+		'manager.catsubs.edit_category_subs.update' => 'Update',
+		'manager.catsubs.edit_category_subs.no_subscription' => 'You have no subscription',
+
 		'manager.catsubs.delete_category.text' => 'Delete this category and all subcategories ?',
 		'manager.catsubs.delete_category.yes' => 'Yes',
 		'manager.catsubs.delete_category.no' => 'No',

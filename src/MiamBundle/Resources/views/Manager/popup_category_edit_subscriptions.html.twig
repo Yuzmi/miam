@@ -1,0 +1,41 @@
+{% extends "MiamBundle:Default:popup.html.twig" %}
+
+{% block popupContainerClass %}editCategorySubscriptions{% endblock %}
+
+{% block popupTitle %}{{ "manager.catsubs.edit_category_subs.title"|trans({'%category%': category.name}, 'manager') }}{% endblock %}
+
+{% block popupContent %}
+	{% if subscriptions|length > 0 %}
+		<form method="POST" action="{{ path('manager_category_update_subscriptions', {'id': category.id}) }}">
+			<div class="subscriptions">
+				{% set cat = null %}
+				{% for s in subscriptions %}
+					{% if cat != s.category %}
+						{% set cat = s.category %}
+						<div class="category">
+							{% if cat %}
+								{{ cat.path }}
+							{% else %}
+								{{ "manager.catsubs.edit_category_subs.no_category"|trans({}, 'manager') }}
+							{% endif %}
+						</div>
+					{% endif %}
+					<div class="subscription" title="{{ s.name ~ ' - ' ~ s.feed.url }}">
+						<input type="checkbox" id="cat{{ category.id }}s{{ s.id }}" name="subscriptions[]" value="{{ s.id }}" {{ s in category.subscriptions ? 'checked' }}>
+						<label for="cat{{ category.id }}s{{ s.id }}">{{ s.name|shorten(50) }}</label>
+					</div>
+				{% endfor %}
+			</div>
+
+			<br>
+
+			<button type="submit">{{ "manager.catsubs.edit_category_subs.update"|trans({}, 'manager') }}</button>
+
+			<input type="hidden" name="csrf_token" value="{{ csrf_token('manager_category_update_subscriptions') }}">
+		</form>
+	{% else %}
+		<p>
+			{{ "manager.catsubs.edit_category_subs.no_subscription"|trans({}, 'manager') }}
+		</p>
+	{% endif %}
+{% endblock %}

@@ -9,5 +9,6 @@
 		'No' => 'No',
 
 		'Save' => 'Save',
-		'Update' => 'Update'
+		'Update' => 'Update',
+		'Close' => 'Close'
 	);

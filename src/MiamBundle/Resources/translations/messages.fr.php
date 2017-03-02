@@ -9,5 +9,6 @@
 		'No' => 'Non',
 
 		'Save' => 'Enregistrer',
-		'Update' => 'Mettre à jour'
+		'Update' => 'Enregistrer',
+		'Close' => 'Fermer'
 	);

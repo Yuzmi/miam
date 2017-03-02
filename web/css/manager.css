@@ -50,6 +50,22 @@
     display: block;
     margin-bottom: 1rem; }
 
+.popupContainer.editCategorySubscriptions .subscriptions {
+  display: inline-block;
+  margin: auto;
+  max-height: 400px;
+  overflow: auto; }
+  .popupContainer.editCategorySubscriptions .subscriptions .category {
+    font-weight: bold;
+    margin: 0.5em 0;
+    text-align: left; }
+  .popupContainer.editCategorySubscriptions .subscriptions .subscription {
+    text-align: left; }
+    .popupContainer.editCategorySubscriptions .subscriptions .subscription input[type=checkbox], .popupContainer.editCategorySubscriptions .subscriptions .subscription label {
+      vertical-align: middle; }
+.popupContainer.editCategorySubscriptions button {
+  margin-top: 1em; }
+
 body.theme-dark .tab {
   border-color: #363636; }
   body.theme-dark .tab header {

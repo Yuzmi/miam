@@ -103,6 +103,35 @@
 	}
 }
 
+.popupContainer {
+	&.editCategorySubscriptions {
+		.subscriptions {
+			display:inline-block;
+			margin:auto;
+			max-height:400px;
+			overflow:auto;
+
+			.category {
+				font-weight:bold;
+				margin:0.5em 0;
+				text-align:left;
+			}
+
+			.subscription {
+				text-align:left;
+
+				input[type=checkbox], label {
+					vertical-align:middle;
+				}
+			}
+		}
+
+		button {
+			margin-top:1em;
+		}
+	}
+}
+
 body.theme-dark {
 	.tab {
 		border-color:#363636;
