@@ -114,7 +114,7 @@ class AdminController extends MainController
     	$form->handleRequest($request);
 
     	if($form->isSubmitted() && $form->isValid()) {
-            $this->get('feed_manager')->getFeedForUrl($form->get('url')->getData(), true);
+            $this->get('feed_manager')->getFeedForUrl($form->get('url')->getData(), true, true);
     	}
 
     	return $this->redirectToRoute('admin_feeds');
@@ -184,7 +184,7 @@ class AdminController extends MainController
                     if(isset($outline["xmlUrl"])) {
                         $url = $outline["xmlUrl"];
                         if(filter_var($url, FILTER_VALIDATE_URL) !== false) {
-                            $feed = $this->get("feed_manager")->findFeedForUrl($url);
+                            $feed = $this->get("feed_manager")->getFeedForUrl($url);
                             if(!$feed) {
                                 $feed = $this->get('feed_manager')->createFeedForUrl($url);
                                 $countNew++;

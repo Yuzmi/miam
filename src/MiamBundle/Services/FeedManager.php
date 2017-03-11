@@ -44,9 +44,8 @@ class FeedManager extends MainService {
 	private function hashUrl($url) {
 		return hash('sha1', $url);
 	}
-
-	// Find a feed, create if not exists
-	public function getFeedForUrl($url, $parsing = false) {
+	
+	public function getFeedForUrl($url, $createIfNotExists = false, $parse = false) {
 		$feed = null;
 
 		if(filter_var($url, FILTER_VALIDATE_URL) !== false) {
@@ -54,30 +53,16 @@ class FeedManager extends MainService {
 			$urlHash = $this->hashUrl($url);
 
 			$feed = $this->getRepo("Feed")->findOneByUrlHash($urlHash);
-			if(!$feed) {
-				$feed = $this->createFeedForUrl($url, $parsing);
+			if(!$feed && $createIfNotExists) {
+				$feed = $this->createFeedForUrl($url, $parse);
 			}
 		}
 
 		return $feed;
 	}
 
-	// Find a feed
-	public function findFeedForUrl($url) {
-		$feed = null;
-
-		if(filter_var($url, FILTER_VALIDATE_URL) !== false) {
-			$url = $this->formatUrl($url);
-			$urlHash = $this->hashUrl($url);
-
-			$feed = $this->getRepo("Feed")->findOneByUrlHash($urlHash);
-		}
-
-		return $feed;
-	}
-
 	// Create a feed
-	public function createFeedForUrl($url, $parsing = false) {
+	public function createFeedForUrl($url, $parse = false) {
 		$url = $this->formatUrl($url);
 		$urlHash = $this->hashUrl($url);
 
@@ -88,7 +73,7 @@ class FeedManager extends MainService {
 		$this->em->persist($feed);
 		$this->em->flush();
 
-		if($parsing) {
+		if($parse) {
 			$this->container->get('data_parsing')->parseFeed($feed);
 		}
 
@@ -106,7 +91,7 @@ class FeedManager extends MainService {
         } elseif($arg == 'unused') {
             return $this->getRepo("Feed")->findUnused();
         } elseif(filter_var($arg, FILTER_VALIDATE_URL) !== false) {
-            $feed = $this->findFeedForUrl($arg);
+            $feed = $this->getFeedForUrl($arg);
             if($feed) {
             	return array($feed);
             }

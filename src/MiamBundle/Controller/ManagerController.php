@@ -319,7 +319,7 @@ class ManagerController extends MainController
                 $new_subscription = true;
             }
 
-            $feed = $this->get('feed_manager')->getFeedForUrl(trim($request->get('url')), true);
+            $feed = $this->get('feed_manager')->getFeedForUrl(trim($request->get('url')), true, true);
             if($feed) {
                 $subscription->setFeed($feed);
 
@@ -492,7 +492,7 @@ class ManagerController extends MainController
         if(isset($outline["xmlUrl"])) {
             $subscription = null;
 
-            $feed = $this->get("feed_manager")->getFeedForUrl($outline["xmlUrl"]);
+            $feed = $this->get("feed_manager")->getFeedForUrl($outline["xmlUrl"], true);
             if($feed) {
                 $subscription = $this->getRepo('Subscription')->findOneBy(array(
                     'user' => $user,

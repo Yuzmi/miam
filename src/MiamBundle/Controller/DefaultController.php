@@ -32,7 +32,7 @@ class DefaultController extends MainController
 			$lease_seconds = intval($request->query->get('hub_lease_seconds'));
 			$reason = $request->query->get('hub_reason');
 
-			$feed = $this->get('feed_manager')->findFeedForUrl($topic);
+			$feed = $this->get('feed_manager')->getFeedForUrl($topic);
 			if($feed) {
 				$subscription = $this->getRepo("PshbSubscription")->findOneByFeed($feed);
 				if(!$subscription) {
@@ -65,7 +65,7 @@ class DefaultController extends MainController
 			if($header_links) {
 				foreach($header_links as $hl) {
 					if(preg_match('#^<(.*)>;rel=self$#i', $hl, $matches)) {
-						$feed = $this->get('feed_manager')->findFeedForUrl($matches[1]);
+						$feed = $this->get('feed_manager')->getFeedForUrl($matches[1]);
 					}
 				}
 			}
