@@ -572,7 +572,7 @@ app.shit = {
 		},
 
 		showItem: function(itemId) {
-			$(".itemContentContainer").removeClass("hidden");
+			$(".shitContainer").addClass("showItemContent");
 
 			var currentItemId = $(".itemContent").attr("data-item");
 			if(currentItemId != itemId) {
@@ -598,12 +598,13 @@ app.shit = {
 		},
 
 		expandItem: function() {
-			$(".itemContentContainer").addClass("expanded");
+			$(".shitContainer").removeClass("showItemContent");
+			$(".shitContainer").addClass("expandItemContent");
 		},
 
 		hideItem: function() {
-			$(".itemContentContainer").addClass("hidden");
-			$(".itemContentContainer").removeClass("expanded");
+			$(".shitContainer").removeClass("showItemContent");
+			$(".shitContainer").removeClass("expandItemContent");
 
 			$(".itemRow").removeClass("selected");
 		}
