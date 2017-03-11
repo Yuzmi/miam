@@ -19,7 +19,7 @@ def parseFeedAfterFeed(feeds, scriptDir, args=[], verbose=False):
 
 
 # Init
-countThreads = 4
+countThreads = 2
 scriptDir = os.path.dirname(os.path.abspath(__file__))
 timeout = 30
 verbose = False
