@@ -114,7 +114,17 @@ class AdminController extends MainController
     	$form->handleRequest($request);
 
     	if($form->isSubmitted() && $form->isValid()) {
-            $this->get('feed_manager')->getFeedForUrl($form->get('url')->getData(), true, true);
+            $url = $form->get('url')->getData();
+            if(filter_var($url, FILTER_VALIDATE_URL) !== false) {
+                $feed = $this->get('feed_manager')->getFeedForUrl($url);
+                if(!$feed) {
+                    $this->get('feed_manager')->createFeedForUrl($url);
+                } else {
+                    $this->addFm("Feed already exists", "error");
+                }
+            } else {
+                $this->addFm("Wrong URL", "error");
+            }
     	}
 
     	return $this->redirectToRoute('admin_feeds');
