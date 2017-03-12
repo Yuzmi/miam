@@ -55,7 +55,8 @@ app.shit = {
 			});
 
 			// Context menu for sidebar
-			$(".sidebar .row").contextmenu(function(e) {
+			$(".sidebar .row").off("contextmenu");
+			$(".sidebar .row").on("contextmenu", function(e) {
 				e.preventDefault();
 
 				$(".contextMenu").hide();
@@ -296,7 +297,7 @@ app.shit = {
 					$(this).addClass("selected");
 
 					var itemId = $(this).attr("data-item");
-					app.shit.items.showItem(itemId);
+					app.shit.itemContent.show(itemId);
 
 					if(!$(this).hasClass("read")) {
 						app.shit.items.readItem(itemId);
@@ -347,15 +348,18 @@ app.shit = {
 
 			$(".itemContentContainer .toggle-hide").off("click");
 			$(".itemContentContainer .toggle-hide").on("click", function() {
-				app.shit.items.hideItem();
+				app.shit.itemContent.hide();
+
+				$(".itemRow").removeClass("selected");
 			});
 
 			$(".itemContentContainer .toggle-expand").off("click");
 			$(".itemContentContainer .toggle-expand").on("click", function() {
-				app.shit.items.expandItem();
+				app.shit.itemContent.expand();
 			});
 
-			$(".itemRow").contextmenu(function(e) {
+			$(".itemRow").off('contextmenu');
+			$(".itemRow").on('contextmenu', function(e) {
 				e.preventDefault();
 
 				$(".contextMenu").hide();
@@ -366,7 +370,7 @@ app.shit = {
 				var menu = $(".itemMenu");
 				menu.css({
 						left: e.clientX,
-						top: e.clientY + 10
+						top: e.clientY + 2
 					})
 					.attr("data-item", item.attr("data-item"));
 
@@ -569,13 +573,18 @@ app.shit = {
 					app.shit.sidebar.decrementStarredCount();
 				}
 			});
-		},
+		}
+	},
 
-		showItem: function(itemId) {
+	itemContent: {
+		currentItemId: null,
+
+		show: function(itemId) {
 			$(".shitContainer").addClass("showItemContent");
 
-			var currentItemId = $(".itemContent").attr("data-item");
-			if(currentItemId != itemId) {
+			if(itemId != app.shit.itemContent.currentItemId) {
+				app.shit.itemContent.currentItemId = itemId;
+
 				$(".itemContent").html('<span class="loading"><i class="fa fa-spinner fa-spin"></i></span>');
 				
 				$.ajax({
@@ -586,8 +595,7 @@ app.shit = {
 					},
 					dataType: "json"
 				}).done(function(result) {
-					var currentItemId = $(".itemContent").attr("data-item");
-					if(currentItemId != itemId) {
+					if(result.success && itemId == app.shit.itemContent.currentItemId) {
 						$(".itemContent")
 							.attr("data-item", itemId)
 							.html(result.html);
@@ -597,16 +605,14 @@ app.shit = {
 			}
 		},
 
-		expandItem: function() {
+		expand: function() {
 			$(".shitContainer").removeClass("showItemContent");
 			$(".shitContainer").addClass("expandItemContent");
 		},
 
-		hideItem: function() {
+		hide: function() {
 			$(".shitContainer").removeClass("showItemContent");
 			$(".shitContainer").removeClass("expandItemContent");
-
-			$(".itemRow").removeClass("selected");
 		}
 	}
 }

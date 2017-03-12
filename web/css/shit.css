@@ -9,13 +9,13 @@ body {
   body header {
     flex-shrink: 0; }
   body .shitContainer {
+    background-color: inherit;
     flex-grow: 1;
     position: relative; }
     body .shitContainer .notItemContentContainer {
       display: flex;
       flex-direction: column;
       height: 100%;
-      overflow-y: auto;
       position: absolute;
       width: 100%; }
       body .shitContainer .notItemContentContainer .topbar {
@@ -30,7 +30,8 @@ body {
         align-items: stretch;
         display: flex;
         flex-direction: row;
-        flex-grow: 1; }
+        flex-grow: 1;
+        overflow-y: auto; }
         body .shitContainer .notItemContentContainer .itemsContainer .sidebar {
           border-right: solid 1px black;
           flex-shrink: 0;
@@ -98,6 +99,7 @@ body {
             margin-top: 2em;
             text-align: center; }
     body .shitContainer .itemContentContainer {
+      background-color: inherit;
       bottom: 0px;
       display: none;
       flex-direction: column;

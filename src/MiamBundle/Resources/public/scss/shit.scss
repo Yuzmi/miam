@@ -12,6 +12,7 @@ body {
 	}
 
 	.shitContainer {
+		background-color:inherit;
 		flex-grow:1;
 		position:relative;
 
@@ -19,7 +20,6 @@ body {
 			display:flex;
 			flex-direction:column;
 			height:100%;
-			overflow-y:auto;
 			position:absolute;
 			width:100%;
 
@@ -40,6 +40,7 @@ body {
 				display:flex;
 				flex-direction:row;
 				flex-grow:1;
+				overflow-y:auto;
 
 				.sidebar {
 					border-right:solid 1px black;
@@ -148,6 +149,7 @@ body {
 		}
 
 		.itemContentContainer {
+			background-color:inherit;
 			bottom:0px;
 			display:none;
 			flex-direction:column;
