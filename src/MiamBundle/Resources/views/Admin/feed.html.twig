@@ -10,7 +10,7 @@
 {% block body %}
 	{% include 'MiamBundle:Default:header.html.twig' %}
 
-	<h1>{{ feed.name }}</h1>
+	<h1>{{ feed.name ?: feed.url }}</h1>
 
 	{% if feed.hasIcon %}
 		<p><img src="{{ asset(feed.icon) }}" alt=""></p>
