@@ -393,7 +393,8 @@ class DataParsing extends MainService {
 		}
 
 		// Count items per day
-		$totalDays = max(1, $now->getTimestamp() - $feed->getDateFirstSuccess()->getTimestamp()) / 86400;
+		$dateFirstSuccess = $feed->getDateFirstSuccess() ?: $now;
+		$totalDays = max(1, $now->getTimestamp() - $dateFirstSuccess->getTimestamp()) / 86400;
 		$countDailyItems = round(($feed->getCountTotalItems() - $feed->getCountFirstParsedItems()) / $totalDays, 2);
 		$feed->setCountDailyItems($countDailyItems);
 
