@@ -12,23 +12,13 @@ class FeedRepository extends \Doctrine\ORM\EntityRepository
     }
 
     public function findSubscribed() {
-		$fs = $this->createQueryBuilder("f")
-            ->select("f, COUNT(s.id)")
-            ->leftJoin("f.subscriptions", "s")
-            ->groupBy("f")
-            ->having("COUNT(s.id) > 0")
+		return $this->createQueryBuilder("f")
+            ->innerJoin("f.subscriptions", "s")
             ->orderBy('f.id', 'ASC')
             ->getQuery()->getResult();
-
-        $feeds = array();
-        foreach($fs as $f) {
-            $feeds[] = $f[0];
-        }
-
-        return $feeds;
 	}
 
-    // Identical to findSubscribed() but may change in the future
+    // May change in the future
 	public function findUsed() {
 		return $this->findSubscribed();
 	}
