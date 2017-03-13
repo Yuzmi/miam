@@ -118,7 +118,7 @@ class AdminController extends MainController
             if(filter_var($url, FILTER_VALIDATE_URL) !== false) {
                 $feed = $this->get('feed_manager')->getFeedForUrl($url);
                 if(!$feed) {
-                    $this->get('feed_manager')->createFeedForUrl($url);
+                    $this->get('feed_manager')->createFeedForUrl($url, true);
                 } else {
                     $this->addFm("Feed already exists", "error");
                 }
