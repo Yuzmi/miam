@@ -11,7 +11,7 @@ MiamBundle\Entity\Subscription:
     fields:
         name:
             type: string
-            length: 100
+            length: 255
             nullable: true
         dateCreated:
             type: datetime
