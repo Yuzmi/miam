@@ -35,25 +35,26 @@
 			</tr>
 		{% endif %}
 		<tr>
-			<th>Creation</th>
+			<th>Creation date</th>
 			<td>{{ feed.dateCreated|date() }}</td>
 		</tr>
+		{% if feed.dateNewItem %}
+			<tr>
+				<th>Last item date</th>
+				<td>{{ feed.dateNewItem|date() }}</td>
+			</tr>
+		{% endif %}
 		<tr>
-			<th>Total items</th>
-			<td>
-				{{ countItems }}
-				{% if countItems != feed.countTotalItems %}
-					({{ feed.countTotalItems }})
-				{% endif %}
-			</td>
+			<th>Items</th>
+			<td>{{ feed.countTotalItems }}</td>
 		</tr>
 		<tr>
 			<th>Items/Day</th>
 			<td>{{ feed.countDailyItems }}</td>
 		</tr>
 		<tr>
-			<th>Total subscribers</th>
-			<td>{{ countSubscriptions }}</td>
+			<th>Subscribers</th>
+			<td>{{ feed.subscriptions|length }}</td>
 		</tr>
 	</table>
 

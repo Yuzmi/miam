@@ -222,8 +222,6 @@ class AdminController extends MainController
 
         return $this->render('MiamBundle:Admin:feed.html.twig', array(
             'feed' => $feed,
-            'countItems' => $this->getRepo('Item')->countForFeed($feed),
-            'countSubscriptions' => $this->getRepo('Subscription')->countForFeed($feed),
             'lastItems' => $this->getRepo('Item')->findLastPublishedForFeed($feed, 10),
             'parseFeedForm' => $this->createParseFeedForm($feed)->createView(),
             'deleteFeedForm' => $this->createDeleteFeedForm($feed)->createView()
