@@ -10,5 +10,7 @@
 
 		'Save' => 'Save',
 		'Update' => 'Update',
-		'Close' => 'Close'
+		'Close' => 'Close',
+
+		'URL' => 'URL'
 	);
