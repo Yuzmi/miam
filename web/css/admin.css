@@ -57,40 +57,42 @@
   .adminFeeds table tr.feed td.icon, .adminFeeds table tr.feed td.items, .adminFeeds table tr.feed td.subscriptions, .adminFeeds table tr.feed td.parser, .adminFeeds table tr.feed td.delete {
     text-align: center; }
 
-.adminFeed h1 {
-  text-align: center; }
-.adminFeed p {
-  text-align: center; }
-.adminFeed table.infos {
-  border: solid 1px black;
-  border-collapse: collapse;
-  margin: 2em auto; }
-  .adminFeed table.infos tr:nth-of-type(even) {
-    background-color: rgba(0, 0, 0, 0.2); }
-  .adminFeed table.infos tr th, .adminFeed table.infos tr td {
-    padding: 0.4em 0.6em; }
-  .adminFeed table.infos tr th {
-    text-align: right; }
-.adminFeed .parseForm {
-  text-align: center; }
-.adminFeed .lastItems {
-  margin-top: 2em; }
-.adminFeed .items > *:first-child {
-  border-top: solid 1px black; }
-.adminFeed .delete {
-  margin-top: 5em;
-  text-align: center; }
-  .adminFeed .delete .deleteLink {
-    cursor: pointer;
-    text-decoration: underline; }
-  .adminFeed .delete .deleteForm {
-    display: none; }
-    .adminFeed .delete .deleteForm button {
-      margin: 0 1em; }
-    .adminFeed .delete .deleteForm .deleteButton {
-      background-color: red;
-      border: none;
-      color: white; }
+.adminFeed {
+  margin-bottom: 2em; }
+  .adminFeed h1 {
+    text-align: center; }
+  .adminFeed p {
+    text-align: center; }
+  .adminFeed table.infos {
+    border: solid 1px black;
+    border-collapse: collapse;
+    margin: 2em auto; }
+    .adminFeed table.infos tr:nth-of-type(even) {
+      background-color: rgba(0, 0, 0, 0.2); }
+    .adminFeed table.infos tr th, .adminFeed table.infos tr td {
+      padding: 0.4em 0.6em; }
+    .adminFeed table.infos tr th {
+      text-align: right; }
+  .adminFeed .parseForm {
+    text-align: center; }
+  .adminFeed .lastItems {
+    margin-top: 2em; }
+  .adminFeed .items > *:first-child {
+    border-top: solid 1px black; }
+  .adminFeed .delete {
+    margin-top: 5em;
+    text-align: center; }
+    .adminFeed .delete .deleteLink {
+      cursor: pointer;
+      text-decoration: underline; }
+    .adminFeed .delete .deleteForm {
+      display: none; }
+      .adminFeed .delete .deleteForm button {
+        margin: 0 1em; }
+      .adminFeed .delete .deleteForm .deleteButton {
+        background-color: red;
+        border: none;
+        color: white; }
 
 body.theme-dark.adminIndex .blocks .block {
   border-color: #363636; }
