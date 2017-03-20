@@ -280,7 +280,7 @@ app.shit = {
 	items: {
 		category: null,
 		countNewAdded: 0,
-		dateRefresh: null,
+		lastItem: null,
 		subscription: null,
 		page: 1,
 		type: null,
@@ -306,10 +306,6 @@ app.shit = {
 					e.stopPropagation();
 				}
 			});
-
-			if(app.shit.items.dateRefresh == null) {
-				app.shit.items.dateRefresh = app.dateLoaded;
-			}
 
 			$(".itemRow .readIcon").off("click");
 			$(".itemRow .readIcon").on("click", function(e) {
@@ -429,8 +425,8 @@ app.shit = {
 					app.items.init();
 					app.shit.items.init();
 
+					app.shit.items.lastItem = result.lastItem;
 					app.shit.items.countNewAdded = 0;
-					app.shit.items.dateRefresh = result.dateRefresh;
 					app.shit.items.page = 1;
 				}
 			});
@@ -438,8 +434,8 @@ app.shit = {
 
 		loadNew: function() {
 			this.getItems({
-				created_after: app.shit.items.dateRefresh,
 				category: app.shit.items.category,
+				last_item: app.shit.items.lastItem,
 				subscription: app.shit.items.subscription,
 				type: app.shit.items.type
 			}, function(result) {
@@ -449,8 +445,8 @@ app.shit = {
 					app.items.init();
 					app.shit.items.init();
 
+					app.shit.items.lastItem = result.lastItem;
 					app.shit.items.countNewAdded += result.count;
-					app.shit.items.dateRefresh = result.dateRefresh;
 				}
 			});
 		},

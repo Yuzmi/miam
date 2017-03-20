@@ -56,8 +56,5 @@ var app = {
 };
 
 $(document).ready(function() {
-	if(app.preInit) {
-		app.preInit();
-	}
 	app.init();
 });

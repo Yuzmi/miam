@@ -21,6 +21,7 @@ class ShitController extends MainController
 
         $unreadCounts = $this->get('mark_manager')->getUnreadCounts($this->getUser(), $this->getUser());
         $starredCount = $this->getRepo("ItemMark")->countStarredAndSubscribedForUser($this->getUser());
+        $lastCreatedItem = $this->getRepo("Item")->findLastCreatedOneForSubscriber($this->getUser());
 
         $items = $this->get('item_manager')->getItems(array(
             'marker' => $this->getUser(),
@@ -42,7 +43,8 @@ class ShitController extends MainController
             'countMaxItems' => 40,
             'tree' => $tree,
             'unreadCounts' => $unreadCounts,
-            'starredCount' => $starredCount
+            'starredCount' => $starredCount,
+            'lastCreatedItem' => $lastCreatedItem
         ));
 	}
 
@@ -134,10 +136,10 @@ class ShitController extends MainController
             } else {
                 $options['type'] = $type;
             }
-            
-            $createdAfter = date_create_from_format(DATE_ATOM, $request->get("created_after"));
-            if($createdAfter !== false) {
-                $options['createdAfter'] = $createdAfter;
+
+            $lastItemId = intval($request->get('last_item'));
+            if($lastItemId > 0) {
+                $options['createdAfterItem'] = $lastItemId;
                 $countMaxItems = 100;
             }
 
@@ -171,16 +173,23 @@ class ShitController extends MainController
                 'countMaxItems' => $countMaxItems
             ));
 
+            $lastCreatedItem = $this->getRepo("Item")->findLastCreatedOneForSubscriber($this->getUser());
+
             $success = true;
         }
 
-        return new JsonResponse(array(
-            'success' => $success,
-            'count' => count($items),
-            'page' => $page,
-            'dateRefresh' => date_format(new \DateTime(), DATE_ATOM),
-            'html' => $htmlItems
-        ));
+        $response = array('success' => $success);
+
+        if($success) {
+            $response = array_merge($response, array(
+                'count' => count($items),
+                'page' => $page,
+                'html' => $htmlItems,
+                'lastItem' => $lastCreatedItem ? $lastCreatedItem->getId() : null
+            ));
+        }
+
+        return new JsonResponse($response);
     }
 
     public function ajaxGetItemAction(Request $request) {

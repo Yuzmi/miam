@@ -30,10 +30,10 @@
 	{% endfor %}
 
 	{% for s in tree.subscriptions %}
-		<div class="row" data-type="subscription" data-id="{{ s.id }}" title="{{ s.name }}">
+		<div class="row" data-type="subscription" data-id="{{ s.id }}" title="{{ s.name ?: s.feed.url }}">
 			<span class="name">
 				<img class="icon" src="{{ asset(s.feed.icon) }}" alt="">
-				{{ s.name ?: "[NO TITLE]" }}
+				{{ s.name ?: s.feed.url }}
 			</span>
 			<span class="unreadCount">{{ unreadCounts[s.id] is defined ? unreadCounts[s.id] : 0 }}</span>
 		</div>
@@ -175,6 +175,8 @@
 	<script type="text/javascript" src="{{ asset('js/shit.js') }}"></script>
 	<script type="text/javascript">
 		$(document).ready(function() {
+			app.shit.items.lastItem = {{ lastCreatedItem ? lastCreatedItem.id : null }};
+
 			app.items.init();
 			app.shit.init();
 		});

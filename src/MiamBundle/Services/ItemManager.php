@@ -72,10 +72,16 @@ class ItemManager extends MainService {
 			}
 		}
 
-		$createdAfter = isset($options['createdAfter']) ? $options['createdAfter'] : null;
-		if($createdAfter) {
-			$qb->andWhere('i.dateCreated > :createdAfter');
-			$qb->setParameter('createdAfter', $createdAfter);
+		$createdAfterItem = isset($options['createdAfterItem']) ? $options['createdAfterItem'] : null;
+		if($createdAfterItem) {
+			$qb->andWhere('i.id > :createdAfterItem');
+			$qb->setParameter('createdAfterItem', $createdAfterItem);
+		}
+
+		$createdAfterDate = isset($options['createdAfterDate']) ? $options['createdAfterDate'] : null;
+		if($createdAfterDate) {
+			$qb->andWhere('i.dateCreated > :createdAfterDate');
+			$qb->setParameter('createdAfterDate', $createdAfterDate);
 		}
 
 		$ids = isset($options['ids']) ? $options['ids'] : array();

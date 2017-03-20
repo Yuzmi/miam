@@ -3,6 +3,7 @@
 namespace MiamBundle\Repository;
 
 use MiamBundle\Entity\Feed;
+use MiamBundle\Entity\User;
 
 class ItemRepository extends \Doctrine\ORM\EntityRepository
 {
@@ -22,6 +23,19 @@ class ItemRepository extends \Doctrine\ORM\EntityRepository
 			->orderBy("i.datePublished", "DESC")
 			->setMaxResults($count)
 			->getQuery()->getResult();
+	}
+
+	public function findLastCreatedOneForSubscriber(User $user) {
+		return $this->createQueryBuilder("i")
+			->innerJoin("i.feed", "f")
+			->innerJoin("f.subscriptions", "s")
+			->where("s.user = :user")
+			->setMaxResults(1)
+			->orderBy("i.id", "DESC")
+			->setParameters(array(
+				'user' => $user
+			))
+			->getQuery()->getOneOrNullResult();
 	}
 
 	public function countAll() {
