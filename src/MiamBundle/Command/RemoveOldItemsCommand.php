@@ -23,8 +23,9 @@ class RemoveOldItemsCommand extends ContainerAwareCommand {
 
         $em = $this->getContainer()->get('doctrine')->getManager();
 
-        $keptItemsPerFeed = $input->getOption('keep') ?: 1000;
-        $daysBeforeRemoval = $input->getOption('time') ?: 365;
+        $keptItemsPerFeed = $input->getOption('keep') ? intval($input->getOption('keep')) : 1000;
+        $daysBeforeRemoval = $input->getOption('time') ? intval($input->getOption('time')) : 365;
+        $removalBefore = new \DateTime("- ".$daysBeforeRemoval." days");
         
         $countItemsRemoved = 0;
 
@@ -40,10 +41,8 @@ class RemoveOldItemsCommand extends ContainerAwareCommand {
 
             $countFeedItemsRemoved = 0;
             if(count($items) > 0) {
-                $removalBefore = new \DateTime("- ".$daysBeforeRemoval." days");
-
                 foreach($items as $i) {
-                    if($i->getDateCreated < $removalBefore) {
+                    if($i->getDateCreated() < $removalBefore) {
                         $em->remove($i);
 
                         $countFeedItemsRemoved++;
@@ -61,7 +60,7 @@ class RemoveOldItemsCommand extends ContainerAwareCommand {
             }
 
             $i = isset($i) ? $i+1 : 1;
-            if($i%20) {
+            if($i%10) {
                 $em->clear();
             }
         }
