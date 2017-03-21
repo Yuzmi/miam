@@ -42,7 +42,7 @@ This project is potentially unstable as it's still in development.
 Moreover it uses FOSJsRoutingBundle 2.0 which is still in its alpha version.  
 
 The default config is set for MySQL. Change parameters for PostgreSQL.  
-Other engines may work but i don't support them at the moment.  
+Other engines may work but i don't support them.  
 
 CSS files are generated using [Sass](http://sass-lang.com).  
 Originals files are found in the src/MiamBundle/Resources/public/scss folder.  
@@ -56,4 +56,3 @@ Use a modern browser.
 - Order management for categories and feeds
 - Filters => subscription_item
 - ICO to PNG without imagick
-- PubSubHubBub

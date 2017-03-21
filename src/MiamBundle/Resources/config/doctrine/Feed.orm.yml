@@ -100,10 +100,6 @@ MiamBundle\Entity\Feed:
             targetEntity: Item
             mappedBy: feed
             cascade: ["remove"]
-        pshbSubscriptions:
-            targetEntity: PshbSubscription
-            mappedBy: feed
-            cascade: ["remove"]
         subscriptions:
             targetEntity: Subscription
             mappedBy: feed

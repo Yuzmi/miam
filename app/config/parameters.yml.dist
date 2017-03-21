@@ -19,9 +19,3 @@ parameters:
 
     # A secret key that's used to generate certain security-related tokens
     secret:            AreYouFeedingMeRightNow?
-    
-    # PubSubHubBub parameters
-    #pshb_enabled:      false
-    #pshb_hub:          http://pubsubhubbub.appspot.com
-    #pshb_callback:     http://yourwebsite.com/pshb
-    #pshb_secret:       MySecretForPubSubHubBub

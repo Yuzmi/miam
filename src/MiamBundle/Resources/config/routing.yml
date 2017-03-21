@@ -16,7 +16,3 @@ miam_security:
 miam_shit:
     resource: "@MiamBundle/Resources/config/routing/shit.yml"
     prefix: /shit
-
-pubsubhubbub:
-    path: /pshb
-    defaults: { _controller: MiamBundle:Default:pshb }

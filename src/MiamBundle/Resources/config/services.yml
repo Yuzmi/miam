@@ -19,9 +19,6 @@ services:
     mark_manager:
         class: MiamBundle\Services\MarkManager
         arguments: ["@doctrine.orm.default_entity_manager"]
-    pubsubhubbub:
-        class: MiamBundle\Services\PubSubHubBub
-        arguments: ["@doctrine.orm.default_entity_manager", "@service_container"]
     redirect_listener:
         class: MiamBundle\EventListener\RedirectListener
         arguments: ["@router", "@security.token_storage"]
