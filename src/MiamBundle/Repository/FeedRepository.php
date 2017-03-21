@@ -18,12 +18,7 @@ class FeedRepository extends \Doctrine\ORM\EntityRepository
             ->getQuery()->getResult();
 	}
 
-    // May change in the future
-	public function findUsed() {
-		return $this->findSubscribed();
-	}
-
-	public function findUnused() {
+	public function findUnsubscribed() {
 		$fs = $this->createQueryBuilder("f")
             ->select("f, COUNT(s.id)")
             ->leftJoin("f.subscriptions", "s")

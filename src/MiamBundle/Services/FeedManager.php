@@ -86,10 +86,8 @@ class FeedManager extends MainService {
             return $this->getRepo("Feed")->findAll();
         } elseif($arg == 'subscribed') {
             return $this->getRepo("Feed")->findSubscribed();
-        } elseif($arg == 'used') {
-            return $this->getRepo("Feed")->findUsed();
-        } elseif($arg == 'unused') {
-            return $this->getRepo("Feed")->findUnused();
+        } elseif($arg == 'unsubscribed') {
+            return $this->getRepo("Feed")->findUnsubscribed();
         } elseif(filter_var($arg, FILTER_VALIDATE_URL) !== false) {
             $feed = $this->getFeedForUrl($arg);
             if($feed) {
