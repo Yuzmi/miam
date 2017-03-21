@@ -78,21 +78,6 @@ class DataParsing extends MainService {
 				$feed->setWebsite($feed_website);
 			}
 
-			// Identifier (may be used as website in some cases)
-			if(!$feed->getWebsite()) {
-				$feed_identifier = null;
-
-				if($fi = $pie->get_channel_tags(SIMPLEPIE_NAMESPACE_ATOM_10, 'id')) {
-					$feed_identifier = $fi[0]["data"];
-				} elseif($fi = $pie->get_channel_tags(SIMPLEPIE_NAMESPACE_ATOM_03, 'id')) {
-					$feed_identifier = $fi[0]["data"];
-				}
-
-				if(filter_var($feed_identifier, FILTER_VALIDATE_URL) !== false) {
-					$feed->setWebsite($feed_identifier);
-				}
-			}
-
 			// Icon Url
 			$feed_icon = $this->sanitizeUrl($pie->get_image_url());
 			if(filter_var($feed_icon, FILTER_VALIDATE_URL) !== false) {
