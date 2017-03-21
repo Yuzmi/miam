@@ -23,6 +23,19 @@ RSS agregator using [Symfony 3](https://symfony.com/) and [SimplePie](https://gi
 
 Read instructions in [INSTALL.md](https://github.com/Yuzmi/miam/blob/master/INSTALL.md).
 
+### Commands
+
+```
+# Add an admin
+php bin/console miam:admin:add USERNAME
+
+# Remove old items
+php bin/console miam:items:remove-old
+
+# See all commands
+php bin/console
+```
+
 ### Notes
 
 This project is potentially unstable as it's still in development.  

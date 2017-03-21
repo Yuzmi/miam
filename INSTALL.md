@@ -190,8 +190,3 @@ And add one of these lines (not both):
 
 It will parse your feeds automatically every 30 minutes.  
 The "subscribed" argument will only parse the feeds you're subscribed to.  
-
-#### Add an admin (optional)
-```
-php bin/console miam:admin:add YOUR_USERNAME
-```
