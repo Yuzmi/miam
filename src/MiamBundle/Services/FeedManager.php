@@ -105,6 +105,24 @@ class FeedManager extends MainService {
         return null;
     }
 
+    public function updateItemCounts() {
+    	$fs = $this->getRepo("Feed")->createQueryBuilder('f')
+            ->select('f, COUNT(i) AS countItems')
+            ->leftJoin('f.items', 'i')
+            ->groupBy('f')
+            ->getQuery()->getResult();
+
+        foreach($fs as $f) {
+        	$feed = $f[0];
+        	if($feed->getCountTotalItems() != $f['countItems']) {
+        		$feed->setCountTotalItems($f['countItems']);
+        		$this->em->persist($feed);
+        	}
+        }
+
+        $this->em->flush();
+    }
+
 	public function deleteSubscription(Subscription $subscription) {
 		$this->em->remove($subscription);
 		$this->em->flush();
