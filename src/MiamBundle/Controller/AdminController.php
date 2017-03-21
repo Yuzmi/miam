@@ -48,15 +48,6 @@ class AdminController extends MainController
             ->setMaxResults(10)
             ->getQuery()->getResult();
 
-        $mostPopularTags = $this->getRepo("Tag")
-            ->createQueryBuilder('t')
-            ->select('t, COUNT(i) AS countItems')
-            ->leftJoin('t.items', 'i')
-            ->groupBy('t')
-            ->orderBy('countItems', 'DESC')
-            ->setMaxResults(10)
-            ->getQuery()->getResult();
-
         return $this->render('MiamBundle:Admin:index.html.twig', array(
             'countFeeds' => $countFeeds,
             'countItems' => $countItems,
@@ -64,7 +55,6 @@ class AdminController extends MainController
             'lastFeeds' => $lastFeeds,
             'mostActiveFeeds' => $mostActiveFeeds,
             'mostSubscribedFeeds' => $mostSubscribedFeeds,
-            'mostPopularTags' => $mostPopularTags,
             'errorFeeds' => $errorFeeds
         ));
 	}

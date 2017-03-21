@@ -99,23 +99,5 @@
 				{% endfor %}
 			</table>
 		{% endif %}
-
-		{% if mostPopularTags|length > 0 %}
-			<table class="block popularTags">
-				<tr>
-					<th>Popular tag</th>
-					<th>Items</th>
-				</tr>
-				{% for t in mostPopularTags %}
-					{% set tag = t[0] %}
-					<tr>
-						<td title="{{ tag.name }}">
-							{{ tag.name|shorten(60) }}
-						</td>
-						<td>{{ t.countItems }}</td>
-					</tr>
-				{% endfor %}
-			</table>
-		{% endif %}
 	</div>
 {% endblock %}
