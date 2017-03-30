@@ -97,9 +97,7 @@ class ParseFeedsCommand extends ContainerAwareCommand {
 
                 $countParsedFeeds++;
 
-                if($countParsedFeeds%20 == 0) {
-                    $em->clear();
-                }
+                $em->clear();
             }
         }
 
