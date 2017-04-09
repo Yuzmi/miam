@@ -19,7 +19,7 @@ MiamBundle\Entity\Enclosure:
             length: 255
             nullable: true
         length:
-            type: integer
+            type: bigint
             nullable: true
         title:
             type: string
