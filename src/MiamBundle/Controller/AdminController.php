@@ -24,10 +24,15 @@ class AdminController extends MainController
             ->setMaxResults(10)
             ->getQuery()->getResult();
 
-        $mostActiveFeeds = $this->getRepo('Feed')
+        $mostItemsFeeds = $this->getRepo('Feed')
             ->createQueryBuilder('f')
-            ->orderBy('f.countDailyItems', 'DESC')
-            ->addOrderBy('f.originalName', 'ASC')
+            ->orderBy('f.countTotalItems', 'DESC')
+            ->setMaxResults(10)
+            ->getQuery()->getResult();
+
+        $mostParsedItemsFeeds = $this->getRepo('Feed')
+            ->createQueryBuilder('f')
+            ->orderBy('f.countLastParsedItems', 'DESC')
             ->setMaxResults(10)
             ->getQuery()->getResult();
 
@@ -53,7 +58,8 @@ class AdminController extends MainController
             'countItems' => $countItems,
             'countTags' => $countTags,
             'lastFeeds' => $lastFeeds,
-            'mostActiveFeeds' => $mostActiveFeeds,
+            'mostItemsFeeds' => $mostItemsFeeds,
+            'mostParsedItemsFeeds' => $mostParsedItemsFeeds,
             'mostSubscribedFeeds' => $mostSubscribedFeeds,
             'errorFeeds' => $errorFeeds
         ));

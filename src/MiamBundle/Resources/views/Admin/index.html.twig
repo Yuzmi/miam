@@ -22,9 +22,9 @@
 
 	<div class="blocks">
 		{% if lastFeeds|length > 0 %}
-			<table class="block lastFeeds">
+			<table class="block">
 				<tr>
-					<th>Recent feed</th>
+					<th>Recent feeds</th>
 					<th>Date added</th>
 				</tr>
 				{% for feed in lastFeeds %}
@@ -42,29 +42,10 @@
 			</table>
 		{% endif %}
 
-		{% if mostActiveFeeds|length > 0 %}
-			<table class="block activeFeeds">
-				<tr>
-					<th>Active feed</th>
-					<th>Items/Day</th>
-				</tr>
-				{% for feed in mostActiveFeeds %}
-					<tr>
-						<td title="{{ feed.name ?: feed.url }}">
-							<a href="{{ path('admin_feed', {'id': feed.id}) }}">
-								{{ feed.name ? feed.name|shorten(60) : feed.url|shorten(80) }}
-							</a>
-						</td>
-						<td>{{ feed.countDailyItems }}</td>
-					</tr>
-				{% endfor %}
-			</table>
-		{% endif %}
-
 		{% if mostSubscribedFeeds|length > 0 %}
-			<table class="block subscribedFeeds">
+			<table class="block">
 				<tr>
-					<th>Subscribed feed</th>
+					<th>Most subscribed feeds</th>
 					<th>Subscribers</th>
 				</tr>
 				{% for f in mostSubscribedFeeds %}
@@ -81,10 +62,48 @@
 			</table>
 		{% endif %}
 
-		{% if errorFeeds|length > 0 %}
-			<table class="block errorFeeds">
+		{% if mostItemsFeeds|length > 0 %}
+			<table class="block">
 				<tr>
-					<th>Feed with errors</th>
+					<th>Feeds with more items in DB</th>
+					<th>Items</th>
+				</tr>
+				{% for feed in mostItemsFeeds %}
+					<tr>
+						<td title="{{ feed.name ?: feed.url }}">
+							<a href="{{ path('admin_feed', {'id': feed.id}) }}">
+								{{ feed.name ? feed.name|shorten(60) : feed.url|shorten(80) }}
+							</a>
+						</td>
+						<td>{{ feed.countTotalItems }}</td>
+					</tr>
+				{% endfor %}
+			</table>
+		{% endif %}
+
+		{% if mostParsedItemsFeeds|length > 0 %}
+			<table class="block">
+				<tr>
+					<th>Feeds with more items in XML</th>
+					<th>Items</th>
+				</tr>
+				{% for feed in mostParsedItemsFeeds %}
+					<tr>
+						<td title="{{ feed.name ?: feed.url }}">
+							<a href="{{ path('admin_feed', {'id': feed.id}) }}">
+								{{ feed.name ? feed.name|shorten(60) : feed.url|shorten(80) }}
+							</a>
+						</td>
+						<td>{{ feed.countLastParsedItems }}</td>
+					</tr>
+				{% endfor %}
+			</table>
+		{% endif %}
+
+		{% if errorFeeds|length > 0 %}
+			<table class="block">
+				<tr>
+					<th>New feeds with errors</th>
 					<th>Errors</th>
 				</tr>
 				{% for feed in errorFeeds %}
