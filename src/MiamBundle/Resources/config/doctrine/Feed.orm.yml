@@ -59,9 +59,6 @@ MiamBundle\Entity\Feed:
         countTotalItems:
             type: integer
             column: count_items_total
-        countDailyItems:
-            type: float
-            column: count_items_daily
         errorCount:
             type: integer
             column: error_count

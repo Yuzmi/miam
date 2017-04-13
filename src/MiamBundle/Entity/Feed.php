@@ -19,7 +19,6 @@ class Feed
     private $countFirstParsedItems;
     private $countLastParsedItems;
     private $countTotalItems;
-    private $countDailyItems;
     private $errorCount;
     private $errorMessage;
     private $hasIcon;
@@ -37,7 +36,6 @@ class Feed
         $this->countFirstParsedItems = 0;
         $this->countLastParsedItems = 0;
         $this->countTotalItems = 0;
-        $this->countDailyItems = 0;
         $this->errorCount = 0;
         $this->hasIcon = false;
         $this->dateCreated = new \DateTime();
@@ -67,7 +65,6 @@ class Feed
     public function getCountFirstParsedItems() { return $this->countFirstParsedItems; }
     public function getCountLastParsedItems() { return $this->countLastParsedItems; }
     public function getCountTotalItems() { return $this->countTotalItems; }
-    public function getCountDailyItems() { return $this->countDailyItems; }
     public function getErrorCount() { return $this->errorCount; }
     public function getErrorMessage() { return $this->errorMessage; }
     public function getHasIcon() { return $this->hasIcon; }
@@ -95,7 +92,6 @@ class Feed
     public function setCountFirstParsedItems($countFirstParsedItems) { $this->countFirstParsedItems = $countFirstParsedItems; return $this; }
     public function setCountLastParsedItems($countLastParsedItems) { $this->countLastParsedItems = $countLastParsedItems; return $this; }
     public function setCountTotalItems($countTotalItems) { $this->countTotalItems = $countTotalItems; return $this; }
-    public function setCountDailyItems($countDailyItems) { $this->countDailyItems = $countDailyItems; return $this; }
     public function setErrorCount($errorCount) { $this->errorCount = $errorCount; return $this; }
     public function setErrorMessage($errorMessage) { $this->errorMessage = $errorMessage; return $this; }
     public function setHasIcon($hasIcon) { $this->hasIcon = $hasIcon; return $this; }
