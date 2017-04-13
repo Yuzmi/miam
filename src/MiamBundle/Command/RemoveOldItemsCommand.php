@@ -49,17 +49,17 @@ class RemoveOldItemsCommand extends ContainerAwareCommand {
         $feeds = $em->getRepository("MiamBundle:Feed")->findAll();
         foreach($feeds as $feed) {
             $countFeedItemsRemoved = 0;
-            
-            if($minItemsPerFeed !== null) {
-                $offset = max($minItemsPerFeed, $feed->getCountLastParsedItems());
-            } else {
-                $offset = $feed->getCountLastParsedItems();
+
+            $offset = $feed->getCountLastParsedItems();
+            if($minItemsPerFeed !== null && $minItemsPerFeed > $offset) {
+                $offset = $minItemsPerFeed;
             }
             
             $iItem = $offset;
             do {
                 $batchItems = $em->getRepository("MiamBundle:Item")
                     ->createQueryBuilder("i")
+                    ->leftJoin("i.marks", "im")->addSelect("im")
                     ->where("i.feed = :feed")->setParameter('feed', $feed)
                     ->orderBy('i.dateCreated', 'DESC')
                     ->addOrderBy('i.id', 'DESC')
@@ -73,6 +73,13 @@ class RemoveOldItemsCommand extends ContainerAwareCommand {
 
                     foreach($batchItems as $item) {
                         $iItem++;
+
+                        // We don't remove starred items
+                        foreach($item->getMarks() as $mark) {
+                            if($mark->getIsStarred()) {
+                                continue 2;
+                            }
+                        }
 
                         if($item->getDateCreated() < $removalBefore || ($maxItemsPerFeed !== null && $iItem > $maxItemsPerFeed)) {
                             $em->remove($item);
