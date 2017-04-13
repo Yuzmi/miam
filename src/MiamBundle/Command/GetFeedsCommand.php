@@ -11,7 +11,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 class GetFeedsCommand extends ContainerAwareCommand {
 	protected function configure() {
         $this
-            ->setName('miam:get:feeds')
+            ->setName('miam:feeds:get')
             ->setDescription('Get feeds')
             ->addArgument('feeds', InputArgument::OPTIONAL, "Which feeds do you want ?")
         ;

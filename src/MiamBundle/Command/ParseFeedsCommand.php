@@ -11,7 +11,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 class ParseFeedsCommand extends ContainerAwareCommand {
 	protected function configure() {
         $this
-            ->setName('miam:parse:feeds')
+            ->setName('miam:feeds:parse')
             ->setDescription('Parse feeds')
             ->addArgument('feeds', InputArgument::OPTIONAL, "Which feeds will you parse ?")
             ->addOption('ignore-invalid', null, InputOption::VALUE_NONE, "Ignore invalid feeds")

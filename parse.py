@@ -9,7 +9,7 @@ def parseFeedAfterFeed(feeds, scriptDir, args=[], verbose=False):
 		feedId = int(feed[0])
 
 		result = subprocess.run(
-			args = ['php', scriptDir+'/bin/console', 'miam:parse:feeds', str(feedId)] + args,
+			args = ['php', scriptDir+'/bin/console', 'miam:feeds:parse', str(feedId)] + args,
 			stdout = subprocess.PIPE,
 			universal_newlines = True
 		)
@@ -71,7 +71,7 @@ if args.verbose:
 
 # Get feeds
 getFeeds = subprocess.run(
-	args = ['php', scriptDir+'/bin/console', 'miam:get:feeds'] + getArgs,
+	args = ['php', scriptDir+'/bin/console', 'miam:feeds:get'] + getArgs,
 	stdout = subprocess.PIPE,
 	universal_newlines = True
 )

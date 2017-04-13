@@ -180,7 +180,7 @@ And add one of these lines (not both):
 
 ```
 # Normal
-*/30 * * * * php /var/www/miam/bin/console miam:parse:feeds subscribed -e=prod --no-debug
+*/30 * * * * php /var/www/miam/bin/console miam:feeds:parse subscribed -e=prod --no-debug
 # Do not forget the flags !
 
 # Faster, require Python 3
