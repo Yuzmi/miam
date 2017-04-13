@@ -319,7 +319,7 @@ class ManagerController extends MainController
                 $new_subscription = true;
             }
 
-            $feed = $this->get('feed_manager')->getFeedForUrl(trim($request->get('url')), true, true);
+            $feed = $this->get('feed_manager')->getFeedForUrl(trim($request->get('url')), true);
             if($feed) {
                 $subscription->setFeed($feed);
 
@@ -343,6 +343,11 @@ class ManagerController extends MainController
 
                 $em->persist($subscription);
                 $em->flush();
+
+                $countSubscribers = $this->getRepo("Subscription")->countForFeed($feed);
+                if($countSubscribers == 1) {
+                    $this->get('data_parsing')->parseFeed($feed);
+                }
 
                 if($new_subscription) {
                     $this->addFm("Feed subscribed", "success");
