@@ -40,7 +40,7 @@
 		{% endif %}
 	</span>
 	-
-	<a class="link" href="{{ item.link }}" target="_blank">{{ "item.link"|trans({}, 'item') }}</a>
+	<a class="link" href="{{ item.link }}" target="_blank" rel="noopener noreferrer">{{ "item.link"|trans({}, 'item') }}</a>
 	
 	{% if details and app.user and app.user.setting('SHOW_ITEM_DETAILS') == 'onclick' %}
 		<span class="showDetails">
@@ -86,7 +86,7 @@
 					{% if dataItem.enclosures|length > 1 %}
 						<br>
 					{% endif %}
-					<a href="{{ enclosure.url }}" target="_blank">
+					<a href="{{ enclosure.url }}" target="_blank" rel="noopener noreferrer">
 						{{ enclosure.title ?: enclosure.url }}
 					</a>
 				{% endfor %}
