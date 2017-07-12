@@ -58,7 +58,7 @@
 	{% endfor %}
 
 	{% for s in tree.subscriptions %}
-		<option data-type="feed" data-id="{{ s.feed.id }}" data-parent="{{ tree.category is defined ? tree.category.id }}">
+		<option data-type="subscription" data-id="{{ s.id }}" data-parent="{{ tree.category is defined ? tree.category.id }}">
 			{{ tree.category is defined ? s.path(tree.category) : s.name }}
 		</option>
 	{% endfor %}
