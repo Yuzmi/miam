@@ -30,17 +30,17 @@
 	<table class="infos">
 		{% if feed.author %}
 			<tr>
-				<th>Author:</th>
+				<th>Author</th>
 				<td>{{ feed.author }}</td>
 			</tr>
 		{% endif %}
 		<tr>
-			<th>Creation date</th>
+			<th>Creation</th>
 			<td>{{ feed.dateCreated|date() }}</td>
 		</tr>
 		{% if feed.dateNewItem %}
 			<tr>
-				<th>Last item date</th>
+				<th>Last item</th>
 				<td>{{ feed.dateNewItem|date() }}</td>
 			</tr>
 		{% endif %}
