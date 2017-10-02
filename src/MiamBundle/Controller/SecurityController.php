@@ -38,8 +38,18 @@ class SecurityController extends MainController
             $username = mb_substr($username, 0, 255);
         }
 
+        if(!$error && empty($username)) {
+            $this->addFm("register.empty_username", "error", array(), "flashbag");
+            $error = true;
+        }
+
         $password = $request->get('password');
         $passwordAgain = $request->get('password_again');
+        if(!$error && ($password === '' || is_null($password))) {
+            $this->addFm("register.empty_password", "error", array(), "flashbag");
+            $error = true;
+        }
+
         if(!$error && $password !== $passwordAgain) {
             $this->addFm("register.different_passwords", "error", array(), "flashbag");
             $error = true;

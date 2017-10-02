@@ -1,10 +1,12 @@
 <?php
 	return array(
 		'register.long_username' => 'Username is too long',
+		'register.empty_username' => 'Username is empty',
+		'register.empty_password' => 'Password is empty',
 		'register.different_passwords' => 'Passwords are different',
 		'register.username_exists' => 'Username already exists',
 		'register.welcome' => 'Welcome!',
-		
+
 		'category_created' => 'Category "%category%" created',
 		'category_updated' => 'Category "%category%" updated',
 		'category_deleted' => 'Category "%category%" deleted',

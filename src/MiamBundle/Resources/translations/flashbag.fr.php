@@ -1,6 +1,8 @@
 <?php
 	return array(
 		'register.long_username' => 'Ce nom d\'utilisateur est trop long',
+		'register.empty_username' => 'Le nom d\'utilisateur est vide',
+		'register.empty_password' => 'Le mot de passe est vide',
 		'register.different_passwords' => 'Les mots de passe sont différents',
 		'register.username_exists' => 'Ce nom d\'utilisateur existe déjà',
 		'register.welcome' => 'Bienvenue !',
