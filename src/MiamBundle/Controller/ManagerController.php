@@ -120,15 +120,15 @@ class ManagerController extends MainController
                 $this->get('category_manager')->updateForUser($this->getUser());
 
                 if($new_category) {
-                    $this->addFm("Category created", "success");
+                    $this->addFm("category_created", "success", array("%category%" => $category->getName()), "flashbag");
                 } else {
-                    $this->addFm("Category updated", "success");
+                    $this->addFm("category_updated", "success", array("%category%" => $category->getName()), "flashbag");
                 }
             } else {
-                $this->addFm("Invalid name", "error");
+                $this->addFm("error.invalid_name", "error", array(), "flashbag");
             }
         } else {
-            $this->addFm("Invalid token", "error");
+            $this->addFm("error.invalid_token", "error", array(), "flashbag");
         }
 
         return $this->redirectToRoute("manager", array("tab" => "catsubs"));
@@ -199,12 +199,12 @@ class ManagerController extends MainController
 
                 $em->flush();
 
-                $this->addFm('Subscriptions updated for "'.$category->getName().'"', "success");
+                $this->addFm("category_subscriptions_updated", "success", array("%category%" => $category->getName()), "flashbag");
             } else {
-                $this->addFm("Error", "error");
+                $this->addFm("error", "error", array(), "flashbag");
             }
         } else {
-            $this->addFm("Invalid token", "error");
+            $this->addFm("error.invalid_token", "error", array(), "flashbag");
         }
         
         return $this->redirectToRoute("manager", array("tab" => "catsubs"));
@@ -246,12 +246,12 @@ class ManagerController extends MainController
 
                 $this->get('category_manager')->updateForUser($this->getUser());
 
-                $this->addFm("Category deleted", "success");
+                $this->addFm("category_deleted", "success", array("%category%" => $category->getName()), "flashbag");
             } else {
-                $this->addFm("Error", "error");
+                $this->addFm("error", "error", array(), "flashbag");
             }
         } else {
-            $this->addFm("Invalid token", "error");
+            $this->addFm("error.invalid_token", "error", array(), "flashbag");
         }
 
         return $this->redirectToRoute("manager", array("tab" => "catsubs"));
@@ -350,15 +350,25 @@ class ManagerController extends MainController
                 }
 
                 if($new_subscription) {
-                    $this->addFm("Feed subscribed", "success");
+                    $this->addFm(
+                        "subscription_created", 
+                        "success", 
+                        array("%subscription%" => $subscription->getName() ?: $subscription->getUrl()), 
+                        "flashbag"
+                    );
                 } else {
-                    $this->addFm("Feed updated", "success");
+                    $this->addFm(
+                        "subscription_updated", 
+                        "success", 
+                        array("%subscription%" => $subscription->getName() ?: $subscription->getUrl()), 
+                        "flashbag"
+                    );
                 }
             } else {
-                $this->addFm("Feed not found", "error");
+                $this->addFm("error.feed_not_found", "error", array(), "flashbag");
             }
         } else {
-            $this->addFm("Invalid token", "error");
+            $this->addFm("error.invalid_token", "error", array(), "flashbag");
         }
 
         return $this->redirectToRoute("manager", array("tab" => "catsubs"));
@@ -396,12 +406,17 @@ class ManagerController extends MainController
             if($subscription) {
                 $this->get("feed_manager")->deleteSubscription($subscription);
 
-                $this->addFm("Feed unsubscribed", "success");
+                $this->addFm(
+                        "subscription_deleted", 
+                        "success", 
+                        array("%subscription%" => $subscription->getName() ?: $subscription->getUrl()), 
+                        "flashbag"
+                    );
             } else {
-                $this->addFm("Error", "error");
+                $this->addFm("error", "error", array(), "flashbag");
             }
         } else {
-            $this->addFm("Invalid token", "error");
+            $this->addFm("error.invalid_token", "error", array(), "flashbag");
         }
 
         return $this->redirectToRoute("manager", array("tab" => "catsubs"));
@@ -479,12 +494,12 @@ class ManagerController extends MainController
 
                 $this->get('category_manager')->updateForUser($this->getUser());
 
-                $this->addFm("OPML imported", "success");
+                $this->addFm("opml_imported", "success", array(), "flashbag");
             } else {
-                $this->addFm("Error", "error");
+                $this->addFm("error", "error", array(), "flashbag");
             }
         } else {
-            $this->addFm("Invalid token", "error");
+            $this->addFm("error.invalid_token", "error", array(), "flashbag");
         }
 
         return $this->redirectToRoute("manager", array("tab" => "catsubs"));
@@ -590,9 +605,9 @@ class ManagerController extends MainController
             $em->persist($user);
             $em->flush();
 
-            $this->addFm("Settings updated", "success");
+            $this->addFm("settings_updated", "success", array(), "flashbag");
         } else {
-            $this->addFm("Invalid token", "error");
+            $this->addFm("error.invalid_token", "error", array(), "flashbag");
         }
 
         return $this->redirectToRoute("manager", array("tab" => "settings"));
@@ -608,11 +623,11 @@ class ManagerController extends MainController
             $new_password_again = $request->get('new_password_again');
 
             if(!$encoder->isPasswordValid($user, $current_password)) {
-                $this->addFm("Current password is wrong", "error");
+                $this->addFm("error.current_password_wrong", "error", array(), "flashbag");
             } elseif(empty($new_password)) {
-                $this->addFm("New password is empty");
+                $this->addFm("error.new_password_empty", "error", array(), "flashbag");
             } elseif($new_password != $new_password_again) {
-                $this->addFm("New password not identical");
+                $this->addFm("error.new_passwords_different", "error", array(), "flashbag");
             } else {
                 $password = $encoder->encodePassword($user, $new_password);
                 $user->setPassword($password);
@@ -621,10 +636,10 @@ class ManagerController extends MainController
                 $em->persist($user);
                 $em->flush();
 
-                $this->addFm("Password updated", "success");
+                $this->addFm("password_updated", "success", array(), "flashbag");
             }
         } else {
-            $this->addFm("Invalid token", "error");
+            $this->addFm("error.invalid_token", "error", array(), "flashbag");
         }
 
         return $this->redirectToRoute("manager", array("tab" => "password"));

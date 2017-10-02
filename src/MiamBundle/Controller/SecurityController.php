@@ -32,7 +32,7 @@ class SecurityController extends MainController
 
         $username = trim($request->get('username'));
         if(mb_strlen($username) > 255) {
-            $this->addFm("Username is too long", "error");
+            $this->addFm("register.long_username", "error", array(), "flashbag");
             $error = true;
         } else {
             $username = mb_substr($username, 0, 255);
@@ -41,13 +41,13 @@ class SecurityController extends MainController
         $password = $request->get('password');
         $passwordAgain = $request->get('password_again');
         if(!$error && $password !== $passwordAgain) {
-            $this->addFm("Passwords are different", "error");
+            $this->addFm("register.different_passwords", "error", array(), "flashbag");
             $error = true;
         }
 
         $user = $this->getRepo("User")->findOneByUsername($username);
         if(!$error && $user) {
-            $this->addFm("Username already exists", "error");
+            $this->addFm("register.username_exists", "error", array(), "flashbag");
             $error = true;
         }
 
@@ -67,7 +67,7 @@ class SecurityController extends MainController
 
             $this->login($user);
 
-            $this->addFm("Welcome!", "success");
+            $this->addFm("register.welcome", "success", array(), "flashbag");
         }
 
         return $this->redirectToRoute('index');
