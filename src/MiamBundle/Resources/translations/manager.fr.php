@@ -82,7 +82,7 @@
 		'manager.catsubs.edit_sub.update' => 'Mettre à jour',
 
 		'manager.catsubs.delete_sub' => 'Désabonnement',
-		'manager.catsubs.delete_sub.text' => 'Se désabonner de %name% ?',
+		'manager.catsubs.delete_sub.text' => 'Se désabonner de "%subscription%" ?',
 		'manager.catsubs.delete_sub.yes' => 'Oui',
 		'manager.catsubs.delete_sub.no' => 'Non',
 

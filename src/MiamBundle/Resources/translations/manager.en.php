@@ -81,7 +81,7 @@
 		'manager.catsubs.edit_sub.update' => 'Update',
 
 		'manager.catsubs.delete_sub' => 'Unsubscription',
-		'manager.catsubs.delete_sub.text' => 'Unsubscribe from "%name%" ?',
+		'manager.catsubs.delete_sub.text' => 'Unsubscribe from "%subscription%" ?',
 		'manager.catsubs.delete_sub.yes' => 'Yes',
 		'manager.catsubs.delete_sub.no' => 'No',
 

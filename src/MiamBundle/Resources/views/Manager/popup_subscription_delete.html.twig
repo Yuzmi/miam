@@ -4,7 +4,7 @@
 
 {% block popupContent %}
 	<form method="POST" action="{{ path('manager_subscription_delete', {'id': subscription.id}) }}">
-		{{ "manager.catsubs.delete_sub.text"|trans({'%name%': subscription.name }, 'manager') }}
+		{{ "manager.catsubs.delete_sub.text"|trans({'%subscription%': subscription.name }, 'manager') }}
 
 		<br><br>
 
